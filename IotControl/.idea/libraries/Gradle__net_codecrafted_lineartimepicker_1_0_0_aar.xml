@@ -1,0 +1,15 @@
+<component name="libraryTable">
+  <library name="Gradle: net.codecrafted:lineartimepicker:1.0.0@aar">
+    <CLASSES>
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/f6a9ffe45c776af6a5e5d996ef5f8f81/lineartimepicker-1.0.0/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/f6a9ffe45c776af6a5e5d996ef5f8f81/lineartimepicker-1.0.0/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/f6a9ffe45c776af6a5e5d996ef5f8f81/lineartimepicker-1.0.0/jars/classes.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.codecrafted/lineartimepicker/1.0.0/7d14e4002f31fee0ff1aea46301aad487395f07a/lineartimepicker-1.0.0-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.codecrafted/lineartimepicker/1.0.0/ccde554b50e5f9954691c60b126eb3b6eb132f45/lineartimepicker-1.0.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

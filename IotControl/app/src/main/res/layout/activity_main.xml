@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/fondoAplicacion"
+    tools:context=".MainActivity"
+    android:orientation="vertical"
+    android:layout_marginTop="20dp">
+
+    <include
+        android:id="@+id/toolbarPrincipal"
+        layout="@layout/barra_principal" />
+
+    <android.support.v4.widget.DrawerLayout
+        android:id="@+id/drawer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        tools:context=".MainActivity">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            style="@style/fondoAplicacion">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:weightSum="10"
+                android:orientation="horizontal"
+                android:background="@drawable/esquinas">
+
+                <ProgressBar
+                    android:id="@+id/animacionMain"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:visibility="invisible">
+
+                </ProgressBar>
+
+
+
+              <TextView
+                  android:id="@+id/textoBrokerMqtt"
+                  android:layout_width="0dp"
+                  android:layout_height="50dp"
+                  android:layout_weight="7"
+                  style="@style/indicadorTemperatura"
+                  android:layout_gravity="center"
+                  android:gravity="center"
+
+                  >
+
+              </TextView>
+                <ImageView
+                    android:id="@+id/iconoConexionMqtt"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="2"
+                    android:contentDescription="@string/descripcionImagen"
+                    android:src="@drawable/bkconectado"/>
+
+            </LinearLayout>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#123456"
+                android:text="@string/listaDispositivos"
+                android:textAlignment="center"
+                android:textColor="#FFFFFF"/>
+
+            <android.support.v4.widget.SwipeRefreshLayout
+                android:id="@+id/swipeListaDispositivosIot"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/fondoAplicacion">
+
+
+
+
+                <ListView
+                    android:id="@+id/listaDispositivosIot"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                </ListView>
+
+
+
+            </android.support.v4.widget.SwipeRefreshLayout>
+
+        </LinearLayout>
+
+
+
+
+
+        <android.support.design.widget.NavigationView
+
+            android:id="@+id/navigation_view"
+            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginTop="20dp"
+            app:headerLayout="@layout/header"
+            app:menu="@menu/menu_principal"/>
+
+    </android.support.v4.widget.DrawerLayout>
+
+
+
+
+
+
+
+
+</LinearLayout>

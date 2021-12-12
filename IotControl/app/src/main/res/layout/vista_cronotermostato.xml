@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/esquinas"
+    android:orientation="horizontal"
+    android:weightSum="13"
+>
+
+<!-- icono llama del termostato -->
+    <ImageView
+        android:id="@+id/iconoCronotermostato"
+        android:layout_width="0dp"
+        android:layout_weight="2"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
+        android:src="@drawable/heating"
+        android:contentDescription="@string/rele"/>
+
+    <!-- Icono de borrar el dispositivo y progressbar-->
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_weight="2">
+        <ImageView
+            android:id="@+id/iconoBorrarCronotermostato"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_gravity="center"
+            android:src="@drawable/delete">
+
+        </ImageView>
+
+        <ProgressBar
+            android:id="@+id/progresoCronotermostato"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:scaleY="0.5"
+            android:scaleX="0.5">
+
+        </ProgressBar>
+    </LinearLayout>
+     <!-- Indicadores de temperatura -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_weight="7"
+        android:weightSum="6"
+        >
+
+
+        <TextView
+            android:id="@+id/nombreCronotermostato"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:text="Interruptor"
+            android:layout_gravity="center"
+            android:gravity="center"
+            style="@style/nombreDispositivo"/>
+
+
+        <!-- icono temperatura, temperatura y ºC -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:orientation="horizontal"
+            android:weightSum="10">
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="32dp"
+                android:src="@drawable/temperature"
+                android:layout_gravity="left" />
+
+            <TextView
+                android:id="@+id/textoTemperatura"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="8"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="25.5"
+                android:textSize="30dp"
+                style="@style/indicadorTemperatura"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="ºC"
+                style="@style/indicadorTemperatura"/>
+
+        </LinearLayout>
+
+        <!-- icono humedad, humedad y % -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:orientation="horizontal"
+            android:weightSum="10">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_weight="6">
+
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/humedad"/>
+
+                <TextView
+                    android:id="@+id/textoHumedad"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="45.3"
+                    android:textSize="20dp"
+                    style="@style/indicadorHumedad"
+                    android:layout_marginStart="5dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="%"
+                    style="@style/indicadorHumedad"/>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_weight="4"
+                android:layout_gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/heatingicon"
+                    android:layout_gravity="center_vertical"/>
+                <TextView
+                    android:id="@+id/textoUmbralTemperatura"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="21.0"
+                    style="@style/indicadorHumedad"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ºC"
+                    style="@style/indicadorHumedad"/>
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/iconoEstadoConexionCronotermostato"
+        android:layout_width="0dp"
+        android:layout_weight="2"
+        android:layout_height="48dp"
+        android:layout_gravity="center_vertical"
+        android:src="@drawable/bkconectado"
+        android:contentDescription="@string/broker"
+        android:foregroundGravity="right" />
+
+
+
+
+
+</LinearLayout>

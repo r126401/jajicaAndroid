@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+        <item
+            android:id="@+id/menuConfigurarMqtt"
+            android:checked="false"
+            android:icon="@drawable/conectarbroker"
+            android:title="@string/configurarMqtt"/>
+        <item
+            android:id="@+id/menuAnadirDispositivo"
+            android:checked="false"
+            android:icon="@drawable/anadir_dispositivo"
+            android:title="@string/AnadirDispositivo"/>
+
+        <item
+            android:id="@+id/menuInstalarDispositivo"
+            android:checked="false"
+            android:icon="@drawable/instalar_dispositivo"
+            android:title="@string/instalarDispositivo"/>
+
+        <item
+                android:id="@+id/menuAyuda"
+                android:checked="false"
+                android:icon="@drawable/acerca_de"
+                android:title="Ayuda"/>
+
+
+        <item
+            android:id="@+id/acercaDe"
+            android:checked="false"
+            android:icon="@drawable/acerca_de"
+            android:title="@string/acercaDe"/>
+
+
+
+
+
+
+
+</menu>

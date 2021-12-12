@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.iotcontrol">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/icono_aplicacion"
+        android:label="@string/app_name"
+        android:roundIcon="@drawable/icono_aplicacion"
+        android:screenOrientation="portrait"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        <activity android:name=".programador"></activity>
+        <activity
+            android:name=".interruptor"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".configuracionTermostato"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Temporizador"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".programadorCronotermostato"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".cronotermostato"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".instalarDispositivo"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".AnadirDispositivo"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".configuracionMqtt"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.CONFIGURACION_MQTT" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
+
+        <service android:name="org.eclipse.paho.android.service.MqttService" />
+    </application>
+
+</manifest>

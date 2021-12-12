@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/fondoAplicacion"
+    tools:context=".AnadirDispositivo"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/toolbarAnadirDispositivo"
+        layout="@layout/barra_principal"/>
+
+    <include
+        layout="@layout/botones_aceptar_cancelar">
+
+    </include>
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="40dp"
+            android:layout_marginStart="10dp">
+
+            <TextView
+                style="@style/textosOpciones"
+                android:text="@string/nombreDispositivo"/>
+
+            <EditText
+                android:id="@+id/editNombreDispositivo"
+               style="@style/rellenoTextoOpciones"
+                android:maxLength="25"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/textosOpciones"
+                android:text="@string/idDispositivo"/>
+
+            <EditText
+                android:id="@+id/editIdDispositivo"
+                style="@style/rellenoTextoOpciones"
+                android:maxLength="12"/>
+
+
+        </LinearLayout>
+
+
+
+
+    </LinearLayout>
+
+
+
+</LinearLayout>

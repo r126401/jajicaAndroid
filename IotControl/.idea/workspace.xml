@@ -1,0 +1,720 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AndroidLayouts">
+    <shared>
+      <config />
+    </shared>
+  </component>
+  <component name="AndroidLogFilters">
+    <option name="TOOL_WINDOW_LOG_LEVEL" value="error" />
+    <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="No Filters" />
+  </component>
+  <component name="AvailableLibraryUpdateStorage">
+    <library-updates>
+      <library-update>
+        <group-id>org.eclipse.paho</group-id>
+        <name>org.eclipse.paho.client.mqttv3</name>
+        <version>1.2.1</version>
+        <repository>JCenter</repository>
+      </library-update>
+      <library-update>
+        <group-id>com.android.support</group-id>
+        <name>appcompat-v7</name>
+        <version>28.0.0</version>
+        <repository>Google,Android Repository</repository>
+      </library-update>
+      <library-update>
+        <group-id>com.android.support</group-id>
+        <name>design</name>
+        <version>28.0.0</version>
+        <repository>Google,Android Repository</repository>
+      </library-update>
+      <library-update>
+        <group-id>org.eclipse.paho</group-id>
+        <name>org.eclipse.paho.android.service</name>
+        <version>1.1.1</version>
+        <repository>JCenter</repository>
+      </library-update>
+      <library-update>
+        <group-id>com.android.support.constraint</group-id>
+        <name>constraint-layout</name>
+        <version>2.0.0-beta2</version>
+        <repository>Google</repository>
+      </library-update>
+      <library-update>
+        <group-id>junit</group-id>
+        <name>junit</name>
+        <version>4.13-beta-3</version>
+        <repository>JCenter</repository>
+      </library-update>
+      <library-update>
+        <group-id>com.android.support.test</group-id>
+        <name>runner</name>
+        <version>1.0.2</version>
+        <repository>Google,Android Repository</repository>
+      </library-update>
+      <library-update>
+        <group-id>com.android.support.test.espresso</group-id>
+        <name>espresso-core</name>
+        <version>3.0.2</version>
+        <repository>Google,Android Repository</repository>
+      </library-update>
+    </library-updates>
+    <last-search-timestamp>1563550293962</last-search-timestamp>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="23d00115-d3af-48c2-a0e5-936070caa06f" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Cvs2Configuration">
+    <option name="OVERRIDE_EXISTING_TAG_FOR_PROJECT" value="false" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[]" />
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <projects_view>
+          <tree_state>
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="IotControl" type="f1a62948:ProjectNode" />
+              </path>
+            </expand>
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="valueResourceFile" />
+        <option value="Interface" />
+        <option value="Class" />
+        <option value="layoutResourceFile" />
+        <option value="resourceFile" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectId" id="1YGmtERVm3dsKjBKwVL9evVwIkD" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="DeviceAndSnapshotComboBoxAction.selectedDevice" value="Pixel_3a_API_30_x86" />
+    <property name="DeviceAndSnapshotComboBoxAction.selectionTime" value="2021-12-09T18:41:48.439Z" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="android.sdk.path" value="/opt/android/sdk" />
+    <property name="device.picker.selection" value="google" />
+    <property name="last_opened_file_path" value="$USER_HOME$/temporal/Paho-MQTT-Android-TCP-TLS-WSS-Example" />
+    <property name="memory.settings.postsync.do.not.ask.for.project" value="true" />
+    <property name="project.structure.last.edited" value="SDK Location" />
+    <property name="project.structure.proportion" value="0.17" />
+    <property name="project.structure.side.proportion" value="0.55041325" />
+    <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
+    <property name="settings.editor.selected.configurable" value="AndroidSdkUpdater" />
+  </component>
+  <component name="PsdUISettings">
+    <option name="MODULE_TAB" value="Properties" />
+    <option name="LAST_EDITED_SIGNING_CONFIG" value="debug" />
+    <option name="LAST_EDITED_BUILD_TYPE" value="release" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="com.iotcontrol" />
+    </key>
+    <key name="android.template.packageName">
+      <recent name="com.iotcontrol" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.iotcontrol" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/app/src/main/res/drawable" />
+      <recent name="$PROJECT_DIR$/app/src/main/res/layout" />
+      <recent name="$PROJECT_DIR$/app/src/main/res/drawable-v24" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="AndroidJUnit" factoryName="Android JUnit">
+      <option name="TEST_OBJECT" value="class" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <method v="2">
+        <option name="Android.Gradle.BeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="app" type="AndroidRunConfigurationType" factoryName="Android App" activateToolWindowBeforeRun="false">
+      <module name="IotControl.app" />
+      <option name="DEPLOY" value="true" />
+      <option name="DEPLOY_APK_FROM_BUNDLE" value="false" />
+      <option name="DEPLOY_AS_INSTANT" value="false" />
+      <option name="ARTIFACT_NAME" value="" />
+      <option name="PM_INSTALL_OPTIONS" value="" />
+      <option name="ALL_USERS" value="false" />
+      <option name="DYNAMIC_FEATURES_DISABLED_LIST" value="" />
+      <option name="ACTIVITY_EXTRA_FLAGS" value="" />
+      <option name="MODE" value="default_activity" />
+      <option name="CLEAR_LOGCAT" value="false" />
+      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="false" />
+      <option name="SKIP_NOOP_APK_INSTALLATIONS" value="true" />
+      <option name="FORCE_STOP_RUNNING_APP" value="true" />
+      <option name="TARGET_SELECTION_MODE" value="SHOW_DIALOG" />
+      <option name="SELECTED_CLOUD_MATRIX_CONFIGURATION_ID" value="-1" />
+      <option name="SELECTED_CLOUD_MATRIX_PROJECT_ID" value="" />
+      <option name="DEBUGGER_TYPE" value="Auto" />
+      <Auto>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+      </Auto>
+      <Hybrid>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+      </Hybrid>
+      <Java />
+      <Native>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+      </Native>
+      <Profilers>
+        <option name="ADVANCED_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_CPU_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_CPU_PROFILING_CONFIGURATION_NAME" value="Sample Java Methods" />
+        <option name="STARTUP_NATIVE_MEMORY_PROFILING_ENABLED" value="false" />
+        <option name="NATIVE_MEMORY_SAMPLE_RATE_BYTES" value="2048" />
+      </Profilers>
+      <option name="DEEP_LINK" value="" />
+      <option name="ACTIVITY_CLASS" value="" />
+      <option name="SEARCH_ACTIVITY_IN_GLOBAL_SCOPE" value="false" />
+      <option name="SKIP_ACTIVITY_VALIDATION" value="false" />
+      <method v="2">
+        <option name="Android.Gradle.BeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="StructureViewFactory">
+    <option name="ACTIVE_ACTIONS" value=",ALPHA_COMPARATOR" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="23d00115-d3af-48c2-a0e5-936070caa06f" name="Default Changelist" comment="" />
+      <created>1563538370920</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1563538370920</updated>
+    </task>
+    <task id="LOCAL-00102">
+      <created>1578355032301</created>
+      <option name="number" value="00102" />
+      <option name="presentableId" value="LOCAL-00102" />
+      <option name="project" value="LOCAL" />
+      <updated>1578355032302</updated>
+    </task>
+    <task id="LOCAL-00103">
+      <created>1578438494677</created>
+      <option name="number" value="00103" />
+      <option name="presentableId" value="LOCAL-00103" />
+      <option name="project" value="LOCAL" />
+      <updated>1578438494677</updated>
+    </task>
+    <task id="LOCAL-00104">
+      <created>1578491306253</created>
+      <option name="number" value="00104" />
+      <option name="presentableId" value="LOCAL-00104" />
+      <option name="project" value="LOCAL" />
+      <updated>1578491306254</updated>
+    </task>
+    <task id="LOCAL-00105">
+      <created>1578606086581</created>
+      <option name="number" value="00105" />
+      <option name="presentableId" value="LOCAL-00105" />
+      <option name="project" value="LOCAL" />
+      <updated>1578606086582</updated>
+    </task>
+    <task id="LOCAL-00106">
+      <created>1578729283255</created>
+      <option name="number" value="00106" />
+      <option name="presentableId" value="LOCAL-00106" />
+      <option name="project" value="LOCAL" />
+      <updated>1578729283256</updated>
+    </task>
+    <task id="LOCAL-00107">
+      <created>1578730377614</created>
+      <option name="number" value="00107" />
+      <option name="presentableId" value="LOCAL-00107" />
+      <option name="project" value="LOCAL" />
+      <updated>1578730377615</updated>
+    </task>
+    <task id="LOCAL-00108">
+      <created>1578731068644</created>
+      <option name="number" value="00108" />
+      <option name="presentableId" value="LOCAL-00108" />
+      <option name="project" value="LOCAL" />
+      <updated>1578731068644</updated>
+    </task>
+    <task id="LOCAL-00109">
+      <created>1578746831445</created>
+      <option name="number" value="00109" />
+      <option name="presentableId" value="LOCAL-00109" />
+      <option name="project" value="LOCAL" />
+      <updated>1578746831446</updated>
+    </task>
+    <task id="LOCAL-00110">
+      <created>1578751671587</created>
+      <option name="number" value="00110" />
+      <option name="presentableId" value="LOCAL-00110" />
+      <option name="project" value="LOCAL" />
+      <updated>1578751671588</updated>
+    </task>
+    <task id="LOCAL-00111">
+      <created>1578751695764</created>
+      <option name="number" value="00111" />
+      <option name="presentableId" value="LOCAL-00111" />
+      <option name="project" value="LOCAL" />
+      <updated>1578751695764</updated>
+    </task>
+    <task id="LOCAL-00112">
+      <created>1578833833654</created>
+      <option name="number" value="00112" />
+      <option name="presentableId" value="LOCAL-00112" />
+      <option name="project" value="LOCAL" />
+      <updated>1578833833655</updated>
+    </task>
+    <task id="LOCAL-00113">
+      <created>1578841112844</created>
+      <option name="number" value="00113" />
+      <option name="presentableId" value="LOCAL-00113" />
+      <option name="project" value="LOCAL" />
+      <updated>1578841112845</updated>
+    </task>
+    <task id="LOCAL-00114">
+      <created>1578843555416</created>
+      <option name="number" value="00114" />
+      <option name="presentableId" value="LOCAL-00114" />
+      <option name="project" value="LOCAL" />
+      <updated>1578843555417</updated>
+    </task>
+    <task id="LOCAL-00115">
+      <created>1578866691833</created>
+      <option name="number" value="00115" />
+      <option name="presentableId" value="LOCAL-00115" />
+      <option name="project" value="LOCAL" />
+      <updated>1578866691834</updated>
+    </task>
+    <task id="LOCAL-00116">
+      <created>1578868714305</created>
+      <option name="number" value="00116" />
+      <option name="presentableId" value="LOCAL-00116" />
+      <option name="project" value="LOCAL" />
+      <updated>1578868714305</updated>
+    </task>
+    <task id="LOCAL-00117">
+      <created>1578869062997</created>
+      <option name="number" value="00117" />
+      <option name="presentableId" value="LOCAL-00117" />
+      <option name="project" value="LOCAL" />
+      <updated>1578869062998</updated>
+    </task>
+    <task id="LOCAL-00118">
+      <created>1578869861522</created>
+      <option name="number" value="00118" />
+      <option name="presentableId" value="LOCAL-00118" />
+      <option name="project" value="LOCAL" />
+      <updated>1578869861522</updated>
+    </task>
+    <task id="LOCAL-00119">
+      <created>1578949984161</created>
+      <option name="number" value="00119" />
+      <option name="presentableId" value="LOCAL-00119" />
+      <option name="project" value="LOCAL" />
+      <updated>1578949984162</updated>
+    </task>
+    <task id="LOCAL-00120">
+      <created>1579036895900</created>
+      <option name="number" value="00120" />
+      <option name="presentableId" value="LOCAL-00120" />
+      <option name="project" value="LOCAL" />
+      <updated>1579036895902</updated>
+    </task>
+    <task id="LOCAL-00121">
+      <created>1579122439816</created>
+      <option name="number" value="00121" />
+      <option name="presentableId" value="LOCAL-00121" />
+      <option name="project" value="LOCAL" />
+      <updated>1579122439817</updated>
+    </task>
+    <task id="LOCAL-00122">
+      <created>1579123843838</created>
+      <option name="number" value="00122" />
+      <option name="presentableId" value="LOCAL-00122" />
+      <option name="project" value="LOCAL" />
+      <updated>1579123843838</updated>
+    </task>
+    <task id="LOCAL-00123">
+      <created>1579209514541</created>
+      <option name="number" value="00123" />
+      <option name="presentableId" value="LOCAL-00123" />
+      <option name="project" value="LOCAL" />
+      <updated>1579209514542</updated>
+    </task>
+    <task id="LOCAL-00124">
+      <created>1579362386498</created>
+      <option name="number" value="00124" />
+      <option name="presentableId" value="LOCAL-00124" />
+      <option name="project" value="LOCAL" />
+      <updated>1579362386498</updated>
+    </task>
+    <task id="LOCAL-00125">
+      <created>1579463777924</created>
+      <option name="number" value="00125" />
+      <option name="presentableId" value="LOCAL-00125" />
+      <option name="project" value="LOCAL" />
+      <updated>1579463777925</updated>
+    </task>
+    <task id="LOCAL-00126">
+      <created>1579469125958</created>
+      <option name="number" value="00126" />
+      <option name="presentableId" value="LOCAL-00126" />
+      <option name="project" value="LOCAL" />
+      <updated>1579469125960</updated>
+    </task>
+    <task id="LOCAL-00127">
+      <created>1579554840392</created>
+      <option name="number" value="00127" />
+      <option name="presentableId" value="LOCAL-00127" />
+      <option name="project" value="LOCAL" />
+      <updated>1579554840393</updated>
+    </task>
+    <task id="LOCAL-00128">
+      <created>1579642227843</created>
+      <option name="number" value="00128" />
+      <option name="presentableId" value="LOCAL-00128" />
+      <option name="project" value="LOCAL" />
+      <updated>1579642227843</updated>
+    </task>
+    <task id="LOCAL-00129">
+      <created>1579728351192</created>
+      <option name="number" value="00129" />
+      <option name="presentableId" value="LOCAL-00129" />
+      <option name="project" value="LOCAL" />
+      <updated>1579728351193</updated>
+    </task>
+    <task id="LOCAL-00130">
+      <created>1579813299849</created>
+      <option name="number" value="00130" />
+      <option name="presentableId" value="LOCAL-00130" />
+      <option name="project" value="LOCAL" />
+      <updated>1579813299850</updated>
+    </task>
+    <task id="LOCAL-00131">
+      <created>1579814799212</created>
+      <option name="number" value="00131" />
+      <option name="presentableId" value="LOCAL-00131" />
+      <option name="project" value="LOCAL" />
+      <updated>1579814799212</updated>
+    </task>
+    <task id="LOCAL-00132">
+      <created>1579821910005</created>
+      <option name="number" value="00132" />
+      <option name="presentableId" value="LOCAL-00132" />
+      <option name="project" value="LOCAL" />
+      <updated>1579821910006</updated>
+    </task>
+    <task id="LOCAL-00133">
+      <created>1579968656662</created>
+      <option name="number" value="00133" />
+      <option name="presentableId" value="LOCAL-00133" />
+      <option name="project" value="LOCAL" />
+      <updated>1579968656664</updated>
+    </task>
+    <task id="LOCAL-00134">
+      <created>1580076130946</created>
+      <option name="number" value="00134" />
+      <option name="presentableId" value="LOCAL-00134" />
+      <option name="project" value="LOCAL" />
+      <updated>1580076130948</updated>
+    </task>
+    <task id="LOCAL-00135">
+      <created>1580080204985</created>
+      <option name="number" value="00135" />
+      <option name="presentableId" value="LOCAL-00135" />
+      <option name="project" value="LOCAL" />
+      <updated>1580080204985</updated>
+    </task>
+    <task id="LOCAL-00136">
+      <created>1580160899677</created>
+      <option name="number" value="00136" />
+      <option name="presentableId" value="LOCAL-00136" />
+      <option name="project" value="LOCAL" />
+      <updated>1580160899678</updated>
+    </task>
+    <task id="LOCAL-00137">
+      <created>1580333978523</created>
+      <option name="number" value="00137" />
+      <option name="presentableId" value="LOCAL-00137" />
+      <option name="project" value="LOCAL" />
+      <updated>1580333978524</updated>
+    </task>
+    <task id="LOCAL-00138">
+      <created>1580420336663</created>
+      <option name="number" value="00138" />
+      <option name="presentableId" value="LOCAL-00138" />
+      <option name="project" value="LOCAL" />
+      <updated>1580420336664</updated>
+    </task>
+    <task id="LOCAL-00139">
+      <created>1580502503500</created>
+      <option name="number" value="00139" />
+      <option name="presentableId" value="LOCAL-00139" />
+      <option name="project" value="LOCAL" />
+      <updated>1580502503501</updated>
+    </task>
+    <task id="LOCAL-00140">
+      <created>1580510157711</created>
+      <option name="number" value="00140" />
+      <option name="presentableId" value="LOCAL-00140" />
+      <option name="project" value="LOCAL" />
+      <updated>1580510157712</updated>
+    </task>
+    <task id="LOCAL-00141">
+      <created>1581284344300</created>
+      <option name="number" value="00141" />
+      <option name="presentableId" value="LOCAL-00141" />
+      <option name="project" value="LOCAL" />
+      <updated>1581284344301</updated>
+    </task>
+    <task id="LOCAL-00142">
+      <created>1581370799592</created>
+      <option name="number" value="00142" />
+      <option name="presentableId" value="LOCAL-00142" />
+      <option name="project" value="LOCAL" />
+      <updated>1581370799594</updated>
+    </task>
+    <task id="LOCAL-00143">
+      <created>1581457635679</created>
+      <option name="number" value="00143" />
+      <option name="presentableId" value="LOCAL-00143" />
+      <option name="project" value="LOCAL" />
+      <updated>1581457635680</updated>
+    </task>
+    <task id="LOCAL-00144">
+      <created>1581538958563</created>
+      <option name="number" value="00144" />
+      <option name="presentableId" value="LOCAL-00144" />
+      <option name="project" value="LOCAL" />
+      <updated>1581538958565</updated>
+    </task>
+    <task id="LOCAL-00145">
+      <created>1581543420030</created>
+      <option name="number" value="00145" />
+      <option name="presentableId" value="LOCAL-00145" />
+      <option name="project" value="LOCAL" />
+      <updated>1581543420030</updated>
+    </task>
+    <task id="LOCAL-00146">
+      <created>1581629583631</created>
+      <option name="number" value="00146" />
+      <option name="presentableId" value="LOCAL-00146" />
+      <option name="project" value="LOCAL" />
+      <updated>1581629583632</updated>
+    </task>
+    <task id="LOCAL-00147">
+      <created>1582063933558</created>
+      <option name="number" value="00147" />
+      <option name="presentableId" value="LOCAL-00147" />
+      <option name="project" value="LOCAL" />
+      <updated>1582063933559</updated>
+    </task>
+    <task id="LOCAL-00148">
+      <created>1582148171406</created>
+      <option name="number" value="00148" />
+      <option name="presentableId" value="LOCAL-00148" />
+      <option name="project" value="LOCAL" />
+      <updated>1582148171407</updated>
+    </task>
+    <task id="LOCAL-00149">
+      <created>1582234772178</created>
+      <option name="number" value="00149" />
+      <option name="presentableId" value="LOCAL-00149" />
+      <option name="project" value="LOCAL" />
+      <updated>1582234772179</updated>
+    </task>
+    <task id="LOCAL-00150">
+      <created>1582578457820</created>
+      <option name="number" value="00150" />
+      <option name="presentableId" value="LOCAL-00150" />
+      <option name="project" value="LOCAL" />
+      <updated>1582578457821</updated>
+    </task>
+    <option name="localTasksCounter" value="151" />
+    <servers />
+  </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="LAST_COMMIT_MESSAGE" value="" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="101" y="100" width="1718" height="853" key="AVDManager" timestamp="1639075724322">
+      <screen x="0" y="0" width="1920" height="1054" />
+    </state>
+    <state x="101" y="100" width="1718" height="853" key="AVDManager/0.0.1920.1054@0.0.1920.1054" timestamp="1639075724322" />
+    <state x="704" y="285" key="FileChooserDialogImpl" timestamp="1639226522364">
+      <screen x="0" y="0" width="1920" height="1054" />
+    </state>
+    <state x="704" y="285" key="FileChooserDialogImpl/0.0.1920.1054@0.0.1920.1054" timestamp="1639226522364" />
+  </component>
+  <component name="XDebuggerManager">
+    <watches-manager>
+      <configuration name="app">
+        <watch expression="TEXTOS_DIALOGO_IOT.SERVIDOR_OTA.getValorTextoJson()" language="JAVA" />
+        <watch expression="Integer.valueOf(textoUmbralParteEntera.getText().toString())" language="JAVA" />
+        <watch expression="programa" language="JAVA" />
+        <watch expression="v.getId()" language="JAVA" />
+        <watch expression="textoUmbralParteDecimal.getText().toString()" language="JAVA" />
+        <watch expression="dispositivo" language="JAVA" />
+        <watch expression="dispositivo" language="JAVA" />
+        <watch expression="dialogo.escribirComando(COMANDO_IOT.ESTADO)" language="JAVA" />
+        <watch expression="boton.getText()" language="JAVA" />
+        <watch expression="cadena.getString(R.id.editIdDispositivo)" language="JAVA" custom="com.iotcontrol.R" />
+        <watch expression="dispositivo.getTopicPublicacion()" language="JAVA" />
+        <watch expression="holder.iconoCronotermostato.getTag();" language="JAVA" />
+        <watch expression="botonLunes.getText()" language="JAVA" />
+        <watch expression="programa.getHora()" language="JAVA" />
+        <watch expression="programa.getMinuto()" language="JAVA" />
+        <watch expression="timePickerHora.getHour()" language="JAVA" />
+        <watch expression="programas.get(i).getIdProgramacion()" language="JAVA" />
+        <watch expression="programas.size()" language="JAVA" />
+        <watch expression="arrayProgramas.length()" language="JAVA" />
+        <watch expression="COMANDO_IOT.MODIFICAR_PROGRAMACION.toString()" language="JAVA" />
+        <watch expression="finalHolder.iconoBorrarInterruptor.getTag()" language="JAVA" />
+        <watch expression="programa" language="JAVA" />
+        <watch expression="fila.getTag()" language="JAVA" />
+        <watch expression="programas.get(i).getIdProgramacion()" language="JAVA" />
+        <watch expression="programa.getMinuto()" language="JAVA" />
+        <watch expression="dispositivo.programas.size()" language="JAVA" />
+        <watch expression="arrayProgramas.length()" language="JAVA" />
+        <watch expression="listaProgramas.getOnItemClickListener()" language="JAVA" />
+        <watch expression="COMANDO_IOT.MODIFICAR_PROGRAMACION.toString()" language="JAVA" />
+        <watch expression="getIntent().getSerializableExtra(COMANDO_IOT.MODIFICAR_PROGRAMACION.toString())" language="JAVA" />
+        <watch expression="check.getTag()" language="JAVA" />
+        <watch expression="domingo.isChecked()" language="JAVA" />
+        <watch expression="programas.get(i).getIdProgramacion()" language="JAVA" />
+        <watch expression="programa" language="JAVA" />
+        <watch expression="datePickerDialog.getDatePicker()" language="JAVA" />
+        <watch expression="timePickerHora.getMinute()" language="JAVA" />
+        <watch expression="boton.getId()" language="JAVA" />
+        <watch expression="dato.getString" language="JAVA" />
+        <watch expression="datosMqtt.getJSONObject(CONF_MQTT.MQTT.getValorTextoJson())" language="JAVA" />
+        <watch expression="holder.iconoCronotermostato.getTag()" language="JAVA" />
+        <watch expression="holder.iconoInterruptor.getTag()" language="JAVA" />
+        <watch expression="holder" language="JAVA" />
+        <watch expression="vista.getTag()" language="JAVA" />
+        <watch expression="holder.iconoCronotermostato.getDrawable()" language="JAVA" />
+        <watch expression="holder.iconoInterruptor.getTag()" language="JAVA" />
+        <watch expression="dispositivo.getTopicPublicacion()" language="JAVA" />
+        <watch expression="cnx.isConnected()" language="JAVA" />
+        <watch expression="cnx" language="JAVA" />
+        <watch expression="dispositivo.getTopicPublicacion()" language="JAVA" />
+        <watch expression="dialogo.comandoActuarRele(ESTADO_RELE.OFF)" language="JAVA" />
+        <watch expression="programa" language="JAVA" />
+        <watch expression="programa.getMinuto()" language="JAVA" />
+        <watch expression="datos.get(position)" language="JAVA" />
+        <watch expression="datos.get(position)" language="JAVA" />
+        <watch expression="datos.get(position)" language="JAVA" />
+        <watch expression="datos.get(position)" language="JAVA" />
+      </configuration>
+    </watches-manager>
+  </component>
+  <component name="debuggerHistoryManager">
+    <expressions id="watch">
+      <expression>
+        <expression-string>datos.get(position)</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>v.getId()</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>programa.getMinuto()</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>programa</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>dialogo.comandoActuarRele(ESTADO_RELE.OFF)</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>dispositivo.getTopicPublicacion()</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>cnx</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>cnx.isConnected()</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>cadena.getString(R.id.editIdDispositivo)</expression-string>
+        <language-id>JAVA</language-id>
+        <custom-info>com.iotcontrol.R</custom-info>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+    </expressions>
+    <expressions id="evaluateExpression">
+      <expression>
+        <expression-string>programas.get(i).getIdProgramacion()</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+    </expressions>
+  </component>
+</project>

@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_weight="100">
+
+    <android.support.v7.widget.Toolbar
+
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="10"
+        android:background="#234562"
+        app:title="@string/cronotermostato"
+        app:titleTextColor="#FFFFFF"
+        app:navigationIcon="@drawable/interruptor"
+        android:layout_marginBottom="2dp">
+
+    </android.support.v7.widget.Toolbar>
+
+    <!-- barra de notificador -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="4"
+        android:orientation="horizontal"
+        android:weightSum="100"
+        style="@style/textoLista"
+        android:background="@drawable/esquinas_notificador">
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/temperature"
+            android:layout_weight="10"/>
+
+        <ImageView
+            android:id="@+id/iconoNotificacion"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="10"
+            android:src="@drawable/warning"/>
+
+        <TextView
+            android:id="@+id/textoNotificacion"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/robotreavers044d"
+            android:textColor="#333333"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="70"
+            android:text="texto notificacion"/>
+
+        <ImageView
+            android:id="@+id/iconoEstadoMqtt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="10"
+            android:src="@drawable/bkconectado"/>
+
+
+    </LinearLayout>
+
+    <!-- pantalla -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="40"
+        android:weightSum="100"
+        android:background="@drawable/pantalla_termostato"
+        android:orientation="vertical">
+
+        <ProgressBar
+            android:id="@+id/barra"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="10"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:max="100"
+            android:min="0"
+            android:indeterminate="false"
+            android:theme="@style/Widget.AppCompat.ProgressBar.Horizontal">
+        </ProgressBar>
+
+        <!-- Primera linea de la pantalla -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="20"
+            android:orientation="horizontal"
+            android:weightSum="100"
+            android:background="#000000">
+
+            <ProgressBar
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="20"
+                android:indeterminate="false">
+            </ProgressBar>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="30"
+                android:text="21.5ºC"
+                style="@style/textoProgramas"
+                android:layout_gravity="center"
+                android:gravity="center">
+
+            </TextView>
+
+            <TextClock
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="30"
+                android:text="hola"
+                style="@style/textoProgramas"
+                android:format24Hour="hh:mm:ss">
+
+            </TextClock>
+
+
+        </LinearLayout>
+
+        <!-- Segunda linea -->
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="20">
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+<!-- Lista de programas -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="46"
+        android:orientation="vertical">
+
+        <!-- ListView de programacion -->
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swipeListaProgramas"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:focusable="false"
+            android:focusableInTouchMode="false">
+
+            <ListView
+                android:id="@+id/listaProgr"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="false"
+                android:focusableInTouchMode="false">
+            </ListView>
+
+
+        </android.support.v4.widget.SwipeRefreshLayout>
+
+    </LinearLayout>
+
+
+
+</LinearLayout>

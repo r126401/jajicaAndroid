@@ -1,0 +1,437 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:orientation="vertical"
+    android:layout_marginBottom="20dp">
+
+
+
+    <include layout="@layout/botones_aceptar_cancelar">
+
+    </include>
+
+
+
+    <!-- Fila de repetir o no repetir -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="40dp">
+
+
+
+        <!-- Fila de opcion -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="10"
+            android:background="@drawable/lista">
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@drawable/icono_repetir"
+                android:layout_gravity="center"
+                >
+
+            </ImageView>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="7"
+                android:layout_gravity="center"
+                android:layout_marginLeft="20dp"
+                android:text="Repetir"
+                style="@style/textoLista">
+
+            </TextView>
+
+            <android.support.v7.widget.SwitchCompat
+                android:id="@+id/idSwitchTipoPrograma"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:layout_gravity="center"
+                app:track="@drawable/track"
+                android:thumb="@drawable/thumb"
+                android:textOn="SI"
+                android:textOff="NO"
+                app:showText="true">
+
+            </android.support.v7.widget.SwitchCompat>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="110dp"
+            android:orientation="horizontal"
+            android:layout_margin="10dp">
+
+            <!-- Fila de los dias de la semana o fecha -->
+            <LinearLayout
+                android:id="@+id/idLayoutDiasSemana"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_weight="1"
+                android:visibility="visible">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Dias de la semana:"
+                    style="@style/textoLista">
+
+                </TextView>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="4"
+                    android:layout_margin="5dp">
+
+                    <TextView
+                        android:id="@+id/textoLunes"
+                        style="@style/diasDeLaSemanaProgramador"
+                        android:text="L"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false">
+                    </TextView>
+                    <TextView
+                        android:id="@+id/textoMartes"
+                        style="@style/diasDeLaSemanaProgramador"
+                        android:text="M"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false">
+                    </TextView>
+                    <TextView
+                        android:id="@+id/textoMiercoles"
+                        style="@style/diasDeLaSemanaProgramador"
+                        android:text="X"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false">
+                    </TextView>
+                    <TextView
+                        android:id="@+id/textoJueves"
+                        style="@style/diasDeLaSemanaProgramador"
+                        android:text="J"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false">
+                    </TextView>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="4"
+                    android:layout_margin="5dp">
+                    <TextView
+                        android:id="@+id/textoViernes"
+                        style="@style/diasDeLaSemanaProgramador"
+                        android:text="V"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false">
+                    </TextView>
+                    <TextView
+                        android:id="@+id/textoSabado"
+                        style="@style/diasDeLaSemanaProgramador"
+                        android:text="S"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false">
+                    </TextView>
+                    <TextView
+                        android:id="@+id/textoDomingo"
+                        style="@style/diasDeLaSemanaProgramador"
+                        android:text="D"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false">
+                    </TextView>
+
+
+
+                </LinearLayout>
+
+
+
+            </LinearLayout>
+
+            <!-- Layout de la fecha -->
+            <LinearLayout
+                android:id="@+id/idLayoutFecha"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_margin="10dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/textoLista"
+                    android:text="Fecha:"
+                    android:clickable="false">
+
+                </TextView>
+
+                <TextView
+                    android:id="@+id/textoFecha"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="date"
+                    android:text="01/10/2022"
+                    style="@style/textoLista"
+                    android:layout_marginStart="20dp"
+                    android:clickable="false">
+
+                </TextView>
+
+            </LinearLayout>
+            <!-- Fecha en caso de que fuera fechada -->
+
+            <!-- hora -->
+            <LinearLayout
+                android:id="@+id/idLayoutHora"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+>
+
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/textoLista"
+                    android:text="Hora:"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:clickable="false">
+
+                </TextView>
+
+                <TextView
+                    android:id="@+id/idTextoHora"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:inputType="date"
+                    android:text="08:05"
+                    style="@style/textoLista"
+                    android:layout_marginStart="20dp"
+                    android:layout_gravity="center"
+                    android:clickable="false">
+
+                </TextView>
+
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+
+    <!-- LinearLayout para el interruptor -->
+    <LinearLayout
+        android:id="@+id/idLayoutInterruptor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <!-- LinearLayout duracion -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="14"
+            android:background="@drawable/lista">
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@drawable/icono_duracion"
+                android:layout_gravity="center"
+                >
+
+            </ImageView>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="6"
+                android:layout_gravity="center"
+                android:layout_marginLeft="20dp"
+                android:text="Duracion del programa (min)"
+                style="@style/textoLista"
+                android:clickable="false">
+
+            </TextView>
+
+            <ImageButton
+                android:id="@+id/idBotonMenosDuracion"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:src="@drawable/icono_menos">
+
+            </ImageButton>
+
+            <TextView
+                android:id="@+id/idtextoDuracion"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:text="20"
+                android:textSize="25dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                style="@style/textoLista"
+                android:clickable="false"
+                >
+
+            </TextView>
+            <ImageButton
+                android:id="@+id/idBotonMasDuracion"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:src="@drawable/icono_mas">
+
+            </ImageButton>
+
+
+        </LinearLayout>
+
+        <!-- LinearLayout estado del interruptor -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="10"
+            android:background="@drawable/lista">
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@drawable/icono_interruptor"
+                android:layout_gravity="center"
+                >
+
+            </ImageView>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="7"
+                android:layout_gravity="center"
+                android:layout_marginLeft="20dp"
+                android:text="Estado del interruptor"
+                style="@style/textoLista">
+
+            </TextView>
+
+            <android.support.v7.widget.SwitchCompat
+                android:id="@+id/idSwitchEstadoRele"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:layout_gravity="center"
+                app:track="@drawable/track"
+                android:thumb="@drawable/thumb"
+                android:textOn="ON"
+                android:textOff="OFF"
+                app:showText="true">
+
+            </android.support.v7.widget.SwitchCompat>
+
+
+
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+
+    <!-- LinearLayout para la temperatura -->
+    <LinearLayout
+        android:id="@+id/idLayoutCronotermostato"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <!-- LinearLayout duracion -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="14"
+            android:background="@drawable/lista">
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@drawable/icono_termometro"
+                android:layout_gravity="center"
+                >
+
+            </ImageView>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="5"
+                android:layout_gravity="center"
+                android:layout_marginLeft="20dp"
+                android:text="Temperatura en ºC"
+                style="@style/textoLista">
+
+            </TextView>
+
+            <ImageButton
+                android:id="@+id/idbotonMenostemperatura"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:src="@drawable/icono_menos">
+
+            </ImageButton>
+
+            <TextView
+                android:id="@+id/idTextoTemperatura"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:text="25.1"
+                android:textSize="40dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                style="@style/textoLista">
+
+            </TextView>
+            <ImageButton
+                android:id="@+id/idbotonMasTemperatura"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:src="@drawable/icono_mas">
+
+            </ImageButton>
+
+
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

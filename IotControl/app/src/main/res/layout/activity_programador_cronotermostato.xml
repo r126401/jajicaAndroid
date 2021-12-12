@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".cronotermostato"
+    android:orientation="vertical"
+    android:background="#25a0af">
+
+    <android.support.v7.widget.Toolbar
+
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="#234562"
+        app:title="@string/cronotermostato"
+        app:titleTextColor="#FFFFFF"
+        app:navigationIcon="@drawable/interruptor">
+
+    </android.support.v7.widget.Toolbar>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="30dp">
+
+        <!-- Tipo de programa -->
+        <Switch
+            android:id="@+id/switchTipoPrograma"
+            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:text="Se repite"
+            android:textSize="30dp"
+            style="@style/timePickers">
+        </Switch>
+
+        <!-- layout dias de la semana -->
+        <LinearLayout
+            android:id="@+id/linearLayoutDiasSemana"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="7"
+            android:layout_marginTop="10dp">
+
+            <ToggleButton
+                android:id="@+id/botonLunes"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:textOff="L"
+                android:textOn="L"
+                style="@style/diasDeLaSemana"
+                android:checked="true">
+            </ToggleButton>
+            <ToggleButton
+                android:id="@+id/botonMartes"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:textOff="M"
+                android:textOn="M"
+                style="@style/diasDeLaSemana"
+                android:checked="true">
+            </ToggleButton>
+            <ToggleButton
+                android:id="@+id/botonMiercoles"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:textOff="X"
+                android:textOn="X"
+                style="@style/diasDeLaSemana"
+                android:checked="true">
+            </ToggleButton>
+            <ToggleButton
+                android:id="@+id/botonJueves"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:textOff="J"
+                android:textOn="J"
+                style="@style/diasDeLaSemana"
+                android:checked="true">
+            </ToggleButton>
+            <ToggleButton
+                android:id="@+id/botonViernes"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:textOff="V"
+                android:textOn="V"
+                style="@style/diasDeLaSemana"
+                android:checked="true">
+            </ToggleButton>
+            <ToggleButton
+                android:id="@+id/botonSabado"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:textOff="S"
+                android:textOn="S"
+                style="@style/diasDeLaSemana"
+                android:checked="true">
+            </ToggleButton>
+            <ToggleButton
+                android:id="@+id/botonDomingo"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:textOff="D"
+                android:textOn="D"
+                style="@style/diasDeLaSemana"
+                android:checked="true">
+            </ToggleButton>
+
+
+
+        </LinearLayout>
+
+
+        <!-- layout botones fecha y hora -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+
+            <Button
+                android:layout_marginTop="10dp"
+                android:id="@+id/botonSeleccionFecha"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                style="@style/timePickers"
+                android:text="Selecciona fecha"
+                android:textSize="15dp"
+                android:layout_gravity="center"
+                android:gravity="center">
+
+            </Button>
+
+            <Button
+                android:layout_marginTop="10dp"
+                android:id="@+id/botonSeleccionHora"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                style="@style/timePickers"
+                android:text="Selecciona Hora"
+                android:textSize="15dp"
+                android:layout_gravity="center"
+                android:gravity="center">
+
+            </Button>
+
+        </LinearLayout>
+
+
+        <!-- Indicadores de fecha y hora -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="9">
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_weight="1"
+                android:src="@drawable/auto">
+
+            </ImageView>
+
+            <TextView
+                android:id="@+id/textoProgramaFecha"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:layout_gravity="right"
+                android:gravity="right"
+                android:paddingRight="5dp"
+                android:textSize="25dp"
+                android:fontFamily="@font/robotreaversw9zz"
+                >
+
+            </TextView>
+            <TextView
+                android:id="@+id/textoProgramahora"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:fontFamily="@font/robotreaversw9zz"
+                android:textSize="25dp"
+                >
+
+            </TextView>
+
+        </LinearLayout>
+
+        <!-- layout de temperatura -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:src="@drawable/heating">
+            </ImageView>
+
+            <TextView
+                android:id="@+id/textoIndicadorTemperatura"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/robotreavers044d"
+                android:textSize="25dp"
+                android:text="--.-">
+            </TextView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/robotreavers044d"
+                android:textSize="25dp"
+                android:text=" º">
+
+            </TextView>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/robotreavers044d"
+                android:textSize="25dp"
+                android:text="C">
+
+            </TextView>
+
+        </LinearLayout>
+
+        <!-- Botones para configurar la temperatura -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_weight="4"
+            android:layout_gravity="center_horizontal">
+
+            <Button
+                android:id="@+id/botonMenosTemperatura"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="-">
+
+            </Button>
+
+            <EditText
+                android:id="@+id/editIndicadorTemperatura"
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_height="wrap_content"
+                android:text="21.1"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center">
+
+            </EditText>
+            <Button
+                android:id="@+id/botonMasTemperatura"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="+">
+
+            </Button>
+
+
+
+        </LinearLayout>
+
+        <!-- Boton para aceptar el programa -->
+        <Button
+            android:id="@+id/botonAceptarPrograma"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Aceptar"
+            android:layout_gravity="center_horizontal">
+
+        </Button>
+
+
+    </LinearLayout>
+
+
+
+
+
+
+
+
+</LinearLayout>

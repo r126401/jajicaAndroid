@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".interruptor"
+    android:orientation="vertical"
+    android:layout_gravity="center"
+    android:gravity="center">
+
+
+    <android.support.v7.widget.Toolbar
+
+        android:id="@+id/toolbarInterruptor"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="#234562"
+        app:title="@string/interruptor"
+        app:titleTextColor="#FFFFFF"
+        app:navigationIcon="@drawable/interruptor_apagado">
+
+    </android.support.v7.widget.Toolbar>
+
+    <!-- panel de notificaciones -->
+
+    <LinearLayout
+        android:id="@+id/notificador"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:orientation="horizontal"
+        android:background="@drawable/notificador"
+        android:weightSum="100">
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/interruptor_encendido"
+            android:layout_weight="10"/>
+
+        <ProgressBar
+            android:id="@+id/animacion"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_gravity="center">
+
+        </ProgressBar>
+
+        <ImageView
+            android:id="@+id/iconoNotificacion"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="10"
+            android:src="@drawable/led"/>
+
+        <TextView
+            android:id="@+id/textoNotificacion"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/robotreavers044d"
+            android:textColor="#ffffff"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="70"/>
+
+        <ImageView
+            android:id="@+id/iconoEstadoMqtt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="10"/>
+
+
+    </LinearLayout>
+
+    <!-- Panel del interruptor -->
+
+    <ProgressBar
+        android:id="@+id/barra"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="100"
+        android:min="0"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:visibility="visible"
+        android:scrollbarSize="40dp">
+
+    </ProgressBar>
+
+
+    <ProgressBar
+        android:id="@+id/animacionComandos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right">
+
+    </ProgressBar>
+    <ImageView
+        android:id="@+id/imageInterruptor"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_gravity="center"
+        android:src="@drawable/interruptor_apagado">
+
+    </ImageView>
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="10">
+
+
+        <ImageView
+            android:id="@+id/botonPuntosSuspensivos"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:background="@drawable/puntossuspensivos">
+
+        </ImageView>
+
+
+
+
+
+        <ImageView
+            android:id="@+id/botonSettings"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="8"
+            android:src="@drawable/settings"
+            android:visibility="invisible">
+
+        </ImageView>
+
+        <ImageView
+            android:id="@+id/botonAnadirPrograma"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:src="@drawable/anadir">
+
+        </ImageView>
+
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/listaProgramas"
+        android:gravity="center"
+        android:background="@drawable/notificador"
+        android:textColor="#FFFFFF">
+    </TextView>
+
+
+    <!-- ListView de programacion -->
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeListaProgramas"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:focusable="false"
+        android:focusableInTouchMode="false">
+
+        <ListView
+            android:id="@+id/listaProgramasInterruptor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="false"
+            android:focusableInTouchMode="false">
+        </ListView>
+
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+
+
+</LinearLayout>

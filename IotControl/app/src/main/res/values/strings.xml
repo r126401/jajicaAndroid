@@ -1,0 +1,126 @@
+<resources>
+    <string name="app_name">IotControl</string>
+    <string name="AnadirDispositivo">Añadir dispositivo</string>
+    <string name="listaDispositivosIot">Lista de dispositivos</string>
+    <string name="descripcionImagen">Descripcion de la imagen</string>
+    <string name="broker">Broker:</string>
+    <string name="puerto">Puerto:</string>
+    <string name="usuario">Usuario:</string>
+    <string name="password">Pass:</string>
+    <string name="brokerHint">Direccion ip</string>
+    <string name="guardar">Guardar</string>
+    <string name="configurarMqtt">Configurar Mqtt</string>
+    <string name="idDispositivo">id Dispositivo:</string>
+    <string name="nombreDispositivo">Nombre:</string>
+    <string name="tipoDispositivo">Tipo de despositivo:</string>
+    <string name="topicSubscripcion">topic de subscripcion:</string>
+    <string name="topicPublicacion">topic de publicacion:</string>
+    <string name="guardarDispositivo">Añadir</string>
+    <string name="spinTipoPrograma">Se repite... :</string>
+    <string name="spinDiaSemana">Dia de la semana</string>
+    <string name="programador">PROGRAMADOR</string>
+    <string name="reset">Reset</string>
+    <string name="factoryReset">Factory reset</string>
+    <string name="upgradeFirmware">Upgrade Firmware</string>
+    <string name="modificarNombre">Modificar Nombre</string>
+    <string name="opcionesGenerales">Opciones Generales</string>
+    <string name="ntpConf">Configuracion Ntp</string>
+    <string name="backup">Backup</string>
+    <string name="aceptar">Aceptar</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="infoDispositivo">Info del dispositivo</string>
+    <string name="ssid_title">SSID: </string>
+    <string name="bssid_title">BSSID: </string>
+    <string name="password_title">contraseña: </string>
+    <string name="device_count_title">Device count: </string>
+    <string name="package_broadcast">Broadcast</string>
+    <string name="package_multicast">Multicast</string>
+    <string name="confirm">Confirm</string>
+    <string name="wifi_5g_message">El dispositivo no soporta wifi 5g</string>
+    <string name="instalarDispositivo">Instalar dispositivo</string>
+    <string name="anadirDispositivo">Añadir dispositivo</string>
+    <string name="acercaDe">Acerca de...</string>
+    <string name="abrir">Abrir</string>
+    <string name="cerrar">Cerrar</string>
+    <string name="eliminarDispositivo">Eliminar dispositivo</string>
+    <string name="modificarDispositivo">Modificar dispositivo</string>
+    <string name="prefijo">Prefijo: </string>
+    <string name="iotOnoOff">iotOnOff</string>
+    <string name="autor">Emilio Jimenez Prieto</string>
+    <string name="canal1">CanalNotificacion01</string>
+    <string name="descripcionCanal1">DescripcionCanal01</string>
+    <string name="tipoPrograma">Tipo de programa</string>
+    <string name="rele">Rele: </string>
+    <string name="estadoPrograma">Estado: </string>
+    <string name="fecha">FECHA</string>
+    <string name="hora">HORA</string>
+    <string name="ssid">SSID:</string>
+    <string name="duracion">Duracion:</string>
+    <string name="repetir">Programa repetido</string>
+    <string name="norepetir">Programa no repetido</string>
+    <string name="ano">Año</string>
+    <string name="instalacion">No tienes aun ningun dispositivo instalado.
+        Para instalar uno nuevo, debes configurar primero un servidor mqtt válido.\n\nDespues debes seleccionar la opcion Instalar dispositivo del menu.\n\n
+        Finalmente sigue las instrucciones de dicha opcion.\n\n Para registrar un dispositivo activado, elije la opcion de añadir dispositivo en el menu general.</string>
+    <string name="cronotermostato">cronotermostato</string>
+    <string name="configuracionDispositivo">Configuracion del dispositivo</string>
+    <string name="margenTemperatura">Margen de Temperatura</string>
+    <string name="intervaloLectura">Intervalo de lectura</string>
+    <string name="reintentosLectura">Reintentos de lectura</string>
+    <string name="intervaloReintentos">Intervalo de reintentos</string>
+    <string name="calibrado">Calibrado</string>
+    <string name="avisoReset">Se ejecutara reset sobre el disositivo</string>
+    <string name="avisoFactoryReset">El dispositivo volver a valores de fabrica</string>
+    <string name="avisoEliminarDispositivo">La accion eliminara el dispositivo de la aplicacion.</string>
+    <string name="avisoAcercaDe">iotControl: </string>
+    <string name="ayuda">Ayuda</string>
+    <string name="avisoAyuda">Aqui meto el texto de ayuda</string>
+    <string name="avisoUpgradeFirmware">Esta operacion tardara unos dos minutos.</string>
+    <string name="interruptor">Interruptor</string>
+    <string name="listaProgramas">Lista de Programas</string>
+    <string name="borrarDispositivo">Borrar dispositivo</string>
+    <string name="conexionBroker">Conexion con el broker Mqtt</string>
+    <string name="listaDispositivos">Lista de dispositivos</string>
+    <string name="notificacionDispositivo">Eventos del dispositivo</string>
+    <string name="descripcionNotificacionDispositivo">Canal para notificar eventos del dispositivo</string>
+    <string name="eventoOnInterruptorTemporizado"> se encendio por cambio de programa </string>
+    <string name="eventoOffInterruptorTemporizado"> se apagó por cambio de programa  </string>
+    <string name="eventoOnInterruptorlocal"> se encendio localmente por accion manual </string>
+    <string name="eventoOffInterruptorlocal"> se apago localmente por accion manual </string>
+    <string name="eventoOnCrontermostatoTemporizado"> se encendio por cambio de programa </string>
+    <string name="eventoOffCronotermostatoTemporizado"> se apago por cambio de programa </string>
+    <string name="eventoOnCronotermostatolocal"> se encendio localmente por accion manual </string>
+    <string name="eventoOffCronotermostatolocal"> se apago localmente por accion manual </string>
+    <string name="version">version 1.0</string>
+    <string name="errorBroker">Error en broker</string>
+    <string name="errorPuerto">Error en puerto</string>
+    <string name="brokerNoConfigurado">Broker no configurado</string>
+    <string name="ningunCambio">No has realizado ningun cambio</string>
+
+
+    <string-array name="arraySemana">
+        <item>Domingo</item>
+        <item>Lunes</item>
+        <item>Martes</item>
+        <item>Miercoles</item>
+        <item>Jueves</item>
+        <item>Viernes</item>
+        <item>Sabado</item>
+
+
+    </string-array>
+
+    <string-array name="arrayTipoProgramacion">
+        <item>Una vez</item>
+        <item>Repetida</item>
+    </string-array>
+
+    <string-array name="arrayAno">
+        <item>Este año</item>
+        <item>El año que viene</item>
+    </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+</resources>

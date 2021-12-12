@@ -1,0 +1,671 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".configuracionTermostato"
+    android:orientation="vertical">
+
+
+    <android.support.v7.widget.Toolbar
+
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="#234562"
+        app:title="@string/configuracionDispositivo"
+        app:titleTextColor="#FFFFFF"
+        app:navigationIcon="@drawable/interruptor">
+
+    </android.support.v7.widget.Toolbar>
+
+
+    <include layout="@layout/botones_aceptar_cancelar">
+
+    </include>
+
+    <!-- LinearLayout para margen de temperatura -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <!-- LinearLayout duracion -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="14"
+            android:background="@drawable/lista">
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@drawable/icono_termometro"
+                android:layout_gravity="center"
+                >
+
+            </ImageView>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="5"
+                android:layout_gravity="center"
+                android:layout_marginLeft="20dp"
+                android:text="Margen de temperatura"
+                style="@style/textoLista">
+
+            </TextView>
+
+            <ImageButton
+                android:id="@+id/botonMenosMargen"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:src="@drawable/icono_menos">
+
+            </ImageButton>
+
+            <TextView
+                android:id="@+id/textMargenTemperatura"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:text="0.5"
+                android:textSize="40dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                style="@style/textoLista">
+
+            </TextView>
+            <ImageButton
+                android:id="@+id/botonMasMargen"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:src="@drawable/icono_mas">
+
+            </ImageButton>
+
+
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+
+    <!-- margen de temperatura
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:weightSum="100">
+
+        <TextView
+
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/margenTemperatura"
+            android:layout_weight="60"
+            android:layout_gravity="center">
+
+        </TextView>
+
+        <ImageButton
+            android:id="@+id/botonMenosMargen"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="10"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:src="@drawable/icono_menos"
+            >
+
+        </ImageButton>
+
+        <TextView
+            android:id="@+id/textMargenTemperatura"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="0.5"
+            android:layout_weight="20"
+            android:layout_gravity="center"
+            android:gravity="center">
+
+        </TextView>
+
+        <ImageButton
+            android:id="@+id/botonMasMargen"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="10"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:src="@drawable/icono_mas">
+
+        </ImageButton>
+
+    </LinearLayout>
+-->
+
+    <!-- LinearLayout para margen de temperatura -->
+
+    <!-- LinearLayout para margen de temperatura -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <!-- LinearLayout duracion -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="14"
+            android:background="@drawable/lista">
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@drawable/icono_termometro"
+                android:layout_gravity="center"
+                >
+
+            </ImageView>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="5"
+                android:layout_gravity="center"
+                android:layout_marginLeft="20dp"
+                android:text="Intervalo de lectura"
+                style="@style/textoLista">
+
+            </TextView>
+
+            <ImageButton
+                android:id="@+id/botonMenosIntervaloLectura"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:src="@drawable/icono_menos">
+
+            </ImageButton>
+
+            <TextView
+                android:id="@+id/textIntervaloLectura"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:text="0.5"
+                android:textSize="40dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                style="@style/textoLista">
+
+            </TextView>
+            <ImageButton
+                android:id="@+id/botonMasIntervaloLectura"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:src="@drawable/icono_mas">
+
+            </ImageButton>
+
+
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+
+
+
+    <!-- Reintentos de lectura
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:weightSum="100">
+
+        <TextView
+
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/reintentosLectura"
+            android:layout_weight="60"
+            android:layout_gravity="center">
+
+        </TextView>
+
+        <ImageButton
+            android:id="@+id/botonMenosReintentosLectura"
+            android:layout_width="0dp"
+            android:layout_height="32dp"
+            android:background="@drawable/menos"
+            android:layout_weight="10"
+            android:layout_gravity="center"
+            android:gravity="center"
+            >
+
+        </ImageButton>
+
+        <TextView
+            android:id="@+id/textReintentosLectura"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="0.5"
+            android:layout_weight="20"
+            android:layout_gravity="center"
+            android:gravity="center">
+
+        </TextView>
+
+        <ImageButton
+            android:id="@+id/botonMasReintentosLectura"
+            android:layout_width="0dp"
+            android:layout_height="32dp"
+            android:background="@drawable/mas"
+            android:layout_weight="10"
+            android:layout_gravity="center"
+            android:gravity="center">
+
+        </ImageButton>
+
+    </LinearLayout>
+ -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <!-- LinearLayout duracion -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="14"
+            android:background="@drawable/lista">
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@drawable/icono_termometro"
+                android:layout_gravity="center"
+                >
+
+            </ImageView>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="5"
+                android:layout_gravity="center"
+                android:layout_marginLeft="20dp"
+                android:text="Reintentos de lectura"
+                style="@style/textoLista">
+
+            </TextView>
+
+            <ImageButton
+                android:id="@+id/botonMenosReintentosLectura"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:src="@drawable/icono_menos">
+
+            </ImageButton>
+
+            <TextView
+                android:id="@+id/textReintentosLectura"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:text="0.5"
+                android:textSize="40dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                style="@style/textoLista">
+
+            </TextView>
+            <ImageButton
+                android:id="@+id/botonMasReintentosLectura"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:src="@drawable/icono_mas">
+
+            </ImageButton>
+
+
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+
+
+    <!-- Reintentos de lectura
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:weightSum="100">
+
+        <TextView
+
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/reintentosLectura"
+            android:layout_weight="60"
+            android:layout_gravity="center">
+
+        </TextView>
+
+        <ImageButton
+            android:id="@+id/botonMenosReintentosLectura"
+            android:layout_width="0dp"
+            android:layout_height="32dp"
+            android:background="@drawable/menos"
+            android:layout_weight="10"
+            android:layout_gravity="center"
+            android:gravity="center"
+            >
+
+        </ImageButton>
+
+        <TextView
+            android:id="@+id/textReintentosLectura"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="0.5"
+            android:layout_weight="20"
+            android:layout_gravity="center"
+            android:gravity="center">
+
+        </TextView>
+
+        <ImageButton
+            android:id="@+id/botonMasReintentosLectura"
+            android:layout_width="0dp"
+            android:layout_height="32dp"
+            android:background="@drawable/mas"
+            android:layout_weight="10"
+            android:layout_gravity="center"
+            android:gravity="center">
+
+        </ImageButton>
+
+    </LinearLayout>
+ -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <!-- LinearLayout duracion -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="14"
+            android:background="@drawable/lista">
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@drawable/icono_termometro"
+                android:layout_gravity="center"
+                >
+
+            </ImageView>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="5"
+                android:layout_gravity="center"
+                android:layout_marginLeft="20dp"
+                android:text="Intervalo de reintentos"
+                style="@style/textoLista">
+
+            </TextView>
+
+            <ImageButton
+                android:id="@+id/botonMenosintervaloReintentos"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:src="@drawable/icono_menos">
+
+            </ImageButton>
+
+            <TextView
+                android:id="@+id/textintervaloReintentos"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:text="0.5"
+                android:textSize="40dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                style="@style/textoLista">
+
+            </TextView>
+            <ImageButton
+                android:id="@+id/botonMasintervaloReintentos"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:src="@drawable/icono_mas">
+
+            </ImageButton>
+
+
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- Intervalo de reintentos
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:weightSum="100">
+
+        <TextView
+
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/intervaloReintentos"
+            android:layout_weight="60"
+            android:layout_gravity="center">
+
+        </TextView>
+
+        <ImageButton
+            android:id="@+id/botonMenosintervaloReintentos"
+            android:layout_width="0dp"
+            android:layout_height="32dp"
+            android:background="@drawable/menos"
+            android:layout_weight="10"
+            android:layout_gravity="center"
+            android:gravity="center"
+            >
+
+        </ImageButton>
+
+        <TextView
+            android:id="@+id/textintervaloReintentos"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="0.5"
+            android:layout_weight="20"
+            android:layout_gravity="center"
+            android:gravity="center">
+
+        </TextView>
+
+        <ImageButton
+            android:id="@+id/botonMasintervaloReintentos"
+            android:layout_width="0dp"
+            android:layout_height="32dp"
+            android:background="@drawable/mas"
+            android:layout_weight="10"
+            android:layout_gravity="center"
+            android:gravity="center">
+
+        </ImageButton>
+
+    </LinearLayout>
+ -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <!-- LinearLayout duracion -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="14"
+            android:background="@drawable/lista">
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@drawable/icono_termometro"
+                android:layout_gravity="center"
+                >
+
+            </ImageView>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="5"
+                android:layout_gravity="center"
+                android:layout_marginLeft="20dp"
+                android:text="Calibrado del termostato en ºC"
+                style="@style/textoLista">
+
+            </TextView>
+
+            <ImageButton
+                android:id="@+id/botonMenosCalibrado"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:src="@drawable/icono_menos">
+
+            </ImageButton>
+
+            <TextView
+                android:id="@+id/textCalibrado"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:text="0.5"
+                android:textSize="40dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                style="@style/textoLista">
+
+            </TextView>
+            <ImageButton
+                android:id="@+id/botonMasCalibrado"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:src="@drawable/icono_mas">
+
+            </ImageButton>
+
+
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+
+
+
+
+    <!-- Calibrado
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:weightSum="100">
+
+        <TextView
+
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/calibrado"
+            android:layout_weight="60"
+            android:layout_gravity="center">
+
+        </TextView>
+
+        <ImageButton
+            android:id="@+id/botonMenosCalibrado"
+            android:layout_width="0dp"
+            android:layout_height="32dp"
+            android:background="@drawable/menos"
+            android:layout_weight="10"
+            android:layout_gravity="center"
+            android:gravity="center"
+            >
+
+        </ImageButton>
+
+        <TextView
+            android:id="@+id/textCalibrado"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="0.5"
+            android:layout_weight="20"
+            android:layout_gravity="center"
+            android:gravity="center">
+
+        </TextView>
+
+        <ImageButton
+            android:id="@+id/botonMasCalibrado"
+            android:layout_width="0dp"
+            android:layout_height="32dp"
+            android:background="@drawable/mas"
+            android:layout_weight="10"
+            android:layout_gravity="center"
+            android:gravity="center">
+
+        </ImageButton>
+
+    </LinearLayout>
+-->
+
+
+
+
+
+</LinearLayout>

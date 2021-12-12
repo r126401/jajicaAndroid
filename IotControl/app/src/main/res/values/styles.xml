@@ -1,0 +1,188 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="diasDeLaSemana">
+
+        <item name="android:gravity">center</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:background">@drawable/texto_redondeado</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">32dp</item>
+        <item name="android:layout_marginEnd">5dp</item>
+        <item name="android:layout_weight">1</item>
+
+    </style>
+
+    <style name="timePickers" parent="android:Widget.Material.NumberPicker">
+        <item name="android:fontFamily">@font/robotreaversw9zz</item>
+        <item name="android:layout_height">200dp</item>
+        <item name="android:solidColor">#ffffff</item>  <!--color del fondo de los numeros no seleccionados -->
+        <item name="android:background">#8EDEEB</item>
+        <item name="android:textSize">50dp</item>
+
+
+    </style>
+
+
+    <style name="nombreDispositivo">
+
+        <item name="android:textColor">#0044FF</item>
+        <item name="android:fontFamily">@font/rpmitalicg5p3</item>
+        <item name="android:textSize">20dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:paddingBottom">10dp</item>
+    </style>
+
+    <style name="indicadorTemperatura">
+        <item name="android:fontFamily">@font/robotreaversitalic7gxa</item>
+        <item name="android:textColor">#2E2C55</item>
+
+    </style>
+    <style name="indicadorHumedad">
+        <item name="android:fontFamily">@font/thyssen</item>
+        <item name="android:textColor">#6B1B08</item>
+        <item name="android:textSize">20dp</item>
+
+    </style>
+
+
+    <style name="textosOpciones">
+
+        <item name="android:fontFamily">@font/robotreaversw9zz</item>
+        <item name="android:textSize">15dp</item>
+        <item name="android:textColor">#000000</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_width">110dp</item>
+        <item name="android:layout_height">50dp</item>
+    </style>
+
+    <style name="rellenoTextoOpciones">
+
+        <item name="android:ems">10</item>
+        <item name="android:textColorHint">#000000</item>
+        <item name="android:textColorLink">#000000</item>
+        <item name="android:textColor">#000000</item>
+        <item name="android:importantForAutofill">no</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:inputType">text</item>
+
+    </style>
+
+    <style name="fondoAplicacion" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">@drawable/fondocontroles</item>
+
+
+    </style>
+
+
+
+    <style name="textoProgramas">
+        <item name="android:fontFamily">@font/poetsenone</item>
+        <item name="android:textSize">24dp</item>
+        <item name="android:textColor">#000000</item>
+        <item name="android:focusable">false</item>
+        <item name="android:focusableInTouchMode">false</item>
+
+
+
+    </style>
+
+    <style name="botonesTermostato">
+        <item name="android:layout_width">24dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">#bcd2dd</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="textoUmbral">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">@font/robotreaversitalic4aa4</item>
+        <item name="android:textSize">25dp</item>
+        <item name="android:textColor">#33455d</item>
+    </style>
+
+    <style name="textoTemperatura">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">@font/thyssen</item>
+        <item name="android:textSize">65dp</item>
+        <item name="android:textColor">#33455d</item>
+        <item name="android:shadowColor">#ddffee</item>
+
+    </style>
+
+    <style name="textoHumedad">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">@font/wendy_one</item>
+        <item name="android:textSize">20dp</item>
+        <item name="android:textColor">#33455d</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_gravity">center</item>
+
+    </style>
+
+    <style name="textoFechaPrograma">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">@font/poetsenone</item>
+        <item name="android:textSize">20dp</item>
+        <item name="android:textColor">#000000</item>
+    </style>
+
+    <style name="textoUmbralTemperatura">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">@font/poetsenone</item>
+        <item name="android:textSize">20dp</item>
+        <item name="android:textColor">#000000</item>
+
+    </style>
+
+
+    <style name="estiloTimePicker">
+
+        <item name="android:background">#776655</item>
+        <item name="android:radius">5dp</item>
+
+
+
+    </style>
+
+
+    <style name="diasDeLaSemanaProgramador">
+
+        <item name="android:gravity">center</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:background">@drawable/texto_redondeado</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:layout_width">32dp</item>
+        <item name="android:layout_height">32dp</item>
+        <item name="android:layout_marginEnd">10dp</item>
+
+
+    </style>
+
+
+    <style name="textoLista" parent="Widget.AppCompat.TextView.SpinnerItem">
+
+
+    </style>
+
+
+
+</resources>

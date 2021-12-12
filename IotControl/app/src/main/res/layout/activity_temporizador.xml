@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Temporizador"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:background="#234562"
+        app:title="@string/cronotermostato"
+        app:titleTextColor="#FFFFFF"
+        app:navigationIcon="@drawable/interruptor">
+
+    </android.support.v7.widget.Toolbar>
+
+
+    <!-- botones de arriba
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:orientation="horizontal"
+        android:weightSum="100">
+
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/nook"
+            android:layout_weight="15"
+            android:id="@+id/botonNoOkPrograma">
+
+        </Button>
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="70"
+            >
+
+        </Space>
+        <Button
+            android:layout_width="0dp"
+            android:layout_weight="15"
+            android:layout_height="wrap_content"
+            android:background="@drawable/visto"
+            android:id="@+id/botonOkPrograma">
+
+        </Button>
+
+    </LinearLayout>
+    -->
+
+    <include layout="@layout/botones_aceptar_cancelar">
+
+    </include>
+
+    <TimePicker
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:timePickerMode="spinner"
+        android:id="@+id/timePickerHora"
+        android:layout_gravity="center"
+        style="@style/estiloTimePicker">
+
+    </TimePicker>
+
+
+
+
+    <!-- Linear de programacion del interruptor -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:id="@+id/linearInterruptor"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/rele">
+
+        </TextView>
+
+        <ImageButton
+            android:id="@+id/botonRele"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/on">
+
+        </ImageButton>
+
+        <TextView
+            style="@style/textosOpciones"
+            android:text="Duracion:">
+
+        </TextView>
+
+        <Button
+            android:id="@+id/botonMenosDuracion"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/menos">
+
+        </Button>
+
+        <TextView
+            android:id="@+id/textoDuracion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:layout_marginStart="5dp">
+
+        </TextView>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="''"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp">
+        </TextView>
+
+        <Button
+            android:id="@+id/botonMasDuracion"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/mas">
+
+        </Button>
+
+    </LinearLayout>
+
+    <!-- Lineas de programacion del cronotermostato -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:id="@+id/linearTemperatura"
+        android:visibility="visible">
+
+
+        <Button
+            android:id="@+id/botonMenos"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/menos">
+
+        </Button>
+
+        <EditText
+            android:id="@+id/textoTemperatura"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="21.1">
+
+        </EditText>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ºC"
+            >
+
+        </TextView>
+
+        <Button
+            android:id="@+id/botonMas"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/mas">
+
+        </Button>
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="21/03/2019 "
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:id="@+id/textoFecha">
+
+        </TextView>
+
+
+        <TextView
+            android:paddingStart="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="21:00"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:id="@+id/textoHora">
+
+        </TextView>
+
+
+
+    </LinearLayout>
+
+<!--
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/arrayTipoProgramacion"
+        android:prompt="@string/repetir"
+        android:id="@+id/spinnerTipoPrograma">
+
+    </Spinner>
+-->
+    <android.support.v7.widget.SwitchCompat
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:id="@+id/switchTipoPrograma"
+        android:textOff="@string/norepetir"
+        android:textOn="@string/repetir">
+
+    </android.support.v7.widget.SwitchCompat>
+
+    <!-- layout dias de la semana -->
+    <LinearLayout
+        android:id="@+id/linearLayoutDiasSemana"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="10"
+        android:layout_marginTop="10dp">
+
+        <CheckBox
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="40dp"
+            android:foreground="@drawable/lunesoff"
+            android:id="@+id/checkboxLunes">
+
+        </CheckBox>
+        <CheckBox
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:foreground="@drawable/martesoff"
+            android:id="@+id/checkboxMartes">
+
+        </CheckBox>
+        <CheckBox
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:foreground="@drawable/miercolesoff"
+            android:id="@+id/checkboxMiercoles">
+
+        </CheckBox>
+        <CheckBox
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:foreground="@drawable/juevesoff"
+            android:id="@+id/checkboxJueves">
+
+        </CheckBox>
+        <CheckBox
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:foreground="@drawable/viernesoff"
+            android:id="@+id/checkboxViernes">
+
+        </CheckBox>
+        <CheckBox
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:foreground="@drawable/sabadooff"
+            android:id="@+id/checkboxSabado">
+
+        </CheckBox>
+        <CheckBox
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:foreground="@drawable/domingooff"
+            android:id="@+id/checkboxDomingo">
+
+        </CheckBox>
+
+
+
+    </LinearLayout>
+<!--
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/arrayAno"
+        android:prompt="@string/ano"
+        android:id="@+id/spinnerAno">
+    </Spinner>
+
+-->
+
+    <DatePicker
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:datePickerMode="spinner"
+        android:id="@+id/datePickerFecha"
+        android:layout_gravity="center"
+        android:spinnersShown="true"
+        android:calendarViewShown="false">
+
+    </DatePicker>
+
+
+
+</LinearLayout>

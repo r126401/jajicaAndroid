@@ -1,0 +1,521 @@
+package com.iotcontrol;
+
+import android.content.Context;
+import android.os.Parcel;
+import android.os.Parcelable;
+import android.util.Log;
+
+import java.util.UUID;
+import java.io.*;
+
+import org.eclipse.paho.android.service.MqttAndroidClient;
+import org.eclipse.paho.client.mqttv3.IMqttActionListener;
+import org.eclipse.paho.client.mqttv3.IMqttAsyncClient;
+import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
+import org.eclipse.paho.client.mqttv3.IMqttToken;
+import org.eclipse.paho.client.mqttv3.MqttCallback;
+import org.eclipse.paho.client.mqttv3.MqttCallbackExtended;
+import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
+import org.eclipse.paho.client.mqttv3.MqttException;
+import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+
+
+
+
+import javax.net.SocketFactory;
+
+import static android.provider.Settings.Global.BOOT_COUNT;
+import static android.provider.Settings.Global.getString;
+
+
+enum CONF_MQTT {
+    MQTT("mqtt"), BROKER("broker"), PUERTO("puerto"), USUARIO("usuario"), PASSWORD("password");
+
+    private String confMqtt;
+
+    CONF_MQTT(String dato) {
+        this.confMqtt = dato;
+
+    }
+
+    String getValorTextoJson() {
+
+        return this.confMqtt;
+    }
+}
+
+
+/**
+ * Esta clase gestiona las conexiones de los dispositivos a traves de mqtt
+ */
+
+public class conexionMqtt implements Serializable, Parcelable {
+
+    MqttAndroidClient cliente;
+    boolean estadoConexion;
+    MqttConnectOptions opcionesConexion;
+    Context contexto;
+    private String idCliente;
+    private String brokerId;
+    private String puerto;
+    private String usuario;
+    private String password;
+    private String ficheroMqtt = "iotControlMqtt.conf";
+    private JSONObject datosMqtt;
+
+    OnConexionMqtt listener;
+    IMqttToken token;
+
+
+    protected conexionMqtt(Parcel in) {
+        estadoConexion = in.readByte() != 0;
+        idCliente = in.readString();
+        brokerId = in.readString();
+        puerto = in.readString();
+        usuario = in.readString();
+        password = in.readString();
+        ficheroMqtt = in.readString();
+    }
+
+    public static final Creator<conexionMqtt> CREATOR = new Creator<conexionMqtt>() {
+        @Override
+        public conexionMqtt createFromParcel(Parcel in) {
+            return new conexionMqtt(in);
+        }
+
+        @Override
+        public conexionMqtt[] newArray(int size) {
+            return new conexionMqtt[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeByte((byte) (estadoConexion ? 1 : 0));
+        dest.writeString(idCliente);
+        dest.writeString(brokerId);
+        dest.writeString(puerto);
+        dest.writeString(usuario);
+        dest.writeString(password);
+        dest.writeString(ficheroMqtt);
+    }
+
+
+    public interface OnConexionMqtt {
+
+        void conexionPerdida();
+
+    }
+
+    public void setOnConexionMqtt(conexionMqtt.OnConexionMqtt listener) {
+        this.listener = listener;
+    }
+
+
+    private void datosDefecto() {
+
+        brokerId = "jajicaiot.ddns.net";
+        puerto = "1883";
+        usuario = "";
+        password = "";
+    }
+
+    /**
+     * Establece el objeto MqttAndroidClient con los datos de la conexion.
+     * Si no hay configuracion, se aplica la de defecto
+     * @param contexto es el contexto de la aplicacion.
+     */
+    conexionMqtt(Context contexto) {
+
+        JSONObject mqtt;
+        cliente = null;
+        estadoConexion = false;
+        this.contexto = contexto;
+
+        if (leerConfiguracion() == false) {
+            Log.i(getClass().toString(), ": No hay configuracion mqtt, se crea por defecto");
+
+            escribirConfiguracionMqttDefecto();
+        }
+
+
+        try {
+            mqtt = datosMqtt.getJSONObject(CONF_MQTT.MQTT.getValorTextoJson());
+            brokerId = mqtt.optString(CONF_MQTT.BROKER.getValorTextoJson());
+            puerto = mqtt.optString(CONF_MQTT.PUERTO.getValorTextoJson());
+            usuario = mqtt.optString(CONF_MQTT.USUARIO.getValorTextoJson());
+            password = mqtt.optString(CONF_MQTT.PASSWORD.getValorTextoJson());
+
+            idCliente = UUID.randomUUID().toString();
+
+            String cadenaConexion = "tcp://" + brokerId + ":" + puerto;
+            Log.w(getClass().toString(), "cadena: " + cadenaConexion);
+            opcionesConexion = new MqttConnectOptions();
+            opcionesConexion.setAutomaticReconnect(true);
+            opcionesConexion.setCleanSession(false);
+            opcionesConexion.setConnectionTimeout(120);
+            opcionesConexion.setMqttVersion(3);
+            cliente = new MqttAndroidClient(contexto, cadenaConexion, idCliente );
+
+
+
+
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+
+        }
+
+
+
+
+    }
+
+    public void establecerConexionMqtt() {
+
+
+
+        try {
+            Log.w(getClass().toString(), "Nos conectamos al broker");
+            cliente.connect(opcionesConexion, this.contexto, new IMqttActionListener() {
+                @Override
+                public void onSuccess(IMqttToken iMqttToken) {
+                    Log.w(getClass().toString(), "Conectado al broker con exito...");
+                    token = iMqttToken;
+                    estadoConexion = true;
+
+                }
+
+                @Override
+                public void onFailure(IMqttToken iMqttToken, Throwable throwable) {
+                    Log.w(getClass().toString(), "Error al conectar con el broker");
+                    estadoConexion = false;
+                    listener.conexionPerdida();
+
+                }
+            });
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+
+    /**
+     * Escribe la configuracion de defecto en el que caso de que no ha hubiera.
+     * @return
+     */
+    private boolean escribirConfiguracionMqttDefecto() {
+
+        OutputStreamWriter escritor = null;
+        JSONObject mqtt = null;
+
+        try {
+            escritor = new OutputStreamWriter(contexto.openFileOutput(ficheroMqtt, contexto.MODE_PRIVATE));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        datosDefecto();
+        mqtt = new JSONObject();
+        datosMqtt = new JSONObject();
+        try {
+            mqtt.put(CONF_MQTT.BROKER.getValorTextoJson(), brokerId);
+            mqtt.put(CONF_MQTT.PUERTO.getValorTextoJson(), puerto);
+            mqtt.put(CONF_MQTT.USUARIO.getValorTextoJson(), usuario);
+            mqtt.put(CONF_MQTT.PASSWORD.getValorTextoJson(), password);
+            datosMqtt.put(CONF_MQTT.MQTT.getValorTextoJson(), mqtt);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return false;
+        }
+         try {
+            escritor.write(datosMqtt.toString());
+            escritor.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+
+
+        return true;
+    }
+
+
+
+    /**
+     * Esta funcion lee la configuracion desde el fichero de configuracionMqtt
+     * @return false en caso de que no se pueda leer la configuracion. true lectura correcta
+     */
+    public boolean leerConfiguracion() {
+
+
+
+        InputStreamReader flujo;
+        BufferedReader lector;
+        String linea = null;
+        String texto = null;
+        datosMqtt = null;
+
+
+
+        try {
+            flujo = new InputStreamReader(contexto.openFileInput(ficheroMqtt));
+            lector = new BufferedReader(flujo);
+            linea = lector.readLine();
+
+            while (linea != null) {
+                if (texto == null) {
+                    texto = linea;
+                } else {
+                    texto = texto + linea;
+                }
+
+                linea = lector.readLine();
+
+            }
+            lector.close();
+            flujo.close();
+
+
+            try {
+                datosMqtt = new JSONObject(texto);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return false;
+
+            //escribirMensaje("No hay configuracion activa");
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+
+        return true;
+
+    }
+
+
+    /**
+     * Obtiene el identificativo del cliente de la conexion
+     * @return
+     */
+    public String getIdCliente() {
+        return idCliente;
+    }
+
+    /**
+     * Funcion que determina si estamos conectados al broker.
+     * @return
+     */
+    public boolean isConnected() {
+        return estadoConexion;
+    }
+
+
+    /**
+     * Configura la reconexion automatica
+     * @param accion
+     */
+    public void setReconexionAutomatica(boolean accion) {
+
+        opcionesConexion.setAutomaticReconnect(accion);
+    }
+
+    /**
+     * Establece el limpiado de sesion
+     * @param accion
+     */
+
+    public void setCleanSession(boolean accion) {
+        opcionesConexion.setCleanSession(accion);
+    }
+
+    /**
+     * Establece en segundos la temporizacion de timeout de la conexion mqtt
+     * @param segundos
+     */
+    public void setConnetionTimeOut(int segundos) {
+        opcionesConexion.setConnectionTimeout(segundos);
+    }
+
+    /**
+     * Establece la version de la conexion mqtt
+     * @param version
+     */
+    public void setMqttVersion(int version) {
+
+        opcionesConexion.setMqttVersion(version);
+    }
+
+
+    /**
+     * Publica un mensaje de texto a traves del topic suministrado
+     * @param topic sobre el que enviar el mensaje
+     * @param texto es el mensaje a enviar
+     */
+    public void publicarTopic(String topic, String texto) {
+
+        MqttMessage mensaje;
+
+        if (cliente == null) {
+            Log.e(getClass().toString(), "el cliente mqtt es nulo");
+        }
+        if (estadoConexion == true) {
+            mensaje = new MqttMessage();
+            mensaje.setPayload(texto.getBytes());
+            try {
+                cliente.publish(topic, mensaje);
+                Log.w(getClass().toString(), topic + ": " + texto);
+            } catch (MqttException e) {
+                e.printStackTrace();
+            }
+
+        } else {
+            Log.w(getClass().toString(), "rno estoy conectado y no puedo publica");
+        }
+    }
+
+
+    /**
+     * Funcion utilizada para subscribirse a un topic dado como parametro
+     * @param topic
+     */
+    public void subscribirTopic(final String topic) {
+
+        Log.w(getClass().toString(), "topic " + topic);
+        if (estadoConexion == true) {
+            try {
+                cliente.subscribe(topic, 0, contexto, new IMqttActionListener() {
+                    @Override
+                    public void onSuccess(IMqttToken iMqttToken) {
+                        Log.w(getClass().toString(), "subscrito al topic " + topic);
+                    }
+
+                    @Override
+                    public void onFailure(IMqttToken iMqttToken, Throwable throwable) {
+                        Log.w(getClass().toString(), "subscrito sin exito al topic " + topic);
+
+                    }
+                });
+            } catch (MqttException e) {
+                e.printStackTrace();
+            }
+
+        } else {
+            Log.w(getClass().toString(), "No estas conectado al broker");
+            estadoConexion = false;
+        }
+
+    }
+
+
+    /**
+     * Cierre de la conexion mqtt
+     */
+    public void cerrarConexion() {
+        try {
+            cliente.disconnect();
+            cliente = null;
+            this.estadoConexion = false;
+            //cliente.close();
+            Log.w(getClass().toString(), "Conexion Mqtt cerrada");
+        } catch (MqttException e) {
+            e.printStackTrace();
+            Log.w(getClass().toString(), "Error al intentar desconectar");
+        }
+    }
+
+    public String getBrokerId() {
+        return this.brokerId;
+    }
+
+    public String getPuerto() {
+        return this.puerto;
+    }
+
+    public String getUsuario() {
+        return  this.usuario;
+    }
+
+    public String getPassword() {
+        return this.password;
+    }
+
+    public String getFicheroMqtt() {
+        return this.ficheroMqtt;
+    }
+
+    public void setBrokerId(String broker) {
+        this.brokerId = broker;
+    }
+
+    public void setPuerto(String puerto) {
+        this.puerto = puerto;
+
+    }
+
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public boolean escribirConfiguracion() {
+
+        OutputStreamWriter escritor = null;
+        JSONObject confMqtt = null;
+
+
+        try {
+            escritor = new OutputStreamWriter(contexto.openFileOutput(ficheroMqtt, contexto.MODE_PRIVATE));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        JSONObject mqtt = null;
+        try {
+            mqtt = new JSONObject();
+            confMqtt = new JSONObject();
+            confMqtt.put(CONF_MQTT.BROKER.getValorTextoJson(), getBrokerId());
+            confMqtt.put(CONF_MQTT.PUERTO.getValorTextoJson(), getPuerto());
+            confMqtt.put(CONF_MQTT.USUARIO.getValorTextoJson(), getUsuario() );
+            confMqtt.put(CONF_MQTT.PASSWORD.getValorTextoJson(), getPassword());
+            mqtt.putOpt(CONF_MQTT.MQTT.getValorTextoJson(), confMqtt);
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            escritor.write(mqtt.toString());
+            escritor.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        return true;
+    }
+
+
+
+}

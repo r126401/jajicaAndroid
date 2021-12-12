@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/fondoAplicacion"
+    tools:context=".configuracionMqtt"
+    android:orientation="vertical">
+
+<!--
+    <android.support.v7.widget.Toolbar
+
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="#234562"
+        app:title="@string/configurarMqtt"
+        app:titleTextColor="#FFFFFF"
+        app:navigationIcon="@drawable/bkconectado">
+
+    </android.support.v7.widget.Toolbar>
+-->
+    <include
+        android:id="@+id/toolbarConfiguracionMqtt"
+        layout="@layout/barra_principal"/>
+
+    <include layout="@layout/botones_aceptar_cancelar">
+
+    </include>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="40dp"
+        android:layout_marginStart="10dp">
+
+        <TextView
+            android:id="@+id/textBroker"
+            style="@style/textosOpciones"
+            android:text="@string/broker"/>
+
+        <EditText
+            android:id="@+id/editBroker"
+            android:text="@string/brokerHint"
+            style="@style/rellenoTextoOpciones"/>
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginStart="10dp">
+
+        <TextView
+            android:id="@+id/textPuerto"
+            android:text="@string/puerto"
+            style="@style/textosOpciones"/>
+
+        <EditText
+            android:id="@+id/editPuerto"
+            android:text="@string/puerto"
+            android:inputType="numberDecimal"
+            style="@style/rellenoTextoOpciones"/>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginStart="10dp">
+
+        <TextView
+            android:id="@+id/textUsuario"
+            android:text="@string/usuario"
+            style="@style/textosOpciones"/>
+
+        <EditText
+            android:id="@+id/editUsuario"
+            android:text="@string/usuario"
+            style="@style/rellenoTextoOpciones"/>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginStart="10dp">
+
+        <TextView
+            android:id="@+id/textPassword"
+            android:text="@string/password"
+            style="@style/textosOpciones"/>
+
+        <EditText
+            android:id="@+id/editPassword"
+            style="@style/rellenoTextoOpciones"
+            android:text="@string/password" />
+    </LinearLayout>
+
+
+
+
+
+</LinearLayout>

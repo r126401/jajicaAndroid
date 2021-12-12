@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menuReset"
+        android:title="@string/reset"
+        android:icon="@drawable/reset">
+    </item>
+
+    <item
+        android:id="@+id/menuFactoryReset"
+        android:title="@string/factoryReset"
+        android:icon="@drawable/reset">
+
+    </item>
+
+    <item
+        android:id="@+id/menuInfo"
+        android:title="@string/infoDispositivo"
+        android:icon="@drawable/informacion">
+
+    </item>
+
+    <item
+        android:id="@+id/menuUpgradeFirmware"
+        android:title="@string/upgradeFirmware"
+        android:icon="@drawable/upgrade">
+
+    </item>
+
+    <item
+        android:id="@+id/menuCambiarNombre"
+        android:title="@string/modificarNombre"
+        android:icon="@drawable/on"
+        >
+
+    </item>
+
+</menu>
