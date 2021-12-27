@@ -6,7 +6,7 @@
     </shared>
   </component>
   <component name="AndroidLogFilters">
-    <option name="TOOL_WINDOW_LOG_LEVEL" value="error" />
+    <option name="TOOL_WINDOW_LOG_LEVEL" value="debug" />
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="No Filters" />
   </component>
   <component name="AvailableLibraryUpdateStorage">
@@ -72,7 +72,7 @@
   <component name="Cvs2Configuration">
     <option name="OVERRIDE_EXISTING_TAG_FOR_PROJECT" value="false" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[5ab456a8]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -100,11 +100,14 @@
       <list>
         <option value="valueResourceFile" />
         <option value="Interface" />
-        <option value="Class" />
         <option value="layoutResourceFile" />
         <option value="resourceFile" />
+        <option value="Class" />
       </list>
     </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="ProjectId" id="1YGmtERVm3dsKjBKwVL9evVwIkD" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
@@ -116,13 +119,15 @@
   </component>
   <component name="PropertiesComponent">
     <property name="DeviceAndSnapshotComboBoxAction.selectedDevice" value="Pixel_3a_API_30_x86" />
-    <property name="DeviceAndSnapshotComboBoxAction.selectionTime" value="2021-12-09T18:41:48.439Z" />
+    <property name="DeviceAndSnapshotComboBoxAction.selectionTime" value="2021-12-13T17:43:50.045Z" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="android-custom-view/home/t126401/Android/Sdk/sources/android-30/android/view/View.java_SELECTED" value="View" />
     <property name="android.sdk.path" value="/opt/android/sdk" />
     <property name="device.picker.selection" value="google" />
-    <property name="last_opened_file_path" value="$USER_HOME$/temporal/Paho-MQTT-Android-TCP-TLS-WSS-Example" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../Paho-MQTT-Android-TCP-TLS-WSS-Example" />
     <property name="memory.settings.postsync.do.not.ask.for.project" value="true" />
+    <property name="multi-representation-preview/home/t126401/Android/Sdk/sources/android-30/android/view/View.java_selected" value="Custom views" />
     <property name="project.structure.last.edited" value="SDK Location" />
     <property name="project.structure.proportion" value="0.17" />
     <property name="project.structure.side.proportion" value="0.55041325" />
@@ -576,35 +581,91 @@
     <option name="localTasksCounter" value="151" />
     <servers />
   </component>
-  <component name="TodoView">
-    <todo-panel id="selected-file">
-      <is-autoscroll-to-source value="true" />
-    </todo-panel>
-    <todo-panel id="all">
-      <are-packages-shown value="true" />
-      <is-autoscroll-to-source value="true" />
-    </todo-panel>
-  </component>
   <component name="VcsManagerConfiguration">
     <option name="LAST_COMMIT_MESSAGE" value="" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="555" y="318" width="801" height="420" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1639335390409">
+      <screen x="0" y="0" width="1920" height="1054" />
+    </state>
+    <state x="555" y="318" width="801" height="420" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1920.1054@0.0.1920.1054" timestamp="1639335390409" />
+    <state x="767" y="229" width="378" height="599" key="#com.intellij.ide.util.MemberChooser" timestamp="1639424361730">
+      <screen x="0" y="0" width="1920" height="1054" />
+    </state>
+    <state x="767" y="229" width="378" height="599" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1054@0.0.1920.1054" timestamp="1639424361730" />
     <state x="101" y="100" width="1718" height="853" key="AVDManager" timestamp="1639075724322">
       <screen x="0" y="0" width="1920" height="1054" />
     </state>
     <state x="101" y="100" width="1718" height="853" key="AVDManager/0.0.1920.1054@0.0.1920.1054" timestamp="1639075724322" />
-    <state x="704" y="285" key="FileChooserDialogImpl" timestamp="1639226522364">
+    <state width="471" height="629" key="DebuggerActiveHint" timestamp="1639417817128">
       <screen x="0" y="0" width="1920" height="1054" />
     </state>
-    <state x="704" y="285" key="FileChooserDialogImpl/0.0.1920.1054@0.0.1920.1054" timestamp="1639226522364" />
+    <state width="471" height="629" key="DebuggerActiveHint/0.0.1920.1054@0.0.1920.1054" timestamp="1639417817128" />
+    <state x="704" y="285" key="FileChooserDialogImpl" timestamp="1639335221846">
+      <screen x="0" y="0" width="1920" height="1054" />
+    </state>
+    <state x="704" y="285" key="FileChooserDialogImpl/0.0.1920.1054@0.0.1920.1054" timestamp="1639335221846" />
+    <state width="1862" height="291" key="GridCell.Tab.0.bottom" timestamp="1640605393437">
+      <screen x="0" y="0" width="1920" height="1054" />
+    </state>
+    <state width="1862" height="291" key="GridCell.Tab.0.bottom/0.0.1920.1054@0.0.1920.1054" timestamp="1640605393437" />
+    <state width="1862" height="291" key="GridCell.Tab.0.center" timestamp="1640605393436">
+      <screen x="0" y="0" width="1920" height="1054" />
+    </state>
+    <state width="1862" height="291" key="GridCell.Tab.0.center/0.0.1920.1054@0.0.1920.1054" timestamp="1640605393436" />
+    <state width="1862" height="291" key="GridCell.Tab.0.left" timestamp="1640605393436">
+      <screen x="0" y="0" width="1920" height="1054" />
+    </state>
+    <state width="1862" height="291" key="GridCell.Tab.0.left/0.0.1920.1054@0.0.1920.1054" timestamp="1640605393436" />
+    <state width="1862" height="291" key="GridCell.Tab.0.right" timestamp="1640605393437">
+      <screen x="0" y="0" width="1920" height="1054" />
+    </state>
+    <state width="1862" height="291" key="GridCell.Tab.0.right/0.0.1920.1054@0.0.1920.1054" timestamp="1640605393437" />
+    <state width="1862" height="291" key="GridCell.Tab.1.bottom" timestamp="1640605393439">
+      <screen x="0" y="0" width="1920" height="1054" />
+    </state>
+    <state width="1862" height="291" key="GridCell.Tab.1.bottom/0.0.1920.1054@0.0.1920.1054" timestamp="1640605393439" />
+    <state width="1862" height="291" key="GridCell.Tab.1.center" timestamp="1640605393438">
+      <screen x="0" y="0" width="1920" height="1054" />
+    </state>
+    <state width="1862" height="291" key="GridCell.Tab.1.center/0.0.1920.1054@0.0.1920.1054" timestamp="1640605393438" />
+    <state width="1862" height="291" key="GridCell.Tab.1.left" timestamp="1640605393438">
+      <screen x="0" y="0" width="1920" height="1054" />
+    </state>
+    <state width="1862" height="291" key="GridCell.Tab.1.left/0.0.1920.1054@0.0.1920.1054" timestamp="1640605393438" />
+    <state width="1862" height="291" key="GridCell.Tab.1.right" timestamp="1640605393439">
+      <screen x="0" y="0" width="1920" height="1054" />
+    </state>
+    <state width="1862" height="291" key="GridCell.Tab.1.right/0.0.1920.1054@0.0.1920.1054" timestamp="1640605393439" />
+    <state x="623" y="232" key="search.everywhere.popup" timestamp="1639418224885">
+      <screen x="0" y="0" width="1920" height="1054" />
+    </state>
+    <state x="623" y="232" key="search.everywhere.popup/0.0.1920.1054@0.0.1920.1054" timestamp="1639418224885" />
   </component>
   <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/iotcontrol/conexionMqtt.java</url>
+          <line>164</line>
+          <option name="timeStamp" value="17" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+    <pin-to-top-manager>
+      <pinned-members>
+        <PinnedItemInfo typeName="android.content.res.AssetManager$AssetInputStream" fieldName="mLength" />
+        <PinnedItemInfo typeName="android.content.res.AssetManager$AssetInputStream" fieldName="this$0" />
+        <PinnedItemInfo typeName="com.iotcontrol.SocketFactory" fieldName="tmf" />
+      </pinned-members>
+    </pin-to-top-manager>
     <watches-manager>
       <configuration name="app">
         <watch expression="TEXTOS_DIALOGO_IOT.SERVIDOR_OTA.getValorTextoJson()" language="JAVA" />
         <watch expression="Integer.valueOf(textoUmbralParteEntera.getText().toString())" language="JAVA" />
         <watch expression="programa" language="JAVA" />
         <watch expression="v.getId()" language="JAVA" />
+        <watch expression="checkTls.isChecked()" language="JAVA" />
         <watch expression="textoUmbralParteDecimal.getText().toString()" language="JAVA" />
         <watch expression="dispositivo" language="JAVA" />
         <watch expression="dispositivo" language="JAVA" />
@@ -651,70 +712,16 @@
         <watch expression="cnx" language="JAVA" />
         <watch expression="dispositivo.getTopicPublicacion()" language="JAVA" />
         <watch expression="dialogo.comandoActuarRele(ESTADO_RELE.OFF)" language="JAVA" />
+        <watch expression="R.raw.certificado" language="JAVA" custom="com.iotcontrol.R" />
         <watch expression="programa" language="JAVA" />
         <watch expression="programa.getMinuto()" language="JAVA" />
+        <watch expression="cnx.isConnected()" language="JAVA" />
         <watch expression="datos.get(position)" language="JAVA" />
         <watch expression="datos.get(position)" language="JAVA" />
         <watch expression="datos.get(position)" language="JAVA" />
         <watch expression="datos.get(position)" language="JAVA" />
+        <watch expression="SocketFactory.SocketFactoryOptions" language="JAVA" custom="com.iotcontrol.SocketFactory" />
       </configuration>
     </watches-manager>
-  </component>
-  <component name="debuggerHistoryManager">
-    <expressions id="watch">
-      <expression>
-        <expression-string>datos.get(position)</expression-string>
-        <language-id>JAVA</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>v.getId()</expression-string>
-        <language-id>JAVA</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>programa.getMinuto()</expression-string>
-        <language-id>JAVA</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>programa</expression-string>
-        <language-id>JAVA</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>dialogo.comandoActuarRele(ESTADO_RELE.OFF)</expression-string>
-        <language-id>JAVA</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>dispositivo.getTopicPublicacion()</expression-string>
-        <language-id>JAVA</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>cnx</expression-string>
-        <language-id>JAVA</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>cnx.isConnected()</expression-string>
-        <language-id>JAVA</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>cadena.getString(R.id.editIdDispositivo)</expression-string>
-        <language-id>JAVA</language-id>
-        <custom-info>com.iotcontrol.R</custom-info>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-    </expressions>
-    <expressions id="evaluateExpression">
-      <expression>
-        <expression-string>programas.get(i).getIdProgramacion()</expression-string>
-        <language-id>JAVA</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-    </expressions>
   </component>
 </project>
