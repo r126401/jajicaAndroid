@@ -98,7 +98,28 @@
         <EditText
             android:id="@+id/editPassword"
             style="@style/rellenoTextoOpciones"
-            android:text="@string/password" />
+            android:text="@string/password"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginStart="10dp">
+
+        <android.support.v7.widget.AppCompatCheckBox
+            android:id="@+id/checkTls"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/textosOpciones"
+            android:text="TLS"
+            android:layout_marginStart="10dp"
+            android:checked="true">
+
+        </android.support.v7.widget.AppCompatCheckBox>
+
+
     </LinearLayout>
 
 

@@ -535,7 +535,7 @@ public class cronotermostato extends AppCompatActivity implements Serializable, 
 
             }
         });
-        cnx.establecerConexionMqtt();
+        cnx.establecerConexionMqtt(getApplicationContext());
 
         return cnx.cliente.isConnected();
 

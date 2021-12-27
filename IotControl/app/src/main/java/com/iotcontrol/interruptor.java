@@ -139,7 +139,7 @@ public class interruptor extends AppCompatActivity implements View.OnClickListen
 
         CountDownTimer contador;
 
-        crearConexionMqtt();
+        crearConexionMqtt(getApplicationContext());
         contador = new CountDownTimer(30000, 10000) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -228,7 +228,7 @@ public class interruptor extends AppCompatActivity implements View.OnClickListen
     }
 
 
-    private boolean crearConexionMqtt() {
+    private boolean crearConexionMqtt(Context contexto) {
 
         // Se crea una nueva conexion mqtt
         if (cnx == null) {
@@ -277,7 +277,7 @@ public class interruptor extends AppCompatActivity implements View.OnClickListen
         }
 
 
-        cnx.establecerConexionMqtt();
+        cnx.establecerConexionMqtt(contexto);
         cnx.setOnConexionMqtt(new conexionMqtt.OnConexionMqtt() {
             @Override
             public void conexionPerdida() {

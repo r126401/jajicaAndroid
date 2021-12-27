@@ -47,6 +47,7 @@ import android.widget.TextView;
 
 
 
+
 public class MainActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener, Serializable {
 
 
@@ -164,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         }
 
 
-        cnx.establecerConexionMqtt();
+        cnx.establecerConexionMqtt(getApplicationContext());
         cnx.setOnConexionMqtt(new conexionMqtt.OnConexionMqtt() {
             @Override
             public void conexionPerdida() {
@@ -226,6 +227,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
             if (cnx.isConnected()) {
                 return;
             }
+
         }
 
 

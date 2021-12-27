@@ -1,10 +1,16 @@
 package com.iotcontrol;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
 
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
 import java.util.UUID;
 import java.io.*;
 
@@ -22,17 +28,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
-
-
-
-import javax.net.SocketFactory;
-
 import static android.provider.Settings.Global.BOOT_COUNT;
 import static android.provider.Settings.Global.getString;
 
 
+
 enum CONF_MQTT {
-    MQTT("mqtt"), BROKER("broker"), PUERTO("puerto"), USUARIO("usuario"), PASSWORD("password");
+    MQTT("mqtt"), BROKER("broker"), PUERTO("puerto"), USUARIO("usuario"), PASSWORD("password"), TLS("tls");
 
     private String confMqtt;
 
@@ -45,6 +47,7 @@ enum CONF_MQTT {
 
         return this.confMqtt;
     }
+
 }
 
 
@@ -63,6 +66,7 @@ public class conexionMqtt implements Serializable, Parcelable {
     private String puerto;
     private String usuario;
     private String password;
+    private boolean tls;
     private String ficheroMqtt = "iotControlMqtt.conf";
     private JSONObject datosMqtt;
 
@@ -123,9 +127,10 @@ public class conexionMqtt implements Serializable, Parcelable {
     private void datosDefecto() {
 
         brokerId = "jajicaiot.ddns.net";
-        puerto = "1883";
+        puerto = "8883";
         usuario = "";
         password = "";
+        tls = true;
     }
 
     /**
@@ -139,6 +144,7 @@ public class conexionMqtt implements Serializable, Parcelable {
         cliente = null;
         estadoConexion = false;
         this.contexto = contexto;
+        String cadenaConexion;
 
         if (leerConfiguracion() == false) {
             Log.i(getClass().toString(), ": No hay configuracion mqtt, se crea por defecto");
@@ -153,17 +159,32 @@ public class conexionMqtt implements Serializable, Parcelable {
             puerto = mqtt.optString(CONF_MQTT.PUERTO.getValorTextoJson());
             usuario = mqtt.optString(CONF_MQTT.USUARIO.getValorTextoJson());
             password = mqtt.optString(CONF_MQTT.PASSWORD.getValorTextoJson());
-
+            tls = mqtt.optBoolean(CONF_MQTT.TLS.getValorTextoJson());
             idCliente = UUID.randomUUID().toString();
 
-            String cadenaConexion = "tcp://" + brokerId + ":" + puerto;
+            if (tls == false) {
+                cadenaConexion = "tcp://" + brokerId + ":" + puerto;
+            } else {
+                cadenaConexion = "ssl://" + brokerId + ":" + puerto;
+            }
+
+
+            //cadenaConexion = "ssl://" + brokerId + ":" + puerto;
             Log.w(getClass().toString(), "cadena: " + cadenaConexion);
             opcionesConexion = new MqttConnectOptions();
             opcionesConexion.setAutomaticReconnect(true);
             opcionesConexion.setCleanSession(false);
             opcionesConexion.setConnectionTimeout(120);
             opcionesConexion.setMqttVersion(3);
+            opcionesConexion.setHttpsHostnameVerificationEnabled(false);
             cliente = new MqttAndroidClient(contexto, cadenaConexion, idCliente );
+
+            if (cadenaConexion.contains("ssl")) {
+                SocketFactory.SocketFactoryOptions socketFactoryOptions = new SocketFactory.SocketFactoryOptions();
+                socketFactoryOptions.withCaInputStream(contexto.getResources().openRawResource(R.raw.certificado));
+                opcionesConexion.setSocketFactory(new SocketFactory(socketFactoryOptions));
+
+            }
 
 
 
@@ -171,25 +192,42 @@ public class conexionMqtt implements Serializable, Parcelable {
 
 
         } catch (JSONException e) {
+            Log.e(getClass().toString(), "Error al procesar el json del fichero de configuracion mqtt");
             e.printStackTrace();
 
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (CertificateException e) {
+            e.printStackTrace();
+            Log.e(getClass().toString(), "Error en certificado");
+        } catch (NoSuchAlgorithmException e) {
+            Log.e(getClass().toString(), "Error en el algoritmo");
+            e.printStackTrace();
+        } catch (UnrecoverableKeyException e) {
+            Log.e(getClass().toString(), "Error no recuperable");
+            e.printStackTrace();
+        } catch (KeyStoreException e) {
+            Log.e(getClass().toString(), "Error en la clage del certificado");
+            e.printStackTrace();
+        } catch (KeyManagementException e) {
+            Log.e(getClass().toString(), "Error en KeyManagementException");
+            e.printStackTrace();
         }
-
-
 
 
     }
 
-    public void establecerConexionMqtt() {
+    public void establecerConexionMqtt(Context contexto) {
 
 
 
         try {
-            Log.w(getClass().toString(), "Nos conectamos al broker");
-            cliente.connect(opcionesConexion, this.contexto, new IMqttActionListener() {
+            //Log.w(getClass().toString(), "MQTT: Nos conectamos al broker" + opcionesConexion.getSocketFactory().toString());
+
+            cliente.connect(opcionesConexion, contexto, new IMqttActionListener() {
                 @Override
                 public void onSuccess(IMqttToken iMqttToken) {
-                    Log.w(getClass().toString(), "Conectado al broker con exito...");
+                    Log.w(getClass().toString(), "MQTT: Conectado al broker con exito...");
                     token = iMqttToken;
                     estadoConexion = true;
 
@@ -197,7 +235,7 @@ public class conexionMqtt implements Serializable, Parcelable {
 
                 @Override
                 public void onFailure(IMqttToken iMqttToken, Throwable throwable) {
-                    Log.w(getClass().toString(), "Error al conectar con el broker");
+                    Log.w(getClass().toString(), "MQTT: Error al conectar con el broker");
                     estadoConexion = false;
                     listener.conexionPerdida();
 
@@ -234,6 +272,7 @@ public class conexionMqtt implements Serializable, Parcelable {
             mqtt.put(CONF_MQTT.PUERTO.getValorTextoJson(), puerto);
             mqtt.put(CONF_MQTT.USUARIO.getValorTextoJson(), usuario);
             mqtt.put(CONF_MQTT.PASSWORD.getValorTextoJson(), password);
+            mqtt.put(CONF_MQTT.TLS.getValorTextoJson(), tls);
             datosMqtt.put(CONF_MQTT.MQTT.getValorTextoJson(), mqtt);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -311,6 +350,14 @@ public class conexionMqtt implements Serializable, Parcelable {
 
     }
 
+    public boolean getTls() {
+        return tls;
+    }
+
+    public void setTls(Boolean tls) {
+
+        this.tls = tls;
+    }
 
     /**
      * Obtiene el identificativo del cliente de la conexion
@@ -498,6 +545,7 @@ public class conexionMqtt implements Serializable, Parcelable {
             confMqtt.put(CONF_MQTT.PUERTO.getValorTextoJson(), getPuerto());
             confMqtt.put(CONF_MQTT.USUARIO.getValorTextoJson(), getUsuario() );
             confMqtt.put(CONF_MQTT.PASSWORD.getValorTextoJson(), getPassword());
+            confMqtt.put(CONF_MQTT.TLS.getValorTextoJson(), getTls());
             mqtt.putOpt(CONF_MQTT.MQTT.getValorTextoJson(), confMqtt);
 
 

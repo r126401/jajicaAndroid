@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -31,6 +32,7 @@ public class configuracionMqtt extends AppCompatActivity implements View.OnClick
     EditText editPuerto;
     EditText editUser;
     EditText editPass;
+    CheckBox checkTls;
     ImageView botonAceptar;
     ImageView botonCancelar;
     android.support.v7.widget.Toolbar toolbar;
@@ -59,6 +61,17 @@ public class configuracionMqtt extends AppCompatActivity implements View.OnClick
         toolbar.setNavigationIcon(R.drawable.mqtt);
         editBroker = (EditText) findViewById(R.id.editBroker);
         editPuerto = (EditText) findViewById(R.id.editPuerto);
+        checkTls = (CheckBox) findViewById(R.id.checkTls);
+        checkTls.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (checkTls.isChecked())  {
+                    editPuerto.setText("8883");
+                } else {
+                    editPuerto.setText("1883");
+                }
+            }
+        });
         editPuerto.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -97,6 +110,7 @@ public class configuracionMqtt extends AppCompatActivity implements View.OnClick
         editPuerto.setText(conexion.getPuerto());
         editUser.setText(conexion.getUsuario());
         editPass.setText(conexion.getPassword());
+        checkTls.setChecked(conexion.getTls());
     }
 
 
@@ -129,7 +143,8 @@ public class configuracionMqtt extends AppCompatActivity implements View.OnClick
         if (editBroker.getText().toString().equals(conexion.getBrokerId()) &&
                 (editPuerto.getText().toString().equals(conexion.getPuerto())) &&
                 (editPass.getText().toString().equals(conexion.getPassword())) &&
-                (editUser.getText().toString().equals(conexion.getUsuario()))) {
+                (editUser.getText().toString().equals(conexion.getUsuario())) &
+                        (checkTls.isChecked() == conexion.getTls())) {
             Log.i(getLocalClassName(), "No ha cambiado nada");
             error = true;
 
@@ -170,6 +185,7 @@ public class configuracionMqtt extends AppCompatActivity implements View.OnClick
             conexion.setPuerto(editPuerto.getText().toString());
             conexion.setUsuario(editUser.getText().toString());
             conexion.setPassword(editPass.getText().toString());
+            conexion.setTls(checkTls.isChecked());
             conexion.escribirConfiguracion();
             //datosDevueltos.setData(Uri.parse("CAMBIADO"));
             setResult(1);
