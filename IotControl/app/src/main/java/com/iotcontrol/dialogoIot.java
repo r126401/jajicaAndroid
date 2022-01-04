@@ -614,9 +614,9 @@ public class dialogoIot implements Serializable {
      * @param texto es la respuesta del dispositivo
      * @return devuelve el valor de la version OTA.
      */
-    public int getOtaVersion(String texto) {
+    public String getOtaVersion(String texto) {
 
-        return extraerDatoJsonInt(texto, TEXTOS_DIALOGO_IOT.VERSION_OTA.getValorTextoJson());
+        return extraerDatoJsonString(texto, TEXTOS_DIALOGO_IOT.VERSION_OTA.getValorTextoJson());
     }
 
 

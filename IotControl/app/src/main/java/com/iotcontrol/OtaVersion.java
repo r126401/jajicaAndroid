@@ -53,7 +53,7 @@ public class OtaVersion {
     protected int otaPort;
     protected String otaUrl;
     protected String otaFile;
-    protected int otaVersionAvailable;
+    protected String otaVersionAvailable;
 
     public String getOtaServer() {
 
@@ -72,7 +72,7 @@ public class OtaVersion {
         return this.otaFile;
     }
 
-    public int getOtaVersionAvailable() {
+    public String getOtaVersionAvailable() {
         return this.otaVersionAvailable;
     }
 
@@ -92,7 +92,7 @@ public class OtaVersion {
         this.otaFile = otaFile;
     }
 
-    public void setOtaVersion(int otaVersion) {
+    public void setOtaVersion(String otaVersion) {
         this.otaVersionAvailable = otaVersion;
     }
 
@@ -122,7 +122,7 @@ public class OtaVersion {
                 setOtaPort(respuesta.getInt(TEXTOS_DIALOGO_IOT.PUERTO_OTA.getValorTextoJson()));
                 setOtaUrl(respuesta.getString(TEXTOS_DIALOGO_IOT.URL_OTA.getValorTextoJson()));
                 setOtaFile(respuesta.getString(TEXTOS_DIALOGO_IOT.FICHERO_OTA.getValorTextoJson()));
-                setOtaVersion(respuesta.getInt(TEXTOS_DIALOGO_IOT.VERSION_OTA.getValorTextoJson()));
+                setOtaVersion(respuesta.getString(TEXTOS_DIALOGO_IOT.VERSION_OTA.getValorTextoJson()));
 
             } else {
                 Log.e(getClass().toString(), "Respuesta erronea del servidor");

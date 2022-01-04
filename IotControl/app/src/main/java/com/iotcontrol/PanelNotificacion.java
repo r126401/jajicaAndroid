@@ -34,8 +34,14 @@ public class PanelNotificacion {
 
     private boolean comprobarSiHayNuevaVersionDisponible(dispositivoIot dispositivo) {
 
-        if (dispositivo.getOtaVersion() > 0) {
-            if (dispositivo.datosOta.getOtaVersionAvailable() > dispositivo.getOtaVersion()) {
+
+        Long availableVersion;
+        Long currentVersion;
+
+        if (!dispositivo.getOtaVersion().equals("")) {
+            availableVersion = Long.valueOf(dispositivo.datosOta.getOtaVersionAvailable());
+            currentVersion = Long.valueOf(dispositivo.getOtaVersion());
+            if ( availableVersion > currentVersion) {
                 Log.i(getClass().toString(), "Hay una nueva version disponible en el servidor OTA");
                 versionComprobada = true;
             } else {

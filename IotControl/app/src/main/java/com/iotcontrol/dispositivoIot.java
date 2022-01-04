@@ -171,7 +171,7 @@ public abstract class dispositivoIot extends configuracionDispositivos implement
     protected String nombreDispositivo;
     protected String idDispositivo;
     protected TIPO_DISPOSITIVO_IOT tipoDispositivo;
-    protected int versionOta;
+    protected String versionOta;
     protected String topicSubscripcion;
     protected String topicPublicacion;
     protected ESTADO_DISPOSITIVO estadoDispositivo;
@@ -186,7 +186,7 @@ public abstract class dispositivoIot extends configuracionDispositivos implement
         nombreDispositivo = "";
         idDispositivo = "";
         tipoDispositivo = TIPO_DISPOSITIVO_IOT.DESCONOCIDO;
-        versionOta = -1;
+        versionOta = "";
         estadoDispositivo = ESTADO_DISPOSITIVO.INDETERMINADO;
         estadoConexion = ESTADO_CONEXION_IOT.INDETERMINADO;
         topicPublicacion = "";
@@ -207,7 +207,7 @@ public abstract class dispositivoIot extends configuracionDispositivos implement
         return programaActivo;
     }
 
-    public int getVersionOta() {
+    public String getVersionOta() {
         return versionOta;
     }
 
@@ -241,7 +241,7 @@ public abstract class dispositivoIot extends configuracionDispositivos implement
         return datosDispositivos;
     }
 */
-    public int getOtaVersion() {
+    public String getOtaVersion() {
 
         return this.versionOta;
     }
@@ -292,7 +292,7 @@ public abstract class dispositivoIot extends configuracionDispositivos implement
         this.programas = programas;
     }
 
-    public void setVersionOta(int versionOta) {
+    public void setVersionOta(String versionOta) {
 
         this.versionOta = versionOta;
     }
@@ -320,7 +320,7 @@ public abstract class dispositivoIot extends configuracionDispositivos implement
         this.nombreDispositivo = nombreDispositivo;
         this.idDispositivo = idDispositivo;
         this.tipoDispositivo = tipo;
-        versionOta = -1;
+        versionOta = "";
         estadoDispositivo = ESTADO_DISPOSITIVO.INDETERMINADO;
         estadoConexion = ESTADO_CONEXION_IOT.INDETERMINADO;
         topicPublicacion = "/sub_" + idDispositivo;
