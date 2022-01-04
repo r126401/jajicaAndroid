@@ -72,7 +72,7 @@
   <component name="Cvs2Configuration">
     <option name="OVERRIDE_EXISTING_TAG_FOR_PROJECT" value="false" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[5ab456a8]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[Pixel_3a_API_30_x86]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -605,38 +605,38 @@
       <screen x="0" y="0" width="1920" height="1054" />
     </state>
     <state x="704" y="285" key="FileChooserDialogImpl/0.0.1920.1054@0.0.1920.1054" timestamp="1639335221846" />
-    <state width="1862" height="291" key="GridCell.Tab.0.bottom" timestamp="1640605393437">
+    <state width="1862" height="291" key="GridCell.Tab.0.bottom" timestamp="1641308514074">
       <screen x="0" y="0" width="1920" height="1054" />
     </state>
-    <state width="1862" height="291" key="GridCell.Tab.0.bottom/0.0.1920.1054@0.0.1920.1054" timestamp="1640605393437" />
-    <state width="1862" height="291" key="GridCell.Tab.0.center" timestamp="1640605393436">
+    <state width="1862" height="291" key="GridCell.Tab.0.bottom/0.0.1920.1054@0.0.1920.1054" timestamp="1641308514074" />
+    <state width="1862" height="291" key="GridCell.Tab.0.center" timestamp="1641308514073">
       <screen x="0" y="0" width="1920" height="1054" />
     </state>
-    <state width="1862" height="291" key="GridCell.Tab.0.center/0.0.1920.1054@0.0.1920.1054" timestamp="1640605393436" />
-    <state width="1862" height="291" key="GridCell.Tab.0.left" timestamp="1640605393436">
+    <state width="1862" height="291" key="GridCell.Tab.0.center/0.0.1920.1054@0.0.1920.1054" timestamp="1641308514073" />
+    <state width="1862" height="291" key="GridCell.Tab.0.left" timestamp="1641308514072">
       <screen x="0" y="0" width="1920" height="1054" />
     </state>
-    <state width="1862" height="291" key="GridCell.Tab.0.left/0.0.1920.1054@0.0.1920.1054" timestamp="1640605393436" />
-    <state width="1862" height="291" key="GridCell.Tab.0.right" timestamp="1640605393437">
+    <state width="1862" height="291" key="GridCell.Tab.0.left/0.0.1920.1054@0.0.1920.1054" timestamp="1641308514072" />
+    <state width="1862" height="291" key="GridCell.Tab.0.right" timestamp="1641308514074">
       <screen x="0" y="0" width="1920" height="1054" />
     </state>
-    <state width="1862" height="291" key="GridCell.Tab.0.right/0.0.1920.1054@0.0.1920.1054" timestamp="1640605393437" />
-    <state width="1862" height="291" key="GridCell.Tab.1.bottom" timestamp="1640605393439">
+    <state width="1862" height="291" key="GridCell.Tab.0.right/0.0.1920.1054@0.0.1920.1054" timestamp="1641308514074" />
+    <state width="1862" height="291" key="GridCell.Tab.1.bottom" timestamp="1641308514076">
       <screen x="0" y="0" width="1920" height="1054" />
     </state>
-    <state width="1862" height="291" key="GridCell.Tab.1.bottom/0.0.1920.1054@0.0.1920.1054" timestamp="1640605393439" />
-    <state width="1862" height="291" key="GridCell.Tab.1.center" timestamp="1640605393438">
+    <state width="1862" height="291" key="GridCell.Tab.1.bottom/0.0.1920.1054@0.0.1920.1054" timestamp="1641308514076" />
+    <state width="1862" height="291" key="GridCell.Tab.1.center" timestamp="1641308514075">
       <screen x="0" y="0" width="1920" height="1054" />
     </state>
-    <state width="1862" height="291" key="GridCell.Tab.1.center/0.0.1920.1054@0.0.1920.1054" timestamp="1640605393438" />
-    <state width="1862" height="291" key="GridCell.Tab.1.left" timestamp="1640605393438">
+    <state width="1862" height="291" key="GridCell.Tab.1.center/0.0.1920.1054@0.0.1920.1054" timestamp="1641308514075" />
+    <state width="1862" height="291" key="GridCell.Tab.1.left" timestamp="1641308514075">
       <screen x="0" y="0" width="1920" height="1054" />
     </state>
-    <state width="1862" height="291" key="GridCell.Tab.1.left/0.0.1920.1054@0.0.1920.1054" timestamp="1640605393438" />
-    <state width="1862" height="291" key="GridCell.Tab.1.right" timestamp="1640605393439">
+    <state width="1862" height="291" key="GridCell.Tab.1.left/0.0.1920.1054@0.0.1920.1054" timestamp="1641308514075" />
+    <state width="1862" height="291" key="GridCell.Tab.1.right" timestamp="1641308514076">
       <screen x="0" y="0" width="1920" height="1054" />
     </state>
-    <state width="1862" height="291" key="GridCell.Tab.1.right/0.0.1920.1054@0.0.1920.1054" timestamp="1640605393439" />
+    <state width="1862" height="291" key="GridCell.Tab.1.right/0.0.1920.1054@0.0.1920.1054" timestamp="1641308514076" />
     <state x="623" y="232" key="search.everywhere.popup" timestamp="1639418224885">
       <screen x="0" y="0" width="1920" height="1054" />
     </state>
@@ -646,9 +646,9 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/iotcontrol/conexionMqtt.java</url>
-          <line>164</line>
-          <option name="timeStamp" value="17" />
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/iotcontrol/PanelNotificacion.java</url>
+          <line>40</line>
+          <option name="timeStamp" value="18" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -664,6 +664,9 @@
         <watch expression="TEXTOS_DIALOGO_IOT.SERVIDOR_OTA.getValorTextoJson()" language="JAVA" />
         <watch expression="Integer.valueOf(textoUmbralParteEntera.getText().toString())" language="JAVA" />
         <watch expression="programa" language="JAVA" />
+        <watch expression="Integer.valueOf(dispositivo.datosOta.getOtaVersionAvailable())" language="JAVA" />
+        <watch expression="dispositivo.datosOta" language="JAVA" />
+        <watch expression="dispositivo.datosOta.getOtaVersionAvailable()" language="JAVA" />
         <watch expression="v.getId()" language="JAVA" />
         <watch expression="checkTls.isChecked()" language="JAVA" />
         <watch expression="textoUmbralParteDecimal.getText().toString()" language="JAVA" />
@@ -721,6 +724,7 @@
         <watch expression="datos.get(position)" language="JAVA" />
         <watch expression="datos.get(position)" language="JAVA" />
         <watch expression="SocketFactory.SocketFactoryOptions" language="JAVA" custom="com.iotcontrol.SocketFactory" />
+        <watch expression="dispositivo.datosOta.getOtaVersionAvailable()" language="JAVA" />
       </configuration>
     </watches-manager>
   </component>
