@@ -14,7 +14,8 @@ import java.util.ArrayList;
 enum TIPO_DISPOSITIVO_IOT implements Serializable{
     DESCONOCIDO(-1),
     INTERRUPTOR(0),
-    CRONOTERMOSTATO(1);
+    CRONOTERMOSTATO(1),
+    TERMOMETRO(2);
 
     private int tipo;
 

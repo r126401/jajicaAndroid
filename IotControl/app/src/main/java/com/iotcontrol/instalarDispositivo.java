@@ -274,9 +274,10 @@ public class instalarDispositivo extends AppCompatActivity implements View.OnCli
                 byte[] ssid = mApSsidTV.getTag() == null ? ByteUtil.getBytesByString(mApSsidTV.getText().toString())
                         : (byte[]) mApSsidTV.getTag();
 
-                byte[] password = ByteUtil.getBytesByString(datosAlDispositivo.toString());
+                //byte[] password = ByteUtil.getBytesByString(datosAlDispositivo.toString());
+
+                byte[] password = ByteUtil.getBytesByString(mApPasswordET.getText().toString());
                 Log.w(APP, password.toString());
-                //byte[] password = ByteUtil.getBytesByString(mApPasswordET.getText().toString());
                 byte [] bssid = EspNetUtil.parseBssid2bytes(mApBssidTV.getText().toString().toUpperCase());
                 byte[] deviceCount = mDeviceCountET.getText().toString().getBytes();
                 byte[] broadcast = {(byte) (mPackageModeGroup.getCheckedRadioButtonId() == R.id.package_broadcast
