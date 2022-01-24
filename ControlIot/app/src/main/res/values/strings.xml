@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">ControlIot</string>
+    <string name="texto_broker">jajicaiot.ddns.net</string>
+    <string name="texto_lista_dispositivos">DEVICES</string>
+    <string name="imagen_decorativa">Image decor</string>
+    <string name="configurar_broker">Broker</string>
+    <string name="instalar_dispositivo">Inst. Device</string>
+    <string name="nuevo_dispositivo">New Device</string>
+</resources>

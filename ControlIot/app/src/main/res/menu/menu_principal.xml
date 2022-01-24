@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/itemConfigurarBroker"
+        android:checked="false"
+        android:icon="@drawable/configurar_broker"
+        android:title="@string/configurar_broker"/>
+    <item
+        android:id="@+id/itemInstalarDispositivo"
+        android:checked="false"
+        android:icon="@drawable/instalar_dispositivo"
+        android:title="@string/instalar_dispositivo"/>
+
+    <item
+        android:id="@+id/itemNuevoDispositivo"
+        android:checked="false"
+        android:icon="@drawable/nuevo_dispositivo"
+        android:title="@string/nuevo_dispositivo"/>
+
+</menu>
