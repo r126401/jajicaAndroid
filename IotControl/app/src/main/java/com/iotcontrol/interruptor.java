@@ -1,24 +1,21 @@
 package com.iotcontrol;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.CountDownTimer;
 import android.os.Handler;
-import android.support.annotation.Nullable;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.Nullable;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -32,14 +29,11 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import static com.iotcontrol.COMANDO_IOT.ESTADO;
 import static com.iotcontrol.COMANDO_IOT.FACTORY_RESET;
-import static com.iotcontrol.COMANDO_IOT.MODIFICAR_PROGRAMACION;
 import static com.iotcontrol.COMANDO_IOT.NUEVA_PROGRAMACION;
 import static com.iotcontrol.COMANDO_IOT.RESET;
 import static com.iotcontrol.COMANDO_IOT.UPGRADE_FIRMWARE;
@@ -161,7 +155,7 @@ public class interruptor extends AppCompatActivity implements View.OnClickListen
     void definicionControles() {
 
         animacionInterruptor = (ProgressBar) findViewById(R.id.animacionComandos);
-        toolbarInterruptor = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbarInterruptor);
+        toolbarInterruptor = (androidx.appcompat.widget.Toolbar) findViewById(R.id.toolbarInterruptor);
         toolbarInterruptor.setNavigationIcon(R.drawable.interruptor);
         animacion = (ProgressBar) findViewById(R.id.animacion);
         barra = (ProgressBar) findViewById(R.id.barra);

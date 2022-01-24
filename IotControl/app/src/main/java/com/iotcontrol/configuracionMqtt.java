@@ -1,28 +1,19 @@
 package com.iotcontrol;
 
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.net.Uri;
-import android.os.Build;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.support.v7.widget.ToolbarWidgetWrapper;
+import androidx.appcompat.widget.Toolbar;
+import androidx.appcompat.widget.ToolbarWidgetWrapper;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.Toast;
 
-import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.io.Serializable;
 
@@ -35,7 +26,7 @@ public class configuracionMqtt extends AppCompatActivity implements View.OnClick
     CheckBox checkTls;
     ImageView botonAceptar;
     ImageView botonCancelar;
-    android.support.v7.widget.Toolbar toolbar;
+    androidx.appcompat.widget.Toolbar toolbar;
 
 
     conexionMqtt conexion = null;
@@ -56,7 +47,7 @@ public class configuracionMqtt extends AppCompatActivity implements View.OnClick
         setContentView(R.layout.activity_configuracion_mqtt);
         boolean estado;
 
-        toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbarConfiguracionMqtt);
+        toolbar = (androidx.appcompat.widget.Toolbar) findViewById(R.id.toolbarConfiguracionMqtt);
         toolbar.setTitle(getString(R.string.configurarMqtt));
         toolbar.setNavigationIcon(R.drawable.mqtt);
         editBroker = (EditText) findViewById(R.id.editBroker);

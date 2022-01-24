@@ -5,8 +5,9 @@
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/dc182c6247949ff816e311764e444d37/transformed/timber-4.1.2/res" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/6a4b15f4379a0219923a260855851d39/transformed/timber-4.1.2/res" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/b732ae94e16a5bd2d6b854452911cab5/transformed/timber-4.1.2/res" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/b732ae94e16a5bd2d6b854452911cab5/transformed/timber-4.1.2/AndroidManifest.xml" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/b732ae94e16a5bd2d6b854452911cab5/transformed/timber-4.1.2/jars/classes.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/0dee6652dd3f17e9512aead0ee27e8a9/transformed/jetified-timber-4.1.2/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/0dee6652dd3f17e9512aead0ee27e8a9/transformed/jetified-timber-4.1.2/AndroidManifest.xml" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/0dee6652dd3f17e9512aead0ee27e8a9/transformed/jetified-timber-4.1.2/res" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jakewharton.timber/timber/4.1.2/c8c629a4f2c05032cf3685b2de64dafd6520b744/timber-4.1.2-javadoc.jar!/" />

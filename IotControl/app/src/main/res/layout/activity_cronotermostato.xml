@@ -7,7 +7,7 @@
     tools:context=".cronotermostato"
     android:orientation="vertical">
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
 
         android:layout_width="match_parent"
         android:layout_height="48dp"
@@ -16,7 +16,7 @@
         app:titleTextColor="#FFFFFF"
         app:navigationIcon="@drawable/interruptor">
 
-    </android.support.v7.widget.Toolbar>
+    </androidx.appcompat.widget.Toolbar>
 
 
     <LinearLayout
@@ -327,7 +327,7 @@
             android:layout_marginTop="10dp">
 
             <!-- ListView de programacion -->
-            <android.support.v4.widget.SwipeRefreshLayout
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
                 android:id="@+id/swipeListaProgramas"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -344,7 +344,7 @@
                 </ListView>
 
 
-            </android.support.v4.widget.SwipeRefreshLayout>
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         </LinearLayout>
 

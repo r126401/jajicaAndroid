@@ -7,7 +7,7 @@
     tools:context=".Temporizador"
     android:orientation="vertical">
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
 
         android:layout_width="match_parent"
         android:layout_height="64dp"
@@ -16,7 +16,7 @@
         app:titleTextColor="#FFFFFF"
         app:navigationIcon="@drawable/interruptor">
 
-    </android.support.v7.widget.Toolbar>
+    </androidx.appcompat.widget.Toolbar>
 
 
     <!-- botones de arriba
@@ -224,14 +224,14 @@
 
     </Spinner>
 -->
-    <android.support.v7.widget.SwitchCompat
+    <androidx.appcompat.widget.SwitchCompat
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:id="@+id/switchTipoPrograma"
         android:textOff="@string/norepetir"
         android:textOn="@string/repetir">
 
-    </android.support.v7.widget.SwitchCompat>
+    </androidx.appcompat.widget.SwitchCompat>
 
     <!-- layout dias de la semana -->
     <LinearLayout

@@ -54,7 +54,7 @@
 
             </TextView>
 
-            <android.support.v7.widget.SwitchCompat
+            <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/idSwitchTipoPrograma"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -66,7 +66,7 @@
                 android:textOff="NO"
                 app:showText="true">
 
-            </android.support.v7.widget.SwitchCompat>
+            </androidx.appcompat.widget.SwitchCompat>
 
 
         </LinearLayout>
@@ -339,7 +339,7 @@
 
             </TextView>
 
-            <android.support.v7.widget.SwitchCompat
+            <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/idSwitchEstadoRele"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -351,7 +351,7 @@
                 android:textOff="OFF"
                 app:showText="true">
 
-            </android.support.v7.widget.SwitchCompat>
+            </androidx.appcompat.widget.SwitchCompat>
 
 
 

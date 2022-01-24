@@ -3,12 +3,11 @@ package com.iotcontrol;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Handler;
-import android.support.v4.media.session.IMediaControllerCallback;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.SwitchCompat;
+import androidx.appcompat.widget.SwitchCompat;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -19,16 +18,10 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-import org.w3c.dom.Text;
-
 import java.math.BigDecimal;
-
-import static com.iotcontrol.COMANDO_IOT.FACTORY_RESET;
-import static com.iotcontrol.COMANDO_IOT.RESET;
 
 public class Temporizador extends AppCompatActivity implements View.OnClickListener, View.OnLongClickListener, View.OnTouchListener {
 

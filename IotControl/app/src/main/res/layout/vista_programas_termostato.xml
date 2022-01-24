@@ -21,7 +21,7 @@
         android:weightSum="11">
 
 
-        <android.support.v7.widget.SwitchCompat
+        <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/botonInhibirPrograma"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -34,7 +34,7 @@
             android:textOn="ACT"
             app:showText="true">
 
-        </android.support.v7.widget.SwitchCompat>
+        </androidx.appcompat.widget.SwitchCompat>
 
         <ImageView
             android:id="@+id/imagenTipoPrograma"

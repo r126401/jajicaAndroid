@@ -1,19 +1,15 @@
 package com.iotcontrol;
 
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.Toolbar;
 
 public class AnadirDispositivo extends AppCompatActivity implements View.OnClickListener {
 
-    android.support.v7.widget.Toolbar toolbar;
+    androidx.appcompat.widget.Toolbar toolbar;
     EditText idDispositivo;
     EditText nombreDispositivo;
     ImageView botonAceptar;
@@ -32,7 +28,7 @@ public class AnadirDispositivo extends AppCompatActivity implements View.OnClick
 
     private void capturarControles() {
 
-        toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbarAnadirDispositivo);
+        toolbar = (androidx.appcompat.widget.Toolbar) findViewById(R.id.toolbarAnadirDispositivo);
         toolbar.setTitle(R.string.anadirDispositivo);
         toolbar.setNavigationIcon(R.drawable.anadir_dispositivo);
        // setSupportActionBar(toolbar);

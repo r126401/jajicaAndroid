@@ -2,37 +2,24 @@ package com.iotcontrol;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CalendarView;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.NumberPicker;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.ToggleButton;
 
-import com.ycuwq.datepicker.date.DatePickerDialogFragment;
-
-import net.steamcrafted.lineartimepicker.dialog.LinearDatePickerDialog;
-import net.steamcrafted.lineartimepicker.dialog.LinearTimePickerDialog;
-import net.steamcrafted.lineartimepicker.view.LinearTimePickerView;
-
-import org.eclipse.paho.client.mqttv3.internal.ConnectActionListener;
-
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.sql.Time;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 

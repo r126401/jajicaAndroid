@@ -10,7 +10,7 @@
     android:gravity="center">
 
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
 
         android:id="@+id/toolbarInterruptor"
         android:layout_width="match_parent"
@@ -20,7 +20,7 @@
         app:titleTextColor="#FFFFFF"
         app:navigationIcon="@drawable/interruptor_apagado">
 
-    </android.support.v7.widget.Toolbar>
+    </androidx.appcompat.widget.Toolbar>
 
     <!-- panel de notificaciones -->
 
@@ -158,7 +158,7 @@
 
     <!-- ListView de programacion -->
 
-    <android.support.v4.widget.SwipeRefreshLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeListaProgramas"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -175,7 +175,7 @@
         </ListView>
 
 
-    </android.support.v4.widget.SwipeRefreshLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 
 

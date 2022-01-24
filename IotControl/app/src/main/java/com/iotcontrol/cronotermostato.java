@@ -1,16 +1,12 @@
 package com.iotcontrol;
 
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.CountDownTimer;
 import android.os.Handler;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.Nullable;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -21,7 +17,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -41,9 +36,6 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
-import static com.iotcontrol.COMANDO_IOT.CONSULTAR_CONF_APP;
-import static com.iotcontrol.COMANDO_IOT.CONSULTAR_PROGRAMACION;
-import static com.iotcontrol.COMANDO_IOT.ESTADO;
 import static com.iotcontrol.COMANDO_IOT.FACTORY_RESET;
 import static com.iotcontrol.COMANDO_IOT.NUEVA_PROGRAMACION;
 import static com.iotcontrol.COMANDO_IOT.RESET;

@@ -11,7 +11,7 @@
         android:id="@+id/toolbarPrincipal"
         layout="@layout/barra_principal" />
 
-    <android.support.v4.widget.DrawerLayout
+    <androidx.drawerlayout.widget.DrawerLayout
         android:id="@+id/drawer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -73,7 +73,7 @@
                 android:textAlignment="center"
                 android:textColor="#FFFFFF"/>
 
-            <android.support.v4.widget.SwipeRefreshLayout
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
                 android:id="@+id/swipeListaDispositivosIot"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -90,7 +90,7 @@
 
 
 
-            </android.support.v4.widget.SwipeRefreshLayout>
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         </LinearLayout>
 
@@ -98,7 +98,7 @@
 
 
 
-        <android.support.design.widget.NavigationView
+        <com.google.android.material.navigation.NavigationView
 
             android:id="@+id/navigation_view"
             android:layout_height="match_parent"
@@ -108,7 +108,7 @@
             app:headerLayout="@layout/header"
             app:menu="@menu/menu_principal"/>
 
-    </android.support.v4.widget.DrawerLayout>
+    </androidx.drawerlayout.widget.DrawerLayout>
 
 
 
