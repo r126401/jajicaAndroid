@@ -6,4 +6,5 @@
     <string name="configurar_broker">Broker</string>
     <string name="instalar_dispositivo">Inst. Device</string>
     <string name="nuevo_dispositivo">New Device</string>
+    <string name="broker_no_configurado">No broker</string>
 </resources>

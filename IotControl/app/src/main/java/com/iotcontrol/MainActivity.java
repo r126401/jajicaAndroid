@@ -159,8 +159,6 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
             //return false;
         }
 
-
-        cnx.establecerConexionMqtt(getApplicationContext());
         cnx.setOnConexionMqtt(new conexionMqtt.OnConexionMqtt() {
             @Override
             public void conexionPerdida() {
@@ -168,6 +166,8 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                 //textoBroker.setText("Conexion perdida totalmente");
             }
         });
+        cnx.establecerConexionMqtt(getApplicationContext());
+
 
         if (cnx != null) {
             if (cnx.cliente != null) {

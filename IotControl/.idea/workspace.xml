@@ -67,93 +67,38 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="23d00115-d3af-48c2-a0e5-936070caa06f" name="Default Changelist" comment="se hace el ubgrade de gradel a 7.1.0">
+      <change afterPath="$PROJECT_DIR$/../ControlIot/.idea/deploymentTargetDropDown.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/OtaVersion.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/ProgramaDispositivoIot.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/ProgramaDispositivoIotOnOff.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/ProgramaDispositivoIotTermostato.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/SocketFactory.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/TemporizacionComandos.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/conexionMqtt.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/configuracionDispositivos.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/dialogoIot.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/dispositivoIot.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/dispositivoIotDesconocido.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/dispositivoIotOnOff.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/dispositivoIotTermostato.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/raw/certificado.crt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ControlIot/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ControlIot/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/MainActivity.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/res/drawable/brokeron.png" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/drawable/bk_conectado.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/res/layout/activity_main.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/layout/activity_principal.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/res/values-es/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/values-es/strings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/values/strings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ControlIot/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.2/executionHistory/executionHistory.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.2/executionHistory/executionHistory.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.2/fileHashes/fileHashes.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.2/fileHashes/fileHashes.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.2/fileHashes/resourceHashesCache.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/checksums/checksums.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/checksums/md5-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/checksums/md5-checksums.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/checksums/sha1-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/checksums/sha1-checksums.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__android_arch_core_common_1_1_1.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__android_arch_core_runtime_1_1_1_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__android_arch_lifecycle_common_1_1_1.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__android_arch_lifecycle_livedata_1_1_1_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__android_arch_lifecycle_livedata_core_1_1_1_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__android_arch_lifecycle_runtime_1_1_1_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__android_arch_lifecycle_viewmodel_1_1_1_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_animated_vector_drawable_28_0_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_appcompat_v7_28_0_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_asynclayoutinflater_28_0_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_cardview_v7_28_0_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_collections_28_0_0.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_constraint_constraint_layout_2_0_0_beta8_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_constraint_constraint_layout_solver_2_0_0_beta8.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_coordinatorlayout_28_0_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_cursoradapter_28_0_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_customview_28_0_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_design_28_0_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_documentfile_28_0_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_drawerlayout_28_0_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_interpolator_28_0_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_loader_28_0_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_localbroadcastmanager_28_0_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_print_28_0_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_recyclerview_v7_28_0_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_slidingpanelayout_28_0_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_support_annotations_28_0_0.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_support_compat_28_0_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_support_core_ui_28_0_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_support_core_utils_28_0_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_support_fragment_28_0_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_support_media_compat_28_0_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_support_v4_28_0_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_support_vector_drawable_28_0_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_swiperefreshlayout_28_0_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_test_espresso_espresso_core_3_0_2_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_test_espresso_espresso_idling_resource_3_0_2_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_test_monitor_1_0_2_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_test_runner_1_0_2_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_transition_28_0_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_versionedparcelable_28_0_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_viewpager_28_0_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_jakewharton_timber_timber_4_1_2_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_jakewharton_timber_timber_4_1_2_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_ycuwq_widgets_datepicker_1_0_1_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_ycuwq_widgets_datepicker_1_0_1_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__net_codecrafted_lineartimepicker_1_0_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__net_codecrafted_lineartimepicker_1_0_0_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/app/IotControl.app.androidTest.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/app/IotControl.app.androidTest.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/app/IotControl.app.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/app/IotControl.app.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/app/IotControl.app.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/app/IotControl.app.main.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/app/IotControl.app.unitTest.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/app/IotControl.app.unitTest.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/androidTest/java/com/iotcontrol/ExampleInstrumentedTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/androidTest/java/com/iotcontrol/ExampleInstrumentedTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/iotcontrol/AnadirDispositivo.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/iotcontrol/AnadirDispositivo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/iotcontrol/DialogosAplicacion.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/iotcontrol/DialogosAplicacion.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/iotcontrol/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/iotcontrol/MainActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/iotcontrol/ProgramasInterruptorAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/iotcontrol/ProgramasInterruptorAdapter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/iotcontrol/ProgramasTermostatoAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/iotcontrol/ProgramasTermostatoAdapter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/iotcontrol/Temporizador.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/iotcontrol/Temporizador.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/iotcontrol/configuracionMqtt.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/iotcontrol/configuracionMqtt.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/iotcontrol/configuracionTermostato.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/iotcontrol/configuracionTermostato.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/iotcontrol/cronotermostato.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/iotcontrol/cronotermostato.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/iotcontrol/dispositivosActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/iotcontrol/dispositivosActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/iotcontrol/instalarDispositivo.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/iotcontrol/instalarDispositivo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/iotcontrol/interruptor.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/iotcontrol/interruptor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/iotcontrol/programador.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/iotcontrol/programador.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/iotcontrol/programadorCronotermostato.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/iotcontrol/programadorCronotermostato.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_configuracion_mqtt.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_configuracion_mqtt.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_configuracion_termostato.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_configuracion_termostato.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_cronotermostato.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_cronotermostato.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_dispositivos.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_dispositivos.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_interruptor.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_interruptor.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_programador.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_programador.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_programador_cronotermostato.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_programador_cronotermostato.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_temporizador.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_temporizador.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/barra_principal.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/barra_principal.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/programador.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/programador.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/termostato.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/termostato.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/vista_programas_interruptor.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/vista_programas_interruptor.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/vista_programas_termostato.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/vista_programas_termostato.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradle.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -693,6 +638,15 @@
     <option name="LAST_COMMIT_MESSAGE" value="se hace el ubgrade de gradel a 7.1.0" />
   </component>
   <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/iotcontrol/conexionMqtt.java</url>
+          <line>226</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
     <pin-to-top-manager>
       <pinned-members>
         <PinnedItemInfo />
@@ -705,6 +659,7 @@
         <watch expression="programa" language="JAVA" />
         <watch expression="Integer.valueOf(dispositivo.datosOta.getOtaVersionAvailable())" language="JAVA" />
         <watch expression="dispositivo.datosOta" language="JAVA" />
+        <watch expression="cliente" language="JAVA" />
         <watch expression="dispositivo.datosOta.getOtaVersionAvailable()" language="JAVA" />
         <watch expression="v.getId()" language="JAVA" />
         <watch expression="checkTls.isChecked()" language="JAVA" />
@@ -764,6 +719,7 @@
         <watch expression="datos.get(position)" language="JAVA" />
         <watch expression="SocketFactory.SocketFactoryOptions" language="JAVA" custom="com.iotcontrol.SocketFactory" />
         <watch expression="dispositivo.datosOta.getOtaVersionAvailable()" language="JAVA" />
+        <watch expression="opcionesConexion" language="JAVA" />
       </configuration>
     </watches-manager>
   </component>
