@@ -2,11 +2,7 @@ package com.iotcontrol;
 
 import android.os.CountDownTimer;
 
-class TemporizacionComandos {
-
-
-    TemporizacionComandos.onTemporizacionComandos listener;
-    public CountDownTimer temporizador;
+ublic CountDownTimer temporizador;
     private COMANDO_IOT comando;
     private int idTemporizador;
     private String clave;

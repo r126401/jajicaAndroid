@@ -102,6 +102,8 @@ public  class configuracionDispositivos implements Serializable {
         OutputStreamWriter escritor;
         JSONObject root;
         JSONArray array;
+        dispositivoIot dispositivo;
+        int i;
 
         if (leerDispositivos(contexto) == true) {
 
@@ -111,8 +113,6 @@ public  class configuracionDispositivos implements Serializable {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
-
 
         } else {
             //root = new JSONObject();
@@ -238,17 +238,25 @@ public  class configuracionDispositivos implements Serializable {
     public boolean guardarDispositivo(dispositivoIot dispositivo, Context contexto) {
 
         JSONObject objeto;
+        int i;
+
+        i = localizarDispositivo(dispositivo, contexto);
+
+        if (i>=0) {
+            Log.w(getClass().toString(), "dispositivo ya existente. No se añade.");
+            return false;
+        }
+
 
         objeto = dispositivo2Json(dispositivo);
         if (objeto == null) {
             Log.e(getClass().toString(), "Error al guardar el dispositivo");
+            return false;
         } else {
 
-            escribirDispositivo(objeto, contexto);
-
-
+            return (escribirDispositivo(objeto, contexto));
         }
-        return true;
+
     }
 
 

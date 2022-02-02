@@ -1,6 +1,7 @@
 package com.example.controliot;
 
 import android.content.Context;
+import android.os.CountDownTimer;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
@@ -15,7 +16,9 @@ import java.io.*;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
 import org.eclipse.paho.client.mqttv3.IMqttActionListener;
+import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.IMqttToken;
+import org.eclipse.paho.client.mqttv3.MqttCallbackExtended;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
@@ -89,6 +92,8 @@ public class conexionMqtt implements Serializable, Parcelable {
     private JSONObject datosMqtt;
     private OnConexionMqtt listener;
     private IMqttToken token;
+    private CountDownTimer temporizacionReintento;
+    private final String LOG_CLASS = "conexionMqtt";
 
 
     protected conexionMqtt(Parcel in) {
@@ -133,7 +138,12 @@ public class conexionMqtt implements Serializable, Parcelable {
 
     public interface OnConexionMqtt {
 
-        void conexionPerdida();
+        void conexionEstablecida(boolean reconnect, String serverURI);
+        void conexionPerdida(Throwable cause);
+        void mensajeRecibido(String topic, MqttMessage message);
+        void entregaCompletada(IMqttDeliveryToken token);
+        void notificacionIntermediaReintento(long intervalo);
+        void finTemporizacionReintento(long temporizador);
 
     }
 
@@ -165,7 +175,7 @@ public class conexionMqtt implements Serializable, Parcelable {
         String cadenaConexion;
 
         if (leerConfiguracion() == false) {
-            Log.i(getClass().toString(), ": No hay configuracion mqtt, se crea por defecto");
+            Log.i(LOG_CLASS, ": No hay configuracion mqtt, se crea por defecto");
 
             escribirConfiguracionMqttDefecto();
         }
@@ -188,7 +198,7 @@ public class conexionMqtt implements Serializable, Parcelable {
 
 
             //cadenaConexion = "ssl://" + brokerId + ":" + puerto;
-            Log.w(getClass().toString(), "cadena: " + cadenaConexion);
+            Log.w(LOG_CLASS, "cadena: " + cadenaConexion);
             opcionesConexion = new MqttConnectOptions();
             opcionesConexion.setAutomaticReconnect(true);
             opcionesConexion.setCleanSession(false);
@@ -204,40 +214,40 @@ public class conexionMqtt implements Serializable, Parcelable {
 
             }
         } catch (JSONException e) {
-            Log.e(getClass().toString(), "Error al procesar el json del fichero de configuracion mqtt");
+            Log.e(LOG_CLASS, "Error al procesar el json del fichero de configuracion mqtt");
             e.printStackTrace();
 
         } catch (IOException e) {
             e.printStackTrace();
         } catch (CertificateException e) {
             e.printStackTrace();
-            Log.e(getClass().toString(), "Error en certificado");
+            Log.e(LOG_CLASS, "Error en certificado");
         } catch (NoSuchAlgorithmException e) {
-            Log.e(getClass().toString(), "Error en el algoritmo");
+            Log.e(LOG_CLASS, "Error en el algoritmo");
             e.printStackTrace();
         } catch (UnrecoverableKeyException e) {
-            Log.e(getClass().toString(), "Error no recuperable");
+            Log.e(LOG_CLASS, "Error no recuperable");
             e.printStackTrace();
         } catch (KeyStoreException e) {
-            Log.e(getClass().toString(), "Error en la clage del certificado");
+            Log.e(LOG_CLASS, "Error en la clage del certificado");
             e.printStackTrace();
         } catch (KeyManagementException e) {
-            Log.e(getClass().toString(), "Error en KeyManagementException");
+            Log.e(LOG_CLASS, "Error en KeyManagementException");
             e.printStackTrace();
         }
     }
 
-    public void establecerConexionMqtt(Context contexto) {
+    public void establecerConexionMqtt() {
 
 
 
         try {
-            //Log.w(getClass().toString(), "MQTT: Nos conectamos al broker" + opcionesConexion.getSocketFactory().toString());
+            //Log.w(LOG_CLASS, "MQTT: Nos conectamos al broker" + opcionesConexion.getSocketFactory().toString());
 
             cliente.connect(opcionesConexion, contexto, new IMqttActionListener() {
                 @Override
                 public void onSuccess(IMqttToken iMqttToken) {
-                    Log.d(getClass().toString(), "MQTT: Conectado al broker con exito...");
+                    Log.d(LOG_CLASS, "MQTT: Conectado al broker con exito...");
                     token = iMqttToken;
                     setEstadoConexion(true);
 
@@ -246,9 +256,9 @@ public class conexionMqtt implements Serializable, Parcelable {
 
                 @Override
                 public void onFailure(IMqttToken iMqttToken, Throwable throwable) {
-                    Log.e(getClass().toString(), "MQTT: Error al conectar con el broker " + getEstadoConexion());
+                    Log.e(LOG_CLASS, "MQTT: Error al conectar con el broker " + getEstadoConexion());
                     setEstadoConexion(false);
-                    listener.conexionPerdida();
+                    listener.conexionPerdida(throwable);
 
                 }
             });
@@ -362,6 +372,7 @@ public class conexionMqtt implements Serializable, Parcelable {
 
     }
 
+
     /**
      * Esta funcion obtiene nos dice si la conexion mqtt por ssl esta configurada
      * @return
@@ -446,20 +457,20 @@ public class conexionMqtt implements Serializable, Parcelable {
         MqttMessage mensaje;
 
         if (cliente == null) {
-            Log.e(getClass().toString(), "el cliente mqtt es nulo");
+            Log.e(LOG_CLASS, "el cliente mqtt es nulo");
         }
         if (estadoConexion == true) {
             mensaje = new MqttMessage();
             mensaje.setPayload(texto.getBytes());
             try {
                 cliente.publish(topic, mensaje);
-                Log.w(getClass().toString(), topic + ": " + texto);
+                Log.w(LOG_CLASS, topic + ": " + texto);
             } catch (MqttException e) {
                 e.printStackTrace();
             }
 
         } else {
-            Log.w(getClass().toString(), "rno estoy conectado y no puedo publica");
+            Log.w(LOG_CLASS, "rno estoy conectado y no puedo publica");
         }
     }
 
@@ -470,18 +481,18 @@ public class conexionMqtt implements Serializable, Parcelable {
      */
     public void subscribirTopic(final String topic) {
 
-        Log.w(getClass().toString(), "topic " + topic);
+        Log.w(LOG_CLASS, "topic " + topic);
         if (estadoConexion == true) {
             try {
                 cliente.subscribe(topic, 0, contexto, new IMqttActionListener() {
                     @Override
                     public void onSuccess(IMqttToken iMqttToken) {
-                        Log.w(getClass().toString(), "subscrito al topic " + topic);
+                        Log.w(LOG_CLASS, "subscrito al topic " + topic);
                     }
 
                     @Override
                     public void onFailure(IMqttToken iMqttToken, Throwable throwable) {
-                        Log.w(getClass().toString(), "subscrito sin exito al topic " + topic);
+                        Log.w(LOG_CLASS, "subscrito sin exito al topic " + topic);
 
                     }
                 });
@@ -490,7 +501,7 @@ public class conexionMqtt implements Serializable, Parcelable {
             }
 
         } else {
-            Log.w(getClass().toString(), "No estas conectado al broker");
+            Log.w(LOG_CLASS, "No estas conectado al broker");
             estadoConexion = false;
         }
 
@@ -506,10 +517,10 @@ public class conexionMqtt implements Serializable, Parcelable {
             cliente = null;
             this.estadoConexion = false;
             //cliente.close();
-            Log.w(getClass().toString(), "Conexion Mqtt cerrada");
+            Log.w(LOG_CLASS, "Conexion Mqtt cerrada");
         } catch (MqttException e) {
             e.printStackTrace();
-            Log.w(getClass().toString(), "Error al intentar desconectar");
+            Log.w(LOG_CLASS, "Error al intentar desconectar");
         }
     }
 
@@ -590,6 +601,79 @@ public class conexionMqtt implements Serializable, Parcelable {
         return true;
     }
 
+
+
+    public void conectarseAlBroker() {
+        cliente.setCallback(new MqttCallbackExtended() {
+            @Override
+            public void connectComplete(boolean reconnect, String serverURI) {
+                listener.conexionEstablecida(reconnect, serverURI);
+
+            }
+
+            @Override
+            public void connectionLost(Throwable cause) {
+                listener.conexionPerdida(cause);
+
+            }
+
+            @Override
+            public void messageArrived(String topic, MqttMessage message) throws Exception {
+                listener.mensajeRecibido(topic, message);
+
+            }
+
+            @Override
+            public void deliveryComplete(IMqttDeliveryToken token) {
+                listener.entregaCompletada(token);
+
+
+            }
+        });
+
+        establecerConexionMqtt();
+
+
+
+    }
+
+    public void conectarseAlBrokerConReintento(long tiempoReintento, long intervaloNotificacion) {
+
+        conectarseAlBroker();
+
+
+
+        temporizacionReintento = new CountDownTimer(tiempoReintento, intervaloNotificacion) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                if(getEstadoConexion()) {
+                    Log.i(LOG_CLASS, "conexion completa, se cancela el temporizador");
+                    this.cancel();
+                }
+                listener.notificacionIntermediaReintento(millisUntilFinished);
+
+            }
+
+            @Override
+            public void onFinish() {
+                if (!getEstadoConexion()) {
+                    Log.e(LOG_CLASS, "No se ha podido establecer la conexion, se reintenta");
+                    conectarseAlBroker();
+                    this.start();
+
+                }
+                listener.finTemporizacionReintento(tiempoReintento);
+
+
+
+            }
+        };
+
+        temporizacionReintento.start();
+
+
+
+    }
 
 
 }

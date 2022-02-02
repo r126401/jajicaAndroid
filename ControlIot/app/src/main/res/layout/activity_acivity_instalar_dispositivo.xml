@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AcivityInstalarDispositivo">
+
+    <TextView
+        android:id="@+id/textSsid"
+        android:layout_width="66dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="116dp"
+        android:layout_marginTop="124dp"
+        android:text="SSID: "
+        android:textAlignment="textStart"
+        app:layout_constraintBottom_toTopOf="@+id/textBssid"
+        app:layout_constraintEnd_toStartOf="@+id/editSsid"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textBssid"
+        android:layout_width="66dp"
+        android:layout_height="50dp"
+        android:text="BSSID: "
+        android:textAlignment="textStart"
+        app:layout_constraintStart_toStartOf="@+id/textSsid"
+        app:layout_constraintTop_toBottomOf="@+id/textSsid" />
+
+    <TextView
+        android:id="@+id/textPassword"
+        android:layout_width="66dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="28dp"
+        android:text="Password: "
+        android:textAlignment="textStart"
+        app:layout_constraintStart_toStartOf="@+id/textBssid"
+        app:layout_constraintTop_toBottomOf="@+id/textBssid" />
+
+    <TextView
+        android:id="@+id/textNombreDispositivo"
+        android:layout_width="66dp"
+        android:layout_height="50dp"
+        android:text="Nombre: "
+        android:textAlignment="textStart"
+        app:layout_constraintStart_toStartOf="@+id/textPassword"
+        app:layout_constraintTop_toBottomOf="@+id/textPassword" />
+
+    <EditText
+        android:id="@+id/editSsid"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:text="Estacion"
+        app:layout_constraintStart_toEndOf="@+id/textSsid"
+        app:layout_constraintTop_toTopOf="@+id/textSsid" />
+
+    <EditText
+        android:id="@+id/editBssid"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:text="Estacion"
+        app:layout_constraintStart_toEndOf="@+id/textBssid"
+        app:layout_constraintTop_toBottomOf="@+id/editSsid" />
+
+    <EditText
+        android:id="@+id/editPassword"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:inputType="textVisiblePassword"
+        android:text="Estacion"
+        app:layout_constraintStart_toEndOf="@+id/textPassword"
+        app:layout_constraintTop_toTopOf="@+id/textPassword" />
+
+    <EditText
+        android:id="@+id/apNombreDispositivo"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:text="Estacion"
+        app:layout_constraintStart_toEndOf="@+id/textNombreDispositivo"
+        app:layout_constraintTop_toBottomOf="@+id/editPassword" />
+
+    <Button
+        android:id="@+id/botonAceptar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text="Aceptar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/apNombreDispositivo" />
+
+    <TextView
+        android:id="@+id/textResultadoOperacion"
+        android:layout_width="299dp"
+        android:layout_height="147dp"
+        android:layout_marginTop="36dp"
+        android:text="Resultado Operacion"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/botonAceptar"
+        android:fontFamily="@font/poetsenone"
+        android:textSize="20dp"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

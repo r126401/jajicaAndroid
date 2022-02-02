@@ -1,23 +1,37 @@
 package com.example.controliot;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.content.Intent;
+import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.journeyapps.barcodescanner.ScanContract;
+import com.journeyapps.barcodescanner.ScanOptions;
 
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
-import org.eclipse.paho.client.mqttv3.MqttCallbackExtended;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 
-public class ActividadPrincipal extends AppCompatActivity {
+
+
+public class ActividadPrincipal extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
     /**
      * identifica la conexion mqtt principal del dispositivo
@@ -31,6 +45,12 @@ public class ActividadPrincipal extends AppCompatActivity {
     private SwipeRefreshLayout swipeListaDispositivos;
     private ListView listViewListaDispositivos;
     private BottomNavigationView navigationMenuPrincipal;
+    private CountDownTimer temporizador;
+    private ProgressBar progressEspera;
+    private ScanOptions opcionesEscaneo;
+    private ScanContract contract;
+    private String texto;
+
 
 
 
@@ -38,43 +58,89 @@ public class ActividadPrincipal extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_principal);
-        cnx = null;
-        CountDownTimer temporizador;
-        dialogo = new dialogoIot();
-        // Se registran todos los controles de la activity
+
+
+         // Se registran todos los controles de la activity
         registrarControles();
+        inicializacionParametros();
         //Se crea la conexion mqtt. A partir de aqui el programa es asincrono y gobernado por los
-        //eventos.
-        crearConexionMqtt();
-
-        temporizador = new CountDownTimer(10000, 1000) {
+        //eventos que lleguen.
+        cnx = new conexionMqtt(getApplicationContext());
+        cnx.setOnConexionMqtt(new conexionMqtt.OnConexionMqtt() {
             @Override
-            public void onTick(long millisUntilFinished) {
-                if (cnx.getEstadoConexion()) {
-                    Log.i(getLocalClassName(), "conexion completa, se cancela el temporizador");
-                    this.cancel();
-                }
+            public void conexionEstablecida(boolean reconnect, String serverURI) {
+                notificarBrokerActivado();
 
             }
 
             @Override
-            public void onFinish() {
-                Log.i(getLocalClassName(), "termino el temporizador");
-                if (!cnx.getEstadoConexion()) {
-                    Log.e(getLocalClassName(), "No se ha podido establecer la conexion, se reintenta");
-                    crearConexionMqtt();
-                    this.start();
-                }
+            public void conexionPerdida(Throwable cause) {
+                notificarBrokerReintentoConexion();
 
             }
-        };
-        temporizador.start();
+
+            @Override
+            public void mensajeRecibido(String topic, MqttMessage message) {
+
+            }
+
+            @Override
+            public void entregaCompletada(IMqttDeliveryToken token) {
+
+            }
+
+            @Override
+            public void notificacionIntermediaReintento(long intervalo) {
+                Log.i(getLocalClassName(), "reintentando");
+
+            }
+
+            @Override
+            public void finTemporizacionReintento(long temporizador) {
+                Log.i(getLocalClassName(), "Temporizacion de reintento terminada");
+
+            }
+        });
+        cnx.conectarseAlBrokerConReintento(10000, 1000);
 
 
 
 
     }
 
+    
+    private void notificarBrokerDesactivado() {
+
+        imageViewEstadoBroker.setImageResource(R.drawable.bk_no_conectado);
+        if (cnx != null) {
+            textIdBroker.setText("Conectando a " + cnx.getBrokerId());
+        }
+
+        textIdBroker.setTextColor(Color.RED);
+        progressEspera.setVisibility(View.VISIBLE);
+
+    }
+    private void notificarBrokerActivado() {
+        imageViewEstadoBroker.setImageResource(R.drawable.bk_conectado);
+        textIdBroker.setText(cnx.getBrokerId());
+        textIdBroker.setTextColor(Color.GREEN);
+        progressEspera.setVisibility(View.INVISIBLE);
+
+    }
+    private void notificarBrokerReintentoConexion() {
+        imageViewEstadoBroker.setImageResource(R.drawable.bk_no_conectado);
+        textIdBroker.setTextColor(Color.MAGENTA);
+        textIdBroker.setText("Reintentando conexion a " + cnx.getBrokerId());
+        progressEspera.setVisibility(View.VISIBLE);
+
+    }
+    private void inicializacionParametros() {
+        cnx = null;
+        dialogo = new dialogoIot();
+        notificarBrokerDesactivado();
+
+
+    }
     private void registrarControles() {
 
         textIdBroker = (TextView) findViewById(R.id.textEstadoBroker);
@@ -84,92 +150,102 @@ public class ActividadPrincipal extends AppCompatActivity {
         swipeListaDispositivos = (SwipeRefreshLayout) findViewById(R.id.swipeListaDispositivos);
         listViewListaDispositivos = (ListView) findViewById(R.id.listViewListaDispositivos);
         navigationMenuPrincipal = (BottomNavigationView) findViewById(R.id.navigationMenuPrincipal);
+        navigationMenuPrincipal.setOnNavigationItemSelectedListener(this);
+        progressEspera = (ProgressBar)  findViewById(R.id.progressEspera);
 
     }
 
 
-    private boolean crearConexionMqtt() {
+    private void lanzarActivityNuevoDispositivo() {
 
-
-        // Se crea una nueva conexion mqtt
-        if (cnx == null) {
-            cnx = new conexionMqtt(getApplicationContext());
-            String broker;
-            broker = cnx.getBrokerId();
-            if (broker.length() == 0) {
-                textIdBroker.setText(getString(R.string.broker_no_configurado));
-            } else {
-                textIdBroker.setText(cnx.getBrokerId());
-            }
-
-            if (cnx == null) {
-                Log.e(getClass().toString(), "Error al crear la conexion mqtt");
-                return false;
-            }
-
-
-            cnx.cliente.setCallback(new MqttCallbackExtended() {
-                @Override
-                public void connectComplete(boolean reconnect, String serverURI) {
-                    Log.d(getClass().toString(), "Conexion completa!!!");
-                    imageViewEstadoBroker.setImageResource(R.drawable.bk_conectado);
-                    dialogo.setConexionMqtt(cnx);
-
-                    //actualizarDispositivos();
-
-                }
-
-                @Override
-                public void connectionLost(Throwable cause) {
-                    Log.d(getClass().toString(), ": Conexion perdida!!!");
-                    imageViewEstadoBroker.setImageResource(R.drawable.bk_no_conectado);
-                    //actualizarEstadoConexionDispositivos(ESTADO_CONEXION_IOT.DESCONECTADO, false);
-                    //animacion.setVisibility(View.VISIBLE);
-
-                }
-
-                @Override
-                public void messageArrived(String topic, MqttMessage message) throws Exception {
-                    Log.d(getClass().toString(), ": Ha llegado un mensaje!!!");
-                    //procesarMensajeRecibido(message);
-
-                }
-
-                @Override
-                public void deliveryComplete(IMqttDeliveryToken token) {
-                    Log.d(getClass().toString(), ": entrega completa!!!");
-
-                }
-            });
-
-        } else {
-            Log.w(getLocalClassName(), "conexion mqtt ya existente");
-            //return false;
-        }
-
-        cnx.setOnConexionMqtt(new conexionMqtt.OnConexionMqtt() {
-            @Override
-            public void conexionPerdida() {
-                Log.e(getLocalClassName(), "No se ha podido establecer la conexion Mqtt ");
-            }
-        });
-        cnx.establecerConexionMqtt(this.getApplicationContext());
-
-       if (cnx != null) {
-            if (cnx.cliente != null) {
-                return cnx.cliente.isConnected();
-            } else {
-                return false;
-            }
-
-
-        } else {
-            return false;
-        }
-        //return cnx.cliente.isConnected();
+        Intent nuevoDispositivo = new Intent(this, ActivityNuevoDispositivo.class);
+        lanzadorActivityNuevoDispositivo.launch(nuevoDispositivo);
 
 
     }
+
+    private void lanzarActivityInstalarDispositivo() {
+
+        Intent instalarDispositivo = new Intent(ActividadPrincipal.this, EspTouchActivity.class);
+        //startActivity(instalarDispositivo);
+        lanzadorActivityInstalarDispositivo.launch(instalarDispositivo);
+    }
+
+
+
+
+
+    //Rutina para lanzar una activityForResult
+    ActivityResultLauncher<Intent> lanzadorActivityNuevoDispositivo = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+
+                    if (result.getResultCode() == RESULT_OK) {
+                        String dato = result.getData().getDataString();
+                        Log.i(getLocalClassName(), "Recibimos datos: " + dato);
+                    } else {
+                        Log.w(getLocalClassName(), "Error al guardar el dispositivo");
+                    }
+                }
+            }
+    );
+
+
+    ActivityResultLauncher<Intent> lanzadorActivityInstalarDispositivo = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+
+                    if (result.getResultCode() == RESULT_OK) {
+                        String dato = result.getData().getDataString();
+                        Log.i(getLocalClassName(), "Recibimos datos " + dato);
+
+                    } else {
+                        Log.w(getLocalClassName(), "Error al instalar el dispositivo");
+                    }
+
+                }
+            }
+    );
+
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+
+        switch (menuItem.getItemId()) {
+
+            case (R.id.itemConfigurarBroker):
+                Log.i(getLocalClassName(), "broker");
+                break;
+            case (R.id.itemInstalarDispositivo):
+                Log.i(getLocalClassName(), "Lanzamos la activity InstalarDispositivo");
+                lanzarActivityInstalarDispositivo();
+                break;
+            case(R.id.itemNuevoDispositivo):
+                Log.i(getLocalClassName(), "Lanzamos la activity nuevoDispositivo");
+                lanzarActivityNuevoDispositivo();
+                break;
+        }
+
+
+
+        return false;
+    }
+
+
+    private void resultadoEscaneo() {
+
+        Log.i(getLocalClassName(), "El resultado del escaneo es: " + texto);
+    }
+
+
+
+
+
+
 
 
 }

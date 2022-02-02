@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ActivityNuevoDispositivo">
+
+
+    <EditText
+        android:id="@+id/editIdDispositivo"
+        android:layout_width="200dp"
+        android:layout_height="39dp"
+
+        android:layout_marginTop="4dp"
+        android:ems="10"
+        android:fontFamily="@font/poetsenone"
+        android:inputType="textPersonName"
+        android:textAlignment="textStart"
+        android:textSize="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.051"
+        app:layout_constraintStart_toEndOf="@+id/textIdDispositivo"
+        app:layout_constraintTop_toBottomOf="@+id/apNombreDispositivo" />
+
+    <EditText
+        android:id="@+id/apNombreDispositivo"
+        android:layout_width="200dp"
+        android:layout_height="39dp"
+        android:layout_marginTop="156dp"
+        android:ems="10"
+        android:fontFamily="@font/poetsenone"
+        android:inputType="textPersonName"
+        android:textAlignment="textStart"
+        android:textSize="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/textNombreDispositivo"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textNombreDispositivo"
+        android:layout_width="194dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="156dp"
+        android:fontFamily="@font/poetsenone"
+        android:text="Nombre dispositivo:"
+        android:textAlignment="textEnd"
+        android:textSize="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textIdDispositivo"
+        android:layout_width="194dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="4dp"
+        android:fontFamily="@font/poetsenone"
+        android:text="idDispositivo:"
+        android:textAlignment="textEnd"
+        android:textSize="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textNombreDispositivo" />
+
+    <Button
+        android:id="@+id/botonEscanear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="156dp"
+        android:layout_marginTop="300dp"
+        android:gravity="center"
+        android:text="Escanear"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/botonCancelar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="56dp"
+        android:layout_marginTop="124dp"
+        android:text="Cancelar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textIdDispositivo" />
+
+    <Button
+        android:id="@+id/botonAceptar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="104dp"
+        android:text="Aceptar"
+        app:layout_constraintStart_toEndOf="@+id/botonCancelar"
+        app:layout_constraintTop_toTopOf="@+id/botonCancelar" />
+
+    <TextView
+        android:id="@+id/textResultadoOperacion"
+        android:layout_width="316dp"
+        android:layout_height="114dp"
+        android:layout_marginBottom="84dp"
+        android:fontFamily="@font/poetsenone"
+        android:text="Resultado de la operacion"
+        android:textAlignment="center"
+        android:textSize="25dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

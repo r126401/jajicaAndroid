@@ -67,38 +67,29 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="23d00115-d3af-48c2-a0e5-936070caa06f" name="Default Changelist" comment="se hace el ubgrade de gradel a 7.1.0">
-      <change afterPath="$PROJECT_DIR$/../ControlIot/.idea/deploymentTargetDropDown.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/OtaVersion.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/ProgramaDispositivoIot.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/ProgramaDispositivoIotOnOff.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/ProgramaDispositivoIotTermostato.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/SocketFactory.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/TemporizacionComandos.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/conexionMqtt.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/configuracionDispositivos.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/dialogoIot.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/dispositivoIot.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/dispositivoIotDesconocido.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/dispositivoIotOnOff.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/dispositivoIotTermostato.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/raw/certificado.crt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/AcivityInstalarDispositivo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/EspTouchActivity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/drawable/baseline_info_black_24.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/drawable/fondo_termostato.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/drawable/ic_delete.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/drawable/ic_info_outline_white_24dp.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/font/poetsenone.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/layout/activity_acivity_instalar_dispositivo.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/layout/activity_esptouch.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../ControlIot/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../ControlIot/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/MainActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/res/drawable/brokeron.png" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/drawable/bk_conectado.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/res/layout/activity_main.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/layout/activity_principal.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/ActividadPrincipal.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/ActividadPrincipal.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/conexionMqtt.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/conexionMqtt.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/configuracionDispositivos.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/configuracionDispositivos.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/dispositivoIot.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/dispositivoIot.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/res/drawable/fondo_degradado.png" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/drawable/fondo_degradado.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/res/layout/activity_principal.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/layout/activity_principal.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/res/values-es/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/values-es/strings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/res/values/colors.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/values/colors.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/values/strings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../ControlIot/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/7.2/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.2/executionHistory/executionHistory.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/7.2/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.2/executionHistory/executionHistory.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/7.2/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.2/fileHashes/fileHashes.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/7.2/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.2/fileHashes/fileHashes.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/7.2/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.2/fileHashes/resourceHashesCache.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/iotcontrol/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/iotcontrol/MainActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ControlIot/settings.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/settings.gradle" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -145,6 +136,14 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
+  </component>
   <component name="ProjectId" id="1YGmtERVm3dsKjBKwVL9evVwIkD" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
@@ -164,12 +163,13 @@
     <property name="android.sdk.path" value="/opt/android/sdk" />
     <property name="cidr.known.project.marker" value="true" />
     <property name="device.picker.selection" value="google" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$USER_HOME$/Descargas/cvs/cvs-203.0.zip" />
     <property name="memory.settings.postsync.do.not.ask.for.project" value="true" />
     <property name="multi-representation-preview/home/t126401/Android/Sdk/sources/android-30/android/view/View.java_selected" value="Custom views" />
     <property name="project.structure.last.edited" value="SDK Location" />
     <property name="project.structure.proportion" value="0.17" />
     <property name="project.structure.side.proportion" value="0.55041325" />
+    <property name="recommended.upgrade.last.time.stamp" value="1643662305234" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
     <property name="settings.editor.selected.configurable" value="AndroidSdkUpdater" />
   </component>

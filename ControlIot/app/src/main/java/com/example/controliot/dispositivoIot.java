@@ -333,8 +333,7 @@ public abstract class dispositivoIot extends configuracionDispositivos implement
 
 
     public boolean guardarDispositivo(Context contexto) {
-        guardarDispositivo(this, contexto);
-        return true;
+        return guardarDispositivo(this, contexto);
     }
 
 
