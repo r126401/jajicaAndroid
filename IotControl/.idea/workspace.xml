@@ -67,29 +67,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="23d00115-d3af-48c2-a0e5-936070caa06f" name="Default Changelist" comment="se hace el ubgrade de gradel a 7.1.0">
-      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/AcivityInstalarDispositivo.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/EspTouchActivity.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/drawable/baseline_info_black_24.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/drawable/fondo_termostato.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/drawable/ic_delete.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/drawable/ic_info_outline_white_24dp.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/font/poetsenone.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/layout/activity_acivity_instalar_dispositivo.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/layout/activity_esptouch.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/ListaDispositivosAdapter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/drawable/heating_off.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/drawable/heating_on.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/drawable/switch_indeterminado.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/drawable/switchoff.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/drawable/switchon.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/layout/vista_dispositivo_desconocido.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ControlIot/.idea/deploymentTargetDropDown.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../ControlIot/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ControlIot/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/AndroidManifest.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/ActividadPrincipal.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/ActividadPrincipal.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/conexionMqtt.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/conexionMqtt.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/configuracionDispositivos.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/configuracionDispositivos.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/dispositivoIot.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/dispositivoIot.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/res/drawable/fondo_degradado.png" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/drawable/fondo_degradado.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/EspTouchActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/EspTouchActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/res/drawable/id_heating.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/res/layout/activity_principal.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/layout/activity_principal.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/res/values-es/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/values-es/strings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/res/values/colors.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/values/colors.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/values/strings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ControlIot/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ControlIot/settings.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/settings.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/res/layout/vista_termostato.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/layout/vista_termostato.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -153,6 +144,7 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="DeviceAndSnapshotComboBoxAction.selectedDevice" value="Pixel_3a_API_30_x86" />
     <property name="DeviceAndSnapshotComboBoxAction.selectionTime" value="2021-12-13T17:43:50.045Z" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
@@ -634,6 +626,7 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="se hace el ubgrade de gradel a 7.1.0" />
     <option name="LAST_COMMIT_MESSAGE" value="se hace el ubgrade de gradel a 7.1.0" />
   </component>

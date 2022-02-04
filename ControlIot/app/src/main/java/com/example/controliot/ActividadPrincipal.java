@@ -27,8 +27,10 @@ import com.journeyapps.barcodescanner.ScanOptions;
 
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.json.JSONArray;
+import org.json.JSONException;
 
-
+import java.util.ArrayList;
 
 
 public class ActividadPrincipal extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
@@ -50,6 +52,8 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
     private ScanOptions opcionesEscaneo;
     private ScanContract contract;
     private String texto;
+    private ArrayList<dispositivoIot> lista = null;
+    private ListaDispositivosAdapter adapter = null;
 
 
 
@@ -102,6 +106,7 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
             }
         });
         cnx.conectarseAlBrokerConReintento(10000, 1000);
+        if (adapter == null) presentarDispositivos();
 
 
 
@@ -242,9 +247,70 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
     }
 
 
+    private boolean presentarDispositivos() {
 
 
+        JSONArray arrayDispositivos;
+        int tamArray;
+        int i;
+        dispositivoIot dispositivos;
 
+        configuracionDispositivos grupoDispositivos = new dispositivoIotDesconocido();
+
+
+        if (grupoDispositivos.leerDispositivos(getApplicationContext()) == false) {
+            Log.w(getClass().toString(), ": no hay dispositivos configurados");
+            return false;
+        } else {
+            Log.i(getClass().toString(), "Vamos a presentar los dispositivos en el listview");
+
+            try {
+                arrayDispositivos = grupoDispositivos.getDatosDispositivos().getJSONArray(TEXTOS_DIALOGO_IOT.DISPOSITIVOS.getValorTextoJson());
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Log.e(getClass().toString(), "El json de dispositivos esta corrupto");
+                return false;
+            }
+
+            tamArray = arrayDispositivos.length();
+            if (lista == null) {
+                lista = new ArrayList<dispositivoIot>();
+            }
+            if (listViewListaDispositivos.getAdapter() == null) {
+                adapter = new ListaDispositivosAdapter(this, R.layout.vista_dispositivo_desconocido, lista, cnx, dialogo);
+            }
+
+            for (i = 0; i < tamArray; i++) {
+
+
+                try {
+                    dispositivos = grupoDispositivos.json2Dispositivo(arrayDispositivos.getJSONObject(i));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    return false;
+                }
+
+                switch (dispositivos.tipoDispositivo) {
+                    case INTERRUPTOR:
+                        dispositivoIot interruptor = new dispositivoIotOnOff(dispositivos);
+                        adapter.add(interruptor);
+
+                        break;
+                    case CRONOTERMOSTATO:
+                        dispositivoIot cronotermostato = new dispositivoIotTermostato(dispositivos);
+                        adapter.add(cronotermostato);
+                        break;
+                    default:
+                        dispositivoIot desconocido = new dispositivoIotDesconocido(dispositivos);
+                        adapter.add(desconocido);
+                        break;
+                }
+            }
+            listViewListaDispositivos.setAdapter(adapter);
+        }
+        return true;
+    }
 
 
 

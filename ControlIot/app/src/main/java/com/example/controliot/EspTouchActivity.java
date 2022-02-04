@@ -2,7 +2,9 @@ package com.example.controliot;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -22,7 +24,7 @@ import com.espressif.iot.esptouch.IEsptouchTask;
 import com.espressif.iot.esptouch.util.ByteUtil;
 import com.espressif.iot.esptouch.util.TouchNetUtil;
 
-import com.example.controliot.EspTouchApp;
+
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -43,6 +45,7 @@ public class EspTouchActivity extends EspTouchActivityAbs {
     private String mBssid;
     private String idDispositivo;
     private String nombreDispositivo;
+    private Boolean resultadoSmartConfig;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +53,7 @@ public class EspTouchActivity extends EspTouchActivityAbs {
         mBinding = ActivityEsptouchBinding.inflate(getLayoutInflater());
         setContentView(mBinding.getRoot());
         mBinding.confirmBtn.setOnClickListener(v -> executeEsptouch());
+        resultadoSmartConfig = false;
 
         mBinding.cancelButton.setOnClickListener(v -> {
             showProgress(false);
@@ -252,18 +256,21 @@ public class EspTouchActivity extends EspTouchActivityAbs {
                         .setPositiveButton(android.R.string.ok, null)
                         .show();
                 mResultDialog.setCanceledOnTouchOutside(false);
+                activity.resultadoSmartConfig = false;
                 return;
             }
 
             // check whether the task is cancelled and no results received
             IEsptouchResult firstResult = result.get(0);
             if (firstResult.isCancelled()) {
+                activity.resultadoSmartConfig = false;
                 return;
             }
             // the task received some results including cancelled while
             // executing before receiving enough results
 
             if (!firstResult.isSuc()) {
+                activity.resultadoSmartConfig = false;
                 mResultDialog = new AlertDialog.Builder(activity)
                         .setMessage(R.string.esptouch1_configure_result_failed)
                         .setPositiveButton(android.R.string.ok, null)
@@ -272,12 +279,16 @@ public class EspTouchActivity extends EspTouchActivityAbs {
                 return;
             }
 
+            activity.resultadoSmartConfig = true;
+            activity.idDispositivo = result.get(0).getBssid();
             ArrayList<CharSequence> resultMsgList = new ArrayList<>(result.size());
             for (IEsptouchResult touchResult : result) {
                 String message = activity.getString(R.string.esptouch1_configure_result_success_item,
                         touchResult.getBssid(), touchResult.getInetAddress().getHostAddress());
                 resultMsgList.add(message);
             }
+            //Contemplamos un solo dispositivo ya que solo permitimos sincronizar un dispositivo a la vez.
+
             CharSequence[] items = new CharSequence[resultMsgList.size()];
             mResultDialog = new AlertDialog.Builder(activity)
                     .setTitle(R.string.esptouch1_configure_result_success)
@@ -286,5 +297,28 @@ public class EspTouchActivity extends EspTouchActivityAbs {
                     .show();
             mResultDialog.setCanceledOnTouchOutside(false);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if ((resultadoSmartConfig) && (!mBinding.apNombreDispositivo.getText().toString().isEmpty()))  {
+            dispositivoIotDesconocido dispositivo;
+            dispositivo = new dispositivoIotDesconocido(mBinding.apNombreDispositivo.getText().toString(),
+                    idDispositivo, TIPO_DISPOSITIVO_IOT.DESCONOCIDO);
+            if (dispositivo.guardarDispositivo(getApplicationContext())) {
+                Intent datos = new Intent();
+                datos.setData(Uri.parse(mBinding.apNombreDispositivo.getText().toString()));
+                setResult(RESULT_OK, datos);
+            } else {
+                setResult(RESULT_CANCELED);
+            }
+
+
+        } else {
+            setResult(RESULT_CANCELED);
+        }
+
+
     }
 }

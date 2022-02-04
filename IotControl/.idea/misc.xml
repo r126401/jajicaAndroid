@@ -10,8 +10,10 @@
       <map>
         <entry key="app/src/main/res/drawable/esquinas.xml" value="0.2785" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.34739583333333335" />
+        <entry key="app/src/main/res/layout/lista_dispositivos.xml" value="0.34739583333333335" />
         <entry key="app/src/main/res/layout/termostato.xml" value="0.34739583333333335" />
-        <entry key="app/src/main/res/layout/vista_cronotermostato.xml" value="0.34739583333333335" />
+        <entry key="app/src/main/res/layout/vista_cronotermostato.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/vista_interruptor.xml" value="0.34739583333333335" />
         <entry key="app/src/main/res/menu/menu_principal.xml" value="0.171875" />
       </map>
     </option>
