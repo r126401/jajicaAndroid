@@ -67,6 +67,27 @@ public class dispositivoIotTermostato extends dispositivoIot implements Serializ
 
 
     }
+    dispositivoIotTermostato(dispositivoIot padre, TIPO_DISPOSITIVO_IOT tipo) {
+
+
+        this.nombreDispositivo = padre.nombreDispositivo;
+        this.idDispositivo = padre.idDispositivo;
+        this.tipoDispositivo = TIPO_DISPOSITIVO_IOT.CRONOTERMOSTATO;
+        estadoRele = ESTADO_RELE.INDETERMINADO;
+        this.topicPublicacion = padre.topicPublicacion;
+        this.topicSubscripcion = padre.topicSubscripcion;
+        this.versionOta = padre.versionOta;
+        temperatura = -1000;
+        umbralTemperatura = -1000;
+        humedad = -1000;
+        intervaloLectura = 0;
+        margenTemperatura = 0;
+        reintentosLectura = 0;
+        intervaloReintentos = 0;
+        this.tipoDispositivo = tipo;
+
+
+    }
 
     public void setMargenTemperatura(double margenTemperatura) {
 

@@ -14,9 +14,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class ListaDispositivosAdapter extends ArrayAdapter<dispositivoIot> {
 
@@ -38,6 +41,13 @@ public class ListaDispositivosAdapter extends ArrayAdapter<dispositivoIot> {
 
     }
 
+    private void inicializarControles(ListaDispositivosAdapterHolder holder) {
+
+        holder.estadoConexionInterruptor.setTag(Integer.valueOf(R.drawable.switch_indeterminado));
+        holder.estadoConexionInterruptor.setImageResource(R.drawable.switch_indeterminado);
+
+
+    }
     @NonNull
     @Override
     public View getView(int position, @Nullable View fila, @NonNull ViewGroup parent) {
@@ -63,17 +73,26 @@ public class ListaDispositivosAdapter extends ArrayAdapter<dispositivoIot> {
             holder.barraProgresoTermostato = (ProgressBar) fila.findViewById(R.id.progresoOperacionTermostato);
             holder.textNombreTermostato = (TextView) fila.findViewById(R.id.textNombreTermostato);
             holder.imageIconoUmbralTemperatura = (ImageView) fila.findViewById(R.id.imageIconoUmbralTemperatura);
+            holder.imageIconoHumedad = (ImageView) fila.findViewById(R.id.imageIconoHumedad);
+
+
+            // Inicializamos los valores
+            inicializarControles(holder);
 
             fila.setTag(holder);
         } else {
             holder = (ListaDispositivosAdapterHolder) fila.getTag();
+
+
         }
+
         Log.d(TAG, "Entramos en la logia del adapter");
         switch (dispositivo.getTipoDispositivo()) {
 
             case DESCONOCIDO:
                 holder.vista_interruptor.setVisibility((View.VISIBLE));
                 holder.vista_termostato.setVisibility(View.INVISIBLE);
+                rellenarControlesDesconocidoSinEstado(holder, (dispositivoIotDesconocido) dispositivo);
                 break;
             case INTERRUPTOR:
                 holder.vista_interruptor.setVisibility(View.VISIBLE);
@@ -115,15 +134,35 @@ public class ListaDispositivosAdapter extends ArrayAdapter<dispositivoIot> {
         ConstraintLayout vista_termostato;
         ProgressBar barraProgresoInterruptor;
         ProgressBar barraProgresoTermostato;
+        ImageView imageIconoHumedad;
 
 
     }
+
+private void rellenarControlesDesconocidoSinEstado(ListaDispositivosAdapterHolder holder, dispositivoIotDesconocido dispositivo) {
+
+        holder.imageOnOff.setVisibility(View.INVISIBLE);
+        int a;
+        a = (Integer) holder.estadoConexionInterruptor.getTag();
+        if (a == R.drawable.bk_no_conectado) {
+            holder.estadoConexionInterruptor.setImageResource(R.drawable.switch_indeterminado);
+
+        }
+        holder.textoInterruptor.setText(dispositivo.getNombreDispositivo().toUpperCase());
+
+}
+
+
+
+
+
 
     private void rellenarControlesInterruptorSinEstado(ListaDispositivosAdapterHolder holder, dispositivoIotOnOff dispositivo) {
 
 
         int valor;
 
+        Log.i(TAG, "delante");
         switch (dispositivo.getEstadoRele()) {
 
             case OFF:
@@ -172,26 +211,8 @@ public class ListaDispositivosAdapter extends ArrayAdapter<dispositivoIot> {
     private void rellenarControlesTermostatoSinEstado(ListaDispositivosAdapterHolder holder, dispositivoIotTermostato dispositivo) {
 
         double dato;
-        rellenarControlesTermometroSinEstado(holder, (dispositivoIotTermostato) dispositivo);
-        dato = dispositivo.redondearDatos(dispositivo.getUmbralTemperatura(), 1);
-        if (dispositivo.getEstadoConexion() == ESTADO_CONEXION_IOT.CONECTADO) {
-            if (dato == -1000) {
-                holder.textoUmbralTemperatura.setText("--.- ºC");
-            } else {
-                holder.textoUmbralTemperatura.setText(String.valueOf(dato));
-            }
-        }
-        holder.imageIconoUmbralTemperatura.setVisibility(View.VISIBLE);
-
-
-
-
-    }
-
-    private void rellenarControlesTermometroSinEstado(ListaDispositivosAdapterHolder holder, dispositivoIotTermostato dispositivo) {
-
         int valor;
-        double dato;
+        rellenarControlesTermometroSinEstado(holder, (dispositivoIotTermostato) dispositivo);
         // Actualizamos el estado del rele del termostato
         holder.imageIconoUmbralTemperatura.setVisibility(View.INVISIBLE);
         switch (dispositivo.getEstadoRele()) {
@@ -211,7 +232,33 @@ public class ListaDispositivosAdapter extends ArrayAdapter<dispositivoIot> {
 
         holder.imageHeatingOnOff.setImageResource(valor);
         holder.imageHeatingOnOff.setTag(Integer.valueOf(valor));
+        dato = dispositivo.redondearDatos(dispositivo.getUmbralTemperatura(), 1);
+        if (dispositivo.getEstadoConexion() == ESTADO_CONEXION_IOT.CONECTADO) {
+            if (dato == -1000) {
+                holder.textoUmbralTemperatura.setText("--.- ºC");
+            } else {
+                holder.textoUmbralTemperatura.setText(String.valueOf(dato));
+            }
+        }
+        holder.imageIconoUmbralTemperatura.setVisibility(View.VISIBLE);
+
+
+
+
+    }
+
+    private void rellenarControlesTermometroSinEstado(ListaDispositivosAdapterHolder holder, dispositivoIotTermostato dispositivo) {
+
+        int valor;
+        double dato;
+
+
         holder.textNombreTermostato.setText(dispositivo.nombreDispositivo);
+        holder.imageHeatingOnOff.setVisibility(View.INVISIBLE);
+        holder.imageIconoUmbralTemperatura.setVisibility(View.INVISIBLE);
+        holder.textoHumedad.setVisibility(View.INVISIBLE);
+        holder.imageIconoHumedad.setVisibility(View.INVISIBLE);
+
 
         //Actualizamos el valor de la conexion
         switch (dispositivo.getEstadoConexion()) {
@@ -219,10 +266,12 @@ public class ListaDispositivosAdapter extends ArrayAdapter<dispositivoIot> {
 
             case INDETERMINADO:
             case ESPERANDO_RESPUESTA:
+            default:
                 valor = R.drawable.switch_indeterminado;
                 break;
             case CONECTADO:
                 valor = R.drawable.bk_conectado;
+                holder.barraProgresoTermostato.setVisibility(View.INVISIBLE);
                 break;
             case DESCONECTADO:
                 valor = R.drawable.bk_no_conectado;
@@ -254,10 +303,6 @@ public class ListaDispositivosAdapter extends ArrayAdapter<dispositivoIot> {
         }
 
     }
-
-
-
-
 
 
 
