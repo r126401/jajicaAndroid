@@ -22,6 +22,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ControlIot">
         <activity
+            android:name=".ActivityInterruptor"
+            android:exported="false" />
+        <activity
             android:name=".AcivityInstalarDispositivo"
             android:exported="false" />
         <activity
@@ -30,7 +33,6 @@
         <activity
             android:name=".EspTouchActivity"
             android:exported="false" />
-
         <activity
             android:name=".ActivityNuevoDispositivo"
             android:exported="false" />

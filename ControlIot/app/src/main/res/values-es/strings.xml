@@ -11,6 +11,10 @@
     <string name="nombre_dispositivo">Nombre :</string>
     <string name="menu_item_about">About App</string>
     <string name="about_app_version">App Version: %s</string>
+    <string name="aceptar">Aceptar</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="avisoEliminarDispositivo">La accion eliminara el dispositivo de la aplicacion.</string>
+    <string name="eliminarDispositivo">Eliminar dispositivo</string>
 
     <string name="main_title">Home</string>
 

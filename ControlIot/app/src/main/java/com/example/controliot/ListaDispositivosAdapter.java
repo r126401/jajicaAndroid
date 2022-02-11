@@ -1,6 +1,7 @@
 package com.example.controliot;
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Resources;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,7 +25,7 @@ import java.util.Locale;
 public class ListaDispositivosAdapter extends ArrayAdapter<dispositivoIot> {
 
     private Context contexto;
-    private ArrayList<dispositivoIot> listaDispositvos;
+    public ArrayList<dispositivoIot> listaDispositvos;
     private conexionMqtt cnx;
     private dialogoIot dialogo;
     private int idLayout;
@@ -53,7 +54,9 @@ public class ListaDispositivosAdapter extends ArrayAdapter<dispositivoIot> {
     public View getView(int position, @Nullable View fila, @NonNull ViewGroup parent) {
 
         ListaDispositivosAdapterHolder holder;
-        dispositivoIot dispositivo = listaDispositvos.get(position);
+        dispositivoIot dispositivo;
+        dispositivo = listaDispositvos.get(position);
+
 
         if (fila == null) {
             LayoutInflater inflater = ((Activity) contexto).getLayoutInflater();
@@ -74,11 +77,76 @@ public class ListaDispositivosAdapter extends ArrayAdapter<dispositivoIot> {
             holder.textNombreTermostato = (TextView) fila.findViewById(R.id.textNombreTermostato);
             holder.imageIconoUmbralTemperatura = (ImageView) fila.findViewById(R.id.imageIconoUmbralTemperatura);
             holder.imageIconoHumedad = (ImageView) fila.findViewById(R.id.imageIconoHumedad);
+            holder.imageEliminarSwitch = (ImageView) fila.findViewById(R.id.imageEliminarSwitch);
+            holder.imageEliminarTermostato = (ImageView) fila.findViewById(R.id.imageEliminarTermostato);
 
+            holder.imageEliminarTermostato.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    borrarDispositivo(dispositivo, position);
+                    Log.i(TAG, "he pulsado el boton de eliminar termometro");
+                }
+            });
+
+            holder.imageEliminarSwitch.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    borrarDispositivo(dispositivo, position);
+                }
+            });
+
+            holder.imageOnOff.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.i(getClass().toString(), "Hemos pulsado el interruptor");
+                    int valorIcono;
+                    valorIcono = (Integer) holder.imageOnOff.getTag();
+                    switch (valorIcono) {
+
+                        case R.drawable.switchon:
+                            dialogo.enviarComando(dispositivo, dialogo.comandoActuarRele(ESTADO_RELE.OFF));
+                            dispositivo.setEstadoConexion(ESTADO_CONEXION_IOT.ESPERANDO_RESPUESTA);
+                            holder.barraProgresoInterruptor.setVisibility(View.VISIBLE);
+                            //cnx.publicarTopic(dispositivo.getTopicPublicacion(), dialogo.comandoActuarRele(ESTADO_RELE.OFF));
+                            break;
+                        case R.drawable.switchoff:
+                            dialogo.enviarComando(dispositivo, dialogo.comandoActuarRele(ESTADO_RELE.ON));
+                            dispositivo.setEstadoConexion(ESTADO_CONEXION_IOT.ESPERANDO_RESPUESTA);
+                            holder.barraProgresoInterruptor.setVisibility(View.VISIBLE);
+
+                            //cnx.publicarTopic(dispositivo.getTopicPublicacion(), dialogo.comandoActuarRele(ESTADO_RELE.ON));
+                            break;
+
+
+                        default:
+                            Log.w(getClass().toString(), "No se puede actuar porque el estado del rele es indeterminado: ");
+                            break;
+
+                    }
+
+
+                    Log.i(TAG, "He pulsado el boton del interruptor");
+                }
+            });
+
+            holder.textoInterruptor.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    Log.i(TAG, "Pulsacion larga para cambiar el nombre del interruptor");
+                    return false;
+                }
+            });
+
+            holder.textNombreTermostato.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    Log.i(TAG, "Pulsacion larga para cambiar el nombre del termostato");
+                    return false;
+                }
+            });
 
             // Inicializamos los valores
             inicializarControles(holder);
-
             fila.setTag(holder);
         } else {
             holder = (ListaDispositivosAdapterHolder) fila.getTag();
@@ -86,7 +154,12 @@ public class ListaDispositivosAdapter extends ArrayAdapter<dispositivoIot> {
 
         }
 
-        Log.d(TAG, "Entramos en la logia del adapter");
+        /**
+         * Preparamos los eventos de los controles
+         */
+
+
+        Log.d(TAG, "Entramos en la logica del adapter");
         switch (dispositivo.getTipoDispositivo()) {
 
             case DESCONOCIDO:
@@ -135,6 +208,9 @@ public class ListaDispositivosAdapter extends ArrayAdapter<dispositivoIot> {
         ProgressBar barraProgresoInterruptor;
         ProgressBar barraProgresoTermostato;
         ImageView imageIconoHumedad;
+        ImageView imageEliminarTermostato;
+        ImageView imageEliminarSwitch;
+
 
 
     }
@@ -169,7 +245,7 @@ private void rellenarControlesDesconocidoSinEstado(ListaDispositivosAdapterHolde
                 valor = R.drawable.switchoff;
                 break;
             case ON:
-                valor = R.drawable.switchoff;
+                valor = R.drawable.switchon;
                 break;
             case INDETERMINADO:
                 valor = R.drawable.switch_indeterminado;
@@ -300,6 +376,58 @@ private void rellenarControlesDesconocidoSinEstado(ListaDispositivosAdapterHolde
         } else {
             Log.d(TAG, "No procede actualizar valores porque no esta conectado.");
 
+        }
+
+    }
+
+    private void accionarBotonEliminarInterruptor(dispositivoIot dispositivo, int position) {
+
+
+        Log.i(TAG, "he pulsado el boton eliminar switch");
+        borrarDispositivo(dispositivo, position);
+
+
+
+    }
+
+
+
+
+    boolean borrarDispositivo(dispositivoIot dispositivo, int position) {
+
+        final configuracionDispositivos lista;
+        DialogosAplicacion dial;
+
+
+        lista = new configuracionDispositivos();
+        dial = new DialogosAplicacion();
+
+        Resources cadena;
+        cadena = contexto.getResources();
+
+
+        if (lista.leerDispositivos(contexto) == true) {
+            dial.ventanaDialogo(contexto, COMANDO_IOT.ESTADO, cadena.getString(R.string.eliminarDispositivo), cadena.getString(R.string.avisoEliminarDispositivo), R.drawable.ic_delete).show();
+            dial.setOnDialogosAplicacion(new DialogosAplicacion.OnDialogosAplicacion() {
+                @Override
+                public void OnAceptarListener(COMANDO_IOT idComando) {
+                    lista.eliminarDispositivo(dispositivo, contexto);
+                    listaDispositvos.remove(position);
+                    remove(dispositivo);
+                    notifyDataSetChanged();
+
+                }
+
+                @Override
+                public void OnCancelarListener() {
+
+                }
+            });
+
+            return true;
+
+        } else {
+            return false;
         }
 
     }

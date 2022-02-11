@@ -1,7 +1,10 @@
 package com.example.controliot;
 
+import android.content.Context;
+import android.os.CountDownTimer;
 import android.util.Log;
 
+import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -15,6 +18,168 @@ enum TIPO_INFORME {
     RESULTADO_COMANDO,
     INFORME_ESPONTANEO
 }
+
+enum TIPO_LISTENER_DIALOGO {
+    LISTENER_BASICO,
+    LISTENER_COMPLETO
+}
+
+enum COMANDO_IOT_ONOFF {
+    CONSULTAR_CONF_APP(0), ACTUAR_RELE(50), ESTADO(51),
+    CONSULTAR_PROGRAMACION(6), NUEVA_PROGRAMACION(7),
+    ELIMINAR_PROGRAMACION(9), MODIFICAR_PROGRAMACION(8), MODIFICAR_APP(12),
+    RESET(10), FACTORY_RESET(11), MODIFY_CLOCK(15),
+    UPGRADE_FIRMWARE(26), ESPONTANEO(-1), VERSION_OTA(100), ERROR_RESPUESTA(-100);
+
+    private int idComando;
+
+
+    COMANDO_IOT_ONOFF(int idComando) {
+        this.idComando = idComando;
+    }
+
+    public int getIdComando() {
+
+        return this.idComando;
+    }
+
+    public COMANDO_IOT_ONOFF fromId(int id) {
+
+
+        for (COMANDO_IOT_ONOFF orden : values() ) {
+
+            if (orden.getIdComando() == id) {
+
+                return orden;
+            }
+
+        }
+        return null;
+
+    }
+
+
+
+
+}
+
+
+
+enum ESPONTANEO_IOT_TERMOMETRO {
+
+    ARRANQUE_APLICACION(0),
+    UPGRADE_FIRMWARE_FOTA(3),
+    CAMBIO_DE_PROGRAMA(4),
+    COMANDO_APLICACION(5),
+    CAMBIO_TEMPERATURA(6),
+    ESPONTANEO_DESCONOCIDO(-1);
+
+
+    private int idTipoInforme;
+
+    ESPONTANEO_IOT_TERMOMETRO(int tipoInforme) {
+        this.idTipoInforme = tipoInforme;
+    }
+
+    public int getIdInforme() {
+        return this.idTipoInforme;
+    }
+    public ESPONTANEO_IOT_TERMOMETRO fromId(int id) {
+
+
+        for (ESPONTANEO_IOT_TERMOMETRO orden : values() ) {
+
+            if (orden.getIdInforme() == id) {
+
+                return orden;
+            }
+
+        }
+        return null;
+
+    }
+
+
+}
+
+enum ESPONTANEO_IOT_TERMOSTATO {
+
+    ARRANQUE_APLICACION(0),
+    ACTUACION_RELE_LOCAL(1),
+    ACTUACION_RELE_REMOTO(2),
+    UPGRADE_FIRMWARE_FOTA(3),
+    CAMBIO_DE_PROGRAMA(4),
+    COMANDO_APLICACION(5),
+    CAMBIO_TEMPERATURA(6),
+    ESPONTANEO_DESCONOCIDO(-1);
+
+
+    private int idTipoInforme;
+
+    ESPONTANEO_IOT_TERMOSTATO(int tipoInforme) {
+        this.idTipoInforme = tipoInforme;
+    }
+
+    public int getIdInforme() {
+        return this.idTipoInforme;
+    }
+    public ESPONTANEO_IOT_TERMOSTATO fromId(int id) {
+
+
+        for (ESPONTANEO_IOT_TERMOSTATO orden : values() ) {
+
+            if (orden.getIdInforme() == id) {
+
+                return orden;
+            }
+
+        }
+        return null;
+
+    }
+
+
+}
+
+
+
+enum ESPONTANEO_IOT_ONOFF {
+
+    ARRANQUE_APLICACION(0),
+    ACTUACION_RELE_LOCAL(1),
+    ACTUACION_RELE_REMOTO(2),
+    UPGRADE_FIRMWARE_FOTA(3),
+    CAMBIO_DE_PROGRAMA(4),
+    ESPONTANEO_DESCONOCIDO(-1);
+
+
+    private int idTipoInforme;
+
+    ESPONTANEO_IOT_ONOFF(int tipoInforme) {
+        this.idTipoInforme = tipoInforme;
+    }
+
+    public int getIdInforme() {
+        return this.idTipoInforme;
+    }
+    public ESPONTANEO_IOT_ONOFF fromId(int id) {
+
+
+        for (ESPONTANEO_IOT_ONOFF orden : values() ) {
+
+            if (orden.getIdInforme() == id) {
+
+                return orden;
+            }
+
+        }
+        return null;
+
+    }
+
+
+}
+
 
 
 enum ESPONTANEO_IOT {
@@ -55,6 +220,85 @@ enum ESPONTANEO_IOT {
 
 
     }
+
+enum COMANDO_IOT_TERMOSTATO {
+    CONSULTAR_CONF_APP(0), ACTUAR_RELE(50), ESTADO(51),
+    CONSULTAR_PROGRAMACION(6), NUEVA_PROGRAMACION(7),
+    ELIMINAR_PROGRAMACION(9), MODIFICAR_PROGRAMACION(8), MODIFICAR_APP(12),
+    RESET(10), FACTORY_RESET(11), MODIFY_CLOCK(15),
+    UPGRADE_FIRMWARE(26), MODIFICAR_UMBRAL_TEMPERATURA(52),
+    ESPONTANEO(-1), VERSION_OTA(100), ERROR_RESPUESTA(-100);
+
+    private int idComando;
+
+
+    COMANDO_IOT_TERMOSTATO(int idComando) {
+        this.idComando = idComando;
+    }
+
+    public int getIdComando() {
+
+        return this.idComando;
+    }
+
+    public COMANDO_IOT_TERMOSTATO fromId(int id) {
+
+
+        for (COMANDO_IOT_TERMOSTATO orden : values() ) {
+
+            if (orden.getIdComando() == id) {
+
+                return orden;
+            }
+
+        }
+        return null;
+
+    }
+
+
+
+
+}
+
+
+enum COMANDO_IOT_TERMOMETRO {
+    CONSULTAR_CONF_APP(0), ESTADO(51), MODIFICAR_APP(12),
+    RESET(10), FACTORY_RESET(11), MODIFY_CLOCK(15),
+    UPGRADE_FIRMWARE(26), ESPONTANEO(-1), VERSION_OTA(100), ERROR_RESPUESTA(-100);
+
+    private int idComando;
+
+
+    COMANDO_IOT_TERMOMETRO(int idComando) {
+        this.idComando = idComando;
+    }
+
+    public int getIdComando() {
+
+        return this.idComando;
+    }
+
+    public COMANDO_IOT_TERMOMETRO fromId(int id) {
+
+
+        for (COMANDO_IOT_TERMOMETRO orden : values() ) {
+
+            if (orden.getIdComando() == id) {
+
+                return orden;
+            }
+
+        }
+        return null;
+
+    }
+
+
+
+
+}
+
 
 enum COMANDO_IOT {
     CONSULTAR_CONF_APP(0), ACTUAR_RELE(50), ESTADO(51),
@@ -168,17 +412,27 @@ enum TEXTOS_DIALOGO_IOT {
 }
 
 
+
+
+
 public class dialogoIot implements Serializable {
 
     String clave;
+    private final String TAG="dialogoIot";
     //private TemporizacionComandos temporizador;
     private conexionMqtt cnx;
     ArrayList<TemporizacionComandos> temporizadores;
     private onDialogoIot listener;
 
+
     public interface onDialogoIot {
 
         void temporizacionVencidaEnComando(String idDispositivo, String clave, COMANDO_IOT comando);
+
+    }
+
+    public void setOnDialogoIot(onDialogoIot listener) {
+        this.listener = listener;
 
     }
 
@@ -187,6 +441,7 @@ public class dialogoIot implements Serializable {
 
     public dialogoIot() {
         super();
+
 
         cnx = null;
         temporizadores = null;
@@ -1182,6 +1437,8 @@ public class dialogoIot implements Serializable {
 
         }
     }
+
+
 
     public void enviarComando(dispositivoIot dispositivo, String comandoJson) {
 

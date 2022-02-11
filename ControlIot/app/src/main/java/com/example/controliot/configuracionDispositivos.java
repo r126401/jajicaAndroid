@@ -17,7 +17,8 @@ import java.io.Serializable;
 public  class configuracionDispositivos implements Serializable {
 
     protected final String ficheroDispositivos = "datosDispositivos.conf";
-    public JSONObject datosDispositivos;
+    private JSONObject datosDispositivos;
+    private Context contexto;
 
 
 
@@ -28,6 +29,11 @@ public  class configuracionDispositivos implements Serializable {
 
 
     }
+    configuracionDispositivos(Context contexto) {
+        this.contexto = contexto;
+    }
+
+
 
     /**
      * Lee la configuracion de dispositivos de la aplicacion
@@ -381,6 +387,78 @@ public  class configuracionDispositivos implements Serializable {
             }
         }
         return true;
+    }
+
+
+
+    public dispositivoIot getDispositivoPorId(String id) {
+
+        int i;
+
+        JSONObject dispositivo;
+        JSONArray array;
+        dispositivoIot disp;
+
+        if (datosDispositivos == null) {
+            if (!leerDispositivos(contexto)) {
+                Log.e(getClass().toString(), "No se ha podido leer la configuracion de disositivos");
+                return null;
+
+            }
+        }
+        i = buscarDispositivoPorId(id);
+
+        try {
+            array = datosDispositivos.getJSONArray(TEXTOS_DIALOGO_IOT.DISPOSITIVOS.getValorTextoJson());
+            dispositivo = array.getJSONObject(i);
+            disp = json2Dispositivo(dispositivo);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+
+
+
+
+
+
+        return disp;
+    }
+
+    public int buscarDispositivoPorId(String idDispositivo) {
+
+        int i;
+        JSONArray array;
+        int tamArray;
+        String id = null;
+        try {
+            array = datosDispositivos.getJSONArray(TEXTOS_DIALOGO_IOT.DISPOSITIVOS.getValorTextoJson());
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.e(getClass().toString(), "json de configuracion corrupto");
+            return -1;
+        }
+        tamArray = array.length();
+        for (i=0;i<tamArray;i++) {
+
+            try {
+                id = array.getJSONObject(i).getString(TEXTOS_DIALOGO_IOT.ID_DISPOSITIVO.getValorTextoJson());
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Log.e(getClass().toString(), "Error al extraer el idDispositivo del json");
+            }
+            if (id.equals(idDispositivo)) {
+
+                Log.i(getClass().toString(), "indice encontrado: " + i);
+                return i;
+
+            }
+
+        }
+
+
+        return -1;
     }
 
 }

@@ -10,12 +10,12 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -34,7 +34,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 
-public class ActividadPrincipal extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
+public class ActividadPrincipal extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener, SwipeRefreshLayout.OnRefreshListener, AdapterView.OnItemClickListener {
 
     /**
      * identifica la conexion mqtt principal del dispositivo
@@ -59,6 +59,7 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
 
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,6 +79,7 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
                 dialogo.setConexionMqtt(cnx);
                 actualizarDispositivos();
 
+
             }
 
             @Override
@@ -88,7 +90,7 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
 
             @Override
             public void mensajeRecibido(String topic, MqttMessage message) {
-                procesarMensajeRecibido(message);
+                //procesarMensajeRecibido(message);
 
             }
 
@@ -111,6 +113,8 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
         });
         cnx.conectarseAlBrokerConReintento(10000, 1000);
         if (adapter == null) presentarDispositivos();
+        procesarMensajes();
+
 
 
 
@@ -163,8 +167,10 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
         imageViewEstadoBroker = (ImageView) findViewById(R.id.imageViewEstadoBroker);
         textListaDispositivo = (TextView) findViewById(R.id.textListaDispositivo);
         imageViewImagenDecorativa = (ImageView) findViewById(R.id.imageViewImagenDecorativa);
-        swipeListaDispositivos = (SwipeRefreshLayout) findViewById(R.id.swipeListaDispositivos);
-        listViewListaDispositivos = (ListView) findViewById(R.id.listViewListaDispositivos);
+        swipeListaDispositivos = (SwipeRefreshLayout) findViewById(R.id.swipeProgramasInterruptor);
+        swipeListaDispositivos.setOnRefreshListener(this);
+        listViewListaDispositivos = (ListView) findViewById(R.id.listViewProgramasInterruptor);
+        listViewListaDispositivos.setOnItemClickListener(this);
         navigationMenuPrincipal = (BottomNavigationView) findViewById(R.id.navigationMenuPrincipal);
         navigationMenuPrincipal.setOnNavigationItemSelectedListener(this);
         progressEspera = (ProgressBar)  findViewById(R.id.progressEspera);
@@ -201,6 +207,8 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
                     if (result.getResultCode() == RESULT_OK) {
                         String dato = result.getData().getDataString();
                         Log.i(getLocalClassName(), "Recibimos datos: " + dato);
+                        refrescarLista();
+
                     } else {
                         Log.w(getLocalClassName(), "Error al guardar el dispositivo");
                     }
@@ -329,7 +337,9 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
 
     private void actualizarDispositivos() {
 
+
         int i;
+
         //dialogoIot comando = new dialogoIot();
         if (lista == null) {
             Log.i(getLocalClassName(), "No hay dispositivos registrados en la aplicacion");
@@ -590,6 +600,150 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
 
     }
 
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+    }
+
+
+    private void refrescarLista() {
+        adapter.clear();
+        lista.clear();
+        presentarDispositivos();
+        actualizarDispositivos();
+
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        refrescarLista();
+
+
+
+
+    }
+
+    @Override
+    public void onRefresh() {
+        refrescarLista();
+        swipeListaDispositivos.setRefreshing(false);
+
+
+
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+        TIPO_DISPOSITIVO_IOT tipoDispositivo;
+        ESTADO_CONEXION_IOT estado_conexion_iot;
+        Intent intent = null;
+        tipoDispositivo = adapter.listaDispositvos.get(position).tipoDispositivo;
+        estado_conexion_iot = adapter.listaDispositvos.get(position).getEstadoConexion();
+        if (estado_conexion_iot == ESTADO_CONEXION_IOT.CONECTADO) {
+            switch(tipoDispositivo) {
+                case DESCONOCIDO:
+                    break;
+                case INTERRUPTOR:
+                    String idDispositivo = adapter.listaDispositvos.get(position).idDispositivo;
+                    intent = new Intent(ActividadPrincipal.this, ActivityInterruptor.class);
+                    intent.putExtra(TEXTOS_DIALOGO_IOT.ID_DISPOSITIVO.getValorTextoJson(), idDispositivo);
+                    startActivity(intent);
+
+                    break;
+                case TERMOMETRO:
+                    break;
+                case CRONOTERMOSTATO:
+                    break;
+            }
+        }
+
+
+    }
+
+
+    private void actualizarEstadoInteruptor(dispositivoIotOnOff dispositivo) {
+        int i;
+        i = buscarElementoEnListaDispositivos(dispositivo.getIdDispositivo());
+        if (i>=0) {
+            dispositivo.modificarDispositivo(dispositivo, getApplicationContext());
+            lista.remove(lista.get(i));
+            lista.add(dispositivo);
+            //dialogo.eliminarTemporizador(dialogo.extraerDatoJsonString(texto, TEXTOS_DIALOGO_IOT.CLAVE.getValorTextoJson()));
+            adapter.notifyDataSetChanged();
+
+        }
+
+    }
+
+    private void actualizarEstadoTermometroTermostato(dispositivoIotTermostato dispositivo) {
+        int i;
+        i = buscarElementoEnListaDispositivos(dispositivo.getIdDispositivo());
+        if (i>=0) {
+            dispositivo.modificarDispositivo(dispositivo, getApplicationContext());
+            lista.remove(lista.get(i));
+            lista.add(dispositivo);
+            //dialogo.eliminarTemporizador(dialogo.extraerDatoJsonString(texto, TEXTOS_DIALOGO_IOT.CLAVE.getValorTextoJson()));
+            adapter.notifyDataSetChanged();
+
+        }
+
+    }
+
+
+    private void procesarMensajes() {
+
+        cnx.setOnProcesarMensajesInterruptor(new conexionMqtt.OnProcesarMensajesInterruptor() {
+            @Override
+            public void estadoInterruptor(String topic, String mensaje, dispositivoIotOnOff dispositivo, TIPO_INFORME tipoInforme) {
+
+                actualizarEstadoInteruptor(dispositivo);
+
+            }
+
+            @Override
+            public void actuacionReleLocalInterruptor(String topic, MqttMessage message, dispositivoIotOnOff dispositivo, TIPO_INFORME tipoInforme) {
+
+            }
+
+            @Override
+            public void actuacionReleRemotoInterruptor(String topic, MqttMessage message, dispositivoIotOnOff dispositivo, TIPO_INFORME tipoInforme) {
+
+            }
+
+            @Override
+            public void errorMensaje(String topic, MqttMessage mensaje) {
+
+            }
+        });
+        cnx.setOnProcesarMensajesTermometro(new conexionMqtt.OnProcesarMensajesTermometro() {
+            @Override
+            public void estadoTermometro(String topic, String message, dispositivoIotTermostato dispositivo, TIPO_INFORME tipoInforme) {
+                actualizarEstadoTermometroTermostato(dispositivo);
+
+            }
+        });
+        cnx.setOnProcesarMensajesTermostato(new conexionMqtt.OnProcesarMensajesTermostato() {
+            @Override
+            public void estadoTermostato(String topic, String message, dispositivoIotTermostato dispositivo, TIPO_INFORME tipoInforme) {
+
+            }
+
+            @Override
+            public void actuacionReleLocalTermostato(String topic, MqttMessage message, dispositivoIotTermostato dispositivo, TIPO_INFORME tipoInforme) {
+
+            }
+
+            @Override
+            public void actuacionReleRemotoTermostato(String topic, MqttMessage message, dispositivoIotTermostato dispositivo, TIPO_INFORME tipoInforme) {
+
+            }
+        });
+
+    }
 }
+
 
 

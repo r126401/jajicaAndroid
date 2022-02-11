@@ -8,7 +8,7 @@
 
 
     <ImageView
-        android:id="@+id/imageEliminarDispositivo"
+        android:id="@+id/imageEliminarSwitch"
         android:layout_width="49dp"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toEndOf="@+id/imageOnOff"
@@ -33,7 +33,7 @@
         android:layout_marginTop="3dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageOnOff"
-        app:layout_constraintTop_toBottomOf="@+id/imageEliminarDispositivo" />
+        app:layout_constraintTop_toBottomOf="@+id/imageEliminarSwitch" />
 
     <TextView
         android:id="@+id/textoInterruptor"
@@ -44,7 +44,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/estadoConexionInterruptor"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/imageEliminarDispositivo"
+        app:layout_constraintStart_toEndOf="@+id/imageEliminarSwitch"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView

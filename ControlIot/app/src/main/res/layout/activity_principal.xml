@@ -61,14 +61,14 @@
 
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipeListaDispositivos"
+        android:id="@+id/swipeProgramasInterruptor"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/textListaDispositivo"
         tools:layout_editor_absoluteX="-16dp">
 
         <ListView
-            android:id="@+id/listViewListaDispositivos"
+            android:id="@+id/listViewProgramasInterruptor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"

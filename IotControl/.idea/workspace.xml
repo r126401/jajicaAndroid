@@ -67,10 +67,31 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="23d00115-d3af-48c2-a0e5-936070caa06f" name="Default Changelist" comment="se hace el ubgrade de gradel a 7.1.0">
+      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/ActivityInterruptor.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/DialogosAplicacion.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/drawable/ic_factory_reset.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/drawable/ic_info.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/drawable/ic_mas.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/drawable/ic_reset.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/drawable/ic_settings.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/drawable/ic_upgrade.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/drawable/schedule.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/layout/activity_interruptor.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/menu/menu_interruptor.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/menu/menu_mas_opciones.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ControlIot/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/AndroidManifest.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/ActividadPrincipal.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/ActividadPrincipal.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/ListaDispositivosAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/ListaDispositivosAdapter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/dispositivoIot.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/dispositivoIot.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/dispositivoIotTermostato.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/dispositivoIotTermostato.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/conexionMqtt.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/conexionMqtt.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/configuracionDispositivos.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/configuracionDispositivos.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/dialogoIot.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/dialogoIot.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/res/drawable/bk_conectado.png" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/drawable/bk_conectado.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/res/drawable/bk_no_conectado.png" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/drawable/bk_no_conectado.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/res/layout/activity_principal.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/layout/activity_principal.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/res/layout/vista_interruptor.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/layout/vista_interruptor.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/res/values-es/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/values-es/strings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/values/strings.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

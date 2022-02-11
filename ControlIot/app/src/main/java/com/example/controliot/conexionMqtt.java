@@ -62,6 +62,8 @@ enum CONF_MQTT {
     CONF_MQTT(String dato) {
         this.confMqtt = dato;
 
+
+
     }
 
     String getValorTextoJson() {
@@ -90,10 +92,63 @@ public class conexionMqtt implements Serializable, Parcelable {
     private boolean tls;
     private String ficheroMqtt = "iotControlMqtt.conf";
     private JSONObject datosMqtt;
-    private OnConexionMqtt listener;
     private IMqttToken token;
     private CountDownTimer temporizacionReintento;
     private final String LOG_CLASS = "conexionMqtt";
+    private dialogoIot dialogo;
+
+    private OnConexionMqtt listener;
+    private OnProcesarMensajesInterruptor listenerMensajesInterruptor;
+    private OnProcesarMensajesTermometro listenerMensajesTermometro;
+    private OnProcesarMensajesTermostato listenerMensajesTermostato;
+
+    public interface OnConexionMqtt {
+
+        void conexionEstablecida(boolean reconnect, String serverURI);
+        void conexionPerdida(Throwable cause);
+        void mensajeRecibido(String topic, MqttMessage message);
+        void entregaCompletada(IMqttDeliveryToken token);
+        void notificacionIntermediaReintento(long intervalo);
+        void finTemporizacionReintento(long temporizador);
+
+    }
+
+    public interface OnProcesarMensajesTermometro {
+        void estadoTermometro(String topic, String message, dispositivoIotTermostato dispositivo, TIPO_INFORME tipoInforme);
+
+    }
+    public void setOnProcesarMensajesTermometro(OnProcesarMensajesTermometro listener) {
+        this.listenerMensajesTermometro = listener;
+    }
+
+    public interface OnProcesarMensajesTermostato  {
+        void estadoTermostato(String topic, String message, dispositivoIotTermostato dispositivo, TIPO_INFORME tipoInforme);
+        void actuacionReleLocalTermostato(String topic, MqttMessage message, dispositivoIotTermostato dispositivo, TIPO_INFORME tipoInforme);
+        void actuacionReleRemotoTermostato(String topic, MqttMessage message, dispositivoIotTermostato dispositivo, TIPO_INFORME tipoInforme);
+
+
+    }
+
+    public void setOnProcesarMensajesTermostato(OnProcesarMensajesTermostato listener) {
+        this.listenerMensajesTermostato = listener;
+    }
+
+    public interface OnProcesarMensajesInterruptor {
+        void estadoInterruptor(String topic, String mensaje, dispositivoIotOnOff dispositivo, TIPO_INFORME tipoInforme );
+        void actuacionReleLocalInterruptor(String topic, MqttMessage message, dispositivoIotOnOff dispositivo, TIPO_INFORME tipoInforme);
+        void actuacionReleRemotoInterruptor(String topic, MqttMessage message, dispositivoIotOnOff dispositivo, TIPO_INFORME tipoInforme);
+        void errorMensaje(String topic, MqttMessage mensaje);
+
+    }
+
+    void setOnProcesarMensajesInterruptor (OnProcesarMensajesInterruptor listener) {
+        this.listenerMensajesInterruptor = listener;
+
+    }
+
+
+
+
 
 
     protected conexionMqtt(Parcel in) {
@@ -136,16 +191,12 @@ public class conexionMqtt implements Serializable, Parcelable {
     }
 
 
-    public interface OnConexionMqtt {
 
-        void conexionEstablecida(boolean reconnect, String serverURI);
-        void conexionPerdida(Throwable cause);
-        void mensajeRecibido(String topic, MqttMessage message);
-        void entregaCompletada(IMqttDeliveryToken token);
-        void notificacionIntermediaReintento(long intervalo);
-        void finTemporizacionReintento(long temporizador);
 
-    }
+
+
+
+
 
     public void setOnConexionMqtt(conexionMqtt.OnConexionMqtt listener) {
         this.listener = listener;
@@ -173,6 +224,7 @@ public class conexionMqtt implements Serializable, Parcelable {
         estadoConexion = false;
         this.contexto = contexto;
         String cadenaConexion;
+        dialogo = new dialogoIot();
 
         if (leerConfiguracion() == false) {
             Log.i(LOG_CLASS, ": No hay configuracion mqtt, se crea por defecto");
@@ -319,7 +371,7 @@ public class conexionMqtt implements Serializable, Parcelable {
      * Esta funcion lee la configuracion desde el fichero de configuracionMqtt
      * @return false en caso de que no se pueda leer la configuracion. true lectura correcta
      */
-    public boolean leerConfiguracion() {
+    private boolean leerConfiguracion() {
 
 
 
@@ -620,6 +672,9 @@ public class conexionMqtt implements Serializable, Parcelable {
             @Override
             public void messageArrived(String topic, MqttMessage message) throws Exception {
                 listener.mensajeRecibido(topic, message);
+                dialogoIot dialogo = new dialogoIot();
+                procesarMensajes(topic, message, contexto);
+
 
             }
 
@@ -672,6 +727,308 @@ public class conexionMqtt implements Serializable, Parcelable {
         temporizacionReintento.start();
 
 
+
+    }
+
+    protected void procesarMensajes(String topic, MqttMessage message, Context contexto) {
+
+        TIPO_DISPOSITIVO_IOT tipo;
+        String respuesta;
+        dialogoIot dialogo;
+        dialogo = new dialogoIot();
+        respuesta = new String(message.getPayload());
+        dispositivoIot dispositivo;
+        dispositivo = new dispositivoIotDesconocido();
+        tipo = dialogo.getTipoDispositivo(respuesta);
+        switch (tipo) {
+
+
+            case DESCONOCIDO:
+                Log.e(getClass().toString(), "No se ha podido determinar el tipo de dispositivo");
+                break;
+            case INTERRUPTOR:
+                procesarMensajesInterruptor(topic, message, contexto);
+                break;
+            case CRONOTERMOSTATO:
+            case TERMOMETRO:
+                procesarMensajesTermometroTermostato(topic, message, contexto);
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + tipo);
+        }
+
+
+
+    }
+
+
+
+
+    public void procesarMensajesTermometroTermostato(String topic, MqttMessage message, Context contexto) {
+        COMANDO_IOT idComando;
+        dispositivoIot dispositivo;
+        dispositivo = new dispositivoIotTermostato();
+        String texto = new String(message.getPayload());
+        idComando = dialogo.descubrirComando(texto);
+
+        if (idComando == COMANDO_IOT.ESPONTANEO) {
+
+            procesarMensajeEspontaneoTermometroTermostato(topic, message, contexto);
+        } else {
+            procesarRespuestaComandoTermometroTermostato(topic, message, contexto);
+        }
+
+    }
+
+    void procesarMensajeEspontaneoTermometroTermostato(String topic, MqttMessage message, Context contexto) {
+
+        ESPONTANEO_IOT tipoInformeEspontaneo;
+        dispositivoIotTermostato dispositivo;
+        String texto = new String(message.getPayload());
+
+        tipoInformeEspontaneo = dialogo.descubrirTipoInformeEspontaneo(texto);
+        switch (tipoInformeEspontaneo) {
+
+            case ARRANQUE_APLICACION:
+                dispositivo = procesarEstadoDispositivoTermometroTermostato(topic, texto, contexto);
+                listenerMensajesTermostato.estadoTermostato(topic, texto, dispositivo, TIPO_INFORME.INFORME_ESPONTANEO);
+                break;
+            case ACTUACION_RELE_LOCAL:
+                dispositivo = procesarEstadoDispositivoTermometroTermostato(topic, texto, contexto);
+                listenerMensajesTermostato.actuacionReleLocalTermostato(topic, message, dispositivo, TIPO_INFORME.INFORME_ESPONTANEO);
+                break;
+            case ACTUACION_RELE_REMOTO:
+                dispositivo = procesarEstadoDispositivoTermometroTermostato(topic, texto, contexto);
+                listenerMensajesTermostato.actuacionReleRemotoTermostato(topic, message, dispositivo, TIPO_INFORME.INFORME_ESPONTANEO);
+                break;
+            case UPGRADE_FIRMWARE_FOTA:
+                break;
+            case CAMBIO_DE_PROGRAMA:
+                break;
+            case COMANDO_APLICACION:
+                break;
+            case CAMBIO_TEMPERATURA:
+                break;
+            default:
+            case ESPONTANEO_DESCONOCIDO:
+                break;
+        }
+    }
+
+    void procesarRespuestaComandoTermometroTermostato(String topic, MqttMessage message, Context contexto) {
+
+        COMANDO_IOT idComando;
+        dispositivoIotTermostato dispositivo;
+        String texto = new String(message.getPayload());
+        idComando = dialogo.descubrirComando(texto);
+        COMANDO_IOT_TERMOMETRO idcomandoTermostato;
+
+        switch (idComando) {
+
+            case CONSULTAR_CONF_APP:
+                break;
+            case ACTUAR_RELE:
+                break;
+            case ESTADO:
+                dispositivo = procesarEstadoDispositivoTermometroTermostato(topic, texto, contexto);
+                if (listenerMensajesTermostato!= null) listenerMensajesTermostato.estadoTermostato(topic, texto, dispositivo, TIPO_INFORME.RESULTADO_COMANDO);
+                if (listenerMensajesTermometro!= null) listenerMensajesTermometro.estadoTermometro(topic, texto, dispositivo, TIPO_INFORME.RESULTADO_COMANDO);
+
+                break;
+            case CONSULTAR_PROGRAMACION:
+                break;
+            case NUEVA_PROGRAMACION:
+                break;
+            case ELIMINAR_PROGRAMACION:
+                break;
+            case MODIFICAR_PROGRAMACION:
+                break;
+            case MODIFICAR_APP:
+                break;
+            case RESET:
+                break;
+            case FACTORY_RESET:
+                break;
+            case MODIFY_CLOCK:
+                break;
+            case UPGRADE_FIRMWARE:
+                break;
+            case MODIFICAR_UMBRAL_TEMPERATURA:
+                break;
+            case ESPONTANEO:
+                break;
+            case VERSION_OTA:
+                break;
+            case ERROR_RESPUESTA:
+                break;
+        }
+
+    }
+
+
+
+    public void procesarMensajesInterruptor(String topic, MqttMessage message, Context contexto) {
+
+        COMANDO_IOT idComando;
+        dispositivoIot dispositivo;
+        dispositivo = new dispositivoIotOnOff();
+        String texto = new String(message.getPayload());
+        idComando = dialogo.descubrirComando(texto);
+
+        if (idComando == COMANDO_IOT.ESPONTANEO) {
+
+            procesarMensajeEspontaneoInterruptor(topic, message, contexto);
+        } else {
+            procesarRespuestaComandoInterruptor(topic, message, contexto);
+        }
+
+    }
+
+
+
+    void procesarMensajeEspontaneoInterruptor(String topic, MqttMessage message, Context contexto) {
+
+        ESPONTANEO_IOT tipoInformeEspontaneo;
+        dispositivoIotOnOff dispositivo;
+        String texto = new String(message.getPayload());
+
+        tipoInformeEspontaneo = dialogo.descubrirTipoInformeEspontaneo(texto);
+        switch (tipoInformeEspontaneo) {
+
+
+
+
+            case ARRANQUE_APLICACION:
+                dispositivo = procesarEstadoDispositivoInterruptor(topic, texto, contexto);
+                listenerMensajesInterruptor.estadoInterruptor(topic, texto, dispositivo, TIPO_INFORME.INFORME_ESPONTANEO);
+                 break;
+            case ACTUACION_RELE_LOCAL:
+                dispositivo = procesarEstadoDispositivoInterruptor(topic, texto, contexto);
+                listenerMensajesInterruptor.actuacionReleLocalInterruptor(topic, message, dispositivo, TIPO_INFORME.INFORME_ESPONTANEO);
+                break;
+            case ACTUACION_RELE_REMOTO:
+                dispositivo = procesarEstadoDispositivoInterruptor(topic, texto, contexto);
+                listenerMensajesInterruptor.actuacionReleRemotoInterruptor(topic, message, dispositivo, TIPO_INFORME.INFORME_ESPONTANEO);
+                break;
+
+            case UPGRADE_FIRMWARE_FOTA:
+                break;
+            case CAMBIO_DE_PROGRAMA:
+                break;
+            default:
+            case ESPONTANEO_DESCONOCIDO:
+                listenerMensajesInterruptor.errorMensaje(topic, message);
+                break;
+        }
+
+    }
+
+    void procesarRespuestaComandoInterruptor(String topic, MqttMessage message, Context contexto) {
+
+        COMANDO_IOT idComando;
+        dispositivoIotOnOff dispositivo;
+        String texto = new String(message.getPayload());
+        idComando = dialogo.descubrirComando(texto);
+        switch (idComando) {
+
+            case CONSULTAR_CONF_APP:
+                break;
+            case ACTUAR_RELE:
+                dispositivo = procesarEstadoDispositivoInterruptor(topic, texto, contexto);
+                listenerMensajesInterruptor.actuacionReleRemotoInterruptor(topic, message, dispositivo, TIPO_INFORME.RESULTADO_COMANDO);
+                break;
+            case ESTADO:
+
+                dispositivo = procesarEstadoDispositivoInterruptor(topic, texto, contexto);
+                listenerMensajesInterruptor.estadoInterruptor(topic, texto, dispositivo, TIPO_INFORME.RESULTADO_COMANDO);
+                break;
+            case CONSULTAR_PROGRAMACION:
+                break;
+            case NUEVA_PROGRAMACION:
+                break;
+            case ELIMINAR_PROGRAMACION:
+                break;
+            case MODIFICAR_PROGRAMACION:
+                break;
+            case MODIFICAR_APP:
+                break;
+            case RESET:
+                break;
+            case FACTORY_RESET:
+                break;
+            case MODIFY_CLOCK:
+                break;
+            case UPGRADE_FIRMWARE:
+                break;
+            case ESPONTANEO:
+                break;
+            case VERSION_OTA:
+                break;
+            case ERROR_RESPUESTA:
+                break;
+        }
+
+    }
+
+
+    private dispositivoIotOnOff procesarEstadoDispositivoInterruptor(String topic, String texto, Context contexto) {
+
+        JSONObject mensaje;
+        String idDispositivo;
+        configuracionDispositivos confDisp;
+        try {
+            mensaje = new JSONObject(texto);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.e(getClass().toString(), "El mensaje no es json");
+            return null;
+
+        }
+
+        dispositivoIot dispositivo;
+        idDispositivo = mensaje.optString(TEXTOS_DIALOGO_IOT.ID_DISPOSITIVO.getValorTextoJson());
+        confDisp = new configuracionDispositivos(contexto);
+        dispositivo = confDisp.getDispositivoPorId(idDispositivo);
+        dispositivoIotOnOff dispIotOnOff;
+        dispIotOnOff = new dispositivoIotOnOff(dispositivo);
+        ESTADO_RELE estado = dialogo.getEstadoRele(texto);
+        dispIotOnOff.setEstadoRele(estado);
+        dispIotOnOff.setEstadoConexion(ESTADO_CONEXION_IOT.CONECTADO);
+        dispIotOnOff.setEstadoDispositivo(dialogo.getEstadoDispositivo(texto));
+
+
+        return dispIotOnOff;
+    }
+
+    private dispositivoIotTermostato procesarEstadoDispositivoTermometroTermostato(String topic, String texto, Context contexto) {
+        JSONObject mensaje;
+        String idDispositivo;
+        configuracionDispositivos confDisp;
+        try {
+            mensaje = new JSONObject(texto);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.e(getClass().toString(), "El mensaje no es json");
+            return null;
+
+        }
+
+        dispositivoIot dispositivo;
+        idDispositivo = mensaje.optString(TEXTOS_DIALOGO_IOT.ID_DISPOSITIVO.getValorTextoJson());
+        confDisp = new configuracionDispositivos(contexto);
+        dispositivo = confDisp.getDispositivoPorId(idDispositivo);
+        dispositivoIotTermostato dispositivoTermometroTermostato;
+        dispositivoTermometroTermostato = new dispositivoIotTermostato(dispositivo);
+        ESTADO_RELE estadoRele = dialogo.getEstadoRele(TEXTOS_DIALOGO_IOT.ESTADO_RELE.getValorTextoJson());
+        dispositivoTermometroTermostato.setEstadoRele(estadoRele);
+        dispositivoTermometroTermostato.setUmbralTemperatura(dialogo.getUmbralTemperatura(texto));
+        dispositivoTermometroTermostato.setTemperatura(dialogo.getTemperatura(texto));
+        dispositivoTermometroTermostato.setHumedad(dialogo.getHumedad(texto));
+        dispositivoTermometroTermostato.setEstadoDispositivo(dialogo.getEstadoDispositivo(texto));
+        dispositivoTermometroTermostato.setTipoDispositivo(dialogo.getTipoDispositivo(texto));
+        dispositivoTermometroTermostato.setEstadoConexion(ESTADO_CONEXION_IOT.CONECTADO);
+        dispositivoTermometroTermostato.setEstadoDispositivo(dialogo.getEstadoDispositivo(texto));
+        return dispositivoTermometroTermostato;
 
     }
 

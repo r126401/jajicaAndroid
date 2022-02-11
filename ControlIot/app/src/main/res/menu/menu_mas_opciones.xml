@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="Reset"
+        android:id="@+id/reset"
+        android:icon="@drawable/ic_reset"
+        android:checked="false"/>
+
+    <item android:title="Reset de Fabrica"
+        android:id="@+id/factoryReset"
+        android:icon="@drawable/ic_factory_reset"
+        android:checked="false"/>
+
+    <item android:title="Actualizar"
+        android:id="@+id/upgrade"
+        android:icon="@drawable/ic_upgrade"
+        android:checked="false"/>
+</menu>
