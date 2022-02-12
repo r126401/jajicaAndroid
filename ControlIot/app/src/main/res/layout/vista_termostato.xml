@@ -43,7 +43,7 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="12dp"
         android:fontFamily="@font/poetsenone"
-        android:text="21.5ºC"
+        android:text="--.-ºC"
         android:textAlignment="center"
         android:textSize="25sp"
         app:layout_constraintStart_toEndOf="@+id/imageIconoTermometro"

@@ -15,28 +15,23 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import org.eclipse.paho.client.mqttv3.MqttMessage;
-import org.json.JSONObject;
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
-import java.util.Locale;
 
 public class ListaDispositivosAdapter extends ArrayAdapter<dispositivoIot> {
 
     private Context contexto;
-    public ArrayList<dispositivoIot> listaDispositvos;
+    public ArrayList<dispositivoIot> listaDispositivos;
     private conexionMqtt cnx;
     private dialogoIot dialogo;
     private int idLayout;
     final String TAG = "ListaDispositivosAdapter";
 
-    ListaDispositivosAdapter(Context contexto, int idLayout, ArrayList<dispositivoIot> listaDispositvos, conexionMqtt cnx, dialogoIot dialogo) {
-        super(contexto, idLayout, listaDispositvos);
+    ListaDispositivosAdapter(Context contexto, int idLayout, ArrayList<dispositivoIot> listaDispositivos, conexionMqtt cnx, dialogoIot dialogo) {
+        super(contexto, idLayout, listaDispositivos);
 
         this.contexto = contexto;
         this.idLayout = idLayout;
-        this.listaDispositvos = listaDispositvos;
+        this.listaDispositivos = listaDispositivos;
         this.cnx = cnx;
         this.dialogo = dialogo;
 
@@ -55,7 +50,7 @@ public class ListaDispositivosAdapter extends ArrayAdapter<dispositivoIot> {
 
         ListaDispositivosAdapterHolder holder;
         dispositivoIot dispositivo;
-        dispositivo = listaDispositvos.get(position);
+        dispositivo = listaDispositivos.get(position);
 
 
         if (fila == null) {
@@ -107,13 +102,14 @@ public class ListaDispositivosAdapter extends ArrayAdapter<dispositivoIot> {
                             dialogo.enviarComando(dispositivo, dialogo.comandoActuarRele(ESTADO_RELE.OFF));
                             dispositivo.setEstadoConexion(ESTADO_CONEXION_IOT.ESPERANDO_RESPUESTA);
                             holder.barraProgresoInterruptor.setVisibility(View.VISIBLE);
+                            holder.imageOnOff.setTag(R.drawable.switchon);
                             //cnx.publicarTopic(dispositivo.getTopicPublicacion(), dialogo.comandoActuarRele(ESTADO_RELE.OFF));
                             break;
                         case R.drawable.switchoff:
                             dialogo.enviarComando(dispositivo, dialogo.comandoActuarRele(ESTADO_RELE.ON));
                             dispositivo.setEstadoConexion(ESTADO_CONEXION_IOT.ESPERANDO_RESPUESTA);
                             holder.barraProgresoInterruptor.setVisibility(View.VISIBLE);
-
+                            holder.imageOnOff.setTag(R.drawable.switchoff);
                             //cnx.publicarTopic(dispositivo.getTopicPublicacion(), dialogo.comandoActuarRele(ESTADO_RELE.ON));
                             break;
 
@@ -272,7 +268,7 @@ private void rellenarControlesDesconocidoSinEstado(ListaDispositivosAdapterHolde
                 break;
             case DESCONECTADO:
                 valor = R.drawable.bk_no_conectado;
-                holder.barraProgresoInterruptor.setVisibility(View.VISIBLE);
+                holder.barraProgresoInterruptor.setVisibility(View.INVISIBLE);
                 break;
         }
 
@@ -296,9 +292,11 @@ private void rellenarControlesDesconocidoSinEstado(ListaDispositivosAdapterHolde
 
             case OFF:
                 valor = R.drawable.heating_off;
+                holder.barraProgresoTermostato.setVisibility(View.INVISIBLE);
                 break;
             case ON:
                 valor = R.drawable.heating_on;
+                holder.barraProgresoTermostato.setVisibility(View.INVISIBLE);
                 break;
             case INDETERMINADO:
             default:
@@ -351,6 +349,7 @@ private void rellenarControlesDesconocidoSinEstado(ListaDispositivosAdapterHolde
                 break;
             case DESCONECTADO:
                 valor = R.drawable.bk_no_conectado;
+                holder.barraProgresoTermostato.setVisibility(View.INVISIBLE);
                 break;
         }
         holder.estadoConexionTermostato.setImageResource(valor);
@@ -362,7 +361,7 @@ private void rellenarControlesDesconocidoSinEstado(ListaDispositivosAdapterHolde
             if (dato == -1000) {
                 holder.textoTemperatura.setText("--.- ºC");
             }
-            holder.textoTemperatura.setText(String.valueOf(dato));
+            holder.textoTemperatura.setText(String.valueOf(dato) + "ºC");
 
             dato = dispositivo.redondearDatos(dispositivo.getHumedad(), 1);
             if(dato == -1000) {
@@ -393,6 +392,7 @@ private void rellenarControlesDesconocidoSinEstado(ListaDispositivosAdapterHolde
 
 
 
+
     boolean borrarDispositivo(dispositivoIot dispositivo, int position) {
 
         final configuracionDispositivos lista;
@@ -412,7 +412,7 @@ private void rellenarControlesDesconocidoSinEstado(ListaDispositivosAdapterHolde
                 @Override
                 public void OnAceptarListener(COMANDO_IOT idComando) {
                     lista.eliminarDispositivo(dispositivo, contexto);
-                    listaDispositvos.remove(position);
+                    listaDispositivos.remove(position);
                     remove(dispositivo);
                     notifyDataSetChanged();
 

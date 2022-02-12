@@ -427,7 +427,7 @@ public class dialogoIot implements Serializable {
 
     public interface onDialogoIot {
 
-        void temporizacionVencidaEnComando(String idDispositivo, String clave, COMANDO_IOT comando);
+        void temporizacionVencidaEnComando(dispositivoIot idDispositivo);
 
     }
 
@@ -1384,131 +1384,29 @@ public class dialogoIot implements Serializable {
         return comando.toString();
     }
 
-    /**
-     * Esta funcion implementa el envio fisico del comando sobre el dispositivo. Ademas, controla si el dispositivo responde
-     * al comando.
-     * @param topic
-     * @param comandoJson
-     * @param idDispositivo
-     */
-
-    public void enviarComando(String topic, String comandoJson, String idDispositivo) {
-
-        TemporizacionComandos temporizador;
-        COMANDO_IOT idComando = COMANDO_IOT.ERROR_RESPUESTA;
-        int a =  extraerDatoJsonInt(comandoJson, TEXTOS_DIALOGO_IOT.DLG_COMANDO.getValorTextoJson());
-        idComando = idComando.fromId(a);
-
-        //idComando = descubrirComando(comandoJson);
-
-        if (temporizadores == null) {
-            temporizadores = new ArrayList<TemporizacionComandos>();
-            Log.i(getClass().toString(), "enviarComando: Se crea el array");
-        }
-
-
-        temporizador = new TemporizacionComandos(idComando, idDispositivo);
-
-        temporizador.setOnTemporizacionComandos(new TemporizacionComandos.onTemporizacionComandos() {
-            @Override
-            public void temporizacionVencida(COMANDO_IOT comando, String clave, String idDispositivo) {
-                Log.i(getClass().toString(), "enviarComando: Temporizacion vencida con clave " + clave + " y dispositivo " + idDispositivo);
-                listener.temporizacionVencidaEnComando(idDispositivo, clave, comando);
-                eliminarTemporizador(clave);
-
-
-            }
-
-            @Override
-            public void informeIntermedio(COMANDO_IOT comando) {
-                Log.i(getClass().toString(), "enviarComando: mensaje intermedio");
-
-            }
-        });
-
-        temporizador.crearTemporizacion(15000, 1000);
-        temporizador.setClave(this.clave);
-        Log.i(getClass().toString(), "enviarComando " + idComando.toString() + ": Envio comando Temporizador clave " + temporizador.getClave());
-        temporizadores.add(temporizador);
-        if (cnx == null) {
-            Log.e(getClass().toString(), "no hay conexion mqtt:" + idComando.toString());
-        } else {
-            cnx.publicarTopic( topic, comandoJson);
-
-        }
-    }
-
 
 
     public void enviarComando(dispositivoIot dispositivo, String comandoJson) {
 
         TemporizacionComandos temporizador;
-        COMANDO_IOT idComando = COMANDO_IOT.ERROR_RESPUESTA;
-        //idComando = descubrirComando(comandoJson);
-       int a =  extraerDatoJsonInt(comandoJson, TEXTOS_DIALOGO_IOT.DLG_COMANDO.getValorTextoJson());
-       idComando = idComando.fromId(a);
-        if (temporizadores == null) {
-            temporizadores = new ArrayList<TemporizacionComandos>();
-            Log.i(getClass().toString(), "enviarComando: Se crea el array");
-        }
-
-
-        temporizador = new TemporizacionComandos(idComando, dispositivo.getIdDispositivo());
-
+        temporizador = new TemporizacionComandos(dispositivo);
         temporizador.setOnTemporizacionComandos(new TemporizacionComandos.onTemporizacionComandos() {
             @Override
-            public void temporizacionVencida(COMANDO_IOT comando, String clave, String idDispositivo) {
-                Log.e(getClass().toString(), "enviarComando: Temporizacion vencida con clave " + clave + " y dispositivo " + idDispositivo);
-                listener.temporizacionVencidaEnComando(idDispositivo, clave, comando);
-                eliminarTemporizador(clave);
-
-
-            }
-
-            @Override
-            public void informeIntermedio(COMANDO_IOT comando) {
-                Log.i(getClass().toString(), "enviarComando: mensaje intermedio " + comando.toString());
+            public void temporizacionVencida(dispositivoIot dispositivo) {
+                listener.temporizacionVencidaEnComando(dispositivo);
 
             }
         });
+        temporizador.crearTemporizacion(10000, 5000);
 
-        temporizador.crearTemporizacion(15000, 1000);
-        temporizador.setClave(this.clave);
-        Log.i(getClass().toString(), "enviarComando " + idComando.toString() + ": Envio comando Temporizador clave " + temporizador.getClave());
-        temporizadores.add(temporizador);
-        if (cnx == null) {
-            Log.e(getClass().toString(), "no hay conexion mqtt:" + idComando.toString());
-        } else {
+        if (cnx!=null) {
             cnx.publicarTopic( dispositivo.getTopicPublicacion(), comandoJson);
             dispositivo.setEstadoConexion(ESTADO_CONEXION_IOT.ESPERANDO_RESPUESTA);
         }
 
 
-
-
-
     }
 
-    void eliminarTemporizador(String clave) {
-
-        int i = 0;
-        if (temporizadores == null) {
-            Log.e(getClass().toString(), "No hay ningun temporizador asociado");
-            return;
-        }
-        Log.i(getClass().toString(), "eliminarTemporizador: clave: " + clave + " tamaño: " + temporizadores.size());
-
-        for (i=0;i<temporizadores.size();i++) {
-            if(temporizadores.get(i).getClave().equals(clave)) {
-                Log.i(getClass().toString(), "eliminarTemporizador: Temporizador con clave " + temporizadores.get(i).getClave() + " borrado");
-                temporizadores.get(i).temporizador.cancel();
-                temporizadores.remove(i);
-                return;
-
-            }
-        }
-        Log.e(getClass().toString(), "eliminarTemporizador: No se ha encontrado el Temporizador con clave " + clave + " y valor " + String.valueOf(i));
-    }
 
     public void setOnTemporizacionVencidaEnComando(onDialogoIot listener) {
         this.listener = listener;

@@ -115,6 +115,9 @@ public class conexionMqtt implements Serializable, Parcelable {
 
     public interface OnProcesarMensajesTermometro {
         void estadoTermometro(String topic, String message, dispositivoIotTermostato dispositivo, TIPO_INFORME tipoInforme);
+        void actuacionReleLocalTermometro(String topic, String message, dispositivoIotTermostato dispositivo, TIPO_INFORME tipoInforme);
+        void actuacionReleRemotoTermometro(String topic, String message, dispositivoIotTermostato dispositivo, TIPO_INFORME tipoInforme);
+
 
     }
     public void setOnProcesarMensajesTermometro(OnProcesarMensajesTermometro listener) {
@@ -123,8 +126,8 @@ public class conexionMqtt implements Serializable, Parcelable {
 
     public interface OnProcesarMensajesTermostato  {
         void estadoTermostato(String topic, String message, dispositivoIotTermostato dispositivo, TIPO_INFORME tipoInforme);
-        void actuacionReleLocalTermostato(String topic, MqttMessage message, dispositivoIotTermostato dispositivo, TIPO_INFORME tipoInforme);
-        void actuacionReleRemotoTermostato(String topic, MqttMessage message, dispositivoIotTermostato dispositivo, TIPO_INFORME tipoInforme);
+        void actuacionReleLocalTermostato(String topic, String message, dispositivoIotTermostato dispositivo, TIPO_INFORME tipoInforme);
+        void actuacionReleRemotoTermostato(String topic, String message, dispositivoIotTermostato dispositivo, TIPO_INFORME tipoInforme);
 
 
     }
@@ -135,8 +138,8 @@ public class conexionMqtt implements Serializable, Parcelable {
 
     public interface OnProcesarMensajesInterruptor {
         void estadoInterruptor(String topic, String mensaje, dispositivoIotOnOff dispositivo, TIPO_INFORME tipoInforme );
-        void actuacionReleLocalInterruptor(String topic, MqttMessage message, dispositivoIotOnOff dispositivo, TIPO_INFORME tipoInforme);
-        void actuacionReleRemotoInterruptor(String topic, MqttMessage message, dispositivoIotOnOff dispositivo, TIPO_INFORME tipoInforme);
+        void actuacionReleLocalInterruptor(String topic, String message, dispositivoIotOnOff dispositivo, TIPO_INFORME tipoInforme);
+        void actuacionReleRemotoInterruptor(String topic, String message, dispositivoIotOnOff dispositivo, TIPO_INFORME tipoInforme);
         void errorMensaje(String topic, MqttMessage mensaje);
 
     }
@@ -791,15 +794,18 @@ public class conexionMqtt implements Serializable, Parcelable {
 
             case ARRANQUE_APLICACION:
                 dispositivo = procesarEstadoDispositivoTermometroTermostato(topic, texto, contexto);
-                listenerMensajesTermostato.estadoTermostato(topic, texto, dispositivo, TIPO_INFORME.INFORME_ESPONTANEO);
+                if (listenerMensajesTermostato!= null) listenerMensajesTermostato.estadoTermostato(topic, texto, dispositivo, TIPO_INFORME.RESULTADO_COMANDO);
+                if (listenerMensajesTermometro!= null) listenerMensajesTermometro.estadoTermometro(topic, texto, dispositivo, TIPO_INFORME.RESULTADO_COMANDO);
                 break;
             case ACTUACION_RELE_LOCAL:
                 dispositivo = procesarEstadoDispositivoTermometroTermostato(topic, texto, contexto);
-                listenerMensajesTermostato.actuacionReleLocalTermostato(topic, message, dispositivo, TIPO_INFORME.INFORME_ESPONTANEO);
+                if (listenerMensajesTermostato!= null) listenerMensajesTermostato.actuacionReleLocalTermostato(topic, texto, dispositivo, TIPO_INFORME.RESULTADO_COMANDO);
+                if (listenerMensajesTermometro!= null) listenerMensajesTermometro.actuacionReleLocalTermometro(topic, texto, dispositivo, TIPO_INFORME.RESULTADO_COMANDO);
                 break;
             case ACTUACION_RELE_REMOTO:
                 dispositivo = procesarEstadoDispositivoTermometroTermostato(topic, texto, contexto);
-                listenerMensajesTermostato.actuacionReleRemotoTermostato(topic, message, dispositivo, TIPO_INFORME.INFORME_ESPONTANEO);
+                if (listenerMensajesTermostato!= null) listenerMensajesTermostato.actuacionReleRemotoTermostato(topic, texto, dispositivo, TIPO_INFORME.RESULTADO_COMANDO);
+                if (listenerMensajesTermometro!= null) listenerMensajesTermometro.actuacionReleRemotoTermometro(topic, texto, dispositivo, TIPO_INFORME.RESULTADO_COMANDO);
                 break;
             case UPGRADE_FIRMWARE_FOTA:
                 break;
@@ -833,7 +839,6 @@ public class conexionMqtt implements Serializable, Parcelable {
                 dispositivo = procesarEstadoDispositivoTermometroTermostato(topic, texto, contexto);
                 if (listenerMensajesTermostato!= null) listenerMensajesTermostato.estadoTermostato(topic, texto, dispositivo, TIPO_INFORME.RESULTADO_COMANDO);
                 if (listenerMensajesTermometro!= null) listenerMensajesTermometro.estadoTermometro(topic, texto, dispositivo, TIPO_INFORME.RESULTADO_COMANDO);
-
                 break;
             case CONSULTAR_PROGRAMACION:
                 break;
@@ -904,11 +909,11 @@ public class conexionMqtt implements Serializable, Parcelable {
                  break;
             case ACTUACION_RELE_LOCAL:
                 dispositivo = procesarEstadoDispositivoInterruptor(topic, texto, contexto);
-                listenerMensajesInterruptor.actuacionReleLocalInterruptor(topic, message, dispositivo, TIPO_INFORME.INFORME_ESPONTANEO);
+                listenerMensajesInterruptor.actuacionReleLocalInterruptor(topic, texto, dispositivo, TIPO_INFORME.INFORME_ESPONTANEO);
                 break;
             case ACTUACION_RELE_REMOTO:
                 dispositivo = procesarEstadoDispositivoInterruptor(topic, texto, contexto);
-                listenerMensajesInterruptor.actuacionReleRemotoInterruptor(topic, message, dispositivo, TIPO_INFORME.INFORME_ESPONTANEO);
+                listenerMensajesInterruptor.actuacionReleRemotoInterruptor(topic, texto, dispositivo, TIPO_INFORME.INFORME_ESPONTANEO);
                 break;
 
             case UPGRADE_FIRMWARE_FOTA:
@@ -935,7 +940,7 @@ public class conexionMqtt implements Serializable, Parcelable {
                 break;
             case ACTUAR_RELE:
                 dispositivo = procesarEstadoDispositivoInterruptor(topic, texto, contexto);
-                listenerMensajesInterruptor.actuacionReleRemotoInterruptor(topic, message, dispositivo, TIPO_INFORME.RESULTADO_COMANDO);
+                listenerMensajesInterruptor.actuacionReleRemotoInterruptor(topic, texto, dispositivo, TIPO_INFORME.RESULTADO_COMANDO);
                 break;
             case ESTADO:
 

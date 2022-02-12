@@ -75,9 +75,9 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
         cnx.setOnConexionMqtt(new conexionMqtt.OnConexionMqtt() {
             @Override
             public void conexionEstablecida(boolean reconnect, String serverURI) {
-                notificarBrokerActivado();
+
                 dialogo.setConexionMqtt(cnx);
-                actualizarDispositivos();
+                notificarBrokerActivado();
 
 
             }
@@ -124,6 +124,7 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
     
     private void notificarBrokerDesactivado() {
 
+        int i;
         imageViewEstadoBroker.setImageResource(R.drawable.bk_no_conectado);
         if (cnx != null) {
             textIdBroker.setText("Conectando a " + cnx.getBrokerId());
@@ -131,35 +132,72 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
 
         textIdBroker.setTextColor(Color.RED);
         progressEspera.setVisibility(View.VISIBLE);
+        if (adapter != null) {
+            if (lista != null) {
+                for (i=0;i<lista.size();i++) {
+                    lista.get(i).setEstadoConexion(ESTADO_CONEXION_IOT.DESCONECTADO);
+                }
+            }
+            adapter.notifyDataSetChanged();
+        }
+
 
     }
     private void notificarBrokerActivado() {
+        int i;
         imageViewEstadoBroker.setImageResource(R.drawable.bk_conectado);
         textIdBroker.setText(cnx.getBrokerId());
         textIdBroker.setTextColor(Color.GREEN);
         progressEspera.setVisibility(View.INVISIBLE);
+        if (adapter != null) {
+            if (lista != null) {
+                for (i=0;i<lista.size();i++) {
+                    lista.get(i).setEstadoConexion(ESTADO_CONEXION_IOT.CONECTADO);
+                }
+            }
+            adapter.notifyDataSetChanged();
+        }
+        actualizarDispositivos();
 
     }
     private void notificarBrokerReintentoConexion() {
+        int i;
         imageViewEstadoBroker.setImageResource(R.drawable.bk_no_conectado);
         textIdBroker.setTextColor(Color.MAGENTA);
         textIdBroker.setText("Reintentando conexion a " + cnx.getBrokerId());
         progressEspera.setVisibility(View.VISIBLE);
+        if (adapter != null) {
+            if (lista != null) {
+                for (i=0;i<lista.size();i++) {
+                    lista.get(i).setEstadoConexion(ESTADO_CONEXION_IOT.DESCONECTADO);
+                }
+            }
+            adapter.notifyDataSetChanged();
+        }
 
     }
+
+
     private void inicializacionParametros() {
         cnx = null;
         dialogo = new dialogoIot();
         dialogo.setOnTemporizacionVencidaEnComando(new dialogoIot.onDialogoIot() {
             @Override
-            public void temporizacionVencidaEnComando(String idDispositivo, String clave, COMANDO_IOT comando) {
-                Log.i(getLocalClassName(), "Temporizacion vencida en el comando");
-                actualizarEstadoDispositivo(idDispositivo);
+            public void temporizacionVencidaEnComando(dispositivoIot dispositivo) {
+
+                int i;
+                i = buscarElementoEnListaDispositivos(dispositivo.getIdDispositivo());
+                if (i >=0) {
+                    if (lista.get(i).getEstadoConexion() == ESTADO_CONEXION_IOT.ESPERANDO_RESPUESTA) {
+                        lista.get(i).setEstadoConexion(ESTADO_CONEXION_IOT.DESCONECTADO);
+                        adapter.notifyDataSetChanged();
+                    }
+
+                }
+
             }
         });
         notificarBrokerDesactivado();
-
-
     }
     private void registrarControles() {
 
@@ -260,11 +298,6 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
     }
 
 
-    private void resultadoEscaneo() {
-
-        Log.i(getLocalClassName(), "El resultado del escaneo es: " + texto);
-    }
-
 
     private boolean presentarDispositivos() {
 
@@ -349,26 +382,12 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
         for (i = 0; i < lista.size(); i++) {
             cnx.subscribirTopic(lista.get(i).topicSubscripcion);
             dialogo.enviarComando(lista.get(i), dialogo.comandoEstadoDispositivo());
-
-
         }
         adapter.notifyDataSetChanged();
 
     }
 
 
-    private void actualizarEstadoDispositivo(String idDispositivo) {
-
-        int i;
-
-        i = buscarElementoEnListaDispositivos(idDispositivo);
-        if (i != -1) {
-            lista.get(i).setEstadoConexion(ESTADO_CONEXION_IOT.DESCONECTADO);
-        }
-        adapter.notifyDataSetChanged();
-
-
-    }
 
     private int buscarElementoEnListaDispositivos(String idDispositivo) {
 
@@ -386,219 +405,6 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
     }
 
 
-    private void procesarMensajeRecibido(MqttMessage mensajeRecibido) {
-
-        COMANDO_IOT idComando;
-        //dialogoIot dialogo = new dialogoIot();
-        JSONObject objeto = null;
-        String clave;
-        String textoRecibido = new String(mensajeRecibido.getPayload());
-        Log.i(getClass().toString(), "mensaje: " + textoRecibido);
-        idComando = dialogo.descubrirComando(textoRecibido);
-        Log.i(getClass().toString(), "idComando:" + idComando.toString());
-
-
-        switch (idComando) {
-
-            case ESTADO:
-                actualizarEstadoDispositivos(textoRecibido, TIPO_INFORME.RESULTADO_COMANDO, ESPONTANEO_IOT.ESPONTANEO_DESCONOCIDO);
-                dialogo.eliminarTemporizador(dialogo.extraerDatoJsonString(textoRecibido, TEXTOS_DIALOGO_IOT.CLAVE.getValorTextoJson()));
-                break;
-
-            case ESPONTANEO:
-                Log.i(getLocalClassName(), "Recibido espontaneo de status");
-                procesarInformeEspontaneo(textoRecibido);
-                break;
-
-            case ACTUAR_RELE:
-                Log.i(getLocalClassName(), "Se ha actuado el rele del dispositivo");
-                actualizarEstadoDispositivos(textoRecibido, TIPO_INFORME.RESULTADO_COMANDO, ESPONTANEO_IOT.ESPONTANEO_DESCONOCIDO);
-                dialogo.eliminarTemporizador(dialogo.extraerDatoJsonString(textoRecibido, TEXTOS_DIALOGO_IOT.CLAVE.getValorTextoJson()));
-                break;
-
-            default:
-                Log.i(getLocalClassName(), "Mensaje no procesado por la activity " + getLocalClassName());
-                break;
-
-        }
-
-
-    }
-
-
-    private void actualizarEstadoDispositivos(String textoRecibido, TIPO_INFORME tipoInforme, ESPONTANEO_IOT tipoEspontaneo) {
-
-        int i;
-        String idDispositivo;
-        String nombreClase = null;
-        TIPO_DISPOSITIVO_IOT tipoDispositivo;
-
-        tipoDispositivo = dialogo.getTipoDispositivo(textoRecibido);
-        Log.i(getLocalClassName(), "tipo de dispositivo: " + tipoDispositivo.toString());
-        idDispositivo = dialogo.getIdDispositivo(textoRecibido);
-        Log.i(getLocalClassName(), "el id del dispositivo: " + idDispositivo);
-
-
-        for (i = 0; i < lista.size(); i++) {
-            if (lista.get(i).idDispositivo.equals(idDispositivo)) {
-                Log.i(getLocalClassName(), "dispositivo " + idDispositivo + " encontrado");
-                break;
-            }
-        }
-
-        if (i == lista.size()) {
-            Log.w(getLocalClassName(), "El mensaje recibido no es de ningun dispositivo registrado");
-            return;
-        }
-
-
-        nombreClase = lista.get(i).getClass().getSimpleName();
-        switch (tipoDispositivo) {
-
-
-            case INTERRUPTOR:
-                if (nombreClase.equals("dispositivoIotDesconocido")) {
-                    Log.i(getLocalClassName(), "Interruptor  " + lista.get(i).nombreDispositivo + " no registrado como tal.");
-                    dispositivoIot nuevoInterruptor = new dispositivoIotOnOff(lista.get(i));
-                    //((dispositivoIotOnOff) nuevoInterruptor).setEstadoRele(estadoRele);
-                    //nuevoInterruptor.setEstadoConexionDispositivo(ESTADO_CONEXION_IOT.CONECTADO);
-                    nuevoInterruptor.modificarTipoDispositivo(nuevoInterruptor, tipoDispositivo, getApplicationContext());
-                    adapter.remove(lista.get(i));
-                    adapter.add(nuevoInterruptor);
-
-                }
-                actualizarInterruptor((dispositivoIotOnOff) lista.get(i), textoRecibido, tipoInforme, tipoEspontaneo);
-                adapter.notifyDataSetChanged();
-
-                break;
-            case CRONOTERMOSTATO:
-                if (nombreClase.equals("dispositivoIotDesconocido")) {
-                    Log.i(getLocalClassName(), "Cronotermostato  " + lista.get(i).nombreDispositivo + " no registrado como tal.");
-                    dispositivoIot nuevoTermostato = new dispositivoIotTermostato(lista.get(i));
-                    nuevoTermostato.modificarTipoDispositivo(nuevoTermostato, tipoDispositivo, getApplicationContext());
-                    adapter.remove(lista.get(i));
-                    adapter.add(nuevoTermostato);
-                }
-                actualizarTermostato((dispositivoIotTermostato) lista.get(i), textoRecibido);
-                adapter.notifyDataSetChanged();
-
-                break;
-            case TERMOMETRO:
-                if (nombreClase.equals("dispositivoIotDesconocido")) {
-                    Log.i(getLocalClassName(), "Termometro  " + lista.get(i).nombreDispositivo + " no registrado como tal.");
-                    dispositivoIot nuevoTermostato = new dispositivoIotTermostato(lista.get(i), TIPO_DISPOSITIVO_IOT.TERMOMETRO);
-                    nuevoTermostato.modificarTipoDispositivo(nuevoTermostato, tipoDispositivo, getApplicationContext());
-                    adapter.remove(lista.get(i));
-                    adapter.add(nuevoTermostato);
-                }
-                actualizarTermostato((dispositivoIotTermostato) lista.get(i), textoRecibido);
-                adapter.notifyDataSetChanged();
-                break;
-
-            default:
-                Log.i(getLocalClassName(), " No se actualiza ningun parametro de dispositivo desconocido");
-                break;
-        }
-
-        Log.i(getLocalClassName(), "degu");
-
-        //Buscar el elemento en la lista
-        //Actualizar los elementos con lo que viene en el mensaje
-        //Actualizar la vista para que se vean los cambios en el listView.
-
-    }
-
-
-    private void actualizarInterruptor(dispositivoIotOnOff dispositivo, String texto, TIPO_INFORME tipoInforme, ESPONTANEO_IOT tipoEspontaneo) {
-
-        ESTADO_RELE estadoRele;
-        estadoRele = dialogo.getEstadoRele(texto);
-        Log.i(getLocalClassName(), "Estado del rele: " + estadoRele.toString());
-        dispositivo.setEstadoRele(estadoRele);
-        dispositivo.setEstadoConexion(ESTADO_CONEXION_IOT.CONECTADO);
-        if (tipoInforme == TIPO_INFORME.INFORME_ESPONTANEO) {
-            switch (tipoEspontaneo) {
-                case ARRANQUE_APLICACION:
-                    //enviarNotificacion("Reinicio", "El dispositivo " + dispositivo.getNombreDispositivo() + " se ha reiniciado", R.drawable.warning, idCanalInterruputor, R.drawable.reset);
-                    break;
-                case ACTUACION_RELE_LOCAL:
-                    if (dispositivo.getEstadoRele() == ESTADO_RELE.ON) {
-                        //enviarNotificacion("Actuacion Rele en local", "El dispositivo " + dispositivo.getNombreDispositivo() + " " + getString(R.string.eventoOnInterruptorlocal), R.drawable.interruptor, idCanalInterruputor, R.drawable.encendido);
-                    } else {
-                        //enviarNotificacion("Actuacion Rele en local", "El dispositivo " + dispositivo.getNombreDispositivo() + " " + getString(R.string.eventoOffInterruptorlocal), R.drawable.interruptor, idCanalInterruputor, R.drawable.apagado);
-
-                    }
-                    break;
-                case CAMBIO_DE_PROGRAMA:
-                    if (dispositivo.getEstadoRele() == ESTADO_RELE.ON) {
-                        //enviarNotificacion("Cambio de programa", "El dispositivo " + dispositivo.getNombreDispositivo() + " " + getString(R.string.eventoOnInterruptorTemporizado), R.drawable.interruptor, idCanalInterruputor, R.drawable.encendido);
-                    } else {
-                        //enviarNotificacion("Cambio de programa", "El dispositivo " + dispositivo.getNombreDispositivo() + " " + getString(R.string.eventoOffInterruptorTemporizado), R.drawable.interruptor, idCanalInterruputor, R.drawable.apagado);
-
-                    }
-                    break;
-
-
-            }
-            Log.i(getLocalClassName(), "Informe espontaneo");
-        }
-
-
-    }
-
-    private void actualizarTermostato(dispositivoIotTermostato dispositivo, String texto) {
-
-        ESTADO_RELE estadoRele;
-        double temperatura, umbral, humedad;
-        estadoRele = dialogo.getEstadoRele(texto);
-        Log.i(getLocalClassName() + ": actualizarTermostato", "Estado del rele: " + estadoRele.toString());
-        dispositivo.setEstadoRele(estadoRele);
-        dispositivo.setEstadoConexion(ESTADO_CONEXION_IOT.CONECTADO);
-        temperatura = dialogo.getTemperatura(texto);
-        humedad = dialogo.getHumedad(texto);
-        umbral = dialogo.getUmbralTemperatura(texto);
-        dispositivo.setTemperatura(temperatura);
-        dispositivo.setHumedad(humedad);
-        dispositivo.setUmbralTemperatura(umbral);
-
-
-    }
-
-    private void procesarInformeEspontaneo(String textoRecibido) {
-
-        ESPONTANEO_IOT tipoInformeEspontaneo;
-
-        tipoInformeEspontaneo = dialogo.descubrirTipoInformeEspontaneo(textoRecibido);
-        switch (tipoInformeEspontaneo) {
-            case ARRANQUE_APLICACION:
-                actualizarEstadoDispositivos(textoRecibido, TIPO_INFORME.INFORME_ESPONTANEO, ESPONTANEO_IOT.ARRANQUE_APLICACION);
-                break;
-            case CAMBIO_DE_PROGRAMA:
-                actualizarEstadoDispositivos(textoRecibido, TIPO_INFORME.INFORME_ESPONTANEO, ESPONTANEO_IOT.CAMBIO_DE_PROGRAMA);
-                break;
-            case COMANDO_APLICACION:
-                break;
-            case ACTUACION_RELE_LOCAL:
-                actualizarEstadoDispositivos(textoRecibido, TIPO_INFORME.INFORME_ESPONTANEO, ESPONTANEO_IOT.ACTUACION_RELE_LOCAL);
-
-                break;
-            case ACTUACION_RELE_REMOTO:
-                break;
-            case UPGRADE_FIRMWARE_FOTA:
-
-                break;
-
-            case CAMBIO_TEMPERATURA:
-                actualizarEstadoDispositivos(textoRecibido, TIPO_INFORME.INFORME_ESPONTANEO, ESPONTANEO_IOT.ARRANQUE_APLICACION);
-                break;
-            default:
-                break;
-        }
-
-        Log.i(getLocalClassName(), "Tipo de informe espontaneo " + tipoInformeEspontaneo.toString());
-
-
-    }
 
     @Override
     protected void onPostResume() {
@@ -611,6 +417,9 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
         lista.clear();
         presentarDispositivos();
         actualizarDispositivos();
+
+
+
 
     }
 
@@ -640,14 +449,14 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
         TIPO_DISPOSITIVO_IOT tipoDispositivo;
         ESTADO_CONEXION_IOT estado_conexion_iot;
         Intent intent = null;
-        tipoDispositivo = adapter.listaDispositvos.get(position).tipoDispositivo;
-        estado_conexion_iot = adapter.listaDispositvos.get(position).getEstadoConexion();
+        tipoDispositivo = adapter.listaDispositivos.get(position).tipoDispositivo;
+        estado_conexion_iot = adapter.listaDispositivos.get(position).getEstadoConexion();
         if (estado_conexion_iot == ESTADO_CONEXION_IOT.CONECTADO) {
             switch(tipoDispositivo) {
                 case DESCONOCIDO:
                     break;
                 case INTERRUPTOR:
-                    String idDispositivo = adapter.listaDispositvos.get(position).idDispositivo;
+                    String idDispositivo = adapter.listaDispositivos.get(position).idDispositivo;
                     intent = new Intent(ActividadPrincipal.this, ActivityInterruptor.class);
                     intent.putExtra(TEXTOS_DIALOGO_IOT.ID_DISPOSITIVO.getValorTextoJson(), idDispositivo);
                     startActivity(intent);
@@ -666,12 +475,12 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
 
     private void actualizarEstadoInteruptor(dispositivoIotOnOff dispositivo) {
         int i;
+        dispositivo.modificarTipoDispositivo(dispositivo, TIPO_DISPOSITIVO_IOT.INTERRUPTOR, getApplicationContext());
         i = buscarElementoEnListaDispositivos(dispositivo.getIdDispositivo());
         if (i>=0) {
-            dispositivo.modificarDispositivo(dispositivo, getApplicationContext());
-            lista.remove(lista.get(i));
-            lista.add(dispositivo);
-            //dialogo.eliminarTemporizador(dialogo.extraerDatoJsonString(texto, TEXTOS_DIALOGO_IOT.CLAVE.getValorTextoJson()));
+            dispositivo.setEstadoConexion(ESTADO_CONEXION_IOT.CONECTADO);
+            adapter.remove(lista.get(i));
+            adapter.insert(dispositivo,i);
             adapter.notifyDataSetChanged();
 
         }
@@ -680,13 +489,19 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
 
     private void actualizarEstadoTermometroTermostato(dispositivoIotTermostato dispositivo) {
         int i;
+        if (dispositivo.getTipoDispositivo() == TIPO_DISPOSITIVO_IOT.TERMOMETRO) {
+            dispositivo.modificarTipoDispositivo(dispositivo, TIPO_DISPOSITIVO_IOT.TERMOMETRO, getApplicationContext());
+        } else {
+            dispositivo.modificarTipoDispositivo(dispositivo, TIPO_DISPOSITIVO_IOT.CRONOTERMOSTATO, getApplicationContext());
+        }
+
         i = buscarElementoEnListaDispositivos(dispositivo.getIdDispositivo());
         if (i>=0) {
-            dispositivo.modificarDispositivo(dispositivo, getApplicationContext());
-            lista.remove(lista.get(i));
-            lista.add(dispositivo);
-            //dialogo.eliminarTemporizador(dialogo.extraerDatoJsonString(texto, TEXTOS_DIALOGO_IOT.CLAVE.getValorTextoJson()));
+            dispositivo.setEstadoConexion(ESTADO_CONEXION_IOT.CONECTADO);
+            adapter.remove(lista.get(i));
+            adapter.insert(dispositivo,i);
             adapter.notifyDataSetChanged();
+
 
         }
 
@@ -704,13 +519,13 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
             }
 
             @Override
-            public void actuacionReleLocalInterruptor(String topic, MqttMessage message, dispositivoIotOnOff dispositivo, TIPO_INFORME tipoInforme) {
-
+            public void actuacionReleLocalInterruptor(String topic, String message, dispositivoIotOnOff dispositivo, TIPO_INFORME tipoInforme) {
+                actualizarEstadoInteruptor(dispositivo);
             }
 
             @Override
-            public void actuacionReleRemotoInterruptor(String topic, MqttMessage message, dispositivoIotOnOff dispositivo, TIPO_INFORME tipoInforme) {
-
+            public void actuacionReleRemotoInterruptor(String topic, String message, dispositivoIotOnOff dispositivo, TIPO_INFORME tipoInforme) {
+                actualizarEstadoInteruptor(dispositivo);
             }
 
             @Override
@@ -718,31 +533,44 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
 
             }
         });
+        cnx.setOnProcesarMensajesTermostato(new conexionMqtt.OnProcesarMensajesTermostato() {
+            @Override
+            public void estadoTermostato(String topic, String message, dispositivoIotTermostato dispositivo, TIPO_INFORME tipoInforme) {
+                actualizarEstadoTermometroTermostato(dispositivo);
+
+            }
+
+            @Override
+            public void actuacionReleLocalTermostato(String topic, String message, dispositivoIotTermostato dispositivo, TIPO_INFORME tipoInforme) {
+
+            }
+
+            @Override
+            public void actuacionReleRemotoTermostato(String topic, String message, dispositivoIotTermostato dispositivo, TIPO_INFORME tipoInforme) {
+
+            }
+        });
         cnx.setOnProcesarMensajesTermometro(new conexionMqtt.OnProcesarMensajesTermometro() {
             @Override
             public void estadoTermometro(String topic, String message, dispositivoIotTermostato dispositivo, TIPO_INFORME tipoInforme) {
                 actualizarEstadoTermometroTermostato(dispositivo);
+            }
+
+            @Override
+            public void actuacionReleLocalTermometro(String topic, String message, dispositivoIotTermostato dispositivo, TIPO_INFORME tipoInforme) {
+
+            }
+
+            @Override
+            public void actuacionReleRemotoTermometro(String topic, String message, dispositivoIotTermostato dispositivo, TIPO_INFORME tipoInforme) {
 
             }
         });
-        cnx.setOnProcesarMensajesTermostato(new conexionMqtt.OnProcesarMensajesTermostato() {
-            @Override
-            public void estadoTermostato(String topic, String message, dispositivoIotTermostato dispositivo, TIPO_INFORME tipoInforme) {
-
-            }
-
-            @Override
-            public void actuacionReleLocalTermostato(String topic, MqttMessage message, dispositivoIotTermostato dispositivo, TIPO_INFORME tipoInforme) {
-
-            }
-
-            @Override
-            public void actuacionReleRemotoTermostato(String topic, MqttMessage message, dispositivoIotTermostato dispositivo, TIPO_INFORME tipoInforme) {
-
-            }
-        });
-
     }
+
+
+
+
 }
 
 

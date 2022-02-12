@@ -345,6 +345,9 @@ public  class configuracionDispositivos implements Serializable {
 
     public boolean modificarDispositivo(dispositivoIot dispositivo, Context contexto) {
 
+        int posicion = buscarDispositivoPorId(dispositivo.getIdDispositivo());
+
+
         if (eliminarDispositivo(dispositivo, contexto) == false) {
 
             Log.e(getClass().toString(), "Error... No se ha podido modificar el dispositivo");
