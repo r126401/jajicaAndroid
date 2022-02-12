@@ -429,9 +429,12 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
         super.onResume();
         refrescarLista();
 
+    }
 
-
-
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        refrescarLista();
     }
 
     @Override
