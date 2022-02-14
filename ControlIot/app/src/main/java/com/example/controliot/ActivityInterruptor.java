@@ -11,9 +11,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupMenu;
@@ -73,7 +71,7 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
 
 
 
-    private void inicializacionClase() {
+    private void ConectarAlBrokerMqtt() {
 
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
@@ -142,7 +140,8 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_interruptor);
         registrarControles();
-        inicializacionClase();
+        ConectarAlBrokerMqtt();
+        procesarMensajes();
         Log.i(TAG, "Clase inicializada");
     }
 
@@ -183,4 +182,12 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
 
         return false;
     }
+
+    private void procesarMensajes() {
+
+
+
+    }
+
+
 }

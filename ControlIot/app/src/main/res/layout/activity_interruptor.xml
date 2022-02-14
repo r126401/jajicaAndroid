@@ -7,57 +7,66 @@
     android:orientation="vertical"
     tools:context=".ActivityInterruptor">
 
-    <TextView
-        android:id="@+id/textConsolaMensajes"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/panelSuperior"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/poetsenone"
-        android:text="Mensajes de la activity"
-        android:textSize="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/textConsolaMensajes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poetsenone"
+            android:text="Mensajes de la activity"
+            android:textSize="20dp" />
 
 
-    <ImageView
-        android:id="@+id/imageBotonOnOff"
-        android:layout_width="128dp"
-        android:layout_height="128dp"
-        android:layout_marginTop="36dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textConsolaMensajes"
-        app:srcCompat="@drawable/switchon" />
+        <ImageView
+            android:id="@+id/imageBotonOnOff"
+            android:layout_width="128dp"
+            android:layout_height="128dp"
+            android:layout_marginTop="36dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textConsolaMensajes"
+            app:srcCompat="@drawable/switchon" />
 
-    <TextView
-        android:id="@+id/textListaProgramas"
-        android:layout_width="409dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:fontFamily="@font/poetsenone"
-        android:text="Lista de Programas"
-        android:textAlignment="center"
-        android:textSize="20dp"
-        app:layout_constraintBottom_toTopOf="@id/swipeSchedule"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/imageBotonOnOff">
+        <TextView
+            android:id="@+id/textListaProgramas"
+            android:layout_width="409dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poetsenone"
+            android:text="Lista de Programas"
+            android:textAlignment="center"
+            android:textSize="20dp"
+            app:layout_constraintBottom_toTopOf="@+id/swipeSchedule"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageBotonOnOff">
 
-    </TextView>
+        </TextView>
 
-    <ImageView
-        android:id="@+id/imageEstadoBroker"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/textListaProgramas"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/bk_conectado" />
+        <ImageView
+            android:id="@+id/imageEstadoBroker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@+id/textListaProgramas"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:srcCompat="@drawable/bk_conectado" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeSchedule"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/textListaProgramas">
+        android:layout_height="416dp"
+        app:layout_constraintBottom_toTopOf="@+id/bottommenuInterruptor"
+        app:layout_constraintTop_toBottomOf="@id/panelSuperior">
 
         <ListView
 
@@ -76,9 +85,10 @@
         android:id="@+id/bottommenuInterruptor"
         android:layout_width="409dp"
         android:layout_height="100dp"
+        android:layout_marginTop="631dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/swipeSchedule"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0"
         app:menu="@menu/menu_interruptor" />
 

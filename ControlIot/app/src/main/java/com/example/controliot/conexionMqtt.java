@@ -11,6 +11,7 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
+import java.util.ArrayList;
 import java.util.UUID;
 import java.io.*;
 
@@ -128,7 +129,10 @@ public class conexionMqtt implements Serializable, Parcelable {
         void estadoTermostato(String topic, String message, dispositivoIotTermostato dispositivo, TIPO_INFORME tipoInforme);
         void actuacionReleLocalTermostato(String topic, String message, dispositivoIotTermostato dispositivo, TIPO_INFORME tipoInforme);
         void actuacionReleRemotoTermostato(String topic, String message, dispositivoIotTermostato dispositivo, TIPO_INFORME tipoInforme);
-
+        void consultarProgramacionTermostato(String topic, String texto, String idDispositivo, ProgramaDispositivoIotTermostato programa, TIPO_INFORME tipoInforme);
+        void nuevoProgramacionTermostato(String topic, String texto, String idDispositivo, TIPO_INFORME tipoInforme);
+        void eliminarProgramacionTermostato(String topic, String texto, String idDispositivo, ProgramaDispositivoIotTermostato programa, TIPO_INFORME tipoInforme);
+        void modificarProgramacionTermostato(String topic, String texto, String idDispositivo, ProgramaDispositivoIotTermostato programa, TIPO_INFORME tipoInforme);
 
     }
 
@@ -140,6 +144,11 @@ public class conexionMqtt implements Serializable, Parcelable {
         void estadoInterruptor(String topic, String mensaje, dispositivoIotOnOff dispositivo, TIPO_INFORME tipoInforme );
         void actuacionReleLocalInterruptor(String topic, String message, dispositivoIotOnOff dispositivo, TIPO_INFORME tipoInforme);
         void actuacionReleRemotoInterruptor(String topic, String message, dispositivoIotOnOff dispositivo, TIPO_INFORME tipoInforme);
+        void consultarProgramacionInterruptor(String topic, String texto, String idDispositivo, ArrayList<ProgramaDispositivoIotOnOff> programa, TIPO_INFORME tipoInforme);
+        void nuevoProgramacionInterruptor(String topic, String texto, String idDispositivo, TIPO_INFORME tipoInforme);
+        void eliminarProgramacionInterruptor(String topic, String texto, String idDispositivo, String programa, TIPO_INFORME tipoInforme);
+        void modificarProgramacionInterruptor(String topic, String texto, String idDispositivo, TIPO_INFORME tipoInforme);
+
         void errorMensaje(String topic, MqttMessage mensaje);
 
     }
@@ -733,7 +742,7 @@ public class conexionMqtt implements Serializable, Parcelable {
 
     }
 
-    protected void procesarMensajes(String topic, MqttMessage message, Context contexto) {
+    protected void procesarMensajes(String topic, MqttMessage message, Context contexto) throws JSONException {
 
         TIPO_DISPOSITIVO_IOT tipo;
         String respuesta;
@@ -841,6 +850,7 @@ public class conexionMqtt implements Serializable, Parcelable {
                 if (listenerMensajesTermometro!= null) listenerMensajesTermometro.estadoTermometro(topic, texto, dispositivo, TIPO_INFORME.RESULTADO_COMANDO);
                 break;
             case CONSULTAR_PROGRAMACION:
+                //if (listenerMensajesTermostato != null) listenerMensajesTermostato.consultarProgramacionTermostato(topic, texto, idDispositivo, TIPO_INFORME.RESULTADO_COMANDO);
                 break;
             case NUEVA_PROGRAMACION:
                 break;
@@ -872,7 +882,7 @@ public class conexionMqtt implements Serializable, Parcelable {
 
 
 
-    public void procesarMensajesInterruptor(String topic, MqttMessage message, Context contexto) {
+    public void procesarMensajesInterruptor(String topic, MqttMessage message, Context contexto) throws JSONException {
 
         COMANDO_IOT idComando;
         dispositivoIot dispositivo;
@@ -928,12 +938,18 @@ public class conexionMqtt implements Serializable, Parcelable {
 
     }
 
-    void procesarRespuestaComandoInterruptor(String topic, MqttMessage message, Context contexto) {
+    void procesarRespuestaComandoInterruptor(String topic, MqttMessage message, Context contexto) throws JSONException {
 
         COMANDO_IOT idComando;
         dispositivoIotOnOff dispositivo;
+
         String texto = new String(message.getPayload());
         idComando = dialogo.descubrirComando(texto);
+        ArrayList<ProgramaDispositivoIotOnOff> programa;
+
+        JSONObject textoJson = new JSONObject(texto);
+        String idDispositivo = textoJson.optString(TEXTOS_DIALOGO_IOT.ID_DISPOSITIVO.getValorTextoJson());
+
         switch (idComando) {
 
             case CONSULTAR_CONF_APP:
@@ -948,12 +964,19 @@ public class conexionMqtt implements Serializable, Parcelable {
                 listenerMensajesInterruptor.estadoInterruptor(topic, texto, dispositivo, TIPO_INFORME.RESULTADO_COMANDO);
                 break;
             case CONSULTAR_PROGRAMACION:
+                programa = procesarConsultaPrograma(texto, contexto);
+                if (listenerMensajesInterruptor != null) listenerMensajesInterruptor.consultarProgramacionInterruptor(topic, texto, idDispositivo, programa, TIPO_INFORME.RESULTADO_COMANDO);
                 break;
             case NUEVA_PROGRAMACION:
+                if (listenerMensajesInterruptor != null) listenerMensajesInterruptor.nuevoProgramacionInterruptor(topic, texto, idDispositivo, TIPO_INFORME.RESULTADO_COMANDO);
                 break;
             case ELIMINAR_PROGRAMACION:
+                int indice;
+                String idPrograma = dialogo.extraerDatoJsonString(texto, TEXTOS_DIALOGO_IOT.ID_PROGRAMA.getValorTextoJson());
+                if (listenerMensajesInterruptor != null) listenerMensajesInterruptor.eliminarProgramacionInterruptor(topic, texto, idDispositivo, idPrograma, TIPO_INFORME.RESULTADO_COMANDO);
                 break;
             case MODIFICAR_PROGRAMACION:
+                if (listenerMensajesInterruptor != null) listenerMensajesInterruptor.modificarProgramacionInterruptor(topic, texto, idDispositivo, TIPO_INFORME.RESULTADO_COMANDO);
                 break;
             case MODIFICAR_APP:
                 break;
@@ -1034,6 +1057,16 @@ public class conexionMqtt implements Serializable, Parcelable {
         dispositivoTermometroTermostato.setEstadoConexion(ESTADO_CONEXION_IOT.CONECTADO);
         dispositivoTermometroTermostato.setEstadoDispositivo(dialogo.getEstadoDispositivo(texto));
         return dispositivoTermometroTermostato;
+
+    }
+
+    private ArrayList<ProgramaDispositivoIotOnOff> procesarConsultaPrograma(String texto, Context contexto) {
+
+        JSONObject mensaje;
+
+        dispositivoIotOnOff dispositivo;
+        dispositivo = new dispositivoIotOnOff();
+        return (dispositivo.cargarProgramas(texto));
 
     }
 
