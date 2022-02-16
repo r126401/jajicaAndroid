@@ -97,11 +97,17 @@ public class conexionMqtt implements Serializable, Parcelable {
     private CountDownTimer temporizacionReintento;
     private final String LOG_CLASS = "conexionMqtt";
     private dialogoIot dialogo;
+    private dispositivoIotOnOff dispositivoOnOff;
+    private dispositivoIotTermostato dispositivoTermostato;
+    private dispositivoIotTermostato dispositivoTermometro;
 
     private OnConexionMqtt listener;
     private OnProcesarMensajesInterruptor listenerMensajesInterruptor;
     private OnProcesarMensajesTermometro listenerMensajesTermometro;
     private OnProcesarMensajesTermostato listenerMensajesTermostato;
+    private OnProcesarEspontaneosInterruptor listenerEspontaneosInterruptor;
+    private OnProcesarEspontaneosTermometro listenerEspontaneosTermometro;
+    private OnProcesarEspontaneosTermostato listenerEspontaneosTermostato;
 
     public interface OnConexionMqtt {
 
@@ -114,45 +120,85 @@ public class conexionMqtt implements Serializable, Parcelable {
 
     }
 
+
+    /**
+     * Definicion de los interfaces para termometro
+     */
     public interface OnProcesarMensajesTermometro {
-        void estadoTermometro(String topic, String message, dispositivoIotTermostato dispositivo, TIPO_INFORME tipoInforme);
-        void actuacionReleLocalTermometro(String topic, String message, dispositivoIotTermostato dispositivo, TIPO_INFORME tipoInforme);
-        void actuacionReleRemotoTermometro(String topic, String message, dispositivoIotTermostato dispositivo, TIPO_INFORME tipoInforme);
+        void estadoTermometro(String topic, String message, dispositivoIotTermostato dispositivo);
+        void actuacionReleLocalTermometro(String topic, String message, dispositivoIotTermostato dispositivo);
+        void actuacionReleRemotoTermometro(String topic, String message, dispositivoIotTermostato dispositivo);
 
 
     }
     public void setOnProcesarMensajesTermometro(OnProcesarMensajesTermometro listener) {
         this.listenerMensajesTermometro = listener;
     }
-
-    public interface OnProcesarMensajesTermostato  {
-        void estadoTermostato(String topic, String message, dispositivoIotTermostato dispositivo, TIPO_INFORME tipoInforme);
-        void actuacionReleLocalTermostato(String topic, String message, dispositivoIotTermostato dispositivo, TIPO_INFORME tipoInforme);
-        void actuacionReleRemotoTermostato(String topic, String message, dispositivoIotTermostato dispositivo, TIPO_INFORME tipoInforme);
-        void consultarProgramacionTermostato(String topic, String texto, String idDispositivo, ProgramaDispositivoIotTermostato programa, TIPO_INFORME tipoInforme);
-        void nuevoProgramacionTermostato(String topic, String texto, String idDispositivo, TIPO_INFORME tipoInforme);
-        void eliminarProgramacionTermostato(String topic, String texto, String idDispositivo, ProgramaDispositivoIotTermostato programa, TIPO_INFORME tipoInforme);
-        void modificarProgramacionTermostato(String topic, String texto, String idDispositivo, ProgramaDispositivoIotTermostato programa, TIPO_INFORME tipoInforme);
+    public interface OnProcesarEspontaneosTermometro{
 
     }
+    public void setOnProcesarEspontaneoTermometro(OnProcesarEspontaneosTermometro listener) {
+        this.listenerEspontaneosTermometro = listener;
+    }
+    /****************************************************************************************************/
 
+    /**
+     * Defiicion de los interfaces para termostato
+     */
+    public interface OnProcesarMensajesTermostato  {
+        void estadoTermostato(String topic, String message, dispositivoIotTermostato dispositivo);
+        void actuacionReleLocalTermostato(String topic, String message, dispositivoIotTermostato dispositivo);
+        void actuacionReleRemotoTermostato(String topic, String message, dispositivoIotTermostato dispositivo);
+        void consultarProgramacionTermostato(String topic, String texto, String idDispositivo, ProgramaDispositivoIotTermostato programa);
+        void nuevoProgramacionTermostato(String topic, String texto, String idDispositivo);
+        void eliminarProgramacionTermostato(String topic, String texto, String idDispositivo, ProgramaDispositivoIotTermostato programa);
+        void modificarProgramacionTermostato(String topic, String texto, String idDispositivo, ProgramaDispositivoIotTermostato programa);
+
+    }
     public void setOnProcesarMensajesTermostato(OnProcesarMensajesTermostato listener) {
         this.listenerMensajesTermostato = listener;
     }
+    public interface OnProcesarEspontaneosTermostato{
 
-    public interface OnProcesarMensajesInterruptor {
-        void estadoInterruptor(String topic, String mensaje, dispositivoIotOnOff dispositivo, TIPO_INFORME tipoInforme );
-        void actuacionReleLocalInterruptor(String topic, String message, dispositivoIotOnOff dispositivo, TIPO_INFORME tipoInforme);
-        void actuacionReleRemotoInterruptor(String topic, String message, dispositivoIotOnOff dispositivo, TIPO_INFORME tipoInforme);
-        void consultarProgramacionInterruptor(String topic, String texto, String idDispositivo, ArrayList<ProgramaDispositivoIotOnOff> programa, TIPO_INFORME tipoInforme);
-        void nuevoProgramacionInterruptor(String topic, String texto, String idDispositivo, TIPO_INFORME tipoInforme);
-        void eliminarProgramacionInterruptor(String topic, String texto, String idDispositivo, String programa, TIPO_INFORME tipoInforme);
-        void modificarProgramacionInterruptor(String topic, String texto, String idDispositivo, TIPO_INFORME tipoInforme);
-
-        void errorMensaje(String topic, MqttMessage mensaje);
+        void arranqueAplicacionTermostato(String topic, String texto, dispositivoIotTermostato dispoisitivo);
+        void cambioProgramaTermostato(String topic, String texto, String idDispositivo, String idPrograma);
+        void atuacionReleLocalTermostato(String topic, String texto, String idDisositivo, ESTADO_RELE estadoRele);
+        void actuacionReleRemotoTermostato(String topic, String texto, String idDispositivo, ESTADO_RELE estadoRele);
+        void upgradeFirmwareTermostato(String topic, String texto, String idDispositivo, OtaVersion otaVersion);
+        void cambioTemperaturaTermostato(String topic, String texto, String idDispositivo, long temperatura, long humedadad);
 
     }
+    public void setOnProcesarEspontaneosTermostato(OnProcesarEspontaneosTermostato listener) {
+        this.listenerEspontaneosTermostato = listener;
+    }
 
+/*******************************************************************************************************/
+
+    public interface OnProcesarMensajesInterruptor {
+        void estadoAplicacion(String topic, String mensaje, dispositivoIotOnOff dispositivo );
+        void actuacionReleLocalInterruptor(String topic, String message, dispositivoIotOnOff dispositivo);
+        void actuacionReleRemotoInterruptor(String topic, String message, dispositivoIotOnOff dispositivo);
+        void consultarProgramacionInterruptor(String topic, String texto, dispositivoIotOnOff dispositivo);
+        void nuevoProgramacionInterruptor(String topic, String texto, String idDispositivo);
+        void eliminarProgramacionInterruptor(String topic, String texto, String idDispositivo, String programa);
+        void modificarProgramacionInterruptor(String topic, String texto, String idDispositivo);
+        void modificarAplicacionInterruptor(String topic, String texto, dispositivoIotOnOff dispositivo);
+        void resetInterruptor(String topic, String texto, String idDispositivo);
+        void factoryResetInterruptor(String topic, String texto, String idDispositivo);
+        void upgradeFirmwareInterruptor(String topic, String texto, String idDispositivo, OtaVersion otaVersion);
+        void recibirVersionOtaDisponibleInterruptor(String topic, String texto, String idDispositivo, OtaVersion version);
+        void errorMensajeInterruptor(String topic, String  mensaje);
+
+    }
+    public interface OnProcesarEspontaneosInterruptor{
+        void arranqueAplicacionInterruptor(String topic, String texto, dispositivoIotOnOff dispositivo);
+        void cambioProgramaInterruptor(String topic, String texto, String idDispositivo, String idPrograma);
+        void actuacionRelelocal(String topic, String texto, dispositivoIotOnOff dispositivo);
+        void actuacionReleRemoto(String topic, String texto, dispositivoIotOnOff dispositivo);
+        void upgradeFirwareFota(String topic, String texto, String idDispositivo, OtaVersion otaVersion);
+        void espontaneoDesconocido(String topic, String texto);
+
+    }
     void setOnProcesarMensajesInterruptor (OnProcesarMensajesInterruptor listener) {
         this.listenerMensajesInterruptor = listener;
 
@@ -237,6 +283,9 @@ public class conexionMqtt implements Serializable, Parcelable {
         this.contexto = contexto;
         String cadenaConexion;
         dialogo = new dialogoIot();
+        dispositivoOnOff = null;
+        dispositivoTermometro = null;
+        dispositivoTermostato = null;
 
         if (leerConfiguracion() == false) {
             Log.i(LOG_CLASS, ": No hay configuracion mqtt, se crea por defecto");
@@ -742,6 +791,13 @@ public class conexionMqtt implements Serializable, Parcelable {
 
     }
 
+    /**
+     * Determina a que tipo de dispositivo se refiere el mensaje
+     * @param topic
+     * @param message
+     * @param contexto
+     * @throws JSONException
+     */
     protected void procesarMensajes(String topic, MqttMessage message, Context contexto) throws JSONException {
 
         TIPO_DISPOSITIVO_IOT tipo;
@@ -774,9 +830,11 @@ public class conexionMqtt implements Serializable, Parcelable {
     }
 
 
+/********************************************************************************************************************/
 
+/****************************** Procesamiento de mensajes de termostato *********************************************/
 
-    public void procesarMensajesTermometroTermostato(String topic, MqttMessage message, Context contexto) {
+    private void procesarMensajesTermometroTermostato(String topic, MqttMessage message, Context contexto) {
         COMANDO_IOT idComando;
         dispositivoIot dispositivo;
         dispositivo = new dispositivoIotTermostato();
@@ -791,8 +849,7 @@ public class conexionMqtt implements Serializable, Parcelable {
         }
 
     }
-
-    void procesarMensajeEspontaneoTermometroTermostato(String topic, MqttMessage message, Context contexto) {
+    private void procesarMensajeEspontaneoTermometroTermostato(String topic, MqttMessage message, Context contexto) {
 
         ESPONTANEO_IOT tipoInformeEspontaneo;
         dispositivoIotTermostato dispositivo;
@@ -803,18 +860,18 @@ public class conexionMqtt implements Serializable, Parcelable {
 
             case ARRANQUE_APLICACION:
                 dispositivo = procesarEstadoDispositivoTermometroTermostato(topic, texto, contexto);
-                if (listenerMensajesTermostato!= null) listenerMensajesTermostato.estadoTermostato(topic, texto, dispositivo, TIPO_INFORME.RESULTADO_COMANDO);
-                if (listenerMensajesTermometro!= null) listenerMensajesTermometro.estadoTermometro(topic, texto, dispositivo, TIPO_INFORME.RESULTADO_COMANDO);
+                if (listenerMensajesTermostato!= null) listenerMensajesTermostato.estadoTermostato(topic, texto, dispositivo);
+                if (listenerMensajesTermometro!= null) listenerMensajesTermometro.estadoTermometro(topic, texto, dispositivo);
                 break;
             case ACTUACION_RELE_LOCAL:
                 dispositivo = procesarEstadoDispositivoTermometroTermostato(topic, texto, contexto);
-                if (listenerMensajesTermostato!= null) listenerMensajesTermostato.actuacionReleLocalTermostato(topic, texto, dispositivo, TIPO_INFORME.RESULTADO_COMANDO);
-                if (listenerMensajesTermometro!= null) listenerMensajesTermometro.actuacionReleLocalTermometro(topic, texto, dispositivo, TIPO_INFORME.RESULTADO_COMANDO);
+                if (listenerMensajesTermostato!= null) listenerMensajesTermostato.actuacionReleLocalTermostato(topic, texto, dispositivo);
+                if (listenerMensajesTermometro!= null) listenerMensajesTermometro.actuacionReleLocalTermometro(topic, texto, dispositivo);
                 break;
             case ACTUACION_RELE_REMOTO:
                 dispositivo = procesarEstadoDispositivoTermometroTermostato(topic, texto, contexto);
-                if (listenerMensajesTermostato!= null) listenerMensajesTermostato.actuacionReleRemotoTermostato(topic, texto, dispositivo, TIPO_INFORME.RESULTADO_COMANDO);
-                if (listenerMensajesTermometro!= null) listenerMensajesTermometro.actuacionReleRemotoTermometro(topic, texto, dispositivo, TIPO_INFORME.RESULTADO_COMANDO);
+                if (listenerMensajesTermostato!= null) listenerMensajesTermostato.actuacionReleRemotoTermostato(topic, texto, dispositivo);
+                if (listenerMensajesTermometro!= null) listenerMensajesTermometro.actuacionReleRemotoTermometro(topic, texto, dispositivo);
                 break;
             case UPGRADE_FIRMWARE_FOTA:
                 break;
@@ -829,8 +886,7 @@ public class conexionMqtt implements Serializable, Parcelable {
                 break;
         }
     }
-
-    void procesarRespuestaComandoTermometroTermostato(String topic, MqttMessage message, Context contexto) {
+    private void procesarRespuestaComandoTermometroTermostato(String topic, MqttMessage message, Context contexto) {
 
         COMANDO_IOT idComando;
         dispositivoIotTermostato dispositivo;
@@ -846,11 +902,10 @@ public class conexionMqtt implements Serializable, Parcelable {
                 break;
             case ESTADO:
                 dispositivo = procesarEstadoDispositivoTermometroTermostato(topic, texto, contexto);
-                if (listenerMensajesTermostato!= null) listenerMensajesTermostato.estadoTermostato(topic, texto, dispositivo, TIPO_INFORME.RESULTADO_COMANDO);
-                if (listenerMensajesTermometro!= null) listenerMensajesTermometro.estadoTermometro(topic, texto, dispositivo, TIPO_INFORME.RESULTADO_COMANDO);
+                if (listenerMensajesTermostato!= null) listenerMensajesTermostato.estadoTermostato(topic, texto, dispositivo);
+                if (listenerMensajesTermometro!= null) listenerMensajesTermometro.estadoTermometro(topic, texto, dispositivo);
                 break;
             case CONSULTAR_PROGRAMACION:
-                //if (listenerMensajesTermostato != null) listenerMensajesTermostato.consultarProgramacionTermostato(topic, texto, idDispositivo, TIPO_INFORME.RESULTADO_COMANDO);
                 break;
             case NUEVA_PROGRAMACION:
                 break;
@@ -881,7 +936,14 @@ public class conexionMqtt implements Serializable, Parcelable {
     }
 
 
-
+    /**
+     * Esta función determina el tipo de mensaje que llega para el interruptor.
+     *
+     * @param topic
+     * @param message
+     * @param contexto
+     * @throws JSONException
+     */
     public void procesarMensajesInterruptor(String topic, MqttMessage message, Context contexto) throws JSONException {
 
         COMANDO_IOT idComando;
@@ -898,9 +960,6 @@ public class conexionMqtt implements Serializable, Parcelable {
         }
 
     }
-
-
-
     void procesarMensajeEspontaneoInterruptor(String topic, MqttMessage message, Context contexto) {
 
         ESPONTANEO_IOT tipoInformeEspontaneo;
@@ -915,15 +974,16 @@ public class conexionMqtt implements Serializable, Parcelable {
 
             case ARRANQUE_APLICACION:
                 dispositivo = procesarEstadoDispositivoInterruptor(topic, texto, contexto);
-                listenerMensajesInterruptor.estadoInterruptor(topic, texto, dispositivo, TIPO_INFORME.INFORME_ESPONTANEO);
+                listenerMensajesInterruptor.estadoAplicacion(topic, texto, dispositivo);
                  break;
             case ACTUACION_RELE_LOCAL:
+                ESTADO_RELE estadoRele = ESTADO_RELE.OFF;
                 dispositivo = procesarEstadoDispositivoInterruptor(topic, texto, contexto);
-                listenerMensajesInterruptor.actuacionReleLocalInterruptor(topic, texto, dispositivo, TIPO_INFORME.INFORME_ESPONTANEO);
+                listenerMensajesInterruptor.actuacionReleLocalInterruptor(topic, texto, dispositivo);
                 break;
             case ACTUACION_RELE_REMOTO:
                 dispositivo = procesarEstadoDispositivoInterruptor(topic, texto, contexto);
-                listenerMensajesInterruptor.actuacionReleRemotoInterruptor(topic, texto, dispositivo, TIPO_INFORME.INFORME_ESPONTANEO);
+                listenerMensajesInterruptor.actuacionReleRemotoInterruptor(topic, texto, dispositivo);
                 break;
 
             case UPGRADE_FIRMWARE_FOTA:
@@ -932,12 +992,17 @@ public class conexionMqtt implements Serializable, Parcelable {
                 break;
             default:
             case ESPONTANEO_DESCONOCIDO:
-                listenerMensajesInterruptor.errorMensaje(topic, message);
+                listenerMensajesInterruptor.errorMensajeInterruptor(topic, texto);
                 break;
         }
 
     }
-
+    public void setOnProcesarMensajeEspontaneoInterruptor(OnProcesarEspontaneosInterruptor listener) {
+        this.listenerEspontaneosInterruptor = listener;
+    }
+    public void setOnProcesarMensajeEspontaneoInterruptor(OnProcesarEspontaneosInterruptor listener, String idDispositivo) {
+        this.listenerEspontaneosInterruptor = listener;
+    }
     void procesarRespuestaComandoInterruptor(String topic, MqttMessage message, Context contexto) throws JSONException {
 
         COMANDO_IOT idComando;
@@ -956,48 +1021,62 @@ public class conexionMqtt implements Serializable, Parcelable {
                 break;
             case ACTUAR_RELE:
                 dispositivo = procesarEstadoDispositivoInterruptor(topic, texto, contexto);
-                listenerMensajesInterruptor.actuacionReleRemotoInterruptor(topic, texto, dispositivo, TIPO_INFORME.RESULTADO_COMANDO);
+                listenerMensajesInterruptor.actuacionReleRemotoInterruptor(topic, texto, dispositivo);
                 break;
             case ESTADO:
 
                 dispositivo = procesarEstadoDispositivoInterruptor(topic, texto, contexto);
-                listenerMensajesInterruptor.estadoInterruptor(topic, texto, dispositivo, TIPO_INFORME.RESULTADO_COMANDO);
+                listenerMensajesInterruptor.estadoAplicacion(topic, texto, dispositivo);
                 break;
             case CONSULTAR_PROGRAMACION:
                 programa = procesarConsultaPrograma(texto, contexto);
-                if (listenerMensajesInterruptor != null) listenerMensajesInterruptor.consultarProgramacionInterruptor(topic, texto, idDispositivo, programa, TIPO_INFORME.RESULTADO_COMANDO);
+                dispositivo = procesarEstadoDispositivoInterruptor(topic, texto, contexto);
+                dispositivo.setProgramasOnOff(programa);
+                if (listenerMensajesInterruptor != null) listenerMensajesInterruptor.consultarProgramacionInterruptor(topic, texto, dispositivo);
                 break;
             case NUEVA_PROGRAMACION:
-                if (listenerMensajesInterruptor != null) listenerMensajesInterruptor.nuevoProgramacionInterruptor(topic, texto, idDispositivo, TIPO_INFORME.RESULTADO_COMANDO);
+                if (listenerMensajesInterruptor != null) listenerMensajesInterruptor.nuevoProgramacionInterruptor(topic, texto, idDispositivo);
                 break;
             case ELIMINAR_PROGRAMACION:
                 int indice;
                 String idPrograma = dialogo.extraerDatoJsonString(texto, TEXTOS_DIALOGO_IOT.ID_PROGRAMA.getValorTextoJson());
-                if (listenerMensajesInterruptor != null) listenerMensajesInterruptor.eliminarProgramacionInterruptor(topic, texto, idDispositivo, idPrograma, TIPO_INFORME.RESULTADO_COMANDO);
+                if (listenerMensajesInterruptor != null) listenerMensajesInterruptor.eliminarProgramacionInterruptor(topic, texto, idDispositivo, idPrograma);
                 break;
             case MODIFICAR_PROGRAMACION:
-                if (listenerMensajesInterruptor != null) listenerMensajesInterruptor.modificarProgramacionInterruptor(topic, texto, idDispositivo, TIPO_INFORME.RESULTADO_COMANDO);
+                if (listenerMensajesInterruptor != null) listenerMensajesInterruptor.modificarProgramacionInterruptor(topic, texto, idDispositivo);
                 break;
             case MODIFICAR_APP:
+                dispositivo = null;
+                if (listenerMensajesInterruptor != null) listenerMensajesInterruptor.modificarAplicacionInterruptor(topic, texto, dispositivo);
                 break;
             case RESET:
+                if (listenerMensajesInterruptor != null) listenerMensajesInterruptor.resetInterruptor(topic, texto, idDispositivo);
                 break;
             case FACTORY_RESET:
+                if (listenerMensajesInterruptor != null) listenerMensajesInterruptor.factoryResetInterruptor(topic, texto, idDispositivo);
                 break;
             case MODIFY_CLOCK:
                 break;
             case UPGRADE_FIRMWARE:
+                OtaVersion otaVersion = null;
+                if (listenerMensajesInterruptor != null) listenerMensajesInterruptor.upgradeFirmwareInterruptor(topic, texto, idDispositivo, otaVersion);
                 break;
             case ESPONTANEO:
                 break;
             case VERSION_OTA:
-                break;
+                OtaVersion version = null;
+                if (listenerMensajesInterruptor != null) listenerMensajesInterruptor.recibirVersionOtaDisponibleInterruptor(topic, texto, idDispositivo, version);
             case ERROR_RESPUESTA:
+                if (listenerMensajesInterruptor != null) listenerMensajesInterruptor.errorMensajeInterruptor(topic, texto);
                 break;
         }
 
     }
+    public void setOnProcesarRespuestaComandoInterruptor(OnProcesarMensajesInterruptor listener) {
+        this.listenerMensajesInterruptor = listener;
+    }
 
+    /******************************************************************************************************************************/
 
     private dispositivoIotOnOff procesarEstadoDispositivoInterruptor(String topic, String texto, Context contexto) {
 

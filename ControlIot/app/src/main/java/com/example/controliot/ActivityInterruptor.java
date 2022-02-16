@@ -6,22 +6,28 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupMenu;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
-public class ActivityInterruptor extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
+import java.util.ArrayList;
+
+public class ActivityInterruptor extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
     private ImageView imageBotonOnOff;
     private ImageView imageEstadoBroker;
@@ -33,6 +39,8 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
     private final String TAG = "ActivityInterruptor";
     private Context contexto;
     private dialogoIot dialogo;
+    private ProgressBar barraProgreso;
+    private TextView textConsolaMensajes;
     private CountDownTimer temporizador;
 
     dispositivoIotOnOff dispositivo;
@@ -43,30 +51,35 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
     private void registrarControles() {
 
         imageBotonOnOff = (ImageView) findViewById(R.id.imageBotonOnOff);
+        imageBotonOnOff.setImageResource(R.drawable.switch_indeterminado);
+        imageBotonOnOff.setOnClickListener(this);
         imageEstadoBroker = (ImageView) findViewById(R.id.imageEstadoBroker);
         swipeSchedule = (SwipeRefreshLayout) findViewById(R.id.swipeSchedule);
         listViewSchedule = (ListView) findViewById(R.id.listViewSchedule);
         bottommenuInterruptor = (BottomNavigationView) findViewById(R.id.bottommenuInterruptor);
         bottommenuInterruptor.setOnNavigationItemSelectedListener(this);
+        barraProgreso = (ProgressBar) findViewById(R.id.barraProgreso);
+        barraProgreso.setVisibility(View.INVISIBLE);
+        textConsolaMensajes = (TextView) findViewById(R.id.textConsolaMensajes);
     }
 
 
     private void notificarBrokerConectado() {
 
-        imageEstadoBroker.setImageResource(R.drawable.bk_conectado);
+        pintarDispositivoDisponible();
         cnx.subscribirTopic(dispositivo.getTopicSubscripcion());
         dialogo.enviarComando(dispositivo,dialogo.comandoEstadoDispositivo());
-
-
+        dialogo.enviarComando(dispositivo, dialogo.escribirComandoConsultarProgramacion());
+        barraProgreso.setVisibility(View.VISIBLE);
     }
 
     private void notificarBrokerDesconectado() {
-        imageEstadoBroker.setImageResource(R.drawable.bk_no_conectado);
-
+        pintarDispositivoIndisponible();
     }
 
     private void notificarBrokerReintentoConexion() {
-        imageEstadoBroker.setImageResource(R.drawable.bk_no_conectado);
+        pintarDispositivoIndisponible();
+        barraProgreso.setVisibility(View.VISIBLE);
     }
 
 
@@ -84,11 +97,19 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
         if (bundle != null) {
             idDispositivo = (String) bundle.get(TEXTOS_DIALOGO_IOT.ID_DISPOSITIVO.getValorTextoJson());
         }
+        dialogo.setOnTemporizacionVencidaEnComando(new dialogoIot.onDialogoIot() {
+            @Override
+            public void temporizacionVencidaEnComando(String idDispositivo) {
+                Log.e(TAG, "Temporizacion vencida en comando");
+            }
+        });
+
+
 
         configuracionDispositivos listaDispositivos;
         listaDispositivos = new configuracionDispositivos();
         listaDispositivos.leerDispositivos(contexto);
-        disp =listaDispositivos.getDispositivoPorId(idDispositivo);
+        disp = listaDispositivos.getDispositivoPorId(idDispositivo);
         dispositivo = new dispositivoIotOnOff(disp);
         cnx = new conexionMqtt(getApplicationContext());
         cnx.setOnConexionMqtt(new conexionMqtt.OnConexionMqtt() {
@@ -123,6 +144,7 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
 
             @Override
             public void finTemporizacionReintento(long temporizador) {
+                notificarBrokerDesconectado();
 
             }
         });
@@ -133,6 +155,12 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
 
 
 
+
+    }
+
+    private void subscribirDispositivo() {
+
+        dispositivo.setTopicSubscripcion(dispositivo.getTopicSubscripcion());
     }
 
     @Override
@@ -141,12 +169,27 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
         setContentView(R.layout.activity_interruptor);
         registrarControles();
         ConectarAlBrokerMqtt();
-        procesarMensajes();
+        subscribirDispositivo();
+        procesarMensajesInterruptor();
+
         Log.i(TAG, "Clase inicializada");
     }
 
 
 
+    public void actualizarInterruptor(dispositivoIotOnOff dispositivo) {
+
+        pintarDispositivoDisponible();
+        if (dispositivo.getEstadoRele() == ESTADO_RELE.ON) {
+            imageBotonOnOff.setImageResource(R.drawable.switchon);
+            imageBotonOnOff.setTag(Integer.valueOf(R.drawable.switchon));
+        } else {
+            imageBotonOnOff.setImageResource(R.drawable.switchoff);
+            imageBotonOnOff.setTag(Integer.valueOf(R.drawable.switchoff));
+        }
+
+
+    }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -183,9 +226,166 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
         return false;
     }
 
-    private void procesarMensajes() {
+
+    private void procesarMensajesInterruptor (){
+
+        cnx.setOnProcesarMensajesInterruptor(new conexionMqtt.OnProcesarMensajesInterruptor() {
+            @Override
+            public void estadoAplicacion(String topic, String mensaje, dispositivoIotOnOff dispositivo) {
+                actualizarInterruptor(dispositivo);
+
+            }
+
+            @Override
+            public void actuacionReleLocalInterruptor(String topic, String message, dispositivoIotOnOff dispositivo) {
+                actualizarInterruptor(dispositivo);
+            }
+
+            @Override
+            public void actuacionReleRemotoInterruptor(String topic, String message, dispositivoIotOnOff dispositivo) {
+                actualizarInterruptor(dispositivo);
+
+            }
+
+            @Override
+            public void consultarProgramacionInterruptor(String topic, String texto, dispositivoIotOnOff dispositivo) {
+
+                Log.i(TAG, texto);
 
 
+            }
+
+            @Override
+            public void nuevoProgramacionInterruptor(String topic, String texto, String idDispositivo) {
+
+            }
+
+            @Override
+            public void eliminarProgramacionInterruptor(String topic, String texto, String idDispositivo, String programa) {
+
+            }
+
+            @Override
+            public void modificarProgramacionInterruptor(String topic, String texto, String idDispositivo) {
+
+            }
+
+            @Override
+            public void modificarAplicacionInterruptor(String topic, String texto, dispositivoIotOnOff dispositivo) {
+
+            }
+
+            @Override
+            public void resetInterruptor(String topic, String texto, String idDispositivo) {
+
+            }
+
+            @Override
+            public void factoryResetInterruptor(String topic, String texto, String idDispositivo) {
+
+            }
+
+            @Override
+            public void upgradeFirmwareInterruptor(String topic, String texto, String idDispositivo, OtaVersion otaVersion) {
+
+            }
+
+            @Override
+            public void recibirVersionOtaDisponibleInterruptor(String topic, String texto, String idDispositivo, OtaVersion version) {
+
+            }
+
+            @Override
+            public void errorMensajeInterruptor(String topic, String mensaje) {
+
+            }
+        });
+        cnx.setOnProcesarMensajeEspontaneoInterruptor(new conexionMqtt.OnProcesarEspontaneosInterruptor() {
+            @Override
+            public void arranqueAplicacionInterruptor(String topic, String texto, dispositivoIotOnOff dispositivo) {
+                actualizarInterruptor(dispositivo);
+            }
+
+            @Override
+            public void cambioProgramaInterruptor(String topic, String texto, String idDispositivo, String idPrograma) {
+
+            }
+
+            @Override
+            public void actuacionRelelocal(String topic, String texto, dispositivoIotOnOff dispositivo) {
+                actualizarInterruptor(dispositivo);
+
+            }
+
+            @Override
+            public void actuacionReleRemoto(String topic, String texto, dispositivoIotOnOff dispositivo) {
+                actualizarInterruptor(dispositivo);
+
+            }
+
+            @Override
+            public void upgradeFirwareFota(String topic, String texto, String idDispositivo, OtaVersion otaVersion) {
+
+            }
+
+            @Override
+            public void espontaneoDesconocido(String topic, String texto) {
+
+            }
+        });
+
+
+
+
+
+
+    }
+
+
+
+    @Override
+    public void onClick(View v) {
+
+        switch (v.getId()) {
+
+            case R.id.imageBotonOnOff:
+                pintarEsperandoComando();
+                if ((int) imageBotonOnOff.getTag() == R.drawable.switchoff) {
+                    dialogo.enviarComando(dispositivo, dialogo.comandoActuarRele(ESTADO_RELE.ON));
+                } else {
+                    dialogo.enviarComando(dispositivo, dialogo.comandoActuarRele(ESTADO_RELE.OFF));
+                }
+
+                break;
+
+            default:
+                throw new IllegalStateException("Unexpected value: " + v.getId());
+        }
+
+    }
+
+    private void pintarDispositivoDisponible() {
+        imageEstadoBroker.setImageResource(R.drawable.bk_conectado);
+        barraProgreso.setVisibility(View.INVISIBLE);
+        textConsolaMensajes.setText(dispositivo.getIdDispositivo() + " disponible");
+        textConsolaMensajes.setTextColor(Color.BLUE);
+        imageEstadoBroker.setImageResource(R.drawable.bk_conectado);
+
+    }
+
+    private void pintarEsperandoComando() {
+
+        barraProgreso.setVisibility(View.VISIBLE);
+        textConsolaMensajes.setText(R.string.esperando_respuesta);
+        textConsolaMensajes.setTextColor(Color.MAGENTA);
+    }
+
+    private void pintarDispositivoIndisponible() {
+        barraProgreso.setVisibility(View.INVISIBLE);
+        textConsolaMensajes.setTextColor(Color.RED);
+        textConsolaMensajes.setText(dispositivo.getIdDispositivo() + " no disponible");
+        imageBotonOnOff.setImageResource(R.drawable.switch_indeterminado);
+        imageEstadoBroker.setImageResource(R.drawable.bk_no_conectado);
 
     }
 

@@ -183,10 +183,10 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
         dialogo = new dialogoIot();
         dialogo.setOnTemporizacionVencidaEnComando(new dialogoIot.onDialogoIot() {
             @Override
-            public void temporizacionVencidaEnComando(dispositivoIot dispositivo) {
+            public void temporizacionVencidaEnComando(String idDispositivo) {
 
                 int i;
-                i = buscarElementoEnListaDispositivos(dispositivo.getIdDispositivo());
+                i = buscarElementoEnListaDispositivos(idDispositivo);
                 if (i >=0) {
                     if (lista.get(i).getEstadoConexion() == ESTADO_CONEXION_IOT.ESPERANDO_RESPUESTA) {
                         lista.get(i).setEstadoConexion(ESTADO_CONEXION_IOT.DESCONECTADO);
@@ -490,6 +490,11 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
 
     }
 
+    private void actualizarEstadoReleInterruptor(String idDispositivo) {
+
+
+    }
+
     private void actualizarEstadoTermometroTermostato(dispositivoIotTermostato dispositivo) {
         int i;
         if (dispositivo.getTipoDispositivo() == TIPO_DISPOSITIVO_IOT.TERMOMETRO) {
@@ -511,99 +516,129 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
     }
 
 
+
+
     private void procesarMensajes() {
+
 
         cnx.setOnProcesarMensajesInterruptor(new conexionMqtt.OnProcesarMensajesInterruptor() {
             @Override
-            public void estadoInterruptor(String topic, String mensaje, dispositivoIotOnOff dispositivo, TIPO_INFORME tipoInforme) {
+            public void estadoAplicacion(String topic, String mensaje, dispositivoIotOnOff dispositivo) {
                 actualizarEstadoInteruptor(dispositivo);
             }
 
             @Override
-            public void actuacionReleLocalInterruptor(String topic, String message, dispositivoIotOnOff dispositivo, TIPO_INFORME tipoInforme) {
+            public void actuacionReleLocalInterruptor(String topic, String message, dispositivoIotOnOff dispositivo) {
                 actualizarEstadoInteruptor(dispositivo);
+
             }
 
             @Override
-            public void actuacionReleRemotoInterruptor(String topic, String message, dispositivoIotOnOff dispositivo, TIPO_INFORME tipoInforme) {
+            public void actuacionReleRemotoInterruptor(String topic, String message, dispositivoIotOnOff dispositivo) {
                 actualizarEstadoInteruptor(dispositivo);
-            }
-
-            @Override
-            public void consultarProgramacionInterruptor(String topic, String texto, String idDispositivo, ArrayList<ProgramaDispositivoIotOnOff> programa, TIPO_INFORME tipoInforme) {
 
             }
 
             @Override
-            public void nuevoProgramacionInterruptor(String topic, String texto, String idDispositivo, TIPO_INFORME tipoInforme) {
+            public void consultarProgramacionInterruptor(String topic, String texto, dispositivoIotOnOff dispositivo) {
 
             }
 
             @Override
-            public void eliminarProgramacionInterruptor(String topic, String texto, String idDispositivo, String programa, TIPO_INFORME tipoInforme) {
+            public void nuevoProgramacionInterruptor(String topic, String texto, String idDispositivo) {
 
             }
 
             @Override
-            public void modificarProgramacionInterruptor(String topic, String texto, String idDispositivo, TIPO_INFORME tipoInforme) {
+            public void eliminarProgramacionInterruptor(String topic, String texto, String idDispositivo, String programa) {
 
             }
 
             @Override
-            public void errorMensaje(String topic, MqttMessage mensaje) {
+            public void modificarProgramacionInterruptor(String topic, String texto, String idDispositivo) {
+
+            }
+
+            @Override
+            public void modificarAplicacionInterruptor(String topic, String texto, dispositivoIotOnOff dispositivo) {
+
+            }
+
+            @Override
+            public void resetInterruptor(String topic, String texto, String idDispositivo) {
+
+            }
+
+            @Override
+            public void factoryResetInterruptor(String topic, String texto, String idDispositivo) {
+
+            }
+
+            @Override
+            public void upgradeFirmwareInterruptor(String topic, String texto, String idDispositivo, OtaVersion otaVersion) {
+
+            }
+
+            @Override
+            public void recibirVersionOtaDisponibleInterruptor(String topic, String texto, String idDispositivo, OtaVersion version) {
+
+            }
+
+            @Override
+            public void errorMensajeInterruptor(String topic, String mensaje) {
 
             }
         });
 
         cnx.setOnProcesarMensajesTermostato(new conexionMqtt.OnProcesarMensajesTermostato() {
             @Override
-            public void estadoTermostato(String topic, String message, dispositivoIotTermostato dispositivo, TIPO_INFORME tipoInforme) {
+            public void estadoTermostato(String topic, String message, dispositivoIotTermostato dispositivo) {
                 actualizarEstadoTermometroTermostato(dispositivo);
             }
 
             @Override
-            public void actuacionReleLocalTermostato(String topic, String message, dispositivoIotTermostato dispositivo, TIPO_INFORME tipoInforme) {
+            public void actuacionReleLocalTermostato(String topic, String message, dispositivoIotTermostato dispositivo) {
 
             }
 
             @Override
-            public void actuacionReleRemotoTermostato(String topic, String message, dispositivoIotTermostato dispositivo, TIPO_INFORME tipoInforme) {
+            public void actuacionReleRemotoTermostato(String topic, String message, dispositivoIotTermostato dispositivo) {
 
             }
 
             @Override
-            public void consultarProgramacionTermostato(String topic, String texto, String idDispositivo, ProgramaDispositivoIotTermostato programa, TIPO_INFORME tipoInforme) {
+            public void consultarProgramacionTermostato(String topic, String texto, String idDispositivo, ProgramaDispositivoIotTermostato programa) {
 
             }
 
             @Override
-            public void nuevoProgramacionTermostato(String topic, String texto, String idDispositivo, TIPO_INFORME tipoInforme) {
+            public void nuevoProgramacionTermostato(String topic, String texto, String idDispositivo) {
 
             }
 
             @Override
-            public void eliminarProgramacionTermostato(String topic, String texto, String idDispositivo, ProgramaDispositivoIotTermostato programa, TIPO_INFORME tipoInforme) {
+            public void eliminarProgramacionTermostato(String topic, String texto, String idDispositivo, ProgramaDispositivoIotTermostato programa) {
 
             }
 
             @Override
-            public void modificarProgramacionTermostato(String topic, String texto, String idDispositivo, ProgramaDispositivoIotTermostato programa, TIPO_INFORME tipoInforme) {
+            public void modificarProgramacionTermostato(String topic, String texto, String idDispositivo, ProgramaDispositivoIotTermostato programa) {
 
             }
         });
          cnx.setOnProcesarMensajesTermometro(new conexionMqtt.OnProcesarMensajesTermometro() {
             @Override
-            public void estadoTermometro(String topic, String message, dispositivoIotTermostato dispositivo, TIPO_INFORME tipoInforme) {
+            public void estadoTermometro(String topic, String message, dispositivoIotTermostato dispositivo) {
                 actualizarEstadoTermometroTermostato(dispositivo);
             }
 
             @Override
-            public void actuacionReleLocalTermometro(String topic, String message, dispositivoIotTermostato dispositivo, TIPO_INFORME tipoInforme) {
+            public void actuacionReleLocalTermometro(String topic, String message, dispositivoIotTermostato dispositivo) {
 
             }
 
             @Override
-            public void actuacionReleRemotoTermometro(String topic, String message, dispositivoIotTermostato dispositivo, TIPO_INFORME tipoInforme) {
+            public void actuacionReleRemotoTermometro(String topic, String message, dispositivoIotTermostato dispositivo) {
 
             }
         });

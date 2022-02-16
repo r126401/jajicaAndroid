@@ -427,7 +427,7 @@ public class dialogoIot implements Serializable {
 
     public interface onDialogoIot {
 
-        void temporizacionVencidaEnComando(dispositivoIot idDispositivo);
+        void temporizacionVencidaEnComando(String idDispositivo);
 
     }
 
@@ -1392,8 +1392,11 @@ public class dialogoIot implements Serializable {
         temporizador = new TemporizacionComandos(dispositivo);
         temporizador.setOnTemporizacionComandos(new TemporizacionComandos.onTemporizacionComandos() {
             @Override
-            public void temporizacionVencida(dispositivoIot dispositivo) {
-                listener.temporizacionVencidaEnComando(dispositivo);
+            public void temporizacionVencida(String  Idispositivo) {
+                if (listener != null) {
+                    listener.temporizacionVencidaEnComando(getIdDispositivo(dispositivo.getIdDispositivo()));
+                }
+
 
             }
         });

@@ -195,4 +195,9 @@ public class dispositivoIotOnOff extends dispositivoIot implements Serializable 
         return -1;
     }
 
+
+    public void setProgramasOnOff(ArrayList<ProgramaDispositivoIotOnOff> programas) {
+        this.programas = programas;
+    }
+
 }

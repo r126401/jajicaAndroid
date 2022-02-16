@@ -15,6 +15,7 @@
     <string name="cancelar">Cancelar</string>
     <string name="avisoEliminarDispositivo">La accion eliminara el dispositivo de la aplicacion.</string>
     <string name="eliminarDispositivo">Eliminar dispositivo</string>
+    <string name="esperando_respuesta">Esperando respuesta...</string>
 
     <string name="main_title">Home</string>
 

@@ -21,7 +21,8 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/poetsenone"
             android:text="Mensajes de la activity"
-            android:textSize="20dp" />
+            android:textSize="20dp"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
         <ImageView
@@ -43,7 +44,8 @@
             android:text="Lista de Programas"
             android:textAlignment="center"
             android:textSize="20dp"
-            app:layout_constraintBottom_toTopOf="@+id/swipeSchedule"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageBotonOnOff">
 
@@ -56,6 +58,20 @@
             app:layout_constraintBottom_toTopOf="@+id/textListaProgramas"
             app:layout_constraintEnd_toEndOf="parent"
             app:srcCompat="@drawable/bk_conectado" />
+
+        <ProgressBar
+            android:id="@+id/barraProgreso"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="89dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/imageBotonOnOff"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

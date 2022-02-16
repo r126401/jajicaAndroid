@@ -10,7 +10,7 @@ class TemporizacionComandos {
     private dispositivoIot idDispositivo;
 
     public interface onTemporizacionComandos {
-        void temporizacionVencida(dispositivoIot idDispositivo);
+        void temporizacionVencida(String idDispositivo);
 
     }
 
@@ -38,7 +38,7 @@ class TemporizacionComandos {
 
             @Override
             public void onFinish() {
-                listener.temporizacionVencida(idDispositivo);
+                listener.temporizacionVencida(idDispositivo.getIdDispositivo());
 
 
             }
