@@ -108,6 +108,7 @@ public class conexionMqtt implements Serializable, Parcelable {
     private OnProcesarEspontaneosInterruptor listenerEspontaneosInterruptor;
     private OnProcesarEspontaneosTermometro listenerEspontaneosTermometro;
     private OnProcesarEspontaneosTermostato listenerEspontaneosTermostato;
+    private OnProcesarVersionServidorOta listenerVersionOta;
 
     public interface OnConexionMqtt {
 
@@ -118,6 +119,14 @@ public class conexionMqtt implements Serializable, Parcelable {
         void notificacionIntermediaReintento(long intervalo);
         void finTemporizacionReintento(long temporizador);
 
+    }
+
+    public interface OnProcesarVersionServidorOta {
+        void lastVersion(OtaVersion otaVersion);
+    }
+
+    public void setOnProcesarVersionServidorOta(OnProcesarVersionServidorOta listener) {
+        this.listenerVersionOta = listener;
     }
 
 
@@ -178,7 +187,7 @@ public class conexionMqtt implements Serializable, Parcelable {
         void estadoAplicacion(String topic, String mensaje, dispositivoIotOnOff dispositivo );
         void actuacionReleLocalInterruptor(String topic, String message, dispositivoIotOnOff dispositivo);
         void actuacionReleRemotoInterruptor(String topic, String message, dispositivoIotOnOff dispositivo);
-        void consultarProgramacionInterruptor(String topic, String texto, dispositivoIotOnOff dispositivo);
+        void consultarProgramacionInterruptor(String topic, String texto, ArrayList<ProgramaDispositivoIotOnOff> programa);
         void nuevoProgramacionInterruptor(String topic, String texto, String idDispositivo);
         void eliminarProgramacionInterruptor(String topic, String texto, String idDispositivo, String programa);
         void modificarProgramacionInterruptor(String topic, String texto, String idDispositivo);
@@ -187,6 +196,7 @@ public class conexionMqtt implements Serializable, Parcelable {
         void factoryResetInterruptor(String topic, String texto, String idDispositivo);
         void upgradeFirmwareInterruptor(String topic, String texto, String idDispositivo, OtaVersion otaVersion);
         void recibirVersionOtaDisponibleInterruptor(String topic, String texto, String idDispositivo, OtaVersion version);
+        void informacionDispositivo(String topic, String texto);
         void errorMensajeInterruptor(String topic, String  mensaje);
 
     }
@@ -791,6 +801,21 @@ public class conexionMqtt implements Serializable, Parcelable {
 
     }
 
+    private void procesarMensajeServidorOta(String topic, MqttMessage message, Context contexto) {
+
+        OtaVersion version;
+        String texto;
+        version = new OtaVersion();
+        texto = new String(message.getPayload());
+        version.setDatosOtaDispositivo(texto);
+        if (listenerVersionOta != null) {
+            listenerVersionOta.lastVersion(version);
+        }
+
+
+
+    }
+
     /**
      * Determina a que tipo de dispositivo se refiere el mensaje
      * @param topic
@@ -821,6 +846,8 @@ public class conexionMqtt implements Serializable, Parcelable {
             case TERMOMETRO:
                 procesarMensajesTermometroTermostato(topic, message, contexto);
                 break;
+            case SERVIDOR_OTA:
+                procesarMensajeServidorOta(topic, message, contexto);
             default:
                 throw new IllegalStateException("Unexpected value: " + tipo);
         }
@@ -1018,6 +1045,7 @@ public class conexionMqtt implements Serializable, Parcelable {
         switch (idComando) {
 
             case CONSULTAR_CONF_APP:
+                if (listenerMensajesInterruptor != null) listenerMensajesInterruptor.informacionDispositivo(topic, texto);
                 break;
             case ACTUAR_RELE:
                 dispositivo = procesarEstadoDispositivoInterruptor(topic, texto, contexto);
@@ -1032,7 +1060,7 @@ public class conexionMqtt implements Serializable, Parcelable {
                 programa = procesarConsultaPrograma(texto, contexto);
                 dispositivo = procesarEstadoDispositivoInterruptor(topic, texto, contexto);
                 dispositivo.setProgramasOnOff(programa);
-                if (listenerMensajesInterruptor != null) listenerMensajesInterruptor.consultarProgramacionInterruptor(topic, texto, dispositivo);
+                if (listenerMensajesInterruptor != null) listenerMensajesInterruptor.consultarProgramacionInterruptor(topic, texto, programa);
                 break;
             case NUEVA_PROGRAMACION:
                 if (listenerMensajesInterruptor != null) listenerMensajesInterruptor.nuevoProgramacionInterruptor(topic, texto, idDispositivo);
@@ -1102,6 +1130,7 @@ public class conexionMqtt implements Serializable, Parcelable {
         dispIotOnOff.setEstadoRele(estado);
         dispIotOnOff.setEstadoConexion(ESTADO_CONEXION_IOT.CONECTADO);
         dispIotOnOff.setEstadoDispositivo(dialogo.getEstadoDispositivo(texto));
+        dispIotOnOff.setVersionOta(dialogo.getOtaVersion(texto));
 
 
         return dispIotOnOff;

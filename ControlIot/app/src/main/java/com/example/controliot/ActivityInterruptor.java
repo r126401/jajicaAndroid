@@ -1,6 +1,7 @@
 package com.example.controliot;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -14,6 +15,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupMenu;
@@ -24,11 +26,15 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class ActivityInterruptor extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
+public class ActivityInterruptor extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
 
+    private ImageView imageUpgrade;
     private ImageView imageBotonOnOff;
     private ImageView imageEstadoBroker;
     private SwipeRefreshLayout swipeSchedule;
@@ -42,8 +48,13 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
     private ProgressBar barraProgreso;
     private TextView textConsolaMensajes;
     private CountDownTimer temporizador;
+    private dispositivoIotOnOff dispositivo;
+    private listaProgramasInterruptorAdapter programasInterruptorAdapter;
+    private final String topicPeticionOta = "OtaIotOnOff";
+    private final String topicRespuestaOta = "newVersionOtaIotOnOff";
+    private boolean versionComprobada = false;
+    private boolean nuevaVersionDisponible = false;
 
-    dispositivoIotOnOff dispositivo;
 
 
 
@@ -55,12 +66,15 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
         imageBotonOnOff.setOnClickListener(this);
         imageEstadoBroker = (ImageView) findViewById(R.id.imageEstadoBroker);
         swipeSchedule = (SwipeRefreshLayout) findViewById(R.id.swipeSchedule);
+        swipeSchedule.setOnRefreshListener(this);
         listViewSchedule = (ListView) findViewById(R.id.listViewSchedule);
         bottommenuInterruptor = (BottomNavigationView) findViewById(R.id.bottommenuInterruptor);
         bottommenuInterruptor.setOnNavigationItemSelectedListener(this);
         barraProgreso = (ProgressBar) findViewById(R.id.barraProgreso);
         barraProgreso.setVisibility(View.INVISIBLE);
         textConsolaMensajes = (TextView) findViewById(R.id.textConsolaMensajes);
+        imageUpgrade = (ImageView) findViewById(R.id.imageUpgrade);
+        imageUpgrade.setVisibility(View.INVISIBLE);
     }
 
 
@@ -69,7 +83,8 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
         pintarDispositivoDisponible();
         cnx.subscribirTopic(dispositivo.getTopicSubscripcion());
         dialogo.enviarComando(dispositivo,dialogo.comandoEstadoDispositivo());
-        dialogo.enviarComando(dispositivo, dialogo.escribirComandoConsultarProgramacion());
+        actualizarProgramacion();
+
         barraProgreso.setVisibility(View.VISIBLE);
     }
 
@@ -163,6 +178,12 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
         dispositivo.setTopicSubscripcion(dispositivo.getTopicSubscripcion());
     }
 
+    private void subscribirTopicOta() {
+        cnx.subscribirTopic(topicRespuestaOta);
+    }
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -187,6 +208,13 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
             imageBotonOnOff.setImageResource(R.drawable.switchoff);
             imageBotonOnOff.setTag(Integer.valueOf(R.drawable.switchoff));
         }
+        this.dispositivo = dispositivo;
+
+        if (versionComprobada == false) {
+            consultarNuevaVersionOta();
+        }
+
+
 
 
     }
@@ -198,18 +226,13 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
         switch (menuItem.getItemId()) {
 
             case (R.id.itemInfo):
+                dialogo.enviarComando(dispositivo, dialogo.escribirComandoInfoApp());
                 break;
             case(R.id.itemConfiguracion):
                 break;
             case(R.id.itemNuevoProgramaInterruptor):
                 break;
             case(R.id.itemmasInterruptor):
-                /*
-                PopupMenu menumas = new PopupMenu(ActivityInterruptor.this, bottommenuInterruptor );
-                MenuInflater inflater = menumas.getMenuInflater();
-                inflater.inflate(R.menu.menu_mas_opciones, menumas.getMenu());
-                menumas.show();
-                */
                  PopupMenu menumas = new PopupMenu(ActivityInterruptor.this, bottommenuInterruptor);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                     menumas.setForceShowIcon(true);
@@ -248,20 +271,23 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
             }
 
             @Override
-            public void consultarProgramacionInterruptor(String topic, String texto, dispositivoIotOnOff dispositivo) {
+            public void consultarProgramacionInterruptor(String topic, String texto, ArrayList<ProgramaDispositivoIotOnOff> programa) {
 
                 Log.i(TAG, texto);
+                procesarProgramasRecibidos(programa);
 
 
             }
 
             @Override
             public void nuevoProgramacionInterruptor(String topic, String texto, String idDispositivo) {
+                Log.i(TAG, "Se recibe la informacion de la aplicacion");
 
             }
 
             @Override
             public void eliminarProgramacionInterruptor(String topic, String texto, String idDispositivo, String programa) {
+                procesarEliminarPrograma(programa);
 
             }
 
@@ -293,6 +319,14 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
             @Override
             public void recibirVersionOtaDisponibleInterruptor(String topic, String texto, String idDispositivo, OtaVersion version) {
 
+                Log.i(TAG, "Recibiendo version");
+            }
+
+            @Override
+            public void informacionDispositivo(String topic, String texto) {
+                Log.i(TAG, "recibida informacion");
+                procesarInformacionDispositivo(texto);
+
             }
 
             @Override
@@ -300,6 +334,7 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
 
             }
         });
+
         cnx.setOnProcesarMensajeEspontaneoInterruptor(new conexionMqtt.OnProcesarEspontaneosInterruptor() {
             @Override
             public void arranqueAplicacionInterruptor(String topic, String texto, dispositivoIotOnOff dispositivo) {
@@ -334,11 +369,24 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
             }
         });
 
+        cnx.setOnProcesarVersionServidorOta(new conexionMqtt.OnProcesarVersionServidorOta() {
+            @Override
+            public void lastVersion(OtaVersion otaVersion) {
+                long versionDispositivo;
+                long versionDisponible;
+                dispositivo.setDatosOta(otaVersion);
+                versionDispositivo = Long.valueOf(dispositivo.getOtaVersion());
+                versionDisponible =  Long.valueOf(dispositivo.getDatosOta().getOtaVersionAvailable());
+                if (versionDisponible > versionDispositivo) {
+                    nuevaVersionDisponible = true;
+                    imageUpgrade.setVisibility(View.VISIBLE);
+                } else {
+                    imageUpgrade.setVisibility(View.INVISIBLE);
+                }
 
 
-
-
-
+            }
+        });
     }
 
 
@@ -386,6 +434,100 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
         textConsolaMensajes.setText(dispositivo.getIdDispositivo() + " no disponible");
         imageBotonOnOff.setImageResource(R.drawable.switch_indeterminado);
         imageEstadoBroker.setImageResource(R.drawable.bk_no_conectado);
+
+    }
+
+    private void procesarProgramasRecibidos(ArrayList<ProgramaDispositivoIotOnOff> programas) {
+
+        if (programasInterruptorAdapter == null) {
+            programasInterruptorAdapter = new listaProgramasInterruptorAdapter(this, R.layout.vista_programas_interruptor, programas, cnx, dispositivo);
+        }
+        listViewSchedule.setAdapter(programasInterruptorAdapter);
+        programasInterruptorAdapter.notifyDataSetChanged();
+
+    }
+
+
+    @Override
+    public void onRefresh() {
+
+        programasInterruptorAdapter.clear();
+        programasInterruptorAdapter = null;
+        actualizarProgramacion();
+        swipeSchedule.setRefreshing(false);
+    }
+
+    private void actualizarProgramacion() {
+        dialogo.enviarComando(dispositivo, dialogo.escribirComandoConsultarProgramacion());
+
+    }
+
+    private void consultarNuevaVersionOta() {
+
+        subscribirTopicOta();
+        cnx.publicarTopic(topicPeticionOta, dialogo.escribirComandoVersionOtaDisponible(TIPO_DISPOSITIVO_IOT.INTERRUPTOR));
+        versionComprobada = true;
+    }
+
+    private void notificarNuevaVersionDisponible() {
+
+    }
+
+    private void procesarInformacionDispositivo(String texto) {
+
+        JSONObject info;
+        ArrayList<String> lista;
+        ListView listaInfo;
+        String fila;
+        int i;
+        JSONArray etiquetas;
+        String nombre;
+        String valor;
+
+
+        lista = new ArrayList<String>();
+        try {
+            info = new JSONObject(texto);
+            etiquetas = info.names();
+            fila = "Nombre: " + dispositivo.getNombreDispositivo();
+            lista.add(fila);
+            for (i=0;i<etiquetas.length();i++) {
+                nombre = etiquetas.getString(i);
+                valor = String.valueOf(info.getString(nombre));
+                fila = nombre + ": " + valor;
+                lista.add(fila);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        AlertDialog.Builder caja;
+        caja = new AlertDialog.Builder(this);
+
+        caja.setTitle("Informacion del dispositivo");
+        caja.setIcon(R.drawable.switchon);
+        View contenedor = getLayoutInflater().inflate(R.layout.info_dispositivo_interruptor, null);
+        caja.setView(contenedor);
+        listaInfo = (ListView) contenedor.findViewById(R.id.listaInfoDispositivo);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, lista);
+        listaInfo.setAdapter(adapter);
+        caja.show();
+
+
+
+    }
+
+    private void procesarEliminarPrograma(String idPrograma) {
+
+        int i;
+
+        for (i=0;i<programasInterruptorAdapter.listaProgramas.size();i++) {
+            if (programasInterruptorAdapter.listaProgramas.get(i).getIdProgramacion().equals(idPrograma)) {
+                programasInterruptorAdapter.listaProgramas.remove(i);
+                break;
+            }
+        }
+        dispositivo.eliminarPrograma(idPrograma);
+        programasInterruptorAdapter.notifyDataSetChanged();
 
     }
 

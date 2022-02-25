@@ -29,7 +29,6 @@ import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -211,7 +210,7 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
         listViewListaDispositivos.setOnItemClickListener(this);
         navigationMenuPrincipal = (BottomNavigationView) findViewById(R.id.navigationMenuPrincipal);
         navigationMenuPrincipal.setOnNavigationItemSelectedListener(this);
-        progressEspera = (ProgressBar)  findViewById(R.id.progressEspera);
+        progressEspera = (ProgressBar)  findViewById(R.id.barraProgreso);
 
     }
 
@@ -520,7 +519,6 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
 
     private void procesarMensajes() {
 
-
         cnx.setOnProcesarMensajesInterruptor(new conexionMqtt.OnProcesarMensajesInterruptor() {
             @Override
             public void estadoAplicacion(String topic, String mensaje, dispositivoIotOnOff dispositivo) {
@@ -530,17 +528,15 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
             @Override
             public void actuacionReleLocalInterruptor(String topic, String message, dispositivoIotOnOff dispositivo) {
                 actualizarEstadoInteruptor(dispositivo);
-
             }
 
             @Override
             public void actuacionReleRemotoInterruptor(String topic, String message, dispositivoIotOnOff dispositivo) {
                 actualizarEstadoInteruptor(dispositivo);
-
             }
 
             @Override
-            public void consultarProgramacionInterruptor(String topic, String texto, dispositivoIotOnOff dispositivo) {
+            public void consultarProgramacionInterruptor(String topic, String texto, ArrayList<ProgramaDispositivoIotOnOff> programa) {
 
             }
 
@@ -585,11 +581,15 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
             }
 
             @Override
+            public void informacionDispositivo(String topic, String texto) {
+
+            }
+
+            @Override
             public void errorMensajeInterruptor(String topic, String mensaje) {
 
             }
         });
-
         cnx.setOnProcesarMensajesTermostato(new conexionMqtt.OnProcesarMensajesTermostato() {
             @Override
             public void estadoTermostato(String topic, String message, dispositivoIotTermostato dispositivo) {
@@ -626,7 +626,7 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
 
             }
         });
-         cnx.setOnProcesarMensajesTermometro(new conexionMqtt.OnProcesarMensajesTermometro() {
+        cnx.setOnProcesarMensajesTermometro(new conexionMqtt.OnProcesarMensajesTermometro() {
             @Override
             public void estadoTermometro(String topic, String message, dispositivoIotTermostato dispositivo) {
                 actualizarEstadoTermometroTermostato(dispositivo);

@@ -16,6 +16,14 @@
     <string name="avisoEliminarDispositivo">La accion eliminara el dispositivo de la aplicacion.</string>
     <string name="eliminarDispositivo">Eliminar dispositivo</string>
     <string name="esperando_respuesta">Esperando respuesta...</string>
+    <string name="lunes">Lunes</string>
+    <string name="martes">Martes</string>
+    <string name="miercoles">Miércoles</string>
+    <string name="jueves">Jueves</string>
+    <string name="viernes">Viernes</string>
+    <string name="sabado">Sábado</string>
+    <string name="domingo">Domingo</string>
+    <string name="sin_repeticion">Solamente una vez</string>
 
     <string name="main_title">Home</string>
 

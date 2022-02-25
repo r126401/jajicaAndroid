@@ -1386,7 +1386,7 @@ public class dialogoIot implements Serializable {
 
 
 
-    public void enviarComando(dispositivoIot dispositivo, String comandoJson) {
+    public boolean enviarComando(dispositivoIot dispositivo, String comandoJson) {
 
         TemporizacionComandos temporizador;
         temporizador = new TemporizacionComandos(dispositivo);
@@ -1405,7 +1405,9 @@ public class dialogoIot implements Serializable {
         if (cnx!=null) {
             cnx.publicarTopic( dispositivo.getTopicPublicacion(), comandoJson);
             dispositivo.setEstadoConexion(ESTADO_CONEXION_IOT.ESPERANDO_RESPUESTA);
+            return false;
         }
+        return true;
 
 
     }

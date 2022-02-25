@@ -7,12 +7,15 @@
         <entry key="app/src/main/res/drawable/fondo_termostato.xml" value="0.303" />
         <entry key="app/src/main/res/layout/activity_acivity_instalar_dispositivo.xml" value="0.34739583333333335" />
         <entry key="app/src/main/res/layout/activity_esptouch.xml" value="0.34739583333333335" />
-        <entry key="app/src/main/res/layout/activity_interruptor.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/activity_interruptor.xml" value="0.33" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.36236391912908245" />
         <entry key="app/src/main/res/layout/activity_nuevo_dispositivo.xml" value="0.33" />
         <entry key="app/src/main/res/layout/activity_principal.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/info_dispositivo_interruptor.xml" value="0.34739583333333335" />
+        <entry key="app/src/main/res/layout/prueba.xml" value="0.22" />
         <entry key="app/src/main/res/layout/vista_dispositivo_desconocido.xml" value="0.34739583333333335" />
-        <entry key="app/src/main/res/layout/vista_interruptor.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/vista_interruptor.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/vista_programas_interruptor.xml" value="0.33" />
         <entry key="app/src/main/res/layout/vista_termometro.xml" value="0.34739583333333335" />
         <entry key="app/src/main/res/layout/vista_termostato.xml" value="0.25" />
         <entry key="app/src/main/res/menu/menu_interruptor.xml" value="0.34739583333333335" />

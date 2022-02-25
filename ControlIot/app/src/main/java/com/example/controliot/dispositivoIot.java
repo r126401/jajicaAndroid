@@ -12,7 +12,8 @@ enum TIPO_DISPOSITIVO_IOT implements Serializable{
     DESCONOCIDO(-1),
     INTERRUPTOR(0),
     TERMOMETRO(1),
-    CRONOTERMOSTATO(2);
+    CRONOTERMOSTATO(2),
+    SERVIDOR_OTA (100);
 
     private int tipo;
 

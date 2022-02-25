@@ -15,6 +15,15 @@
     <string name="avisoEliminarDispositivo">The action will delete device.</string>
     <string name="eliminarDispositivo">Delete device</string>
     <string name="esperando_respuesta">Waiting</string>
+    <string name="lunes">Monday</string>
+    <string name="martes">Tuesday</string>
+    <string name="miercoles">wednesday</string>
+    <string name="jueves">Thursday</string>
+    <string name="viernes">Friday</string>
+    <string name="sabado">Saturday</string>
+    <string name="domingo">Sunday</string>
+    <string name="sin_repeticion">No repeat</string>
+
 
     <string name="main_title">Home</string>
 
