@@ -2,6 +2,8 @@ package com.example.controliot;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +12,10 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SwitchCompat;
@@ -34,18 +40,24 @@ public class listaProgramasInterruptorAdapter extends ArrayAdapter<ProgramaDispo
         this.listaProgramas = listaProgramas;
         this.cnx = cnx;
         this.dispositivo = dispositivo;
+        dispositivo.programas = listaProgramas;
 
     }
+
+    private void eliminarPrograma(ProgramaDispositivoIotOnOff programa) {
+        dialogoIot dialogo;
+        dialogo = new dialogoIot(cnx);
+        dialogo.enviarComando(dispositivo, dialogo.comandoEliminarProgramacion(programa.idProgramacion));
+    }
+
 
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
+
         ListaProgramasInterruptorAdapterHolder holder;
-        int i;
         ProgramaDispositivoIotOnOff programa = listaProgramas.get(position);
-
-
         if (convertView == null) {
             LayoutInflater inflater = ((Activity) contexto).getLayoutInflater();
             convertView = inflater.inflate(idLayout, parent, false);
@@ -62,9 +74,8 @@ public class listaProgramasInterruptorAdapter extends ArrayAdapter<ProgramaDispo
             holder.imageBorrarPrograma.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    dialogoIot dialogo;
-                    dialogo = new dialogoIot(cnx);
-                    dialogo.enviarComando(dispositivo, dialogo.comandoEliminarProgramacion(programa.idProgramacion));
+                    eliminarPrograma(listaProgramas.get(position));
+
 
                 }
             });
@@ -72,12 +83,14 @@ public class listaProgramasInterruptorAdapter extends ArrayAdapter<ProgramaDispo
             holder.switchProgramaActivo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Log.i(getClass().toString(), "hola");
 
                 }
             });
             holder.switchProgramaActivo.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    Log.i(getClass().toString(), "hola");
 
                 }
             });
@@ -108,12 +121,9 @@ public class listaProgramasInterruptorAdapter extends ArrayAdapter<ProgramaDispo
         }
 
 
-
-
-
-
-
         return convertView;
+
+
     }
 
     private void presentarProgramaDiario(ListaProgramasInterruptorAdapterHolder holder, ProgramaDispositivoIotOnOff programa) {
@@ -189,5 +199,6 @@ public class listaProgramasInterruptorAdapter extends ArrayAdapter<ProgramaDispo
         TextView textunidadTiempo;
 
     }
+
 
 }

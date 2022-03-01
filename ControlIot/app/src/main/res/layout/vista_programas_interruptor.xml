@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
+    android:layout_height="wrap_content"
     android:orientation="horizontal">
 
 
@@ -14,8 +14,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.262"
-        app:srcCompat="@drawable/switchon" />
+        app:srcCompat="@drawable/switchon"/>
 
     <ImageView
         android:id="@+id/imageBorrarPrograma"
@@ -26,7 +25,8 @@
         app:layout_constraintEnd_toStartOf="@+id/switchProgramaActivo"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.45"
-        app:srcCompat="@drawable/ic_delete" />
+        app:srcCompat="@drawable/ic_delete"
+        android:focusable="false"/>
 
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/switchProgramaActivo"
@@ -34,7 +34,8 @@
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        android:focusable="false">
 
     </androidx.appcompat.widget.SwitchCompat>
 
@@ -60,7 +61,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"/>
 
     <TextView
         android:id="@+id/textDuracionPrograma"
@@ -68,9 +69,9 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/poetsenone"
         android:text="12:00"
-        android:textSize="20dp"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@+id/textDurante"
-        app:layout_constraintStart_toEndOf="@+id/textDurante" />
+        app:layout_constraintStart_toEndOf="@+id/textDurante"/>
 
     <TextView
         android:id="@+id/textUnidadTiempo"
@@ -81,7 +82,7 @@
 
         app:layout_constraintBottom_toBottomOf="@+id/textDurante"
         app:layout_constraintStart_toEndOf="@+id/textDuracionPrograma"
-        app:layout_constraintTop_toTopOf="@+id/textDurante" />
+        app:layout_constraintTop_toTopOf="@+id/textDurante"/>
 
     <TextView
         android:id="@+id/textDurante"
@@ -91,7 +92,7 @@
         android:text=" durante "
         android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="@+id/textHoraPrograma"
-        app:layout_constraintStart_toEndOf="@+id/textHoraPrograma" />
+        app:layout_constraintStart_toEndOf="@+id/textHoraPrograma"/>
 
     <ImageView
         android:id="@+id/imageProgramaActivado"
@@ -100,5 +101,5 @@
         app:layout_constraintBottom_toTopOf="@+id/switchProgramaActivo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/led" />
+        app:srcCompat="@drawable/led"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

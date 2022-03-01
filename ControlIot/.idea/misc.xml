@@ -5,12 +5,18 @@
       <map>
         <entry key="../../../../layout/custom_preview.xml" value="0.14268585131894485" />
         <entry key="app/src/main/res/drawable/fondo_termostato.xml" value="0.303" />
+        <entry key="app/src/main/res/drawable/texto_redondeado.xml" value="0.2035" />
+        <entry key="app/src/main/res/drawable/texto_redondeado_desactivado.xml" value="0.2355" />
+        <entry key="app/src/main/res/drawable/track.xml" value="0.348" />
         <entry key="app/src/main/res/layout/activity_acivity_instalar_dispositivo.xml" value="0.34739583333333335" />
         <entry key="app/src/main/res/layout/activity_esptouch.xml" value="0.34739583333333335" />
         <entry key="app/src/main/res/layout/activity_interruptor.xml" value="0.33" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.36236391912908245" />
         <entry key="app/src/main/res/layout/activity_nuevo_dispositivo.xml" value="0.33" />
         <entry key="app/src/main/res/layout/activity_principal.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/activity_programa_interruptor.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/dias_semana.xml" value="0.34739583333333335" />
+        <entry key="app/src/main/res/layout/duracion_fecha.xml" value="0.34739583333333335" />
         <entry key="app/src/main/res/layout/info_dispositivo_interruptor.xml" value="0.34739583333333335" />
         <entry key="app/src/main/res/layout/prueba.xml" value="0.22" />
         <entry key="app/src/main/res/layout/vista_dispositivo_desconocido.xml" value="0.34739583333333335" />

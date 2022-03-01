@@ -24,7 +24,6 @@
     <string name="sabado">Sábado</string>
     <string name="domingo">Domingo</string>
     <string name="sin_repeticion">Solamente una vez</string>
-
     <string name="main_title">Home</string>
 
     <string name="esptouch_message_permission">APP require Location permission to get Wi-Fi information. \nClick to request permission</string>

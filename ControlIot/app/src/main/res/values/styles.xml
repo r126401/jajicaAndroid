@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="diasDeLaSemanaProgramador">
+
+        <item name="android:gravity">center</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:background">@drawable/texto_redondeado</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:layout_width">40sp</item>
+        <item name="android:layout_height">40sp</item>
+        <item name="android:layout_marginEnd">10dp</item>
+
+
+    </style>
+
+
+    <style name="numeros">
+
+        <item name="android:gravity">center</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:background">@drawable/texto_redondeado</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:layout_width">40sp</item>
+        <item name="android:layout_height">40sp</item>
+        <item name="android:layout_marginEnd">10dp</item>
+
+
+
+
+    </style>
+
+</resources>

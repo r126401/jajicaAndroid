@@ -1,5 +1,9 @@
 package com.example.controliot;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,6 +19,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -30,9 +35,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class ActivityInterruptor extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
+public class ActivityInterruptor extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener, Serializable {
 
     private ImageView imageUpgrade;
     private ImageView imageBotonOnOff;
@@ -75,7 +81,26 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
         textConsolaMensajes = (TextView) findViewById(R.id.textConsolaMensajes);
         imageUpgrade = (ImageView) findViewById(R.id.imageUpgrade);
         imageUpgrade.setVisibility(View.INVISIBLE);
+        listViewSchedule.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.i(TAG, "hola");
+                lanzarActivityProgramaInterruptor(position, COMANDO_IOT.MODIFICAR_PROGRAMACION);
+            }
+        });
+        listViewSchedule.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Log.i(TAG, "hola");
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                Log.i(TAG, "hola");
+            }
+        });
     }
+
 
 
     private void notificarBrokerConectado() {
@@ -282,6 +307,7 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
             @Override
             public void nuevoProgramacionInterruptor(String topic, String texto, String idDispositivo) {
                 Log.i(TAG, "Se recibe la informacion de la aplicacion");
+                dialogo.enviarComando(dispositivo, dialogo.escribirComandoConsultarProgramacion());
 
             }
 
@@ -439,9 +465,7 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
 
     private void procesarProgramasRecibidos(ArrayList<ProgramaDispositivoIotOnOff> programas) {
 
-        if (programasInterruptorAdapter == null) {
-            programasInterruptorAdapter = new listaProgramasInterruptorAdapter(this, R.layout.vista_programas_interruptor, programas, cnx, dispositivo);
-        }
+        programasInterruptorAdapter = new listaProgramasInterruptorAdapter(this, R.layout.vista_programas_interruptor, programas, cnx, dispositivo);
         listViewSchedule.setAdapter(programasInterruptorAdapter);
         programasInterruptorAdapter.notifyDataSetChanged();
 
@@ -451,9 +475,15 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
     @Override
     public void onRefresh() {
 
-        programasInterruptorAdapter.clear();
-        programasInterruptorAdapter = null;
-        actualizarProgramacion();
+        if (programasInterruptorAdapter != null) {
+            if (programasInterruptorAdapter.listaProgramas != null) {
+                programasInterruptorAdapter.clear();
+                programasInterruptorAdapter = null;
+                actualizarProgramacion();
+            }
+
+        }
+
         swipeSchedule.setRefreshing(false);
     }
 
@@ -517,19 +547,46 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
     }
 
     private void procesarEliminarPrograma(String idPrograma) {
-
-        int i;
-
-        for (i=0;i<programasInterruptorAdapter.listaProgramas.size();i++) {
-            if (programasInterruptorAdapter.listaProgramas.get(i).getIdProgramacion().equals(idPrograma)) {
-                programasInterruptorAdapter.listaProgramas.remove(i);
-                break;
-            }
-        }
         dispositivo.eliminarPrograma(idPrograma);
         programasInterruptorAdapter.notifyDataSetChanged();
-
     }
+
+    //Rutina para lanzar una activityForResult
+    ActivityResultLauncher<Intent> lanzadorActivityProgramaInterruptor = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+
+                    if (result.getResultCode() == RESULT_OK) {
+                        String dato = result.getData().getDataString();
+                        Log.i(getLocalClassName(), "Recibimos datos: " + dato);
+                        //Introducimos loa logica para modificar la programacion.
+
+                    } else {
+                        Log.w(getLocalClassName(), "No se puede modificar la programacion");
+                    }
+                }
+            }
+    );
+
+    private void lanzarActivityProgramaInterruptor(int posicion, COMANDO_IOT idComando) {
+
+        ProgramaDispositivoIotOnOff programa;
+        programa = programasInterruptorAdapter.listaProgramas.get(posicion);
+        Intent lanzador = new Intent(ActivityInterruptor.this, ActivityProgramaInterruptor.class);
+        lanzador.putExtra(TEXTOS_DIALOGO_IOT.TIPO_DISPOSITIVO.getValorTextoJson(), TIPO_DISPOSITIVO_IOT.INTERRUPTOR);
+        //lanzador.putExtra(TEXTOS_DIALOGO_IOT.ID_DISPOSITIVO.getValorTextoJson(), dispositivo.idDispositivo);
+        lanzador.putExtra(TEXTOS_DIALOGO_IOT.COMANDO.getValorTextoJson(), idComando);
+        if (idComando == COMANDO_IOT.MODIFICAR_PROGRAMACION) {
+
+            lanzador.putExtra(TEXTOS_DIALOGO_IOT.ID_PROGRAMA.getValorTextoJson(), programa);
+        }
+
+
+        lanzadorActivityProgramaInterruptor.launch(lanzador);
+    }
+
 
 
 }

@@ -75,6 +75,8 @@ public class ListaDispositivosAdapter extends ArrayAdapter<dispositivoIot> {
             holder.imageEliminarSwitch = (ImageView) fila.findViewById(R.id.imageEliminarSwitch);
             holder.imageEliminarTermostato = (ImageView) fila.findViewById(R.id.imageEliminarTermostato);
 
+
+
             holder.imageEliminarTermostato.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

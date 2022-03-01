@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ActivityProgramaInterruptor">
+
+
+    <TextView
+        android:id="@+id/textRepetir"
+        android:layout_width="301dp"
+        android:layout_height="32dp"
+        android:fontFamily="@font/poetsenone"
+        android:text="Repetir"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/imageRepetir"
+        app:layout_constraintStart_toEndOf="@+id/imageRepetir"
+        app:layout_constraintTop_toTopOf="@+id/imageRepetir" />
+
+
+    <ImageView
+        android:id="@+id/imageRepetir"
+        android:layout_width="wrap_content"
+        android:layout_height="32sp"
+        android:layout_gravity="center"
+        android:layout_marginTop="84dp"
+        android:src="@drawable/ic_repetir"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </ImageView>
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/switchRepetir"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checked="true"
+        android:textOff="NO"
+        android:textOn="SI"
+        android:thumb="@drawable/thumb"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/textRepetir"
+        app:layout_constraintTop_toTopOf="@+id/imageRepetir"
+        app:showText="true"
+        app:track="@drawable/track">
+
+    </androidx.appcompat.widget.SwitchCompat>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/panelRepetir"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageRepetir">
+
+        <TextView
+            android:id="@+id/textoLunes"
+            style="@style/diasDeLaSemanaProgramador"
+            android:layout_marginStart="16dp"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:text="L"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/textoMartes"
+            style="@style/diasDeLaSemanaProgramador"
+            android:layout_marginStart="10sp"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:text="M"
+            app:layout_constraintStart_toEndOf="@+id/textoLunes"
+            app:layout_constraintTop_toTopOf="@+id/textoLunes">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/textoMiercoles"
+            style="@style/diasDeLaSemanaProgramador"
+            android:layout_marginStart="10sp"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:text="X"
+            app:layout_constraintStart_toEndOf="@+id/textoMartes"
+            app:layout_constraintTop_toTopOf="@+id/textoLunes">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/textoJueves"
+            style="@style/diasDeLaSemanaProgramador"
+            android:layout_marginStart="10sp"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:text="J"
+            app:layout_constraintStart_toEndOf="@+id/textoMiercoles"
+            app:layout_constraintTop_toTopOf="@+id/textoLunes">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/textoViernes"
+            style="@style/diasDeLaSemanaProgramador"
+
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:text="V"
+            app:layout_constraintStart_toStartOf="@+id/textoLunes"
+            app:layout_constraintTop_toTopOf="@+id/textoSabado">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/textoSabado"
+            style="@style/diasDeLaSemanaProgramador"
+            android:layout_marginStart="10sp"
+            android:layout_marginTop="20dp"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:text="S"
+            app:layout_constraintStart_toEndOf="@+id/textoViernes"
+            app:layout_constraintTop_toBottomOf="@+id/textoLunes">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/textoDomingo"
+            style="@style/diasDeLaSemanaProgramador"
+            android:layout_marginStart="10sp"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:text="V"
+            app:layout_constraintStart_toEndOf="@+id/textoSabado"
+            app:layout_constraintTop_toTopOf="@+id/textoSabado">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/textFecha"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poetsenone"
+            android:inputType="time"
+            android:text="10/12/2022"
+            android:textAlignment="center"
+            android:textSize="40dp"
+            tools:layout_editor_absoluteX="12dp"
+            tools:layout_editor_absoluteY="22dp">
+
+        </TextView>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <TextView
+        android:id="@+id/textHoraPrograma"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poetsenone"
+        android:inputType="time"
+        android:text="08:25"
+        android:textAlignment="center"
+        android:textSize="40dp"
+        app:layout_constraintBottom_toTopOf="@+id/panelDuracion"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/panelRepetir"
+        app:layout_constraintTop_toBottomOf="@+id/textRepetir">
+
+    </TextView>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/panelDuracion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/divider3"
+        tools:layout_editor_absoluteX="0dp">
+
+
+        <ImageView
+            android:id="@+id/imageDuracion"
+            android:layout_width="wrap_content"
+            android:layout_height="46sp"
+            android:layout_marginStart="64dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.487"
+            app:srcCompat="@drawable/icono_duracion" />
+
+        <TextView
+            android:id="@+id/textDurante"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:fontFamily="@font/poetsenone"
+            android:inputType="number"
+            android:text="duracion"
+            android:textSize="20dp"
+            app:layout_constraintBottom_toBottomOf="@+id/imageDuracion"
+            app:layout_constraintEnd_toStartOf="@+id/textDuracionEntero"
+            app:layout_constraintStart_toEndOf="@+id/imageDuracion"
+            app:layout_constraintTop_toTopOf="@+id/imageDuracion">
+
+        </TextView>
+
+        <ImageButton
+            android:id="@+id/idBotonMenos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icono_menos"
+            app:layout_constraintStart_toStartOf="@+id/textDuracionDecimal"
+            app:layout_constraintTop_toBottomOf="@+id/textDuracionDecimal">
+
+        </ImageButton>
+
+
+        <TextView
+            android:id="@+id/textDuracionEntero"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poetsenone"
+            android:text="1"
+            android:textAlignment="center"
+            android:textSize="20dp"
+            app:layout_constraintStart_toStartOf="@+id/idBotonMas"
+            app:layout_constraintTop_toBottomOf="@+id/idBotonMas">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/textUnidadEntero"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poetsenone"
+            android:text="hora"
+            android:textAlignment="center"
+            android:textSize="20dp"
+            app:layout_constraintStart_toEndOf="@+id/textDuracionEntero"
+            app:layout_constraintTop_toTopOf="@+id/textDuracionEntero">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/textUnidadDecimal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poetsenone"
+            android:text="minutos"
+            android:textAlignment="center"
+            android:textSize="20dp"
+            app:layout_constraintStart_toEndOf="@+id/textDuracionDecimal"
+            app:layout_constraintTop_toBottomOf="@+id/textUnidadEntero">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/textDuracionDecimal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poetsenone"
+            android:text="25"
+            android:textAlignment="center"
+            android:textSize="20dp"
+            app:layout_constraintStart_toStartOf="@+id/textDuracionEntero"
+            app:layout_constraintTop_toBottomOf="@+id/textDuracionEntero">
+
+        </TextView>
+
+        <ImageButton
+            android:id="@+id/idBotonMas"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="100dp"
+            android:src="@drawable/icono_mas"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </ImageButton>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:id="@+id/divider3"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="8dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintTop_toBottomOf="@+id/panelRepetir"
+        tools:layout_editor_absoluteX="0dp" />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintTop_toBottomOf="@+id/panelDuracion"
+        tools:layout_editor_absoluteX="0dp" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

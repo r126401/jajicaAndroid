@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <CheckBox
+        android:id="@+id/checkDomingo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:button="@null"
+        android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+        android:text="@string/domingo"
+        android:textAlignment="textStart"
+        app:layout_constraintStart_toStartOf="@+id/checkSabado"
+        app:layout_constraintTop_toBottomOf="@+id/checkSabado"
+        android:fontFamily="@font/poetsenone"
+        android:textSize="20dp"
+        android:layout_marginTop="10dp"/>
+
+    <CheckBox
+        android:layout_marginTop="10dp"
+        android:id="@+id/checkMiercoles"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:button="@null"
+        android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+        android:fontFamily="@font/poetsenone"
+        android:text="@string/miercoles"
+        android:textAlignment="textStart"
+        android:textSize="20dp"
+        app:layout_constraintStart_toStartOf="@+id/checkMartes"
+        app:layout_constraintTop_toBottomOf="@+id/checkMartes" />
+
+    <CheckBox
+        android:layout_marginTop="10dp"
+        android:id="@+id/checkSabado"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:button="@null"
+        android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+        android:text="@string/sabado"
+        android:textAlignment="textStart"
+        app:layout_constraintStart_toStartOf="@+id/checkViernes"
+        app:layout_constraintTop_toBottomOf="@+id/checkViernes"
+        android:fontFamily="@font/poetsenone"
+        android:textSize="20dp"/>
+
+    <CheckBox
+        android:layout_marginTop="10dp"
+        android:id="@+id/checkViernes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:button="@null"
+        android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+        android:text="@string/viernes"
+        android:textAlignment="textStart"
+        app:layout_constraintStart_toStartOf="@+id/checkJueves"
+        app:layout_constraintTop_toBottomOf="@+id/checkJueves"
+        android:fontFamily="@font/poetsenone"
+        android:textSize="20dp"/>
+
+    <CheckBox
+        android:layout_marginTop="10dp"
+        android:id="@+id/checkJueves"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:button="@null"
+        android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+        android:text="@string/jueves"
+        android:textAlignment="textStart"
+        app:layout_constraintStart_toStartOf="@+id/checkMiercoles"
+        app:layout_constraintTop_toBottomOf="@+id/checkMiercoles"
+        android:fontFamily="@font/poetsenone"
+        android:textSize="20dp"/>
+
+    <CheckBox
+        android:layout_marginTop="10dp"
+        android:id="@+id/checkLunes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:button="@null"
+        android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+        android:text="@string/lunes"
+        android:textAlignment="textStart"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etiquetaRepeticion"
+        android:fontFamily="@font/poetsenone"
+        android:textSize="20dp"/>
+
+    <CheckBox
+        android:layout_marginTop="10dp"
+        android:id="@+id/checkMartes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:button="@null"
+        android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+        android:fontFamily="@font/poetsenone"
+        android:text="@string/martes"
+        android:textAlignment="textStart"
+        android:textSize="20dp"
+        app:layout_constraintStart_toStartOf="@+id/checkLunes"
+        app:layout_constraintTop_toBottomOf="@+id/checkLunes" />
+
+    <TextView
+        android:id="@+id/etiquetaRepeticion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Repetir"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:fontFamily="@font/poetsenone"
+        android:textSize="20dp"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
