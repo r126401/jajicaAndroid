@@ -14,7 +14,7 @@
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.36236391912908245" />
         <entry key="app/src/main/res/layout/activity_nuevo_dispositivo.xml" value="0.33" />
         <entry key="app/src/main/res/layout/activity_principal.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/activity_programa_interruptor.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/activity_programa_interruptor.xml" value="0.5636588380716935" />
         <entry key="app/src/main/res/layout/dias_semana.xml" value="0.34739583333333335" />
         <entry key="app/src/main/res/layout/duracion_fecha.xml" value="0.34739583333333335" />
         <entry key="app/src/main/res/layout/info_dispositivo_interruptor.xml" value="0.34739583333333335" />
@@ -26,6 +26,7 @@
         <entry key="app/src/main/res/layout/vista_termostato.xml" value="0.25" />
         <entry key="app/src/main/res/menu/menu_interruptor.xml" value="0.34739583333333335" />
         <entry key="app/src/main/res/menu/menu_mas.xml" value="0.34739583333333335" />
+        <entry key="app/src/main/res/menu/menu_mas_opciones.xml" value="0.34739583333333335" />
         <entry key="app/src/main/res/menu/menu_principal.xml" value="0.34739583333333335" />
       </map>
     </option>

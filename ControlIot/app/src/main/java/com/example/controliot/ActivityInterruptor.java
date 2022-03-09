@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
@@ -244,6 +245,77 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
 
     }
 
+
+    private void ejecutarMenuMas(PopupMenu menu, Context contexto) {
+        menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                AlertDialog.Builder ventana;
+                ventana = new AlertDialog.Builder(contexto);
+                ventana.setIcon(R.drawable.ic_factory_reset);
+
+
+
+
+                switch (item.getItemId()) {
+                    case (R.id.reset):
+                        ventana.setTitle("vas a reiniciar el dispositivo...");
+                        ventana.setPositiveButton(R.string.aceptar, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialogo.enviarComando(dispositivo, dialogo.escribirComandoReset());
+                            }
+                        });
+                        ventana.setNegativeButton(R.string.cancelar, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        });
+                        break;
+                    case (R.id.factoryReset):
+                        ventana.setTitle("Todas las configuraciones se borraran incluida la configuracion wifi");
+                        ventana.setPositiveButton(R.string.aceptar, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialogo.enviarComando(dispositivo, dialogo.escribirComandoFactoryReset());
+                            }
+                        });
+                        ventana.setNegativeButton(R.string.cancelar, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        });
+
+                        break;
+                    default:
+                    case (R.id.upgrade):
+                        ventana.setTitle("Se va a actualizar el dispositivo. Pulsa Aceptar para continuar");
+                        ventana.setPositiveButton(R.string.aceptar, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialogo.enviarComando(dispositivo, dialogo.escribirComandoUpgradeFirmware(dispositivo));
+                            }
+                        });
+                        ventana.setNegativeButton(R.string.cancelar, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        });
+                        Log.i(TAG, "boton upgrade");
+                        break;
+
+
+                }
+                ventana.show();
+                return false;
+            }
+        });
+
+    }
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
@@ -256,6 +328,7 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
             case(R.id.itemConfiguracion):
                 break;
             case(R.id.itemNuevoProgramaInterruptor):
+                lanzarActivityProgramaInterruptor(0, COMANDO_IOT.NUEVA_PROGRAMACION);
                 break;
             case(R.id.itemmasInterruptor):
                  PopupMenu menumas = new PopupMenu(ActivityInterruptor.this, bottommenuInterruptor);
@@ -264,6 +337,7 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
                 }
                 menumas.inflate(R.menu.menu_mas_opciones);
                  menumas.setGravity(Gravity.RIGHT);
+                 ejecutarMenuMas(menumas, this);
                  menumas.show();
                 break;
 
@@ -319,6 +393,8 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
 
             @Override
             public void modificarProgramacionInterruptor(String topic, String texto, String idDispositivo) {
+                //dialogo.enviarComando(dispositivo, dialogo.escribirComandoConsultarProgramacion());
+                procesarModificarPrograma(texto);
 
             }
 
@@ -559,9 +635,10 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
                 public void onActivityResult(ActivityResult result) {
 
                     if (result.getResultCode() == RESULT_OK) {
-                        String dato = result.getData().getDataString();
-                        Log.i(getLocalClassName(), "Recibimos datos: " + dato);
+                        String textoComando = result.getData().getDataString();
+                        Log.i(getLocalClassName(), "Recibimos datos: " + textoComando);
                         //Introducimos loa logica para modificar la programacion.
+                        cnx.publicarTopic(dispositivo.getTopicPublicacion(), textoComando);
 
                     } else {
                         Log.w(getLocalClassName(), "No se puede modificar la programacion");
@@ -573,13 +650,13 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
     private void lanzarActivityProgramaInterruptor(int posicion, COMANDO_IOT idComando) {
 
         ProgramaDispositivoIotOnOff programa;
-        programa = programasInterruptorAdapter.listaProgramas.get(posicion);
+
         Intent lanzador = new Intent(ActivityInterruptor.this, ActivityProgramaInterruptor.class);
         lanzador.putExtra(TEXTOS_DIALOGO_IOT.TIPO_DISPOSITIVO.getValorTextoJson(), TIPO_DISPOSITIVO_IOT.INTERRUPTOR);
         //lanzador.putExtra(TEXTOS_DIALOGO_IOT.ID_DISPOSITIVO.getValorTextoJson(), dispositivo.idDispositivo);
         lanzador.putExtra(TEXTOS_DIALOGO_IOT.COMANDO.getValorTextoJson(), idComando);
         if (idComando == COMANDO_IOT.MODIFICAR_PROGRAMACION) {
-
+            programa = programasInterruptorAdapter.listaProgramas.get(posicion);
             lanzador.putExtra(TEXTOS_DIALOGO_IOT.ID_PROGRAMA.getValorTextoJson(), programa);
         }
 
@@ -587,6 +664,30 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
         lanzadorActivityProgramaInterruptor.launch(lanzador);
     }
 
+    private void procesarModificarPrograma(String textoRecibido) {
+
+        String idPrograma;
+        String idNuevoPrograma;
+        String estadoPrograma;
+        String idProgramaActivo;
+        int estadoRele;
+        ESTADO_RELE rele = ESTADO_RELE.INDETERMINADO;
+        ESTADO_PROGRAMA prog = ESTADO_PROGRAMA.PROGRAMA_DESCONOCIDO;
+        String estado;
+        int duracion;
+        Log.i(getLocalClassName(), "Se procesa el texto del programa modificado");
+        idNuevoPrograma = dialogo.extraerDatoJsonString(textoRecibido, TEXTOS_DIALOGO_IOT.NUEVO_ID_PROGRAMA.getValorTextoJson());
+        idPrograma = dialogo.extraerDatoJsonString(textoRecibido, TEXTOS_DIALOGO_IOT.ID_PROGRAMA.getValorTextoJson());
+        idProgramaActivo = dialogo.extraerDatoJsonString(textoRecibido, TEXTOS_DIALOGO_IOT.PROGRAMA_ACTIVO.getValorTextoJson());
+        estadoPrograma = dialogo.extraerDatoJsonString(textoRecibido, TEXTOS_DIALOGO_IOT.ESTADO_PROGRAMACION.getValorTextoJson());
+        estadoRele = dialogo.extraerDatoJsonInt(textoRecibido, TEXTOS_DIALOGO_IOT.ESTADO_RELE.getValorTextoJson());
+        duracion = dialogo.extraerDatoJsonInt(textoRecibido, TEXTOS_DIALOGO_IOT.DURACION.getValorTextoJson());
+        if(duracion == -1000) duracion = 0;
+        dispositivo.modificarPrograma(idPrograma, idNuevoPrograma, estadoPrograma, String.valueOf(estadoRele), duracion );
+        dispositivo.actualizarProgramaActivo(idProgramaActivo);
+        programasInterruptorAdapter.notifyDataSetChanged();
+
+    }
 
 
 }

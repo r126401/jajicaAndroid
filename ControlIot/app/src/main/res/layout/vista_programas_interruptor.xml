@@ -21,12 +21,10 @@
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:layout_marginEnd="12dp"
-        app:layout_constraintBottom_toTopOf="@+id/textRepeticionPrograma"
+        android:focusable="false"
         app:layout_constraintEnd_toStartOf="@+id/switchProgramaActivo"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.45"
-        app:srcCompat="@drawable/ic_delete"
-        android:focusable="false"/>
+        app:srcCompat="@drawable/ic_delete" />
 
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/switchProgramaActivo"
@@ -38,6 +36,103 @@
         android:focusable="false">
 
     </androidx.appcompat.widget.SwitchCompat>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/imageInterruptor"
+        android:id="@+id/panelDiasSemana">
+
+
+        <TextView
+            android:id="@+id/textoLunes"
+            style="@style/diasDeLaSemanaProgramadorReducido"
+            android:layout_marginStart="68dp"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:text="L"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="parent">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/textoMartes"
+            style="@style/diasDeLaSemanaProgramadorReducido"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:text="M"
+            app:layout_constraintBottom_toBottomOf="@+id/textoLunes"
+            app:layout_constraintStart_toEndOf="@+id/textoLunes"
+            app:layout_constraintTop_toTopOf="@+id/textoLunes">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/textoMiercoles"
+            style="@style/diasDeLaSemanaProgramadorReducido"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:text="X"
+            app:layout_constraintBottom_toBottomOf="@+id/textoMartes"
+            app:layout_constraintStart_toEndOf="@+id/textoMartes"
+            app:layout_constraintTop_toTopOf="@+id/textoMartes">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/textoJueves"
+            style="@style/diasDeLaSemanaProgramadorReducido"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:text="J"
+            app:layout_constraintBottom_toBottomOf="@+id/textoMiercoles"
+            app:layout_constraintStart_toEndOf="@+id/textoMiercoles"
+            app:layout_constraintTop_toTopOf="@+id/textoMiercoles">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/textoViernes"
+            style="@style/diasDeLaSemanaProgramadorReducido"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:text="V"
+            app:layout_constraintBottom_toBottomOf="@+id/textoJueves"
+            app:layout_constraintStart_toEndOf="@+id/textoJueves"
+            app:layout_constraintTop_toTopOf="@+id/textoJueves">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/textoSabado"
+            style="@style/diasDeLaSemanaProgramadorReducido"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:text="S"
+            app:layout_constraintBottom_toBottomOf="@+id/textoViernes"
+            app:layout_constraintStart_toEndOf="@+id/textoViernes"
+            app:layout_constraintTop_toTopOf="@+id/textoViernes">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/textoDomingo"
+            style="@style/diasDeLaSemanaProgramadorReducido"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:text="D"
+            app:layout_constraintBottom_toBottomOf="@+id/textoSabado"
+            app:layout_constraintStart_toEndOf="@+id/textoSabado"
+            app:layout_constraintTop_toTopOf="@+id/textoSabado">
+
+        </TextView>
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     <TextView
         android:id="@+id/textHoraPrograma"
@@ -52,16 +147,6 @@
         app:layout_constraintStart_toEndOf="@+id/imageInterruptor"
         app:layout_constraintTop_toTopOf="parent"/>
 
-    <TextView
-        android:id="@+id/textRepeticionPrograma"
-        android:layout_width="409dp"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/poetsenone"
-        android:text="12:00"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"/>
 
     <TextView
         android:id="@+id/textDuracionPrograma"
@@ -70,8 +155,8 @@
         android:fontFamily="@font/poetsenone"
         android:text="12:00"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/textDurante"
-        app:layout_constraintStart_toEndOf="@+id/textDurante"/>
+        app:layout_constraintBottom_toBottomOf="@+id/textDuranteTemperatura"
+        app:layout_constraintStart_toEndOf="@+id/textDuranteTemperatura"/>
 
     <TextView
         android:id="@+id/textUnidadTiempo"
@@ -80,12 +165,12 @@
         android:fontFamily="@font/poetsenone"
         android:text="min"
 
-        app:layout_constraintBottom_toBottomOf="@+id/textDurante"
+        app:layout_constraintBottom_toBottomOf="@+id/textDuranteTemperatura"
         app:layout_constraintStart_toEndOf="@+id/textDuracionPrograma"
-        app:layout_constraintTop_toTopOf="@+id/textDurante"/>
+        app:layout_constraintTop_toTopOf="@+id/textDuranteTemperatura"/>
 
     <TextView
-        android:id="@+id/textDurante"
+        android:id="@+id/textDuranteTemperatura"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/poetsenone"

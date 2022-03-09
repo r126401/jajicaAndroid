@@ -16,15 +16,15 @@
         android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="@+id/imageRepetir"
         app:layout_constraintStart_toEndOf="@+id/imageRepetir"
-        app:layout_constraintTop_toTopOf="@+id/imageRepetir" />
-
+        app:layout_constraintTop_toTopOf="@+id/imageRepetir"
+        app:layout_constraintVertical_bias="0.0" />
 
     <ImageView
         android:id="@+id/imageRepetir"
         android:layout_width="wrap_content"
         android:layout_height="32sp"
         android:layout_gravity="center"
-        android:layout_marginTop="84dp"
+        android:layout_marginTop="36dp"
         android:src="@drawable/ic_repetir"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -136,25 +136,13 @@
             android:layout_marginStart="10sp"
             android:focusable="false"
             android:focusableInTouchMode="false"
-            android:text="V"
+            android:text="D"
             app:layout_constraintStart_toEndOf="@+id/textoSabado"
             app:layout_constraintTop_toTopOf="@+id/textoSabado">
 
         </TextView>
 
-        <TextView
-            android:id="@+id/textFecha"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/poetsenone"
-            android:inputType="time"
-            android:text="10/12/2022"
-            android:textAlignment="center"
-            android:textSize="40dp"
-            tools:layout_editor_absoluteX="12dp"
-            tools:layout_editor_absoluteY="22dp">
 
-        </TextView>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -176,29 +164,44 @@
 
     </TextView>
 
+    <TextView
+        android:id="@+id/textFecha"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poetsenone"
+        android:inputType="date"
+        android:text="10/12/2022"
+        android:textAlignment="center"
+        android:textSize="40dp"
+        app:layout_constraintBottom_toTopOf="@+id/panelDuracion"
+        app:layout_constraintEnd_toStartOf="@+id/textHoraPrograma"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textRepetir">
+
+    </TextView>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/panelDuracion"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@+id/divider3"
+        app:layout_constraintTop_toBottomOf="@+id/dividirRepetir"
         tools:layout_editor_absoluteX="0dp">
 
 
         <ImageView
-            android:id="@+id/imageDuracion"
+            android:id="@+id/imageIconoTemperatura"
             android:layout_width="wrap_content"
             android:layout_height="46sp"
-            android:layout_marginStart="64dp"
+            android:layout_marginStart="4dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.487"
+            app:layout_constraintVertical_bias="0.495"
             app:srcCompat="@drawable/icono_duracion" />
 
         <TextView
-            android:id="@+id/textDurante"
+            android:id="@+id/textDuranteTemperatura"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -206,91 +209,98 @@
             android:inputType="number"
             android:text="duracion"
             android:textSize="20dp"
-            app:layout_constraintBottom_toBottomOf="@+id/imageDuracion"
-            app:layout_constraintEnd_toStartOf="@+id/textDuracionEntero"
-            app:layout_constraintStart_toEndOf="@+id/imageDuracion"
-            app:layout_constraintTop_toTopOf="@+id/imageDuracion">
+            app:layout_constraintBottom_toBottomOf="@+id/imageIconoTemperatura"
+            app:layout_constraintStart_toEndOf="@+id/imageIconoTemperatura"
+            app:layout_constraintTop_toTopOf="@+id/imageIconoTemperatura"
+            app:layout_constraintVertical_bias="0.545">
 
         </TextView>
 
+
         <ImageButton
-            android:id="@+id/idBotonMenos"
+            android:id="@+id/idBotonMenosTemperatura"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/icono_menos"
-            app:layout_constraintStart_toStartOf="@+id/textDuracionDecimal"
-            app:layout_constraintTop_toBottomOf="@+id/textDuracionDecimal">
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/textDuranteTemperatura"
+            app:layout_constraintTop_toTopOf="parent">
 
         </ImageButton>
 
-
-        <TextView
-            android:id="@+id/textDuracionEntero"
+        <ImageButton
+            android:id="@+id/idBotonMasTemperatura"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/poetsenone"
-            android:text="1"
-            android:textAlignment="center"
-            android:textSize="20dp"
-            app:layout_constraintStart_toStartOf="@+id/idBotonMas"
-            app:layout_constraintTop_toBottomOf="@+id/idBotonMas">
+            android:src="@drawable/icono_mas"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-        </TextView>
+        </ImageButton>
 
         <TextView
-            android:id="@+id/textUnidadEntero"
+            android:id="@+id/textUnidadEnteroTemperatura"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+
             android:fontFamily="@font/poetsenone"
             android:text="hora"
             android:textAlignment="center"
             android:textSize="20dp"
-            app:layout_constraintStart_toEndOf="@+id/textDuracionEntero"
-            app:layout_constraintTop_toTopOf="@+id/textDuracionEntero">
+            app:layout_constraintStart_toStartOf="@+id/textUnidadDecimalTemperatura"
+            app:layout_constraintTop_toTopOf="parent">
 
         </TextView>
 
         <TextView
-            android:id="@+id/textUnidadDecimal"
+            android:id="@+id/textDuracionEnteroTemperatura"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poetsenone"
+            android:inputType="number"
+            android:text="1"
+            android:textAlignment="center"
+            android:textSize="20dp"
+            app:layout_constraintStart_toStartOf="@+id/textDuracionDecimalTemperatura"
+            app:layout_constraintTop_toTopOf="@+id/textUnidadEnteroTemperatura">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/textDuracionDecimalTemperatura"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:fontFamily="@font/poetsenone"
+            android:text="25"
+            android:textAlignment="center"
+            android:textSize="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/idBotonMenosTemperatura"
+            app:layout_constraintTop_toBottomOf="@+id/textDuracionEnteroTemperatura">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/textUnidadDecimalTemperatura"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/poetsenone"
             android:text="minutos"
             android:textAlignment="center"
             android:textSize="20dp"
-            app:layout_constraintStart_toEndOf="@+id/textDuracionDecimal"
-            app:layout_constraintTop_toBottomOf="@+id/textUnidadEntero">
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/idBotonMasTemperatura"
+            app:layout_constraintStart_toEndOf="@+id/textDuracionDecimalTemperatura"
+            app:layout_constraintTop_toBottomOf="@+id/textUnidadEnteroTemperatura">
 
         </TextView>
-
-        <TextView
-            android:id="@+id/textDuracionDecimal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/poetsenone"
-            android:text="25"
-            android:textAlignment="center"
-            android:textSize="20dp"
-            app:layout_constraintStart_toStartOf="@+id/textDuracionEntero"
-            app:layout_constraintTop_toBottomOf="@+id/textDuracionEntero">
-
-        </TextView>
-
-        <ImageButton
-            android:id="@+id/idBotonMas"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="100dp"
-            android:src="@drawable/icono_mas"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-        </ImageButton>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <View
-        android:id="@+id/divider3"
+        android:id="@+id/dividirRepetir"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="8dp"
@@ -299,12 +309,21 @@
         tools:layout_editor_absoluteX="0dp" />
 
     <View
-        android:id="@+id/divider"
+        android:id="@+id/dividerDuracion"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="?android:attr/listDivider"
         app:layout_constraintTop_toBottomOf="@+id/panelDuracion"
         tools:layout_editor_absoluteX="0dp" />
 
+    <Button
+        android:id="@+id/botonAceptar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/aceptar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.517"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dividerDuracion" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

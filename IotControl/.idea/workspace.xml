@@ -67,28 +67,31 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="23d00115-d3af-48c2-a0e5-936070caa06f" name="Default Changelist" comment="se hace el ubgrade de gradel a 7.1.0">
-      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/ActivityProgramaInterruptor.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/drawable/ic_repetir.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/drawable/icono_duracion.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/drawable/icono_mas.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/drawable/icono_menos.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/drawable/texto_redondeado.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/drawable/texto_redondeado_desactivado.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/drawable/thumb.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/drawable/track.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/layout/activity_programa_interruptor.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/layout/dias_semana.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/layout/duracion_fecha.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/values/styles.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../ControlIot/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ControlIot/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/.idea/gradle.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../ControlIot/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ControlIot/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/ActivityInterruptor.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/ActivityInterruptor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/ListaDispositivosAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/ListaDispositivosAdapter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/ActivityProgramaInterruptor.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/ActivityProgramaInterruptor.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/listaProgramasInterruptorAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/listaProgramasInterruptorAdapter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/res/layout/activity_interruptor.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/layout/activity_interruptor.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/res/layout/activity_programa_interruptor.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/layout/activity_programa_interruptor.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/res/layout/vista_programas_interruptor.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/layout/vista_programas_interruptor.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/res/values-es/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/values-es/strings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/values/strings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/res/values/styles.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/values/styles.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ControlIot/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ControlIot/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.2/fileHashes/fileHashes.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_ycuwq_widgets_datepicker_1_0_1_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_ycuwq_widgets_datepicker_1_0_1_aar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/app/IotControl.app.androidTest.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/app/IotControl.app.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/app/IotControl.app.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/app/IotControl.app.main.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/app/IotControl.app.unitTest.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/IotControl.iml" beforeDir="false" afterPath="$PROJECT_DIR$/IotControl.iml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -98,7 +101,7 @@
   <component name="Cvs2Configuration">
     <option name="OVERRIDE_EXISTING_TAG_FOR_PROJECT" value="false" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[/home/t126401/.android/avd/Nexus_6_API_30.avd]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[5ab456a8]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -143,6 +146,9 @@
       <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
     </file-type-list>
   </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
   <component name="ProjectId" id="1YGmtERVm3dsKjBKwVL9evVwIkD" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
@@ -163,7 +169,7 @@
     <property name="android.sdk.path" value="/opt/android/sdk" />
     <property name="cidr.known.project.marker" value="true" />
     <property name="device.picker.selection" value="google" />
-    <property name="last_opened_file_path" value="$USER_HOME$/Descargas/cvs/cvs-203.0.zip" />
+    <property name="last_opened_file_path" value="$USER_HOME$/Descargas/android-ndk-r23b-linux.zip" />
     <property name="memory.settings.postsync.do.not.ask.for.project" value="true" />
     <property name="multi-representation-preview/home/t126401/Android/Sdk/sources/android-30/android/view/View.java_selected" value="Custom views" />
     <property name="project.structure.last.edited" value="SDK Location" />
@@ -171,7 +177,7 @@
     <property name="project.structure.side.proportion" value="0.55041325" />
     <property name="recommended.upgrade.last.time.stamp" value="1643662305234" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
-    <property name="settings.editor.selected.configurable" value="AndroidSdkUpdater" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
   <component name="PsdUISettings">
     <option name="MODULE_TAB" value="Properties" />
@@ -202,7 +208,7 @@
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
       </method>
     </configuration>
-    <configuration name="app" type="AndroidRunConfigurationType" factoryName="Android App" activateToolWindowBeforeRun="false">
+    <configuration name="app" type="AndroidRunConfigurationType" factoryName="Android App">
       <module name="IotControl.app" />
       <option name="DEPLOY" value="true" />
       <option name="DEPLOY_APK_FROM_BUNDLE" value="false" />
@@ -216,8 +222,10 @@
       <option name="MODE" value="default_activity" />
       <option name="CLEAR_LOGCAT" value="false" />
       <option name="SHOW_LOGCAT_AUTOMATICALLY" value="false" />
+      <option name="SKIP_NOOP_APK_INSTALLATIONS" value="true" />
+      <option name="FORCE_STOP_RUNNING_APP" value="true" />
       <option name="INSPECTION_WITHOUT_ACTIVITY_RESTART" value="false" />
-      <option name="TARGET_SELECTION_MODE" value="SHOW_DIALOG" />
+      <option name="TARGET_SELECTION_MODE" value="DEVICE_AND_SNAPSHOT_COMBO_BOX" />
       <option name="SELECTED_CLOUD_MATRIX_CONFIGURATION_ID" value="-1" />
       <option name="SELECTED_CLOUD_MATRIX_PROJECT_ID" value="" />
       <option name="DEBUGGER_TYPE" value="Auto" />
@@ -247,7 +255,7 @@
         <option name="ADVANCED_PROFILING_ENABLED" value="false" />
         <option name="STARTUP_PROFILING_ENABLED" value="false" />
         <option name="STARTUP_CPU_PROFILING_ENABLED" value="false" />
-        <option name="STARTUP_CPU_PROFILING_CONFIGURATION_NAME" value="Sample Java Methods" />
+        <option name="STARTUP_CPU_PROFILING_CONFIGURATION_NAME" value="Java/Kotlin Method Sample (legacy)" />
         <option name="STARTUP_NATIVE_MEMORY_PROFILING_ENABLED" value="false" />
         <option name="NATIVE_MEMORY_SAMPLE_RATE_BYTES" value="2048" />
       </Profilers>
