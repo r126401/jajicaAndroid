@@ -102,6 +102,7 @@ public class conexionMqtt implements Serializable, Parcelable {
     private dispositivoIotTermostato dispositivoTermometro;
 
     private OnConexionMqtt listener;
+    private OnRecibirMensaje listenerRecibirMensaje;
     private OnProcesarMensajesInterruptor listenerMensajesInterruptor;
     private OnProcesarMensajesTermometro listenerMensajesTermometro;
     private OnProcesarMensajesTermostato listenerMensajesTermostato;
@@ -214,6 +215,14 @@ public class conexionMqtt implements Serializable, Parcelable {
 
     }
 
+    public interface OnRecibirMensaje {
+        void recibirMensaje();
+    }
+
+    public void setOnRecibirMensajes(OnRecibirMensaje listener) {
+        this.listenerRecibirMensaje = listener;
+
+    }
 
 
 
@@ -285,14 +294,14 @@ public class conexionMqtt implements Serializable, Parcelable {
      * Si no hay configuracion, se aplica la de defecto
      * @param contexto es el contexto de la aplicacion.
      */
-    conexionMqtt(Context contexto) {
+    conexionMqtt(Context contexto, dialogoIot dialogo) {
 
         JSONObject mqtt;
         cliente = null;
         estadoConexion = false;
         this.contexto = contexto;
         String cadenaConexion;
-        dialogo = new dialogoIot();
+        this.dialogo = dialogo;
         dispositivoOnOff = null;
         dispositivoTermometro = null;
         dispositivoTermostato = null;
@@ -575,7 +584,7 @@ public class conexionMqtt implements Serializable, Parcelable {
      * @param topic sobre el que enviar el mensaje
      * @param texto es el mensaje a enviar
      */
-    public void publicarTopic(String topic, String texto) {
+    public boolean publicarTopic(String topic, String texto) {
 
         MqttMessage mensaje;
 
@@ -590,11 +599,14 @@ public class conexionMqtt implements Serializable, Parcelable {
                 Log.w(LOG_CLASS, topic + ": " + texto);
             } catch (MqttException e) {
                 e.printStackTrace();
+                return false;
             }
 
         } else {
             Log.w(LOG_CLASS, "rno estoy conectado y no puedo publica");
+            return false;
         }
+        return true;
     }
 
 
@@ -743,7 +755,7 @@ public class conexionMqtt implements Serializable, Parcelable {
             @Override
             public void messageArrived(String topic, MqttMessage message) throws Exception {
                 listener.mensajeRecibido(topic, message);
-                dialogoIot dialogo = new dialogoIot();
+                //dialogoIot dialogo = new dialogoIot();
                 procesarMensajes(topic, message, contexto);
 
 
@@ -827,12 +839,20 @@ public class conexionMqtt implements Serializable, Parcelable {
 
         TIPO_DISPOSITIVO_IOT tipo;
         String respuesta;
-        dialogoIot dialogo;
-        dialogo = new dialogoIot();
+        String clave;
+        //dialogoIot dialogo;
+        //dialogo = new dialogoIot();
         respuesta = new String(message.getPayload());
         dispositivoIot dispositivo;
         dispositivo = new dispositivoIotDesconocido();
         tipo = dialogo.getTipoDispositivo(respuesta);
+        clave = dialogo.getClave(respuesta);
+        dialogo.eliminarTemporizador(clave);
+
+        if (listenerRecibirMensaje != null) {
+            listenerRecibirMensaje.recibirMensaje();
+        }
+
         switch (tipo) {
 
 

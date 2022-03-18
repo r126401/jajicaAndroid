@@ -46,6 +46,7 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
     private ImageView imageEstadoBroker;
     private SwipeRefreshLayout swipeSchedule;
     private ListView listViewSchedule;
+    private ImageView imageEstadoDispositivo;
     private BottomNavigationView bottommenuInterruptor;
     private String idDispositivo;
     private conexionMqtt cnx;
@@ -68,6 +69,7 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
 
     private void registrarControles() {
 
+        imageEstadoDispositivo = (ImageView) findViewById(R.id.imageEstadoDispositivo);
         imageBotonOnOff = (ImageView) findViewById(R.id.imageBotonOnOff);
         imageBotonOnOff.setImageResource(R.drawable.switch_indeterminado);
         imageBotonOnOff.setOnClickListener(this);
@@ -104,14 +106,14 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
 
 
 
+
+
     private void notificarBrokerConectado() {
 
         pintarDispositivoDisponible();
         cnx.subscribirTopic(dispositivo.getTopicSubscripcion());
-        dialogo.enviarComando(dispositivo,dialogo.comandoEstadoDispositivo());
+        envioComando(dialogo.comandoEstadoDispositivo());
         actualizarProgramacion();
-
-        barraProgreso.setVisibility(View.VISIBLE);
     }
 
     private void notificarBrokerDesconectado() {
@@ -138,12 +140,16 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
         if (bundle != null) {
             idDispositivo = (String) bundle.get(TEXTOS_DIALOGO_IOT.ID_DISPOSITIVO.getValorTextoJson());
         }
+
         dialogo.setOnTemporizacionVencidaEnComando(new dialogoIot.onDialogoIot() {
             @Override
-            public void temporizacionVencidaEnComando(String idDispositivo) {
-                Log.e(TAG, "Temporizacion vencida en comando");
+            public void temporizacionVencidaEnComando(COMANDO_IOT comando, String clave, String idDispositivo) {
+
+                dispositivoIndisponible();
+
             }
         });
+
 
 
 
@@ -152,7 +158,14 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
         listaDispositivos.leerDispositivos(contexto);
         disp = listaDispositivos.getDispositivoPorId(idDispositivo);
         dispositivo = new dispositivoIotOnOff(disp);
-        cnx = new conexionMqtt(getApplicationContext());
+        cnx = new conexionMqtt(getApplicationContext(), dialogo);
+        cnx.setOnRecibirMensajes(new conexionMqtt.OnRecibirMensaje() {
+            @Override
+            public void recibirMensaje() {
+                pararAnimacionComando();
+                dispositivoDisponible();
+            }
+        });
         cnx.setOnConexionMqtt(new conexionMqtt.OnConexionMqtt() {
             @Override
             public void conexionEstablecida(boolean reconnect, String serverURI) {
@@ -263,7 +276,7 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
                         ventana.setPositiveButton(R.string.aceptar, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                dialogo.enviarComando(dispositivo, dialogo.escribirComandoReset());
+                                envioComando(dialogo.escribirComandoReset());
                             }
                         });
                         ventana.setNegativeButton(R.string.cancelar, new DialogInterface.OnClickListener() {
@@ -278,7 +291,7 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
                         ventana.setPositiveButton(R.string.aceptar, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                dialogo.enviarComando(dispositivo, dialogo.escribirComandoFactoryReset());
+                                envioComando(dialogo.escribirComandoFactoryReset());
                             }
                         });
                         ventana.setNegativeButton(R.string.cancelar, new DialogInterface.OnClickListener() {
@@ -295,7 +308,7 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
                         ventana.setPositiveButton(R.string.aceptar, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                dialogo.enviarComando(dispositivo, dialogo.escribirComandoUpgradeFirmware(dispositivo));
+                                envioComando(dialogo.escribirComandoUpgradeFirmware(dispositivo));
                             }
                         });
                         ventana.setNegativeButton(R.string.cancelar, new DialogInterface.OnClickListener() {
@@ -323,7 +336,7 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
         switch (menuItem.getItemId()) {
 
             case (R.id.itemInfo):
-                dialogo.enviarComando(dispositivo, dialogo.escribirComandoInfoApp());
+                envioComando(dialogo.escribirComandoInfoApp());
                 break;
             case(R.id.itemConfiguracion):
                 break;
@@ -347,6 +360,7 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
 
         return false;
     }
+
 
 
     private void procesarMensajesInterruptor (){
@@ -381,7 +395,7 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
             @Override
             public void nuevoProgramacionInterruptor(String topic, String texto, String idDispositivo) {
                 Log.i(TAG, "Se recibe la informacion de la aplicacion");
-                dialogo.enviarComando(dispositivo, dialogo.escribirComandoConsultarProgramacion());
+                envioComando(dialogo.escribirComandoConsultarProgramacion());
 
             }
 
@@ -393,7 +407,7 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
 
             @Override
             public void modificarProgramacionInterruptor(String topic, String texto, String idDispositivo) {
-                //dialogo.enviarComando(dispositivo, dialogo.escribirComandoConsultarProgramacion());
+                //envioComando(dialogo(dialogo dialogo.escribirComandoConsultarProgramacion());
                 procesarModificarPrograma(texto);
 
             }
@@ -508,9 +522,9 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
             case R.id.imageBotonOnOff:
                 pintarEsperandoComando();
                 if ((int) imageBotonOnOff.getTag() == R.drawable.switchoff) {
-                    dialogo.enviarComando(dispositivo, dialogo.comandoActuarRele(ESTADO_RELE.ON));
+                    envioComando(dialogo.comandoActuarRele(ESTADO_RELE.ON));
                 } else {
-                    dialogo.enviarComando(dispositivo, dialogo.comandoActuarRele(ESTADO_RELE.OFF));
+                    envioComando(dialogo.comandoActuarRele(ESTADO_RELE.OFF));
                 }
 
                 break;
@@ -554,24 +568,30 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
 
     }
 
-
-    @Override
-    public void onRefresh() {
-
+    private void refrescarDispositivo() {
+        envioComando(dialogo.comandoEstadoDispositivo());
         if (programasInterruptorAdapter != null) {
             if (programasInterruptorAdapter.listaProgramas != null) {
                 programasInterruptorAdapter.clear();
                 programasInterruptorAdapter = null;
-                actualizarProgramacion();
+
             }
 
         }
+        actualizarProgramacion();
 
+
+    }
+
+
+    @Override
+    public void onRefresh() {
+        refrescarDispositivo();
         swipeSchedule.setRefreshing(false);
     }
 
     private void actualizarProgramacion() {
-        dialogo.enviarComando(dispositivo, dialogo.escribirComandoConsultarProgramacion());
+        envioComando(dialogo.escribirComandoConsultarProgramacion());
 
     }
 
@@ -696,5 +716,32 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
 
     }
 
+    private void iniciarAnimacionComando() {
+        barraProgreso.setVisibility(View.VISIBLE);
+
+    }
+    
+    private void pararAnimacionComando() {
+        barraProgreso.setVisibility(View.INVISIBLE);
+    }
+
+    private void dispositivoDisponible()
+    {
+        imageEstadoDispositivo.setImageResource(R.drawable.dispositivo_disponible);
+
+    }
+
+    private void dispositivoIndisponible() {
+        imageEstadoDispositivo.setImageResource(R.drawable.dispositivo_indisponible);
+        barraProgreso.setVisibility(View.INVISIBLE);
+        imageBotonOnOff.setImageResource(R.drawable.switch_indeterminado);
+
+    }
+    
+    private void envioComando(String comando) {
+
+        dialogo.enviarComando(dispositivo, comando);
+        iniciarAnimacionComando();
+    }
 
 }

@@ -1237,7 +1237,7 @@ public class dialogoIot implements Serializable {
 
     }
 
-    void eliminarTemporizador(String clave) {
+    public void eliminarTemporizador(String clave) {
 
         int i = 0;
         if (temporizadores == null) {

@@ -427,7 +427,7 @@ public class dialogoIot implements Serializable {
 
     public interface onDialogoIot {
 
-        void temporizacionVencidaEnComando(String idDispositivo);
+        void temporizacionVencidaEnComando(COMANDO_IOT comando, String clave, String idDispositivo);
 
     }
 
@@ -571,6 +571,10 @@ public class dialogoIot implements Serializable {
         return TIPO_DISPOSITIVO_IOT.DESCONOCIDO.fromId(tipo);
 
 
+    }
+
+    public String getClave(String texto) {
+        return extraerDatoJsonString(texto, TEXTOS_DIALOGO_IOT.CLAVE.getValorTextoJson());
     }
 
     /**
@@ -1389,23 +1393,45 @@ public class dialogoIot implements Serializable {
     public boolean enviarComando(dispositivoIot dispositivo, String comandoJson) {
 
         TemporizacionComandos temporizador;
-        temporizador = new TemporizacionComandos(dispositivo);
+        COMANDO_IOT idComando = COMANDO_IOT.ERROR_RESPUESTA;
+        String clave;
+        clave = extraerDatoJsonString(comandoJson, TEXTOS_DIALOGO_IOT.CLAVE.getValorTextoJson());
+
+        int a =  extraerDatoJsonInt(comandoJson, TEXTOS_DIALOGO_IOT.DLG_COMANDO.getValorTextoJson());
+        idComando = idComando.fromId(a);
+
+        temporizador = new TemporizacionComandos(idComando, dispositivo.getIdDispositivo(), clave);
         temporizador.setOnTemporizacionComandos(new TemporizacionComandos.onTemporizacionComandos() {
             @Override
-            public void temporizacionVencida(String  Idispositivo) {
+            public void temporizacionVencida(COMANDO_IOT comando, String clave, String idDispositivo) {
                 if (listener != null) {
-                    listener.temporizacionVencidaEnComando(getIdDispositivo(dispositivo.getIdDispositivo()));
+                    eliminarTemporizador(clave);
+                    listener.temporizacionVencidaEnComando(comando, clave, idDispositivo);
                 }
 
+            }
+
+            @Override
+            public void informeIntermedio(COMANDO_IOT comando) {
 
             }
         });
-        temporizador.crearTemporizacion(10000, 5000);
+        if (temporizadores == null) {
+            temporizadores = new ArrayList<TemporizacionComandos>();
+            Log.i(getClass().toString(), "enviarComando: Se crea el array");
+        }
+
 
         if (cnx!=null) {
-            cnx.publicarTopic( dispositivo.getTopicPublicacion(), comandoJson);
-            dispositivo.setEstadoConexion(ESTADO_CONEXION_IOT.ESPERANDO_RESPUESTA);
-            return false;
+
+            if (cnx.publicarTopic( dispositivo.getTopicPublicacion(), comandoJson) == true) {
+                temporizador.crearTemporizacion(10000, 5000);
+                dispositivo.setEstadoConexion(ESTADO_CONEXION_IOT.ESPERANDO_RESPUESTA);
+                temporizadores.add(temporizador);
+            } else {
+                return false;
+            }
+
         }
         return true;
 
@@ -1438,6 +1464,27 @@ public class dialogoIot implements Serializable {
         tipoInforme = extraerDatoJsonInt(texto, TEXTOS_DIALOGO_IOT.CODIGO_OTA.getValorTextoJson());
 
         return OTA_IOT.OTA_ERROR.fromId(tipoInforme);
+    }
+
+    public void eliminarTemporizador(String clave) {
+
+        int i = 0;
+        if (temporizadores == null) {
+            Log.e(getClass().toString(), "No hay ningun temporizador asociado");
+            return;
+        }
+        Log.i(getClass().toString(), "eliminarTemporizador: clave: " + clave + " tamaño: " + temporizadores.size());
+
+        for (i=0;i<temporizadores.size();i++) {
+            if(temporizadores.get(i).getClave().equals(clave)) {
+                Log.i(getClass().toString(), "eliminarTemporizador: Temporizador con clave " + temporizadores.get(i).getClave() + " borrado");
+                temporizadores.get(i).temporizador.cancel();
+                temporizadores.remove(i);
+                return;
+
+            }
+        }
+        Log.e(getClass().toString(), "eliminarTemporizador: No se ha encontrado el Temporizador con clave " + clave + " y valor " + String.valueOf(i));
     }
 }
 

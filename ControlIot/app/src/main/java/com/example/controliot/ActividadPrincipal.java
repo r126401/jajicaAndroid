@@ -70,7 +70,7 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
         inicializacionParametros();
         //Se crea la conexion mqtt. A partir de aqui el programa es asincrono y gobernado por los
         //eventos que lleguen.
-        cnx = new conexionMqtt(getApplicationContext());
+        cnx = new conexionMqtt(getApplicationContext(), dialogo);
         cnx.setOnConexionMqtt(new conexionMqtt.OnConexionMqtt() {
             @Override
             public void conexionEstablecida(boolean reconnect, String serverURI) {
@@ -180,22 +180,23 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
     private void inicializacionParametros() {
         cnx = null;
         dialogo = new dialogoIot();
+
         dialogo.setOnTemporizacionVencidaEnComando(new dialogoIot.onDialogoIot() {
             @Override
-            public void temporizacionVencidaEnComando(String idDispositivo) {
-
+            public void temporizacionVencidaEnComando(COMANDO_IOT comando, String clave, String idDispositivo) {
                 int i;
                 i = buscarElementoEnListaDispositivos(idDispositivo);
                 if (i >=0) {
                     if (lista.get(i).getEstadoConexion() == ESTADO_CONEXION_IOT.ESPERANDO_RESPUESTA) {
                         lista.get(i).setEstadoConexion(ESTADO_CONEXION_IOT.DESCONECTADO);
+                        Log.d(getLocalClassName(), idDispositivo + " vencida temporizacion de comando");
                         adapter.notifyDataSetChanged();
                     }
 
                 }
-
             }
         });
+
         notificarBrokerDesactivado();
     }
     private void registrarControles() {
