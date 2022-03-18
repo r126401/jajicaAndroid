@@ -416,6 +416,13 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
             @Override
             public void upgradeFirmwareInterruptor(String topic, String texto, String idDispositivo, OtaVersion otaVersion) {
 
+                AlertDialog.Builder ventana;
+                ventana = new AlertDialog.Builder(contexto);
+                ventana.setIcon(R.drawable.ic_upgrade);
+                ventana.setTitle("Actualizando");
+                ventana.show();
+
+
             }
 
             @Override

@@ -67,31 +67,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="23d00115-d3af-48c2-a0e5-936070caa06f" name="Default Changelist" comment="se hace el ubgrade de gradel a 7.1.0">
-      <change afterPath="$PROJECT_DIR$/../ControlIot/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ControlIot/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/.idea/gradle.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../ControlIot/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ControlIot/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/ActivityInterruptor.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/ActivityInterruptor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/ActivityProgramaInterruptor.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/ActivityProgramaInterruptor.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/listaProgramasInterruptorAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/listaProgramasInterruptorAdapter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/res/layout/activity_interruptor.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/layout/activity_interruptor.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/res/layout/activity_programa_interruptor.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/layout/activity_programa_interruptor.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/res/layout/vista_programas_interruptor.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/layout/vista_programas_interruptor.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/res/values/styles.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/values/styles.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ControlIot/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ControlIot/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/7.2/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.2/fileHashes/fileHashes.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_ycuwq_widgets_datepicker_1_0_1_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_ycuwq_widgets_datepicker_1_0_1_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/app/IotControl.app.androidTest.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/app/IotControl.app.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/app/IotControl.app.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/app/IotControl.app.main.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/app/IotControl.app.unitTest.iml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/IotControl.iml" beforeDir="false" afterPath="$PROJECT_DIR$/IotControl.iml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -101,7 +83,7 @@
   <component name="Cvs2Configuration">
     <option name="OVERRIDE_EXISTING_TAG_FOR_PROJECT" value="false" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[5ab456a8]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[/home/t126401/.android/avd/Nexus_6_API_30.avd]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -647,15 +629,6 @@
     <option name="LAST_COMMIT_MESSAGE" value="se hace el ubgrade de gradel a 7.1.0" />
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/iotcontrol/ProgramasInterruptorAdapter.java</url>
-          <line>54</line>
-          <option name="timeStamp" value="3" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
     <pin-to-top-manager>
       <pinned-members>
         <PinnedItemInfo />

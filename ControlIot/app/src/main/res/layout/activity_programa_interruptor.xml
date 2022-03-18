@@ -39,12 +39,12 @@
         android:textOff="NO"
         android:textOn="SI"
         android:thumb="@drawable/thumb"
+        app:showText="true"
+        app:track="@drawable/track"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/textRepetir"
-        app:layout_constraintTop_toTopOf="@+id/imageRepetir"
-        app:showText="true"
-        app:track="@drawable/track">
+        app:layout_constraintTop_toTopOf="@+id/imageRepetir">
 
     </androidx.appcompat.widget.SwitchCompat>
 
@@ -201,7 +201,7 @@
             app:srcCompat="@drawable/icono_duracion" />
 
         <TextView
-            android:id="@+id/textDuranteTemperatura"
+            android:id="@+id/textDurante"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -223,7 +223,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/icono_menos"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/textDuranteTemperatura"
+            app:layout_constraintStart_toEndOf="@+id/textDurante"
             app:layout_constraintTop_toTopOf="parent">
 
         </ImageButton>

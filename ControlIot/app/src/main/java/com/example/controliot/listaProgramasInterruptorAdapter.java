@@ -17,9 +17,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Formatter;
 
 public class listaProgramasInterruptorAdapter extends ArrayAdapter<ProgramaDispositivoIotOnOff> {
@@ -48,6 +47,18 @@ public class listaProgramasInterruptorAdapter extends ArrayAdapter<ProgramaDispo
         dialogo.enviarComando(dispositivo, dialogo.comandoEliminarProgramacion(programa.idProgramacion));
     }
 
+    private void inhibirPrograma(ProgramaDispositivoIotOnOff programa,ListaProgramasInterruptorAdapterHolder holder) {
+        dialogoIot dialogo;
+        dialogo = new dialogoIot(cnx);
+        if (holder.switchProgramaActivo.isChecked()) {
+            programa.setEstadoPrograma(ESTADO_PROGRAMA.PROGRAMA_ACTIVO);
+        } else {
+            programa.setEstadoPrograma(ESTADO_PROGRAMA.PROGRAMA_INACTIVO);
+        }
+
+        dialogo.enviarComando(dispositivo, dialogo.comandoInhibirProgramacion(programa));
+    }
+
 
     @NonNull
     @Override
@@ -71,11 +82,10 @@ public class listaProgramasInterruptorAdapter extends ArrayAdapter<ProgramaDispo
             holder.textoSabado = (TextView) convertView.findViewById(R.id.textoSabado);
             holder.textoDomingo = (TextView) convertView.findViewById(R.id.textoDomingo);
             holder.panelDiasSemana = (ConstraintLayout) convertView.findViewById(R.id.panelDiasSemana);
-            holder.textDurante = (TextView) convertView.findViewById(R.id.textDuranteTemperatura);
+            holder.textDurante = (TextView) convertView.findViewById(R.id.textDurante);
             holder.textDuracionPrograma = (TextView) convertView.findViewById(R.id.textDuracionPrograma);
             holder.imageBorrarPrograma = (ImageView) convertView.findViewById(R.id.imageBorrarPrograma);
             holder.imageProgramaActivado = (ImageView) convertView.findViewById(R.id.imageProgramaActivado);
-            holder.textunidadTiempo = (TextView) convertView.findViewById(R.id.textUnidadTiempo);
             holder.imageBorrarPrograma.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -89,16 +99,12 @@ public class listaProgramasInterruptorAdapter extends ArrayAdapter<ProgramaDispo
                 @Override
                 public void onClick(View v) {
                     Log.i(getClass().toString(), "hola");
+                    inhibirPrograma(listaProgramas.get(position), holder);
+
 
                 }
             });
-            holder.switchProgramaActivo.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    Log.i(getClass().toString(), "hola");
 
-                }
-            });
 
             convertView.setTag(holder);
 
@@ -200,19 +206,15 @@ public class listaProgramasInterruptorAdapter extends ArrayAdapter<ProgramaDispo
                     actualizarPanelDiaSemana(holder.textoDomingo, false);
                 }
                 holder.textHoraPrograma.setText(formatearHora(programa.getHora(), programa.getMinuto()));
-                duracion = programa.getDuracion();
-                if (duracion < 60) holder.textunidadTiempo.setText("sg");
-                if ((duracion >= 60) && (duracion < 3600)) {
-                    duracion = duracion/60;
-                    holder.textDuracionPrograma.setText(String.valueOf(duracion));
-                    holder.textunidadTiempo.setText("min");
-                }
-                if (duracion > 3600) {
-                    duracion = duracion/3600;
-                    holder.textDuracionPrograma.setText(String.valueOf(duracion));
-                    holder.textunidadTiempo.setText("h");
-                }
+                if (programa.getDuracion() == 0) {
+                    holder.textDurante.setVisibility(View.GONE);
+                    holder.textDuracionPrograma.setText(" Permanente");
+                } else {
+                    holder.textDurante.setVisibility(View.VISIBLE);
+                    holder.textDurante.setText(" hasta las ");
+                    holder.textDuracionPrograma.setText(convertirDuracion(programa.getHora(), programa.getMinuto(), programa.getDuracion()));
 
+                }
                 break;
             case PROGRAMA_SEMANAL:
                 break;
@@ -248,7 +250,6 @@ public class listaProgramasInterruptorAdapter extends ArrayAdapter<ProgramaDispo
         TextView textDurante;
         ImageView imageBorrarPrograma;
         ImageView imageProgramaActivado;
-        TextView textunidadTiempo;
         TextView textoLunes;
         TextView textoMartes;
         TextView textoMiercoles;
@@ -257,6 +258,27 @@ public class listaProgramasInterruptorAdapter extends ArrayAdapter<ProgramaDispo
         TextView textoSabado;
         TextView textoDomingo;
         ConstraintLayout panelDiasSemana;
+
+    }
+
+    private String convertirDuracion(int hora, int minuto, int duracion) {
+
+        Calendar fecha;
+        String horafinal;
+        if (duracion == 0) {
+            horafinal = "siempre";
+        } else {
+            fecha = Calendar.getInstance();
+            fecha.set(Calendar.HOUR_OF_DAY, hora);
+            fecha.set(Calendar.MINUTE, minuto);
+            fecha.set(Calendar.SECOND, duracion);
+
+
+            horafinal = formatearHora(fecha.get(Calendar.HOUR_OF_DAY), fecha.get(Calendar.MINUTE));
+
+        }
+        return horafinal;
+
 
     }
 

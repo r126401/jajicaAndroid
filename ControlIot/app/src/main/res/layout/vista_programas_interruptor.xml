@@ -28,8 +28,17 @@
 
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/switchProgramaActivo"
+
+
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:checked="true"
+        android:textOff="INH"
+        android:textOn="ACT"
+        android:thumb="@drawable/thumb"
+        app:showText="true"
+        app:track="@drawable/track"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -155,26 +164,17 @@
         android:fontFamily="@font/poetsenone"
         android:text="12:00"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/textDuranteTemperatura"
-        app:layout_constraintStart_toEndOf="@+id/textDuranteTemperatura"/>
+        app:layout_constraintBottom_toBottomOf="@+id/textDurante"
+        app:layout_constraintStart_toEndOf="@+id/textDurante"/>
+
+
 
     <TextView
-        android:id="@+id/textUnidadTiempo"
+        android:id="@+id/textDurante"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/poetsenone"
-        android:text="min"
-
-        app:layout_constraintBottom_toBottomOf="@+id/textDuranteTemperatura"
-        app:layout_constraintStart_toEndOf="@+id/textDuracionPrograma"
-        app:layout_constraintTop_toTopOf="@+id/textDuranteTemperatura"/>
-
-    <TextView
-        android:id="@+id/textDuranteTemperatura"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/poetsenone"
-        android:text=" durante "
+        android:text=" hasta "
         android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="@+id/textHoraPrograma"
         app:layout_constraintStart_toEndOf="@+id/textHoraPrograma"/>
