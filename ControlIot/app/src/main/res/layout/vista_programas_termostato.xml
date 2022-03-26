@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+
+    <ImageView
+        android:id="@+id/imageInterruptor"
+        android:layout_width="43dp"
+        android:layout_height="39dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/switchon"/>
+
+    <ImageView
+        android:id="@+id/imageBorrarPrograma"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginEnd="12dp"
+        android:focusable="false"
+        app:layout_constraintEnd_toStartOf="@+id/switchProgramaActivo"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_delete" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/switchProgramaActivo"
+
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checked="true"
+        android:textOff="INH"
+        android:textOn="ACT"
+        android:thumb="@drawable/thumb"
+        app:showText="true"
+        app:track="@drawable/track"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:focusable="false">
+
+    </androidx.appcompat.widget.SwitchCompat>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/imageInterruptor"
+        android:id="@+id/panelDiasSemana">
+
+
+        <TextView
+            android:id="@+id/textoLunes"
+            style="@style/diasDeLaSemanaProgramadorReducido"
+            android:layout_marginStart="68dp"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:text="L"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="parent">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/textoMartes"
+            style="@style/diasDeLaSemanaProgramadorReducido"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:text="M"
+            app:layout_constraintBottom_toBottomOf="@+id/textoLunes"
+            app:layout_constraintStart_toEndOf="@+id/textoLunes"
+            app:layout_constraintTop_toTopOf="@+id/textoLunes">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/textoMiercoles"
+            style="@style/diasDeLaSemanaProgramadorReducido"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:text="X"
+            app:layout_constraintBottom_toBottomOf="@+id/textoMartes"
+            app:layout_constraintStart_toEndOf="@+id/textoMartes"
+            app:layout_constraintTop_toTopOf="@+id/textoMartes">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/textoJueves"
+            style="@style/diasDeLaSemanaProgramadorReducido"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:text="J"
+            app:layout_constraintBottom_toBottomOf="@+id/textoMiercoles"
+            app:layout_constraintStart_toEndOf="@+id/textoMiercoles"
+            app:layout_constraintTop_toTopOf="@+id/textoMiercoles">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/textoViernes"
+            style="@style/diasDeLaSemanaProgramadorReducido"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:text="V"
+            app:layout_constraintBottom_toBottomOf="@+id/textoJueves"
+            app:layout_constraintStart_toEndOf="@+id/textoJueves"
+            app:layout_constraintTop_toTopOf="@+id/textoJueves">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/textoSabado"
+            style="@style/diasDeLaSemanaProgramadorReducido"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:text="S"
+            app:layout_constraintBottom_toBottomOf="@+id/textoViernes"
+            app:layout_constraintStart_toEndOf="@+id/textoViernes"
+            app:layout_constraintTop_toTopOf="@+id/textoViernes">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/textoDomingo"
+            style="@style/diasDeLaSemanaProgramadorReducido"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:text="D"
+            app:layout_constraintBottom_toBottomOf="@+id/textoSabado"
+            app:layout_constraintStart_toEndOf="@+id/textoSabado"
+            app:layout_constraintTop_toTopOf="@+id/textoSabado">
+
+        </TextView>
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <TextView
+        android:id="@+id/textHoraPrograma"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:fontFamily="@font/poetsenone"
+        android:text="12:00"
+        android:textSize="20dp"
+        app:layout_constraintEnd_toStartOf="@+id/switchProgramaActivo"
+        app:layout_constraintHorizontal_bias="0.103"
+        app:layout_constraintStart_toEndOf="@+id/imageInterruptor"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+
+    <TextView
+        android:id="@+id/textDuracionPrograma"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poetsenone"
+        android:text="12:00"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/textDurante"
+        app:layout_constraintStart_toEndOf="@+id/textDurante"/>
+
+
+
+    <TextView
+        android:id="@+id/textDurante"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poetsenone"
+        android:text=" hasta "
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/textHoraPrograma"
+        app:layout_constraintStart_toEndOf="@+id/textHoraPrograma"/>
+
+    <ImageView
+        android:id="@+id/imageProgramaActivado"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/switchProgramaActivo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/led"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

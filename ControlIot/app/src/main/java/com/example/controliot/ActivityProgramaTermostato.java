@@ -1,10 +1,5 @@
 package com.example.controliot;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SwitchCompat;
-import androidx.constraintlayout.widget.ConstraintLayout;
-
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
@@ -23,12 +18,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
+import androidx.constraintlayout.widget.ConstraintLayout;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Formatter;
 
-public class ActivityProgramaInterruptor extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener, View.OnClickListener, View.OnLongClickListener, View.OnTouchListener {
+public class ActivityProgramaTermostato extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener, View.OnClickListener, View.OnLongClickListener, View.OnTouchListener {
 
     private final String TAG = "ActivityProgramaInterruptor";
     private TextView textRepetir;
@@ -53,8 +53,8 @@ public class ActivityProgramaInterruptor extends AppCompatActivity implements Ti
     private Button botonAceptar;
     private ImageView imageOnOff;
 
-    private ProgramaDispositivoIotOnOff programaIotOnOff;
-    private ProgramaDispositivoIotTermostato programaTermostato;
+    private ProgramaDispositivoIotTermostato programaIotTermostato;
+    //private ProgramaDispositivoIotTermostato programaTermostato;
     final double INCREMENTO = 0.1;
     final double DECREMENTO = 0.1;
     final double INCREMENTO_LARGO = 0.5;
@@ -234,11 +234,10 @@ public class ActivityProgramaInterruptor extends AppCompatActivity implements Ti
     private void presentarProgramaInterruptor(COMANDO_IOT tipoComando) {
 
         TIPO_PROGRAMA tipoPrograma;
-        tipoPrograma = programaIotOnOff.getTipoPrograma();
-        int duracion;
+        tipoPrograma = programaIotTermostato.getTipoPrograma();
         int i;
         if (tipoComando == COMANDO_IOT.MODIFICAR_PROGRAMACION) {
-            if (programaIotOnOff.getEstadoRele() == ESTADO_RELE.ON) {
+            if (programaIotTermostato.getEstadoRele() == ESTADO_RELE.ON) {
                 imageOnOff.setImageResource(R.drawable.switchon);
                 imageOnOff.setTag(true);
             } else {
@@ -253,9 +252,7 @@ public class ActivityProgramaInterruptor extends AppCompatActivity implements Ti
                     switchRepetir.setChecked(true);
                     panelRepetir.setVisibility(View.VISIBLE);
                     textFecha.setVisibility(View.INVISIBLE);
-                    textHoraPrograma.setText(formatearHora(programaIotOnOff.getHora(), programaIotOnOff.getMinuto()));
-                    duracion = programaIotOnOff.getDuracion();
-                    presentarDuracion(duracion, false);
+                    textHoraPrograma.setText(formatearHora(programaIotTermostato.getHora(), programaIotTermostato.getMinuto()));
                     actualizarSemanaCompleta();
 
                     break;
@@ -265,9 +262,7 @@ public class ActivityProgramaInterruptor extends AppCompatActivity implements Ti
                     switchRepetir.setChecked(false);
                     panelRepetir.setVisibility(View.INVISIBLE);
                     textFecha.setVisibility(View.VISIBLE);
-                    textHoraPrograma.setText(formatearHora(programaIotOnOff.getHora(), programaIotOnOff.getMinuto()));
-                    duracion = programaIotOnOff.getDuracion();
-                    presentarDuracion(duracion, false);
+                    textHoraPrograma.setText(formatearHora(programaIotTermostato.getHora(), programaIotTermostato.getMinuto()));
                     break;
             }
 
@@ -283,7 +278,7 @@ public class ActivityProgramaInterruptor extends AppCompatActivity implements Ti
             case INTERRUPTOR:
 
                 if (tipoComando == COMANDO_IOT.MODIFICAR_PROGRAMACION) {
-                    programaIotOnOff = (ProgramaDispositivoIotOnOff) intent.getSerializableExtra(TEXTOS_DIALOGO_IOT.ID_PROGRAMA.getValorTextoJson());
+                    programaIotTermostato = (ProgramaDispositivoIotTermostato) intent.getSerializableExtra(TEXTOS_DIALOGO_IOT.ID_PROGRAMA.getValorTextoJson());
                     presentarProgramaInterruptor(COMANDO_IOT.MODIFICAR_PROGRAMACION);
 
                 } else {
@@ -293,7 +288,7 @@ public class ActivityProgramaInterruptor extends AppCompatActivity implements Ti
             case TERMOMETRO:
 
                 if (tipoComando == COMANDO_IOT.MODIFICAR_PROGRAMACION) {
-                    programaTermostato = (ProgramaDispositivoIotTermostato) intent.getSerializableExtra(COMANDO_IOT.MODIFICAR_PROGRAMACION.toString());
+                    programaIotTermostato = (ProgramaDispositivoIotTermostato) intent.getSerializableExtra(COMANDO_IOT.MODIFICAR_PROGRAMACION.toString());
                 } else {
 
                 }
@@ -314,7 +309,7 @@ public class ActivityProgramaInterruptor extends AppCompatActivity implements Ti
         if (bundle != null) {
             tipo = (TIPO_DISPOSITIVO_IOT) bundle.get(TEXTOS_DIALOGO_IOT.TIPO_DISPOSITIVO.getValorTextoJson());
             tipoOperacion = (COMANDO_IOT) bundle.get(TEXTOS_DIALOGO_IOT.COMANDO.getValorTextoJson());
-            programaIotOnOff = (ProgramaDispositivoIotOnOff) intent.getSerializableExtra(TEXTOS_DIALOGO_IOT.ID_PROGRAMA.getValorTextoJson());
+            programaIotTermostato = (ProgramaDispositivoIotTermostato) intent.getSerializableExtra(TEXTOS_DIALOGO_IOT.ID_PROGRAMA.getValorTextoJson());
             //presentarProgramaInterruptor(COMANDO_IOT.MODIFICAR_PROGRAMACION);
             //seleccionarTipoProgramaDispositivo(tipo, intent, tipoOperacion);
 
@@ -333,7 +328,7 @@ public class ActivityProgramaInterruptor extends AppCompatActivity implements Ti
             presentarProgramaInterruptor(COMANDO_IOT.MODIFICAR_PROGRAMACION);
 
         } else {
-            programaIotOnOff = new ProgramaDispositivoIotOnOff();
+            programaIotTermostato = new ProgramaDispositivoIotTermostato();
             actualizarDiasSemana(textoLunes, true);
             actualizarDiasSemana(textoMartes, true);
             actualizarDiasSemana(textoMiercoles, true);
@@ -341,21 +336,19 @@ public class ActivityProgramaInterruptor extends AppCompatActivity implements Ti
             actualizarDiasSemana(textoViernes, true);
             actualizarDiasSemana(textoSabado, true);
             actualizarDiasSemana(textoDomingo, true);
-            programaIotOnOff.setDia(fecha.get(Calendar.DAY_OF_MONTH));
-            programaIotOnOff.setMes(fecha.get(Calendar.MONTH));
-            programaIotOnOff.setAno(fecha.get(Calendar.YEAR));
-            programaIotOnOff.setEstadoPrograma(ESTADO_PROGRAMA.PROGRAMA_ACTIVO);
-            programaIotOnOff.setTipoPrograma(TIPO_PROGRAMA.PROGRAMA_DIARIO);
-            programaIotOnOff.setEstadoRele(ESTADO_RELE.ON);
-            programaIotOnOff.setDuracion(120);
-            programaIotOnOff.setHora(fecha.get(Calendar.HOUR_OF_DAY));
-            programaIotOnOff.setMinuto(fecha.get(Calendar.MINUTE));
-            programaIotOnOff.setSegundo(0);
-            programaIotOnOff.setMascara(calcularMascara());
-            programaIotOnOff.actualizarDiasActivos();
+            programaIotTermostato.setDia(fecha.get(Calendar.DAY_OF_MONTH));
+            programaIotTermostato.setMes(fecha.get(Calendar.MONTH));
+            programaIotTermostato.setAno(fecha.get(Calendar.YEAR));
+            programaIotTermostato.setEstadoPrograma(ESTADO_PROGRAMA.PROGRAMA_ACTIVO);
+            programaIotTermostato.setTipoPrograma(TIPO_PROGRAMA.PROGRAMA_DIARIO);
+            programaIotTermostato.setEstadoRele(ESTADO_RELE.ON);
+            programaIotTermostato.setHora(fecha.get(Calendar.HOUR_OF_DAY));
+            programaIotTermostato.setMinuto(fecha.get(Calendar.MINUTE));
+            programaIotTermostato.setSegundo(0);
+            programaIotTermostato.setMascara(calcularMascara());
+            programaIotTermostato.actualizarDiasActivos();
             textFecha.setVisibility(View.INVISIBLE);
-            textHoraPrograma.setText(formatearHora(programaIotOnOff.getHora(), programaIotOnOff.getMinuto()));
-            presentarDuracion(programaIotOnOff.getDuracion(), true);
+            textHoraPrograma.setText(formatearHora(programaIotTermostato.getHora(), programaIotTermostato.getMinuto()));
             imageOnOff.setTag(true);
 
 
@@ -377,7 +370,7 @@ public class ActivityProgramaInterruptor extends AppCompatActivity implements Ti
         hora = hora.substring(0,2);
         minuto = control.getText().toString().substring(3,5);
 
-        timePickerDialog = new TimePickerDialog(this, ActivityProgramaInterruptor.this, Integer.valueOf(hora),Integer.valueOf(minuto), true);
+        timePickerDialog = new TimePickerDialog(this, ActivityProgramaTermostato.this, Integer.valueOf(hora),Integer.valueOf(minuto), true);
         timePickerDialog.show();
 
     }
@@ -389,16 +382,16 @@ public class ActivityProgramaInterruptor extends AppCompatActivity implements Ti
         Log.i(TAG, "hola");
 
         textHoraPrograma.setText(formatearHora(hourOfDay, minute));
-        programaIotOnOff.setHora(hourOfDay);
-        programaIotOnOff.setMinuto(minute);
+        programaIotTermostato.setHora(hourOfDay);
+        programaIotTermostato.setMinuto(minute);
     }
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
 
-        programaIotOnOff.setAno(year);
-        programaIotOnOff.setMes(month);
-        programaIotOnOff.setDia(dayOfMonth);
+        programaIotTermostato.setAno(year);
+        programaIotTermostato.setMes(month);
+        programaIotTermostato.setDia(dayOfMonth);
     }
 
     private void abrirDialogoDiasSemana() {
@@ -457,23 +450,23 @@ public class ActivityProgramaInterruptor extends AppCompatActivity implements Ti
             mes = fecha.get(Calendar.MONTH);
             dia = fecha.get(Calendar.DAY_OF_MONTH);
         } else {
-            if (programaIotOnOff.getDia() == 0) {
+            if (programaIotTermostato.getDia() == 0) {
                 ano = fecha.get(Calendar.YEAR);
                 mes = fecha.get(Calendar.MONTH);
                 dia = fecha.get(Calendar.DAY_OF_MONTH);
             } else {
-                ano = programaIotOnOff.getAno();
-                mes = programaIotOnOff.getMes();
-                dia = programaIotOnOff.getDia();
+                ano = programaIotTermostato.getAno();
+                mes = programaIotTermostato.getMes();
+                dia = programaIotTermostato.getDia();
             }
 
         }
         datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                programaIotOnOff.setAno(year);
-                programaIotOnOff.setMes(month);
-                programaIotOnOff.setDia(dayOfMonth);
+                programaIotTermostato.setAno(year);
+                programaIotTermostato.setMes(month);
+                programaIotTermostato.setDia(dayOfMonth);
                 textFecha.setText(dayOfMonth + "/"+ (month+1) +"/"+ year);
 
             }
@@ -490,12 +483,12 @@ public class ActivityProgramaInterruptor extends AppCompatActivity implements Ti
         if ((Boolean) imageOnOff.getTag() == true) {
             imageOnOff.setImageResource(R.drawable.switchoff);
             imageOnOff.setTag(false);
-            programaIotOnOff.setEstadoRele(ESTADO_RELE.OFF);
+            programaIotTermostato.setEstadoRele(ESTADO_RELE.OFF);
 
         } else {
             imageOnOff.setImageResource(R.drawable.switchon);
             imageOnOff.setTag(true);
-            programaIotOnOff.setEstadoRele(ESTADO_RELE.ON);
+            programaIotTermostato.setEstadoRele(ESTADO_RELE.ON);
         }
 
 
@@ -531,14 +524,13 @@ public class ActivityProgramaInterruptor extends AppCompatActivity implements Ti
                 if (!(textUnidadEntero.getText().toString().equals("horas")) ||
                         (textUnidadEntero.getText().toString().equals("horas") && (Integer.valueOf(textDuracionEntero.getText().toString()) < 16))) {
                     incrementarDecrementarDuracion(true, true);
-                    programaIotOnOff.setDuracion(Integer.valueOf(duracionPrograma));
+
                 }
 
                 break;
             case R.id.idBotonMenosTemperatura:
 
                 incrementarDecrementarDuracion(false, true);
-                programaIotOnOff.setDuracion(Integer.valueOf(duracionPrograma));
                 break;
             case R.id.botonCancelar:
                 finish();
@@ -658,14 +650,14 @@ public class ActivityProgramaInterruptor extends AppCompatActivity implements Ti
                 if( (event.getAction()==MotionEvent.ACTION_UP || event.getAction()==MotionEvent.ACTION_CANCEL)) {
                     Log.i(TAG, "despues");
                     autoIncremento = false;
-                    programaIotOnOff.setDuracion(Integer.valueOf(duracionPrograma));
+
                 }
                 break;
             //case R.id.idbotonMenostemperatura:
             case R.id.idBotonMenosTemperatura:
                 if( (event.getAction()==MotionEvent.ACTION_UP || event.getAction()==MotionEvent.ACTION_CANCEL)) {
                     autoDecremento = false;
-                    programaIotOnOff.setDuracion(Integer.valueOf(duracionPrograma));
+
                 }
                 break;
 
@@ -718,10 +710,10 @@ public class ActivityProgramaInterruptor extends AppCompatActivity implements Ti
             panelRepetir.setVisibility(View.INVISIBLE);
             textFecha.setVisibility(View.VISIBLE);
             if (tipoOperacion == COMANDO_IOT.MODIFICAR_PROGRAMACION) {
-                if (programaIotOnOff.getDia() == 0) {
+                if (programaIotTermostato.getDia() == 0) {
                     textFecha.setText(ponerFechaDeHoy());
                 } else {
-                    textFecha.setText(programaIotOnOff.getDia() + "/"+programaIotOnOff.getMes() + "/" +programaIotOnOff.getAno());
+                    textFecha.setText(programaIotTermostato.getDia() + "/"+programaIotTermostato.getMes() + "/" +programaIotTermostato.getAno());
 
                 }
             } else {
@@ -742,7 +734,7 @@ public class ActivityProgramaInterruptor extends AppCompatActivity implements Ti
         ProgramaDispositivoIot prog = null;
         switch (tipo) {
             case INTERRUPTOR:
-                prog = programaIotOnOff;
+                prog = programaIotTermostato;
                 break;
             case CRONOTERMOSTATO:
                 //prog = programaCronotermostato;
@@ -797,15 +789,15 @@ public class ActivityProgramaInterruptor extends AppCompatActivity implements Ti
         dialogoIot dialogo;
         String textoComando;
         dialogo = new dialogoIot();
-        programaIotOnOff.setMascara(calcularMascara());
+        programaIotTermostato.setMascara(calcularMascara());
         if (tipoOperacion == COMANDO_IOT.MODIFICAR_PROGRAMACION) {
-            textoComando = dialogo.comandoModificarPrograma(programaIotOnOff);
+            textoComando = dialogo.comandoModificarPrograma(programaIotTermostato);
             Intent datosDevueltos = new Intent();
             datosDevueltos.setData(Uri.parse(textoComando));
             setResult(RESULT_OK, datosDevueltos);
         } else {
-            programaIotOnOff.setEstadoRele(ESTADO_RELE.ON);
-            textoComando = dialogo.comandoNuevoPrograma(programaIotOnOff);
+            programaIotTermostato.setEstadoRele(ESTADO_RELE.ON);
+            textoComando = dialogo.comandoNuevoPrograma(programaIotTermostato);
             Intent datosDevueltos = new Intent();
             datosDevueltos.setData(Uri.parse(textoComando));
             setResult(RESULT_OK, datosDevueltos);
@@ -816,13 +808,13 @@ public class ActivityProgramaInterruptor extends AppCompatActivity implements Ti
     }
     private void actualizarSemanaCompleta() {
 
-        actualizarDiasSemana(textoDomingo, programaIotOnOff.getDiaActivo(0));
-        actualizarDiasSemana(textoLunes, programaIotOnOff.getDiaActivo(1));
-        actualizarDiasSemana(textoMartes, programaIotOnOff.getDiaActivo(2));
-        actualizarDiasSemana(textoMiercoles, programaIotOnOff.getDiaActivo(3));
-        actualizarDiasSemana(textoJueves, programaIotOnOff.getDiaActivo(4));
-        actualizarDiasSemana(textoViernes, programaIotOnOff.getDiaActivo(5));
-        actualizarDiasSemana(textoSabado, programaIotOnOff.getDiaActivo(6));
+        actualizarDiasSemana(textoDomingo, programaIotTermostato.getDiaActivo(0));
+        actualizarDiasSemana(textoLunes, programaIotTermostato.getDiaActivo(1));
+        actualizarDiasSemana(textoMartes, programaIotTermostato.getDiaActivo(2));
+        actualizarDiasSemana(textoMiercoles, programaIotTermostato.getDiaActivo(3));
+        actualizarDiasSemana(textoJueves, programaIotTermostato.getDiaActivo(4));
+        actualizarDiasSemana(textoViernes, programaIotTermostato.getDiaActivo(5));
+        actualizarDiasSemana(textoSabado, programaIotTermostato.getDiaActivo(6));
 
 
     }

@@ -1452,10 +1452,12 @@ public class dialogoIot implements Serializable {
     public ESPONTANEO_IOT descubrirTipoInformeEspontaneo(String texto) {
 
         int tipoInforme;
+        ESPONTANEO_IOT tipoEspontaneo = ESPONTANEO_IOT.ESPONTANEO_DESCONOCIDO;
         tipoInforme = extraerDatoJsonInt(texto, TEXTOS_DIALOGO_IOT.TIPO_INFORME_ESPONTANEO.getValorTextoJson());
 
+        tipoEspontaneo = tipoEspontaneo.fromId(tipoInforme);
 
-        return ESPONTANEO_IOT.ESPONTANEO_DESCONOCIDO.fromId(tipoInforme);
+        return tipoEspontaneo;
     }
 
     public OTA_IOT tipoInformeOta(String texto) {

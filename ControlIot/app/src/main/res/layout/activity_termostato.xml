@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ActivityTermostato">
+
+    <ImageView
+        android:id="@+id/imageBotonOnOff"
+        android:layout_width="134dp"
+        android:layout_height="114dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textConsolaMensajes"
+        app:srcCompat="@drawable/switchon" />
+
+
+    <ProgressBar
+        android:id="@+id/barraProgreso"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/imageBotonOnOff"
+        app:layout_constraintEnd_toStartOf="@+id/imageBotonOnOff"
+        app:layout_constraintHorizontal_bias="0.555"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/imageBotonOnOff" />
+
+    <TextView
+        android:id="@+id/textListaProgramas"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Lista de programas"
+        android:textAlignment="center"
+        app:layout_constraintTop_toBottomOf="@+id/imageBotonOnOff" />
+
+
+    <ImageView
+        android:id="@+id/imageEstadoBroker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.646"
+        app:layout_constraintStart_toEndOf="@+id/imageBotonOnOff"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/bk_conectado" />
+
+    <TextView
+        android:id="@+id/textConsolaMensajes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poetsenone"
+        android:text="TextView"
+        android:textSize="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeSchedule"
+        android:layout_width="match_parent"
+        android:layout_height="492dp"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        app:layout_constraintBottom_toTopOf="@id/bottommenuTermostato"
+        app:layout_constraintTop_toBottomOf="@id/textListaProgramas">
+
+        <ListView
+            android:id="@+id/listViewSchedule"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:descendantFocusability="blocksDescendants"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            app:layout_constraintStart_toStartOf="parent">
+
+
+        </ListView>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <ImageView
+        android:id="@+id/imageUpgrade"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/imageBotonOnOff"
+        app:layout_constraintEnd_toStartOf="@+id/barraProgreso"
+        app:layout_constraintTop_toBottomOf="@+id/barraProgreso"
+        app:srcCompat="@drawable/ic_upgrade" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottommenuTermostato"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:background="#cccccc"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/menu_termostato" />
+
+    <ImageView
+        android:id="@+id/imageEstadoDispositivo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/textListaProgramas"
+        app:layout_constraintEnd_toEndOf="@+id/imageEstadoBroker"
+        app:layout_constraintStart_toStartOf="@+id/imageEstadoBroker"
+        app:layout_constraintTop_toBottomOf="@+id/imageEstadoBroker"
+        app:srcCompat="@drawable/dispositivo_indisponible" />
+</androidx.constraintlayout.widget.ConstraintLayout>

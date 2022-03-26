@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,15 +20,15 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Formatter;
 
-public class listaProgramasInterruptorAdapter extends ArrayAdapter<ProgramaDispositivoIotOnOff> {
+public class listaProgramasTermostatoAdapter extends ArrayAdapter<ProgramaDispositivoIotTermostato> {
 
     private Context contexto;
     private int idLayout;
-    ArrayList<ProgramaDispositivoIotOnOff> listaProgramas;
+    ArrayList<ProgramaDispositivoIotTermostato> listaProgramas;
     conexionMqtt cnx;
-    dispositivoIotOnOff dispositivo;
+    dispositivoIotTermostato dispositivo;
 
-    listaProgramasInterruptorAdapter(Context contexto, int idLayout, ArrayList<ProgramaDispositivoIotOnOff> listaProgramas, conexionMqtt cnx, dispositivoIotOnOff dispositivo) {
+    listaProgramasTermostatoAdapter(Context contexto, int idLayout, ArrayList<ProgramaDispositivoIotTermostato> listaProgramas, conexionMqtt cnx, dispositivoIotTermostato dispositivo) {
         super(contexto, idLayout, listaProgramas);
 
         this.contexto = contexto;
@@ -41,13 +40,13 @@ public class listaProgramasInterruptorAdapter extends ArrayAdapter<ProgramaDispo
 
     }
 
-    private void eliminarPrograma(ProgramaDispositivoIotOnOff programa) {
+    private void eliminarPrograma(ProgramaDispositivoIotTermostato programa) {
         dialogoIot dialogo;
         dialogo = new dialogoIot(cnx);
         dialogo.enviarComando(dispositivo, dialogo.comandoEliminarProgramacion(programa.idProgramacion));
     }
 
-    private void inhibirPrograma(ProgramaDispositivoIotOnOff programa,ListaProgramasInterruptorAdapterHolder holder) {
+    private void inhibirPrograma(ProgramaDispositivoIotTermostato programa,ListaProgramasInterruptorAdapterHolder holder) {
         dialogoIot dialogo;
         dialogo = new dialogoIot(cnx);
         if (holder.switchProgramaActivo.isChecked()) {
@@ -66,7 +65,7 @@ public class listaProgramasInterruptorAdapter extends ArrayAdapter<ProgramaDispo
 
 
         ListaProgramasInterruptorAdapterHolder holder;
-        ProgramaDispositivoIotOnOff programa = listaProgramas.get(position);
+        ProgramaDispositivoIotTermostato programa = listaProgramas.get(position);
         if (convertView == null) {
             LayoutInflater inflater = ((Activity) contexto).getLayoutInflater();
             convertView = inflater.inflate(idLayout, parent, false);
@@ -172,7 +171,7 @@ public class listaProgramasInterruptorAdapter extends ArrayAdapter<ProgramaDispo
     }
 
 
-    private void presentarProgramaDiario(ListaProgramasInterruptorAdapterHolder holder, ProgramaDispositivoIotOnOff programa) {
+    private void presentarProgramaDiario(ListaProgramasInterruptorAdapterHolder holder, ProgramaDispositivoIotTermostato programa) {
 
         int i;
         String textoRepeticion = "";
@@ -219,15 +218,7 @@ public class listaProgramasInterruptorAdapter extends ArrayAdapter<ProgramaDispo
                     actualizarPanelDiaSemana(holder.textoDomingo, false);
                 }
                 holder.textHoraPrograma.setText(formatearHora(programa.getHora(), programa.getMinuto()));
-                if (programa.getDuracion() == 0) {
-                    holder.textDurante.setVisibility(View.GONE);
-                    holder.textDuracionPrograma.setText(" Permanente");
-                } else {
-                    holder.textDurante.setVisibility(View.VISIBLE);
-                    holder.textDurante.setText(" hasta las ");
-                    holder.textDuracionPrograma.setText(convertirDuracion(programa.getHora(), programa.getMinuto(), programa.getDuracion()));
 
-                }
                 break;
             case PROGRAMA_SEMANAL:
                 break;

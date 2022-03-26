@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/itemInfo"
+        android:checked="false"
+        android:icon="@drawable/ic_info"
+        android:title="info">
+    </item>
+
+    <item
+        android:id="@+id/itemConfiguracion"
+        android:checked="false"
+        android:icon="@drawable/ic_settings"
+        android:title="conf">
+    </item>
+    <item
+        android:id="@+id/itemNuevoProgramaTermostato"
+        android:checked="false"
+        android:icon="@drawable/schedule"
+        android:title="Nuevo">
+    </item>
+
+
+    <item
+        android:id="@+id/itemmasTermostato"
+        android:checked="false"
+        android:icon="@drawable/ic_mas"
+        android:title="mas">
+    </item>
+
+
+
+</menu>

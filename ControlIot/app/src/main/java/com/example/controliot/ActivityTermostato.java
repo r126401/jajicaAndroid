@@ -1,14 +1,5 @@
 package com.example.controliot;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -28,6 +19,15 @@ import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
@@ -39,7 +39,7 @@ import org.json.JSONObject;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class ActivityInterruptor extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener, Serializable {
+public class ActivityTermostato extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener, Serializable {
 
     private ImageView imageUpgrade;
     private ImageView imageBotonOnOff;
@@ -47,17 +47,17 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
     private SwipeRefreshLayout swipeSchedule;
     private ListView listViewSchedule;
     private ImageView imageEstadoDispositivo;
-    private BottomNavigationView bottommenuInterruptor;
+    private BottomNavigationView bottommenuTermostato;
     private String idDispositivo;
     private conexionMqtt cnx;
-    private final String TAG = "ActivityInterruptor";
+    private final String TAG = "ActivityTermostato";
     private Context contexto;
     private dialogoIot dialogo;
     private ProgressBar barraProgreso;
     private TextView textConsolaMensajes;
     private CountDownTimer temporizador;
-    private dispositivoIotOnOff dispositivo;
-    private listaProgramasInterruptorAdapter programasInterruptorAdapter;
+    private dispositivoIotTermostato dispositivo;
+    private listaProgramasTermostatoAdapter programasTermostatoAdapter;
     private final String topicPeticionOta = "OtaIotOnOff";
     private final String topicRespuestaOta = "newVersionOtaIotOnOff";
     private boolean versionComprobada = false;
@@ -77,8 +77,8 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
         swipeSchedule = (SwipeRefreshLayout) findViewById(R.id.swipeSchedule);
         swipeSchedule.setOnRefreshListener(this);
         listViewSchedule = (ListView) findViewById(R.id.listViewSchedule);
-        bottommenuInterruptor = (BottomNavigationView) findViewById(R.id.bottommenuInterruptor);
-        bottommenuInterruptor.setOnNavigationItemSelectedListener(this);
+        bottommenuTermostato = (BottomNavigationView) findViewById(R.id.bottommenuTermostato);
+        bottommenuTermostato.setOnNavigationItemSelectedListener(this);
         barraProgreso = (ProgressBar) findViewById(R.id.barraProgreso);
         barraProgreso.setVisibility(View.INVISIBLE);
         textConsolaMensajes = (TextView) findViewById(R.id.textConsolaMensajes);
@@ -89,7 +89,7 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Log.i(TAG, "hola");
-                lanzarActivityProgramaInterruptor(position, COMANDO_IOT.MODIFICAR_PROGRAMACION);
+                lanzarActivityProgramaTermostato(position, COMANDO_IOT.MODIFICAR_PROGRAMACION);
             }
         });
         listViewSchedule.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -158,7 +158,7 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
         listaDispositivos = new configuracionDispositivos();
         listaDispositivos.leerDispositivos(contexto);
         disp = listaDispositivos.getDispositivoPorId(idDispositivo);
-        dispositivo = new dispositivoIotOnOff(disp);
+        dispositivo = new dispositivoIotTermostato(disp);
         cnx = new conexionMqtt(getApplicationContext(), dialogo);
         cnx.setOnRecibirMensajes(new conexionMqtt.OnRecibirMensaje() {
             @Override
@@ -227,18 +227,18 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_interruptor);
+        setContentView(R.layout.activity_termostato);
         registrarControles();
         ConectarAlBrokerMqtt();
         subscribirDispositivo();
-        procesarMensajesInterruptor();
+        procesarMensajesTermostato();
 
         Log.i(TAG, "Clase inicializada");
     }
 
 
 
-    public void actualizarInterruptor(dispositivoIotOnOff dispositivo) {
+    public void actualizarTermostato(dispositivoIotTermostato dispositivo) {
 
         dispositivoDisponible();
         this.dispositivo = dispositivo;
@@ -360,11 +360,11 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
                 break;
             case(R.id.itemConfiguracion):
                 break;
-            case(R.id.itemNuevoProgramaInterruptor):
-                lanzarActivityProgramaInterruptor(0, COMANDO_IOT.NUEVA_PROGRAMACION);
+            case(R.id.itemNuevoProgramaTermostato):
+                lanzarActivityProgramaTermostato(0, COMANDO_IOT.NUEVA_PROGRAMACION);
                 break;
-            case(R.id.itemmasInterruptor):
-                 PopupMenu menumas = new PopupMenu(ActivityInterruptor.this, bottommenuInterruptor);
+            case(R.id.itemmasTermostato):
+                 PopupMenu menumas = new PopupMenu(ActivityTermostato.this, bottommenuTermostato);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                     menumas.setForceShowIcon(true);
                 }
@@ -383,136 +383,81 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
 
 
 
-    private void procesarMensajesInterruptor (){
+    private void procesarMensajesTermostato (){
 
-        cnx.setOnProcesarMensajesInterruptor(new conexionMqtt.OnProcesarMensajesInterruptor() {
+        cnx.setOnProcesarMensajesTermostato(new conexionMqtt.OnProcesarMensajesTermostato() {
             @Override
-            public void estadoAplicacion(String topic, String mensaje, dispositivoIotOnOff dispositivo) {
-                actualizarInterruptor(dispositivo);
+            public void estadoTermostato(String topic, String message, dispositivoIotTermostato dispositivo) {
+                actualizarTermostato(dispositivo);
+            }
+
+            @Override
+            public void actuacionReleLocalTermostato(String topic, String message, dispositivoIotTermostato dispositivo) {
+                actualizarTermostato(dispositivo);
+            }
+
+            @Override
+            public void actuacionReleRemotoTermostato(String topic, String message, dispositivoIotTermostato dispositivo) {
+                actualizarTermostato(dispositivo);
 
             }
 
             @Override
-            public void actuacionReleLocalInterruptor(String topic, String message, dispositivoIotOnOff dispositivo) {
-                actualizarInterruptor(dispositivo);
+            public void consultarProgramacionTermostato(String topic, String texto, String idDispositivo, ProgramaDispositivoIotTermostato programa) {
+                //procesarProgramasRecibidos(programa);
             }
 
             @Override
-            public void actuacionReleRemotoInterruptor(String topic, String message, dispositivoIotOnOff dispositivo) {
-                actualizarInterruptor(dispositivo);
-
-            }
-
-            @Override
-            public void consultarProgramacionInterruptor(String topic, String texto, ArrayList<ProgramaDispositivoIotOnOff> programa) {
-
-                Log.i(TAG, texto);
-                procesarProgramasRecibidos(programa);
-
+            public void nuevoProgramacionTermostato(String topic, String texto, String idDispositivo) {
 
             }
 
             @Override
-            public void nuevoProgramacionInterruptor(String topic, String texto, String idDispositivo) {
-                Log.i(TAG, "Se recibe la informacion de la aplicacion");
-                envioComando(dialogo.escribirComandoConsultarProgramacion());
+            public void eliminarProgramacionTermostato(String topic, String texto, String idDispositivo, ProgramaDispositivoIotTermostato programa) {
 
             }
 
             @Override
-            public void eliminarProgramacionInterruptor(String topic, String texto, String idDispositivo, String programa) {
-                procesarEliminarPrograma(programa);
+            public void modificarProgramacionTermostato(String topic, String texto, String idDispositivo, ProgramaDispositivoIotTermostato programa) {
+
+            }
+        });
+        cnx.setOnProcesarEspontaneosTermostato(new conexionMqtt.OnProcesarEspontaneosTermostato() {
+            @Override
+            public void arranqueAplicacionTermostato(String topic, String texto, dispositivoIotTermostato dispoisitivo) {
+                actualizarTermostato(dispositivo);
+            }
+
+            @Override
+            public void cambioProgramaTermostato(String topic, String texto, String idDispositivo, String idPrograma) {
 
             }
 
             @Override
-            public void modificarProgramacionInterruptor(String topic, String texto, String idDispositivo) {
-                //envioComando(dialogo(dialogo dialogo.escribirComandoConsultarProgramacion());
-                procesarModificarPrograma(texto);
+            public void atuacionReleLocalTermostato(String topic, String texto, String idDisositivo, ESTADO_RELE estadoRele) {
+                actualizarTermostato(dispositivo);
+            }
 
-                //envioComando(dialogo.escribirComandoConsultarProgramacion());
+            @Override
+            public void actuacionReleRemotoTermostato(String topic, String texto, String idDispositivo, ESTADO_RELE estadoRele) {
+                actualizarTermostato(dispositivo);
 
             }
 
             @Override
-            public void modificarAplicacionInterruptor(String topic, String texto, dispositivoIotOnOff dispositivo) {
+            public void upgradeFirmwareTermostato(String topic, String texto, String idDispositivo, OtaVersion otaVersion) {
 
             }
 
             @Override
-            public void resetInterruptor(String topic, String texto, String idDispositivo) {
-
-            }
-
-            @Override
-            public void factoryResetInterruptor(String topic, String texto, String idDispositivo) {
-
-            }
-
-            @Override
-            public void upgradeFirmwareInterruptor(String topic, String texto, String idDispositivo, OtaVersion otaVersion) {
-
-                AlertDialog.Builder ventana;
-                ventana = new AlertDialog.Builder(contexto);
-                ventana.setIcon(R.drawable.ic_upgrade);
-                ventana.setTitle("Actualizando");
-                ventana.show();
-
-
-            }
-
-            @Override
-            public void recibirVersionOtaDisponibleInterruptor(String topic, String texto, String idDispositivo, OtaVersion version) {
-
-                Log.i(TAG, "Recibiendo version");
-            }
-
-            @Override
-            public void informacionDispositivo(String topic, String texto) {
-                Log.i(TAG, "recibida informacion");
-                procesarInformacionDispositivo(texto);
-
-            }
-
-            @Override
-            public void errorMensajeInterruptor(String topic, String mensaje) {
+            public void cambioTemperaturaTermostato(String topic, String texto, String idDispositivo, long temperatura, long humedadad) {
 
             }
         });
 
-        cnx.setOnProcesarMensajeEspontaneoInterruptor(new conexionMqtt.OnProcesarEspontaneosInterruptor() {
-            @Override
-            public void arranqueAplicacionInterruptor(String topic, String texto, dispositivoIotOnOff dispositivo) {
-                actualizarInterruptor(dispositivo);
-            }
 
-            @Override
-            public void cambioProgramaInterruptor(String topic, String texto, String idDispositivo, String idPrograma) {
 
-            }
 
-            @Override
-            public void actuacionRelelocal(String topic, String texto, dispositivoIotOnOff dispositivo) {
-                actualizarInterruptor(dispositivo);
-
-            }
-
-            @Override
-            public void actuacionReleRemoto(String topic, String texto, dispositivoIotOnOff dispositivo) {
-                actualizarInterruptor(dispositivo);
-
-            }
-
-            @Override
-            public void upgradeFirwareFota(String topic, String texto, String idDispositivo, OtaVersion otaVersion) {
-
-            }
-
-            @Override
-            public void espontaneoDesconocido(String topic, String texto) {
-
-            }
-        });
 
         cnx.setOnProcesarVersionServidorOta(new conexionMqtt.OnProcesarVersionServidorOta() {
             @Override
@@ -564,20 +509,20 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
 
 
 
-    private void procesarProgramasRecibidos(ArrayList<ProgramaDispositivoIotOnOff> programas) {
+    private void procesarProgramasRecibidos(ArrayList<ProgramaDispositivoIotTermostato> programas) {
 
-        programasInterruptorAdapter = new listaProgramasInterruptorAdapter(this, R.layout.vista_programas_interruptor, programas, cnx, dispositivo);
-        listViewSchedule.setAdapter(programasInterruptorAdapter);
-        programasInterruptorAdapter.notifyDataSetChanged();
+        programasTermostatoAdapter = new listaProgramasTermostatoAdapter(this, R.layout.vista_programas_termostato, programas, cnx, dispositivo);
+        listViewSchedule.setAdapter(programasTermostatoAdapter);
+        programasTermostatoAdapter.notifyDataSetChanged();
 
     }
 
     private void refrescarDispositivo() {
         envioComando(dialogo.comandoEstadoDispositivo());
-        if (programasInterruptorAdapter != null) {
-            if (programasInterruptorAdapter.listaProgramas != null) {
-                programasInterruptorAdapter.clear();
-                programasInterruptorAdapter = null;
+        if (programasTermostatoAdapter != null) {
+            if (programasTermostatoAdapter.listaProgramas != null) {
+                programasTermostatoAdapter.clear();
+                programasTermostatoAdapter = null;
 
             }
 
@@ -602,7 +547,7 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
     private void consultarNuevaVersionOta() {
 
         subscribirTopicOta();
-        cnx.publicarTopic(topicPeticionOta, dialogo.escribirComandoVersionOtaDisponible(TIPO_DISPOSITIVO_IOT.INTERRUPTOR));
+        cnx.publicarTopic(topicPeticionOta, dialogo.escribirComandoVersionOtaDisponible(TIPO_DISPOSITIVO_IOT.CRONOTERMOSTATO));
         versionComprobada = true;
     }
 
@@ -642,7 +587,7 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
 
         caja.setTitle("Informacion del dispositivo");
         caja.setIcon(R.drawable.switchon);
-        View contenedor = getLayoutInflater().inflate(R.layout.info_dispositivo_interruptor, null);
+        View contenedor = getLayoutInflater().inflate(R.layout.info_dispositivo_termostato, null);
         caja.setView(contenedor);
         listaInfo = (ListView) contenedor.findViewById(R.id.listaInfoDispositivo);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, lista);
@@ -655,11 +600,11 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
 
     private void procesarEliminarPrograma(String idPrograma) {
         dispositivo.eliminarPrograma(idPrograma);
-        programasInterruptorAdapter.notifyDataSetChanged();
+        programasTermostatoAdapter.notifyDataSetChanged();
     }
 
     //Rutina para lanzar una activityForResult
-    ActivityResultLauncher<Intent> lanzadorActivityProgramaInterruptor = registerForActivityResult(
+    ActivityResultLauncher<Intent> lanzadorActivityProgramaTermostato = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {
                 @Override
@@ -678,21 +623,21 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
             }
     );
 
-    private void lanzarActivityProgramaInterruptor(int posicion, COMANDO_IOT idComando) {
+    private void lanzarActivityProgramaTermostato(int posicion, COMANDO_IOT idComando) {
 
-        ProgramaDispositivoIotOnOff programa;
+        ProgramaDispositivoIotTermostato programa;
 
-        Intent lanzador = new Intent(ActivityInterruptor.this, ActivityProgramaInterruptor.class);
-        lanzador.putExtra(TEXTOS_DIALOGO_IOT.TIPO_DISPOSITIVO.getValorTextoJson(), TIPO_DISPOSITIVO_IOT.INTERRUPTOR);
+        Intent lanzador = new Intent(ActivityTermostato.this, ActivityProgramaTermostato.class);
+        lanzador.putExtra(TEXTOS_DIALOGO_IOT.TIPO_DISPOSITIVO.getValorTextoJson(), TIPO_DISPOSITIVO_IOT.CRONOTERMOSTATO);
         //lanzador.putExtra(TEXTOS_DIALOGO_IOT.ID_DISPOSITIVO.getValorTextoJson(), dispositivo.idDispositivo);
         lanzador.putExtra(TEXTOS_DIALOGO_IOT.COMANDO.getValorTextoJson(), idComando);
         if (idComando == COMANDO_IOT.MODIFICAR_PROGRAMACION) {
-            programa = programasInterruptorAdapter.listaProgramas.get(posicion);
+            programa = programasTermostatoAdapter.listaProgramas.get(posicion);
             lanzador.putExtra(TEXTOS_DIALOGO_IOT.ID_PROGRAMA.getValorTextoJson(), programa);
         }
 
 
-        lanzadorActivityProgramaInterruptor.launch(lanzador);
+        lanzadorActivityProgramaTermostato.launch(lanzador);
     }
 
     private void procesarModificarPrograma(String textoRecibido) {
@@ -720,9 +665,10 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
         actualizarEstadoRele();
         duracion = dialogo.extraerDatoJsonInt(textoRecibido, TEXTOS_DIALOGO_IOT.DURACION.getValorTextoJson());
         if(duracion == -1000) duracion = 0;
-        dispositivo.modificarPrograma(idPrograma, idNuevoPrograma, estadoPrograma, String.valueOf(estadoRele), duracion );
+        dispositivo.modificarPrograma(idPrograma, idNuevoPrograma, estadoPrograma,dispositivo.getUmbralTemperatura());
+        //dispositivo.modificarPrograma(idPrograma, idNuevoPrograma, estadoPrograma, String.valueOf(estadoRele), duracion );
         dispositivo.actualizarProgramaActivo(idProgramaActivo);
-        programasInterruptorAdapter.notifyDataSetChanged();
+        programasTermostatoAdapter.notifyDataSetChanged();
 
     }
 
