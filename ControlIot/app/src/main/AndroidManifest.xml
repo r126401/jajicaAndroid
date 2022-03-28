@@ -28,6 +28,9 @@
             android:name=".ActivityInterruptor"
             android:exported="false" />
         <activity
+            android:name=".ActivityTermostato"
+            android:exported="false" />
+        <activity
             android:name=".AcivityInstalarDispositivo"
             android:exported="false" />
         <activity

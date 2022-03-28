@@ -63,7 +63,7 @@
         android:id="@+id/textoUmbralTemperatura"
         android:layout_width="65dp"
         android:layout_height="28dp"
-        android:text="21.5ºC"
+
         android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/estadoConexionTermostato"
@@ -84,8 +84,9 @@
         android:id="@+id/imageIconoUmbralTemperatura"
         android:layout_width="33dp"
         android:layout_height="28dp"
+        android:layout_marginStart="56dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textoHumedad"
+        app:layout_constraintStart_toEndOf="@+id/imageIconoTermometro"
         app:srcCompat="@drawable/ic_umbral_temp" />
 
     <ImageView
@@ -94,6 +95,7 @@
         android:layout_height="28dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/textoHumedad"
+        app:layout_constraintStart_toEndOf="@+id/progresoOperacionTermostato"
         app:layout_constraintTop_toBottomOf="@+id/imageIconoTermometro"
         app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@drawable/ic_humedad" />

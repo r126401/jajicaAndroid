@@ -63,7 +63,7 @@ public class ListaDispositivosAdapter extends ArrayAdapter<dispositivoIot> {
             holder.imageHeatingOnOff = (ImageView) fila.findViewById(R.id.imageHeatingOnOff);
             holder.textoTemperatura = (TextView) fila.findViewById(R.id.textoTemperatura);
             holder.textoHumedad = (TextView) fila.findViewById(R.id.textoHumedad);
-            holder.textoUmbralTemperatura = (TextView) fila.findViewById(R.id.textoTemperatura);
+            holder.textoUmbralTemperatura = (TextView) fila.findViewById(R.id.textoUmbralTemperatura);
             holder.estadoConexionTermostato = (ImageView) fila.findViewById(R.id.estadoConexionTermostato);
             holder.vista_interruptor = (ConstraintLayout) fila.findViewById(R.id.layoutVistaInterruptor);
             holder.vista_termostato = (ConstraintLayout) fila.findViewById(R.id.layoutVistaTermostato);
@@ -289,20 +289,25 @@ private void rellenarControlesDesconocidoSinEstado(ListaDispositivosAdapterHolde
         rellenarControlesTermometroSinEstado(holder, (dispositivoIotTermostato) dispositivo);
         // Actualizamos el estado del rele del termostato
         holder.imageIconoUmbralTemperatura.setVisibility(View.INVISIBLE);
+        holder.imageHeatingOnOff.setVisibility(View.VISIBLE);
         switch (dispositivo.getEstadoRele()) {
 
 
             case OFF:
                 valor = R.drawable.heating_off;
                 holder.barraProgresoTermostato.setVisibility(View.INVISIBLE);
+                holder.imageHeatingOnOff.setImageResource(R.drawable.heating_off);
+
                 break;
             case ON:
                 valor = R.drawable.heating_on;
                 holder.barraProgresoTermostato.setVisibility(View.INVISIBLE);
+                holder.imageHeatingOnOff.setImageResource(R.drawable.heating_on);
                 break;
             case INDETERMINADO:
             default:
                 valor = R.drawable.switch_indeterminado;
+                holder.imageHeatingOnOff.setImageResource(R.drawable.switch_indeterminado);
                 break;
         }
 
@@ -313,7 +318,7 @@ private void rellenarControlesDesconocidoSinEstado(ListaDispositivosAdapterHolde
             if (dato == -1000) {
                 holder.textoUmbralTemperatura.setText("--.- ºC");
             } else {
-                holder.textoUmbralTemperatura.setText(String.valueOf(dato));
+                holder.textoUmbralTemperatura.setText(String.valueOf(dato) + " ºC");
             }
         }
         holder.imageIconoUmbralTemperatura.setVisibility(View.VISIBLE);

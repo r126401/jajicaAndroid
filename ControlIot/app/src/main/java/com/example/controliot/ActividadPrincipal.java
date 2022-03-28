@@ -254,7 +254,6 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
             }
     );
 
-
     ActivityResultLauncher<Intent> lanzadorActivityInstalarDispositivo = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {
@@ -454,12 +453,13 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
         Intent intent = null;
         tipoDispositivo = adapter.listaDispositivos.get(position).tipoDispositivo;
         estado_conexion_iot = adapter.listaDispositivos.get(position).getEstadoConexion();
+        String idDispositivo = adapter.listaDispositivos.get(position).idDispositivo;
         if (estado_conexion_iot == ESTADO_CONEXION_IOT.CONECTADO) {
             switch(tipoDispositivo) {
                 case DESCONOCIDO:
                     break;
                 case INTERRUPTOR:
-                    String idDispositivo = adapter.listaDispositivos.get(position).idDispositivo;
+
                     intent = new Intent(ActividadPrincipal.this, ActivityInterruptor.class);
                     intent.putExtra(TEXTOS_DIALOGO_IOT.ID_DISPOSITIVO.getValorTextoJson(), idDispositivo);
                     startActivity(intent);
@@ -468,6 +468,9 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
                 case TERMOMETRO:
                     break;
                 case CRONOTERMOSTATO:
+                    intent = new Intent(ActividadPrincipal.this, ActivityTermostato.class);
+                    intent.putExtra(TEXTOS_DIALOGO_IOT.ID_DISPOSITIVO.getValorTextoJson(), idDispositivo);
+                    startActivity(intent);
                     break;
             }
         }
@@ -490,10 +493,7 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
 
     }
 
-    private void actualizarEstadoReleInterruptor(String idDispositivo) {
 
-
-    }
 
     private void actualizarEstadoTermometroTermostato(dispositivoIotTermostato dispositivo) {
         int i;
@@ -591,10 +591,52 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
 
             }
         });
+
+        cnx.setOnProcesarEspontaneosInterruptor(new conexionMqtt.OnProcesarEspontaneosInterruptor() {
+            @Override
+            public void arranqueAplicacionInterruptor(String topic, String texto, dispositivoIotOnOff dispositivo) {
+                actualizarEstadoInteruptor(dispositivo);
+            }
+
+            @Override
+            public void cambioPrograma(String topic, String texto, dispositivoIotOnOff dispositivo) {
+                actualizarEstadoInteruptor(dispositivo);
+            }
+
+            @Override
+            public void actuacionRelelocal(String topic, String texto, dispositivoIotOnOff dispositivo) {
+                actualizarEstadoInteruptor(dispositivo);
+            }
+
+            @Override
+            public void actuacionReleRemoto(String topic, String texto, dispositivoIotOnOff dispositivo) {
+                actualizarEstadoInteruptor(dispositivo);
+            }
+
+            @Override
+            public void upgradeFirwareFota(String topic, String texto, String idDispositivo, OtaVersion otaVersion) {
+
+            }
+
+            @Override
+            public void espontaneoDesconocido(String topic, String texto) {
+
+            }
+
+            @Override
+            public void releTemporizado(String topic, String texto) {
+
+            }
+
+            @Override
+            public void alarmaDispositivo(String topic, String texto) {
+
+            }
+        });
+
         cnx.setOnProcesarMensajesTermostato(new conexionMqtt.OnProcesarMensajesTermostato() {
             @Override
-            public void estadoTermostato(String topic, String message, dispositivoIotTermostato dispositivo) {
-                actualizarEstadoTermometroTermostato(dispositivo);
+            public void estadoTermostato(String topic, String message, dispositivoIotTermostato dispositivo) {actualizarEstadoTermometroTermostato(dispositivo);
             }
 
             @Override

@@ -480,27 +480,25 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
             }
         });
 
-        cnx.setOnProcesarMensajeEspontaneoInterruptor(new conexionMqtt.OnProcesarEspontaneosInterruptor() {
+        cnx.setOnProcesarEspontaneosInterruptor(new conexionMqtt.OnProcesarEspontaneosInterruptor() {
             @Override
             public void arranqueAplicacionInterruptor(String topic, String texto, dispositivoIotOnOff dispositivo) {
                 actualizarInterruptor(dispositivo);
             }
 
             @Override
-            public void cambioProgramaInterruptor(String topic, String texto, String idDispositivo, String idPrograma) {
-
+            public void cambioPrograma(String topic, String texto, dispositivoIotOnOff dispositivo) {
+                actualizarInterruptor(dispositivo);
             }
 
             @Override
             public void actuacionRelelocal(String topic, String texto, dispositivoIotOnOff dispositivo) {
                 actualizarInterruptor(dispositivo);
-
             }
 
             @Override
             public void actuacionReleRemoto(String topic, String texto, dispositivoIotOnOff dispositivo) {
                 actualizarInterruptor(dispositivo);
-
             }
 
             @Override
@@ -512,7 +510,19 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
             public void espontaneoDesconocido(String topic, String texto) {
 
             }
+
+            @Override
+            public void releTemporizado(String topic, String texto) {
+
+            }
+
+            @Override
+            public void alarmaDispositivo(String topic, String texto) {
+
+            }
         });
+
+
 
         cnx.setOnProcesarVersionServidorOta(new conexionMqtt.OnProcesarVersionServidorOta() {
             @Override
@@ -543,7 +553,7 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
 
             case R.id.imageBotonOnOff:
                 pintarEsperandoComando();
-                if ((int) imageBotonOnOff.getTag() == R.drawable.switchoff) {
+                if ((Boolean) imageBotonOnOff.getTag() == false) {
                     envioComando(dialogo.comandoActuarRele(ESTADO_RELE.ON));
                 } else {
                     envioComando(dialogo.comandoActuarRele(ESTADO_RELE.OFF));

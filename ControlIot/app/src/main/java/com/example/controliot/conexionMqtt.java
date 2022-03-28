@@ -164,6 +164,8 @@ public class conexionMqtt implements Serializable, Parcelable {
         void eliminarProgramacionTermostato(String topic, String texto, String idDispositivo, ProgramaDispositivoIotTermostato programa);
         void modificarProgramacionTermostato(String topic, String texto, String idDispositivo, ProgramaDispositivoIotTermostato programa);
 
+
+
     }
     public void setOnProcesarMensajesTermostato(OnProcesarMensajesTermostato listener) {
         this.listenerMensajesTermostato = listener;
@@ -203,11 +205,13 @@ public class conexionMqtt implements Serializable, Parcelable {
     }
     public interface OnProcesarEspontaneosInterruptor{
         void arranqueAplicacionInterruptor(String topic, String texto, dispositivoIotOnOff dispositivo);
-        void cambioProgramaInterruptor(String topic, String texto, String idDispositivo, String idPrograma);
+        void cambioPrograma(String topic, String texto, dispositivoIotOnOff dispositivo);
         void actuacionRelelocal(String topic, String texto, dispositivoIotOnOff dispositivo);
         void actuacionReleRemoto(String topic, String texto, dispositivoIotOnOff dispositivo);
         void upgradeFirwareFota(String topic, String texto, String idDispositivo, OtaVersion otaVersion);
         void espontaneoDesconocido(String topic, String texto);
+        void releTemporizado(String topic, String texto);
+        void alarmaDispositivo(String topic, String texto);
 
     }
     void setOnProcesarMensajesInterruptor (OnProcesarMensajesInterruptor listener) {
@@ -900,38 +904,63 @@ public class conexionMqtt implements Serializable, Parcelable {
 
         ESPONTANEO_IOT tipoInformeEspontaneo;
         dispositivoIotTermostato dispositivo;
-        String texto = new String(message.getPayload());
 
-        tipoInformeEspontaneo = dialogo.descubrirTipoInformeEspontaneo(texto);
-        switch (tipoInformeEspontaneo) {
+        if (listenerMensajesTermostato != null) {
+            String texto = new String(message.getPayload());
 
-            case ARRANQUE_APLICACION:
-                dispositivo = procesarEstadoDispositivoTermometroTermostato(topic, texto, contexto);
-                if (listenerMensajesTermostato!= null) listenerMensajesTermostato.estadoTermostato(topic, texto, dispositivo);
-                if (listenerMensajesTermometro!= null) listenerMensajesTermometro.estadoTermometro(topic, texto, dispositivo);
-                break;
-            case ACTUACION_RELE_LOCAL:
-                dispositivo = procesarEstadoDispositivoTermometroTermostato(topic, texto, contexto);
-                if (listenerMensajesTermostato!= null) listenerMensajesTermostato.actuacionReleLocalTermostato(topic, texto, dispositivo);
-                if (listenerMensajesTermometro!= null) listenerMensajesTermometro.actuacionReleLocalTermometro(topic, texto, dispositivo);
-                break;
-            case ACTUACION_RELE_REMOTO:
-                dispositivo = procesarEstadoDispositivoTermometroTermostato(topic, texto, contexto);
-                if (listenerMensajesTermostato!= null) listenerMensajesTermostato.actuacionReleRemotoTermostato(topic, texto, dispositivo);
-                if (listenerMensajesTermometro!= null) listenerMensajesTermometro.actuacionReleRemotoTermometro(topic, texto, dispositivo);
-                break;
-            case UPGRADE_FIRMWARE_FOTA:
-                break;
-            case CAMBIO_DE_PROGRAMA:
-                break;
-            case COMANDO_APLICACION:
-                break;
-            case CAMBIO_TEMPERATURA:
-                break;
-            default:
-            case ESPONTANEO_DESCONOCIDO:
-                break;
+            tipoInformeEspontaneo = dialogo.descubrirTipoInformeEspontaneo(texto);
+            switch (tipoInformeEspontaneo) {
+
+                case ARRANQUE_APLICACION:
+                    dispositivo = procesarEstadoDispositivoTermometroTermostato(topic, texto, contexto);
+                    listenerMensajesTermostato.estadoTermostato(topic, texto, dispositivo);
+                    listenerMensajesTermometro.estadoTermometro(topic, texto, dispositivo);
+                    break;
+                case ACTUACION_RELE_LOCAL:
+                    dispositivo = procesarEstadoDispositivoTermometroTermostato(topic, texto, contexto);
+                    listenerMensajesTermostato.actuacionReleLocalTermostato(topic, texto, dispositivo);
+                    listenerMensajesTermometro.actuacionReleLocalTermometro(topic, texto, dispositivo);
+                    break;
+                case ACTUACION_RELE_REMOTO:
+                    dispositivo = procesarEstadoDispositivoTermometroTermostato(topic, texto, contexto);
+                    listenerMensajesTermostato.actuacionReleRemotoTermostato(topic, texto, dispositivo);
+                    listenerMensajesTermometro.actuacionReleRemotoTermometro(topic, texto, dispositivo);
+                    break;
+                case UPGRADE_FIRMWARE_FOTA:
+                    break;
+                case CAMBIO_DE_PROGRAMA:
+                    dispositivo = procesarEstadoDispositivoTermometroTermostato(topic, texto, contexto);
+                    listenerMensajesTermostato.estadoTermostato(topic, texto, dispositivo);
+                    break;
+                case COMANDO_APLICACION:
+                    break;
+                case CAMBIO_TEMPERATURA:
+                    dispositivo = procesarEstadoDispositivoTermometroTermostato(topic, texto, contexto);
+                    listenerMensajesTermostato.estadoTermostato(topic, texto, dispositivo);
+                    listenerMensajesTermometro.estadoTermometro(topic, texto, dispositivo);
+                    break;
+                case CAMBIO_ESTADO:
+                    break;
+                case RELE_TEMPORIZADO:
+                    break;
+                case INFORME_ALARMA:
+                    break;
+                case CAMBIO_UMBRAL_TEMPERATURA:
+                    dispositivo = procesarEstadoDispositivoTermometroTermostato(topic, texto, contexto);
+                    listenerMensajesTermostato.estadoTermostato(topic, texto, dispositivo);
+                    break;
+                case CAMBIO_ESTADO_APLICACION:
+                    break;
+                case ERROR:
+                    break;
+                case ESPONTANEO_DESCONOCIDO:
+                    break;
+            }
+
         }
+
+
+
     }
     private void procesarRespuestaComandoTermometroTermostato(String topic, MqttMessage message, Context contexto) {
 
@@ -1011,45 +1040,60 @@ public class conexionMqtt implements Serializable, Parcelable {
 
         ESPONTANEO_IOT tipoInformeEspontaneo;
         dispositivoIotOnOff dispositivo;
-        String texto = new String(message.getPayload());
+        if (listenerEspontaneosInterruptor != null ) {
+            String texto = new String(message.getPayload());
+            tipoInformeEspontaneo = dialogo.descubrirTipoInformeEspontaneo(texto);
+            switch (tipoInformeEspontaneo) {
 
-        tipoInformeEspontaneo = dialogo.descubrirTipoInformeEspontaneo(texto);
-        switch (tipoInformeEspontaneo) {
-
-
-
-
-            case ARRANQUE_APLICACION:
-                dispositivo = procesarEstadoDispositivoInterruptor(topic, texto, contexto);
-                listenerMensajesInterruptor.estadoAplicacion(topic, texto, dispositivo);
-                 break;
-            case ACTUACION_RELE_LOCAL:
-                ESTADO_RELE estadoRele = ESTADO_RELE.OFF;
-                dispositivo = procesarEstadoDispositivoInterruptor(topic, texto, contexto);
-                listenerMensajesInterruptor.actuacionReleLocalInterruptor(topic, texto, dispositivo);
-                break;
-            case ACTUACION_RELE_REMOTO:
-                dispositivo = procesarEstadoDispositivoInterruptor(topic, texto, contexto);
-                listenerMensajesInterruptor.actuacionReleRemotoInterruptor(topic, texto, dispositivo);
-                break;
-
-            case UPGRADE_FIRMWARE_FOTA:
-                break;
-            case CAMBIO_DE_PROGRAMA:
-                break;
-            default:
-            case ESPONTANEO_DESCONOCIDO:
-                listenerMensajesInterruptor.errorMensajeInterruptor(topic, texto);
-                break;
+                case ARRANQUE_APLICACION:
+                    dispositivo = procesarEstadoDispositivoInterruptor(topic, texto, contexto);
+                    listenerEspontaneosInterruptor.arranqueAplicacionInterruptor(topic, texto, dispositivo);
+                    break;
+                case ACTUACION_RELE_LOCAL:
+                    dispositivo = procesarEstadoDispositivoInterruptor(topic, texto, contexto);
+                    listenerEspontaneosInterruptor.actuacionRelelocal(topic, texto, dispositivo);
+                    break;
+                case ACTUACION_RELE_REMOTO:
+                    dispositivo = procesarEstadoDispositivoInterruptor(topic, texto, contexto);
+                    listenerEspontaneosInterruptor.actuacionReleRemoto(topic, texto, dispositivo);
+                    break;
+                case UPGRADE_FIRMWARE_FOTA:
+                    break;
+                case CAMBIO_DE_PROGRAMA:
+                    dispositivo = procesarEstadoDispositivoInterruptor(topic, texto, contexto);
+                    listenerEspontaneosInterruptor.cambioPrograma(topic, texto, dispositivo);
+                    break;
+                case COMANDO_APLICACION:
+                    break;
+                case CAMBIO_TEMPERATURA:
+                    break;
+                case CAMBIO_ESTADO:
+                    break;
+                case RELE_TEMPORIZADO:
+                    dispositivo = procesarEstadoDispositivoInterruptor(topic, texto, contexto);
+                    listenerEspontaneosInterruptor.releTemporizado(topic, texto);
+                    break;
+                case INFORME_ALARMA:
+                    listenerEspontaneosInterruptor.alarmaDispositivo(topic, texto);
+                    break;
+                case CAMBIO_UMBRAL_TEMPERATURA:
+                    break;
+                case CAMBIO_ESTADO_APLICACION:
+                    break;
+                case ERROR:
+                    break;
+                case ESPONTANEO_DESCONOCIDO:
+                    listenerMensajesInterruptor.errorMensajeInterruptor(topic, texto);
+                    break;
+            }
         }
 
     }
-    public void setOnProcesarMensajeEspontaneoInterruptor(OnProcesarEspontaneosInterruptor listener) {
+
+    public void setOnProcesarEspontaneosInterruptor(OnProcesarEspontaneosInterruptor listener) {
         this.listenerEspontaneosInterruptor = listener;
     }
-    public void setOnProcesarMensajeEspontaneoInterruptor(OnProcesarEspontaneosInterruptor listener, String idDispositivo) {
-        this.listenerEspontaneosInterruptor = listener;
-    }
+
     void procesarRespuestaComandoInterruptor(String topic, MqttMessage message, Context contexto) throws JSONException {
 
         COMANDO_IOT idComando;
@@ -1175,7 +1219,7 @@ public class conexionMqtt implements Serializable, Parcelable {
         dispositivo = confDisp.getDispositivoPorId(idDispositivo);
         dispositivoIotTermostato dispositivoTermometroTermostato;
         dispositivoTermometroTermostato = new dispositivoIotTermostato(dispositivo);
-        ESTADO_RELE estadoRele = dialogo.getEstadoRele(TEXTOS_DIALOGO_IOT.ESTADO_RELE.getValorTextoJson());
+        ESTADO_RELE estadoRele = dialogo.getEstadoRele(texto);
         dispositivoTermometroTermostato.setEstadoRele(estadoRele);
         dispositivoTermometroTermostato.setUmbralTemperatura(dialogo.getUmbralTemperatura(texto));
         dispositivoTermometroTermostato.setTemperatura(dialogo.getTemperatura(texto));
