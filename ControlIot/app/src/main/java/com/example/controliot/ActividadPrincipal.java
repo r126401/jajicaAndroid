@@ -650,7 +650,7 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
             }
 
             @Override
-            public void consultarProgramacionTermostato(String topic, String texto, String idDispositivo, ProgramaDispositivoIotTermostato programa) {
+            public void consultarProgramacionTermostato(String topic, String texto, String idDispositivo, ArrayList<ProgramaDispositivoIotTermostato> programa) {
 
             }
 

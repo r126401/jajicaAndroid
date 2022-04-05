@@ -8,7 +8,7 @@
     tools:context=".ActivityInterruptor">
 
     <ImageView
-        android:id="@+id/imageBotonOnOff"
+        android:id="@+id/imageHeating"
         android:layout_width="134dp"
         android:layout_height="114dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -23,11 +23,11 @@
         style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/imageBotonOnOff"
-        app:layout_constraintEnd_toStartOf="@+id/imageBotonOnOff"
+        app:layout_constraintBottom_toBottomOf="@+id/imageHeating"
+        app:layout_constraintEnd_toStartOf="@+id/imageHeating"
         app:layout_constraintHorizontal_bias="0.555"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/imageBotonOnOff" />
+        app:layout_constraintTop_toTopOf="@+id/imageHeating" />
 
     <TextView
         android:id="@+id/textListaProgramas"
@@ -35,7 +35,7 @@
         android:layout_height="wrap_content"
         android:text="Lista de programas"
         android:textAlignment="center"
-        app:layout_constraintTop_toBottomOf="@+id/imageBotonOnOff" />
+        app:layout_constraintTop_toBottomOf="@+id/imageHeating" />
 
 
     <ImageView
@@ -45,7 +45,7 @@
         android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.646"
-        app:layout_constraintStart_toEndOf="@+id/imageBotonOnOff"
+        app:layout_constraintStart_toEndOf="@+id/imageHeating"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/bk_conectado" />
 
@@ -88,7 +88,7 @@
         android:id="@+id/imageUpgrade"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/imageBotonOnOff"
+        app:layout_constraintBottom_toBottomOf="@+id/imageHeating"
         app:layout_constraintEnd_toStartOf="@+id/barraProgreso"
         app:layout_constraintTop_toBottomOf="@+id/barraProgreso"
         app:srcCompat="@drawable/ic_upgrade" />

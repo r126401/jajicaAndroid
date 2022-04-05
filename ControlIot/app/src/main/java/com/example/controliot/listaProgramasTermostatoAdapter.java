@@ -70,7 +70,7 @@ public class listaProgramasTermostatoAdapter extends ArrayAdapter<ProgramaDispos
             LayoutInflater inflater = ((Activity) contexto).getLayoutInflater();
             convertView = inflater.inflate(idLayout, parent, false);
             holder = new ListaProgramasInterruptorAdapterHolder();
-            holder.imageInterruptor = (ImageView) convertView.findViewById(R.id.imageInterruptor);
+            holder.imageHeating = (ImageView) convertView.findViewById(R.id.imageHeating);
             holder.switchProgramaActivo = (SwitchCompat) convertView.findViewById(R.id.switchProgramaActivo);
             holder.textHoraPrograma = (TextView) convertView.findViewById(R.id.textHoraPrograma);
             holder.textoLunes = (TextView) convertView.findViewById(R.id.textoLunes);
@@ -81,8 +81,7 @@ public class listaProgramasTermostatoAdapter extends ArrayAdapter<ProgramaDispos
             holder.textoSabado = (TextView) convertView.findViewById(R.id.textoSabado);
             holder.textoDomingo = (TextView) convertView.findViewById(R.id.textoDomingo);
             holder.panelDiasSemana = (ConstraintLayout) convertView.findViewById(R.id.panelDiasSemana);
-            holder.textDurante = (TextView) convertView.findViewById(R.id.textDurante);
-            holder.textDuracionPrograma = (TextView) convertView.findViewById(R.id.textDuracionPrograma);
+            holder.textoUmbral = (TextView) convertView.findViewById(R.id.textoUmbral);
             holder.imageBorrarPrograma = (ImageView) convertView.findViewById(R.id.imageBorrarPrograma);
             holder.imageProgramaActivado = (ImageView) convertView.findViewById(R.id.imageProgramaActivado);
             holder.imageBorrarPrograma.setOnClickListener(new View.OnClickListener() {
@@ -135,14 +134,10 @@ public class listaProgramasTermostatoAdapter extends ArrayAdapter<ProgramaDispos
             holder.imageProgramaActivado.setVisibility(View.INVISIBLE);
         }
 
-        if (programa.getEstadoRele() == ESTADO_RELE.ON) {
-            holder.imageInterruptor.setImageResource(R.drawable.switchon);
-            holder.imageInterruptor.setTag(true);
-        } else {
-            holder.imageInterruptor.setImageResource(R.drawable.switchoff);
-            holder.imageInterruptor.setTag(false);
-        }
+        holder.imageHeating.setImageResource(R.drawable.heating_on);
 
+
+        holder.textoUmbral.setText(programa.getUmbralTemperatura() + " ºC");
 
         return convertView;
 
@@ -247,11 +242,10 @@ public class listaProgramasTermostatoAdapter extends ArrayAdapter<ProgramaDispos
 
     static class ListaProgramasInterruptorAdapterHolder {
 
-        ImageView imageInterruptor;
+        ImageView imageHeating;
         SwitchCompat switchProgramaActivo;
         TextView textHoraPrograma;
-        TextView textDuracionPrograma;
-        TextView textDurante;
+        TextView textoUmbral;
         ImageView imageBorrarPrograma;
         ImageView imageProgramaActivado;
         TextView textoLunes;

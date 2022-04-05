@@ -35,14 +35,16 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Formatter;
 
 public class ActivityTermostato extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener, Serializable {
 
     private ImageView imageUpgrade;
-    private ImageView imageBotonOnOff;
+    private ImageView imageHeating;
     private ImageView imageEstadoBroker;
     private SwipeRefreshLayout swipeSchedule;
     private ListView listViewSchedule;
@@ -62,6 +64,12 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
     private final String topicRespuestaOta = "newVersionOtaIotOnOff";
     private boolean versionComprobada = false;
     private boolean nuevaVersionDisponible = false;
+    private TextView textoTemperatura;
+    private TextView textoUmbralTemperatura;
+    private TextView textoModo;
+    private TextView textoProgramaDesde;
+    private ProgressBar progresoPrograma;
+    private TextView textoProgramaHasta;
 
 
 
@@ -69,10 +77,16 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
 
     private void registrarControles() {
 
+        textoProgramaDesde = (TextView) findViewById(R.id.programa_desde);
+        textoProgramaHasta = (TextView) findViewById(R.id.programa_hasta);
+        progresoPrograma = (ProgressBar) findViewById(R.id.progreso_programa);
+        textoModo = (TextView)  findViewById(R.id.textModo);
+        textoTemperatura = (TextView) findViewById(R.id.textoTemperatura);
+        textoUmbralTemperatura = (TextView) findViewById(R.id.textoUmbralTemperatura);
         imageEstadoDispositivo = (ImageView) findViewById(R.id.imageEstadoDispositivo);
-        imageBotonOnOff = (ImageView) findViewById(R.id.imageBotonOnOff);
-        imageBotonOnOff.setImageResource(R.drawable.switch_indeterminado);
-        imageBotonOnOff.setOnClickListener(this);
+        imageHeating = (ImageView) findViewById(R.id.imageHeating);
+        imageHeating.setImageResource(R.drawable.switch_indeterminado);
+        imageHeating.setOnClickListener(this);
         imageEstadoBroker = (ImageView) findViewById(R.id.imageEstadoBroker);
         swipeSchedule = (SwipeRefreshLayout) findViewById(R.id.swipeSchedule);
         swipeSchedule.setOnRefreshListener(this);
@@ -236,13 +250,72 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
         Log.i(TAG, "Clase inicializada");
     }
 
+    private void actualizarModo() {
 
+        switch (dispositivo.getEstadoDispositivo()) {
+
+            case NORMAL_AUTO:
+            case NORMAL_AUTOMAN:
+                textoModo.setText("AUTO");
+                break;
+            case NORMAL_MANUAL:
+                textoModo.setText("MANUAL");
+                break;
+            case NORMAL_ARRANCANDO:
+                break;
+            case NORMAL_SIN_PROGRAMACION:
+                textoModo.setText("NO PROG");
+                break;
+            case INDETERMINADO:
+                break;
+        }
+    }
+
+    private void actualizarTemperatura() {
+        textoTemperatura.setText(dispositivo.getTemperatura() + " ºC");
+        textoUmbralTemperatura.setText(dispositivo.getUmbralTemperatura() + " ºC");
+    }
+
+    private void actualizarProgramaEnCurso(String idPrograma) {
+        int hora;
+        int minuto;
+        int i;
+        ProgramaDispositivoIotTermostato programa;
+        i = dispositivo.buscarPrograma(idPrograma);
+        programa = dispositivo.getProgramasTermostato().get(i);
+        hora = programa.getHora();
+        minuto = programa.getMinuto();
+        textoProgramaDesde.setText(formatearHora(hora, minuto));
+        if ((i + 1) < dispositivo.getProgramasTermostato().size()) {
+            programa = dispositivo.getProgramasTermostato().get(i+1);
+            hora = programa.getHora();
+            minuto = programa.getMinuto();
+            textoProgramaHasta.setText(formatearHora(hora, minuto));
+        } else {
+            textoProgramaHasta.setText(formatearHora(0, 0));
+        }
+
+
+
+    }
+
+    private String formatearHora(int hora, int minuto) {
+
+        Formatter formato;
+        formato = new Formatter();
+        return formato.format("%02d:%02d", hora, minuto).toString();
+
+    }
 
     public void actualizarTermostato(dispositivoIotTermostato dispositivo) {
 
         dispositivoDisponible();
         this.dispositivo = dispositivo;
         actualizarEstadoRele();
+        actualizarModo();
+        actualizarTemperatura();
+
+
 
         if (versionComprobada == false) {
             consultarNuevaVersionOta();
@@ -399,12 +472,12 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
             @Override
             public void actuacionReleRemotoTermostato(String topic, String message, dispositivoIotTermostato dispositivo) {
                 actualizarTermostato(dispositivo);
-
             }
 
             @Override
-            public void consultarProgramacionTermostato(String topic, String texto, String idDispositivo, ProgramaDispositivoIotTermostato programa) {
-                //procesarProgramasRecibidos(programa);
+            public void consultarProgramacionTermostato(String topic, String texto, String idDispositivo, ArrayList<ProgramaDispositivoIotTermostato> programa) {
+                procesarProgramasRecibidos(programa);
+                Log.i(TAG, "hola");
             }
 
             @Override
@@ -422,6 +495,8 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
 
             }
         });
+
+
         cnx.setOnProcesarEspontaneosTermostato(new conexionMqtt.OnProcesarEspontaneosTermostato() {
             @Override
             public void arranqueAplicacionTermostato(String topic, String texto, dispositivoIotTermostato dispoisitivo) {
@@ -486,9 +561,9 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
 
         switch (v.getId()) {
 
-            case R.id.imageBotonOnOff:
+            case R.id.imageHeating:
                 pintarEsperandoComando();
-                if ((int) imageBotonOnOff.getTag() == R.drawable.switchoff) {
+                if ((int) imageHeating.getTag() == R.drawable.heating_off) {
                     envioComando(dialogo.comandoActuarRele(ESTADO_RELE.ON));
                 } else {
                     envioComando(dialogo.comandoActuarRele(ESTADO_RELE.OFF));
@@ -514,6 +589,9 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
         programasTermostatoAdapter = new listaProgramasTermostatoAdapter(this, R.layout.vista_programas_termostato, programas, cnx, dispositivo);
         listViewSchedule.setAdapter(programasTermostatoAdapter);
         programasTermostatoAdapter.notifyDataSetChanged();
+        dispositivo.setProgramasTermostato(programas);
+        actualizarProgramaEnCurso(dispositivo.getProgramaActivo());
+
 
     }
 
@@ -528,6 +606,7 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
 
         }
         actualizarProgramacion();
+
 
 
     }
@@ -586,7 +665,7 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
         caja = new AlertDialog.Builder(this);
 
         caja.setTitle("Informacion del dispositivo");
-        caja.setIcon(R.drawable.switchon);
+        caja.setIcon(R.drawable.heating_on);
         View contenedor = getLayoutInflater().inflate(R.layout.info_dispositivo_termostato, null);
         caja.setView(contenedor);
         listaInfo = (ListView) contenedor.findViewById(R.id.listaInfoDispositivo);
@@ -695,7 +774,7 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
     private void dispositivoIndisponible() {
         imageEstadoDispositivo.setImageResource(R.drawable.dispositivo_indisponible);
         barraProgreso.setVisibility(View.INVISIBLE);
-        imageBotonOnOff.setImageResource(R.drawable.switch_indeterminado);
+        imageHeating.setImageResource(R.drawable.switch_indeterminado);
         barraProgreso.setVisibility(View.INVISIBLE);
         textConsolaMensajes.setTextColor(Color.RED);
         textConsolaMensajes.setText(dispositivo.getIdDispositivo() + " no disponible");
@@ -723,7 +802,7 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
         barraProgreso.setVisibility(View.INVISIBLE);
         textConsolaMensajes.setTextColor(Color.RED);
         textConsolaMensajes.setText(dispositivo.getIdDispositivo() + " no disponible");
-        imageBotonOnOff.setImageResource(R.drawable.switch_indeterminado);
+        imageHeating.setImageResource(R.drawable.switch_indeterminado);
         imageEstadoBroker.setImageResource(R.drawable.bk_no_conectado);
 
     }
@@ -731,12 +810,12 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
     private void actualizarEstadoRele() {
 
         if (dispositivo.getEstadoRele() == ESTADO_RELE.ON) {
-            imageBotonOnOff.setImageResource(R.drawable.switchon);
-            imageBotonOnOff.setTag(true);
+            imageHeating.setImageResource(R.drawable.heating_on);
+            imageHeating.setTag(true);
 
         } else {
-            imageBotonOnOff.setImageResource(R.drawable.switchoff);
-            imageBotonOnOff.setTag(false);
+            imageHeating.setImageResource(R.drawable.heating_off);
+            imageHeating.setTag(false);
         }
 
     }

@@ -8,7 +8,7 @@
 
 
     <ImageView
-        android:id="@+id/imageInterruptor"
+        android:id="@+id/imageHeating"
         android:layout_width="43dp"
         android:layout_height="39dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -49,7 +49,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/imageInterruptor"
+        app:layout_constraintTop_toBottomOf="@+id/imageHeating"
         android:id="@+id/panelDiasSemana">
 
 
@@ -153,31 +153,21 @@
         android:textSize="20dp"
         app:layout_constraintEnd_toStartOf="@+id/switchProgramaActivo"
         app:layout_constraintHorizontal_bias="0.103"
-        app:layout_constraintStart_toEndOf="@+id/imageInterruptor"
+        app:layout_constraintStart_toEndOf="@+id/imageHeating"
         app:layout_constraintTop_toTopOf="parent"/>
 
 
     <TextView
-        android:id="@+id/textDuracionPrograma"
+        android:id="@+id/textoUmbral"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="72dp"
         android:fontFamily="@font/poetsenone"
         android:text="12:00"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/textDurante"
-        app:layout_constraintStart_toEndOf="@+id/textDurante"/>
-
-
-
-    <TextView
-        android:id="@+id/textDurante"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/poetsenone"
-        android:text=" hasta "
-        android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="@+id/textHoraPrograma"
-        app:layout_constraintStart_toEndOf="@+id/textHoraPrograma"/>
+        app:layout_constraintStart_toEndOf="@+id/textHoraPrograma"
+        app:layout_constraintTop_toTopOf="@+id/textHoraPrograma" />
 
     <ImageView
         android:id="@+id/imageProgramaActivado"

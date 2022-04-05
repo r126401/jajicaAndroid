@@ -70,7 +70,7 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
     private void registrarControles() {
 
         imageEstadoDispositivo = (ImageView) findViewById(R.id.imageEstadoDispositivo);
-        imageBotonOnOff = (ImageView) findViewById(R.id.imageBotonOnOff);
+        imageBotonOnOff = (ImageView) findViewById(R.id.imageHeating);
         imageBotonOnOff.setImageResource(R.drawable.switch_indeterminado);
         imageBotonOnOff.setOnClickListener(this);
         imageEstadoBroker = (ImageView) findViewById(R.id.imageEstadoBroker);
@@ -551,7 +551,7 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
 
         switch (v.getId()) {
 
-            case R.id.imageBotonOnOff:
+            case R.id.imageHeating:
                 pintarEsperandoComando();
                 if ((Boolean) imageBotonOnOff.getTag() == false) {
                     envioComando(dialogo.comandoActuarRele(ESTADO_RELE.ON));

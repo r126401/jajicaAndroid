@@ -159,7 +159,7 @@ public class conexionMqtt implements Serializable, Parcelable {
         void estadoTermostato(String topic, String message, dispositivoIotTermostato dispositivo);
         void actuacionReleLocalTermostato(String topic, String message, dispositivoIotTermostato dispositivo);
         void actuacionReleRemotoTermostato(String topic, String message, dispositivoIotTermostato dispositivo);
-        void consultarProgramacionTermostato(String topic, String texto, String idDispositivo, ProgramaDispositivoIotTermostato programa);
+        void consultarProgramacionTermostato(String topic, String texto, String idDispositivo, ArrayList<ProgramaDispositivoIotTermostato> programa);
         void nuevoProgramacionTermostato(String topic, String texto, String idDispositivo);
         void eliminarProgramacionTermostato(String topic, String texto, String idDispositivo, ProgramaDispositivoIotTermostato programa);
         void modificarProgramacionTermostato(String topic, String texto, String idDispositivo, ProgramaDispositivoIotTermostato programa);
@@ -968,6 +968,7 @@ public class conexionMqtt implements Serializable, Parcelable {
         dispositivoIotTermostato dispositivo;
         String texto = new String(message.getPayload());
         idComando = dialogo.descubrirComando(texto);
+        ArrayList<ProgramaDispositivoIotTermostato> programa;
         COMANDO_IOT_TERMOMETRO idcomandoTermostato;
 
         switch (idComando) {
@@ -982,6 +983,11 @@ public class conexionMqtt implements Serializable, Parcelable {
                 if (listenerMensajesTermometro!= null) listenerMensajesTermometro.estadoTermometro(topic, texto, dispositivo);
                 break;
             case CONSULTAR_PROGRAMACION:
+                programa = procesarConsultaProgramaTermostato(texto, contexto);
+                dispositivo = procesarEstadoDispositivoTermometroTermostato(topic, texto, contexto);
+                dispositivo.setProgramasTermostato(programa);
+                if (listenerMensajesTermostato != null) listenerMensajesTermostato.consultarProgramacionTermostato(topic, texto, dispositivo.idDispositivo, programa);
+
                 break;
             case NUEVA_PROGRAMACION:
                 break;
@@ -1121,7 +1127,7 @@ public class conexionMqtt implements Serializable, Parcelable {
                 listenerMensajesInterruptor.estadoAplicacion(topic, texto, dispositivo);
                 break;
             case CONSULTAR_PROGRAMACION:
-                programa = procesarConsultaPrograma(texto, contexto);
+                programa = procesarConsultaProgramaInterruptor(texto, contexto);
                 dispositivo = procesarEstadoDispositivoInterruptor(topic, texto, contexto);
                 dispositivo.setProgramasOnOff(programa);
                 if (listenerMensajesInterruptor != null) listenerMensajesInterruptor.consultarProgramacionInterruptor(topic, texto, programa);
@@ -1228,11 +1234,12 @@ public class conexionMqtt implements Serializable, Parcelable {
         dispositivoTermometroTermostato.setTipoDispositivo(dialogo.getTipoDispositivo(texto));
         dispositivoTermometroTermostato.setEstadoConexion(ESTADO_CONEXION_IOT.CONECTADO);
         dispositivoTermometroTermostato.setEstadoDispositivo(dialogo.getEstadoDispositivo(texto));
+        dispositivoTermometroTermostato.setProgramaActivo(dialogo.getProgramaActivo(texto));
         return dispositivoTermometroTermostato;
 
     }
 
-    private ArrayList<ProgramaDispositivoIotOnOff> procesarConsultaPrograma(String texto, Context contexto) {
+    private ArrayList<ProgramaDispositivoIotOnOff> procesarConsultaProgramaInterruptor(String texto, Context contexto) {
 
         JSONObject mensaje;
 
@@ -1241,6 +1248,19 @@ public class conexionMqtt implements Serializable, Parcelable {
         return (dispositivo.cargarProgramas(texto));
 
     }
+
+
+    private ArrayList<ProgramaDispositivoIotTermostato> procesarConsultaProgramaTermostato(String texto, Context contexto) {
+
+        JSONObject mensaje;
+
+        dispositivoIotTermostato dispositivo;
+        dispositivo = new dispositivoIotTermostato();
+
+        return (dispositivo.cargarProgramas(texto));
+
+    }
+
 
 
 }

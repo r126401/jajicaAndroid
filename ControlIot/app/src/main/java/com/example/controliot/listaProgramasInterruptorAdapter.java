@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -71,7 +70,7 @@ public class listaProgramasInterruptorAdapter extends ArrayAdapter<ProgramaDispo
             LayoutInflater inflater = ((Activity) contexto).getLayoutInflater();
             convertView = inflater.inflate(idLayout, parent, false);
             holder = new ListaProgramasInterruptorAdapterHolder();
-            holder.imageInterruptor = (ImageView) convertView.findViewById(R.id.imageInterruptor);
+            holder.imageInterruptor = (ImageView) convertView.findViewById(R.id.imageHeating);
             holder.switchProgramaActivo = (SwitchCompat) convertView.findViewById(R.id.switchProgramaActivo);
             holder.textHoraPrograma = (TextView) convertView.findViewById(R.id.textHoraPrograma);
             holder.textoLunes = (TextView) convertView.findViewById(R.id.textoLunes);
@@ -83,7 +82,7 @@ public class listaProgramasInterruptorAdapter extends ArrayAdapter<ProgramaDispo
             holder.textoDomingo = (TextView) convertView.findViewById(R.id.textoDomingo);
             holder.panelDiasSemana = (ConstraintLayout) convertView.findViewById(R.id.panelDiasSemana);
             holder.textDurante = (TextView) convertView.findViewById(R.id.textDurante);
-            holder.textDuracionPrograma = (TextView) convertView.findViewById(R.id.textDuracionPrograma);
+            holder.textDuracionPrograma = (TextView) convertView.findViewById(R.id.textoUmbral);
             holder.imageBorrarPrograma = (ImageView) convertView.findViewById(R.id.imageBorrarPrograma);
             holder.imageProgramaActivado = (ImageView) convertView.findViewById(R.id.imageProgramaActivado);
             holder.imageBorrarPrograma.setOnClickListener(new View.OnClickListener() {

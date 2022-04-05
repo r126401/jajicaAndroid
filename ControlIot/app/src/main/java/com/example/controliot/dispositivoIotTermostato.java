@@ -8,6 +8,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class dispositivoIotTermostato extends dispositivoIot implements Serializable {
@@ -331,6 +332,10 @@ public class dispositivoIotTermostato extends dispositivoIot implements Serializ
             }
         }
 
+    }
+
+    public void setProgramasTermostato(ArrayList<ProgramaDispositivoIotTermostato> programas) {
+        this.programas = programas;
     }
 
 
