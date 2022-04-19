@@ -6,4 +6,361 @@
     android:layout_height="match_parent"
     tools:context=".ActivitySettings">
 
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/panelMargenTemperatura"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/iconoMargenTemperatura"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icono_duracion"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"></ImageView>
+
+        <TextView
+            android:id="@+id/etiqueta_margen_temperatura"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poetsenone"
+            android:text="Margen de temperatura"
+            android:textAlignment="center"
+            android:textSize="20dp"
+            app:layout_constraintBottom_toBottomOf="@+id/iconoMargenTemperatura"
+            app:layout_constraintStart_toEndOf="@+id/iconoMargenTemperatura"
+            app:layout_constraintTop_toTopOf="@+id/iconoMargenTemperatura">
+
+        </TextView>
+
+        <ImageButton
+            android:id="@+id/idBotonMenosMargen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icono_menos"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/etiqueta_margen_temperatura"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </ImageButton>
+
+        <TextView
+            android:id="@+id/text_margen_temperatura"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poetsenone"
+            android:inputType="numberDecimal"
+            android:text="0.0"
+            android:textSize="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/idBotonMasMargen"
+            app:layout_constraintStart_toEndOf="@+id/idBotonMenosMargen"
+            app:layout_constraintTop_toTopOf="@+id/idBotonMenosMargen">
+
+        </TextView>
+
+
+        <ImageButton
+            android:id="@+id/idBotonMasMargen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icono_mas"
+            app:layout_constraintBottom_toBottomOf="@+id/idBotonMenosMargen"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/idBotonMenosMargen">
+
+        </ImageButton>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/panelIntervaloLectura"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/panelMargenTemperatura">
+
+
+
+        <ImageView
+            android:id="@+id/image_intervalo_lectura"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icono_duracion"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"></ImageView>
+
+        <TextView
+            android:id="@+id/etiqueta_intervalo_lectura"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poetsenone"
+            android:text="Intervalo de lectura"
+            android:textAlignment="center"
+            android:textSize="20dp"
+            app:layout_constraintBottom_toBottomOf="@+id/image_intervalo_lectura"
+            app:layout_constraintStart_toEndOf="@+id/image_intervalo_lectura"
+            app:layout_constraintTop_toTopOf="@+id/image_intervalo_lectura">
+
+        </TextView>
+
+        <ImageButton
+            android:id="@+id/boton_menos_intervalo_lectura"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icono_menos"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/etiqueta_intervalo_lectura"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </ImageButton>
+
+        <TextView
+            android:id="@+id/text_intervalo_lectura"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poetsenone"
+            android:inputType="numberDecimal"
+            android:text="0.0"
+            android:textSize="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/boton_mas_intervalo_lectura"
+            app:layout_constraintStart_toEndOf="@+id/boton_menos_intervalo_lectura"
+            app:layout_constraintTop_toTopOf="@+id/boton_menos_intervalo_lectura">
+
+        </TextView>
+
+
+        <ImageButton
+            android:id="@+id/boton_mas_intervalo_lectura"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icono_mas"
+            app:layout_constraintBottom_toBottomOf="@+id/boton_menos_intervalo_lectura"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/boton_menos_intervalo_lectura">
+
+        </ImageButton>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/panelReintentosLectura"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/panelIntervaloLectura">
+
+
+
+        <ImageView
+            android:id="@+id/image_reintentos_lectura"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icono_duracion"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"></ImageView>
+
+        <TextView
+            android:id="@+id/etiqueta_reintentos_lectura"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poetsenone"
+            android:text="Reintentos de lectura"
+            android:textAlignment="center"
+            android:textSize="20dp"
+            app:layout_constraintBottom_toBottomOf="@+id/image_reintentos_lectura"
+            app:layout_constraintStart_toEndOf="@+id/image_reintentos_lectura"
+            app:layout_constraintTop_toTopOf="@+id/image_reintentos_lectura">
+
+        </TextView>
+
+        <ImageButton
+            android:id="@+id/boton_menos_reintentos_lectura"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icono_menos"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/etiqueta_reintentos_lectura"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </ImageButton>
+
+        <TextView
+            android:id="@+id/text_reintentos_lectura"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poetsenone"
+            android:inputType="numberDecimal"
+            android:text="0.0"
+            android:textSize="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/boton_mas_reintentos_lectura"
+            app:layout_constraintStart_toEndOf="@+id/boton_menos_reintentos_lectura"
+            app:layout_constraintTop_toTopOf="@+id/boton_menos_reintentos_lectura">
+
+        </TextView>
+
+
+        <ImageButton
+            android:id="@+id/boton_mas_reintentos_lectura"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icono_mas"
+            app:layout_constraintBottom_toBottomOf="@+id/boton_menos_reintentos_lectura"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/boton_menos_reintentos_lectura">
+
+        </ImageButton>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/panelIntervaloReintentos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/panelReintentosLectura">
+
+
+
+        <ImageView
+            android:id="@+id/imageIntervaloReintentos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icono_duracion"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"></ImageView>
+
+        <TextView
+            android:id="@+id/etiqueta_intervalo_reintentos"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poetsenone"
+            android:text="Intervalo de reintentos"
+            android:textAlignment="center"
+            android:textSize="20dp"
+            app:layout_constraintBottom_toBottomOf="@+id/imageIntervaloReintentos"
+            app:layout_constraintStart_toEndOf="@+id/imageIntervaloReintentos"
+            app:layout_constraintTop_toTopOf="@+id/imageIntervaloReintentos">
+
+        </TextView>
+
+        <ImageButton
+            android:id="@+id/boton_menos_intervalo_reintentos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icono_menos"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/etiqueta_intervalo_reintentos"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </ImageButton>
+
+        <TextView
+            android:id="@+id/text_intervalo_reintentos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poetsenone"
+            android:inputType="numberDecimal"
+            android:text="0.0"
+            android:textSize="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/boton_mas_intervalo_reintentos"
+            app:layout_constraintStart_toEndOf="@+id/boton_menos_intervalo_reintentos"
+            app:layout_constraintTop_toTopOf="@+id/boton_menos_intervalo_reintentos">
+
+        </TextView>
+
+
+        <ImageButton
+            android:id="@+id/boton_mas_intervalo_reintentos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icono_mas"
+            app:layout_constraintBottom_toBottomOf="@+id/boton_menos_intervalo_reintentos"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/boton_menos_intervalo_reintentos">
+
+        </ImageButton>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/panelCalibrado"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/panelIntervaloReintentos">
+
+
+
+        <ImageView
+            android:id="@+id/imageCalibrado"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icono_duracion"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"></ImageView>
+
+        <TextView
+            android:id="@+id/etiqueta_calibrado"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poetsenone"
+            android:text="Calibrado de temperatura"
+            android:textAlignment="center"
+            android:textSize="20dp"
+            app:layout_constraintBottom_toBottomOf="@+id/imageCalibrado"
+            app:layout_constraintStart_toEndOf="@+id/imageCalibrado"
+            app:layout_constraintTop_toTopOf="@+id/imageCalibrado">
+
+        </TextView>
+
+        <ImageButton
+            android:id="@+id/boton_menos_calibrado"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icono_menos"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/etiqueta_calibrado"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </ImageButton>
+
+        <TextView
+            android:id="@+id/text_calibrado"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poetsenone"
+            android:inputType="numberDecimal"
+            android:text="0.0"
+            android:textSize="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/boton_mas_calibrado"
+            app:layout_constraintStart_toEndOf="@+id/boton_menos_calibrado"
+            app:layout_constraintTop_toTopOf="@+id/boton_menos_calibrado">
+
+        </TextView>
+
+
+        <ImageButton
+            android:id="@+id/boton_mas_calibrado"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icono_mas"
+            app:layout_constraintBottom_toBottomOf="@+id/boton_menos_calibrado"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/boton_menos_calibrado">
+
+        </ImageButton>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
