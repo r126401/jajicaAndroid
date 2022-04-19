@@ -44,29 +44,28 @@ public class ActivityProgramaTermostato extends AppCompatActivity implements Tim
     private TextView textoDomingo;
     private TextView textFecha;
     private ImageView imageDuracion;
-    private TextView textDuracionEntero;
-    private TextView textDuracionDecimal;
+    private TextView textUmbralTemperatura;
     private TextView textUnidadEntero;
-    private TextView textUnidadDecimal;
     private ImageView idBotonMenos;
     private ImageView idBotonMas;
     private Button botonAceptar;
     private ImageView imageOnOff;
+    private TextView textHasta;
+    private TextView textoHoraHasta;
 
     private ProgramaDispositivoIotTermostato programaIotTermostato;
     //private ProgramaDispositivoIotTermostato programaTermostato;
-    final double INCREMENTO = 0.1;
-    final double DECREMENTO = 0.1;
-    final double INCREMENTO_LARGO = 0.5;
-    final double DECREMENTO_LARGO = 0.5;
-    private long INCREMENTO_DURACION = 1;
-    private long DECREMENTO_DURACION = 1;
-    private long INCREMENTO_DURACION_LARGO = 10;
-    private long DECREMENTO_DURACION_LARGO = 10;
+    final double INCREMENTO = 0.5;
+    final double DECREMENTO = 0.5;
+    final double INCREMENTO_LARGO = 1;
+    final double DECREMENTO_LARGO = 1;
+    private double INCREMENTO_UMBRAL = 0.5;
+    private double DECREMENTO_DURACION = 0.5;
+    private double INCREMENTO_UMBRAL_LARGO = 1;
+    private double DECREMENTO_UMBRAL_LARGO = 1;
     private Handler repetidor;
     boolean autoIncremento = false;
     boolean autoDecremento = false;
-    private int duracionPrograma;
     private COMANDO_IOT tipoOperacion;
     private TIPO_DISPOSITIVO_IOT tipo;
     private final int DURACION_MAXIMA = 16;
@@ -76,6 +75,14 @@ public class ActivityProgramaTermostato extends AppCompatActivity implements Tim
 
     private void registrarControles() {
 
+        textHasta = (TextView) findViewById(R.id.textHasta);
+        textoHoraHasta = (TextView) findViewById(R.id.textoHoraHasta);
+        textoHoraHasta.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                anotarHoraPrograma(textoHoraHasta);
+            }
+        });
         textHoraPrograma = (TextView) findViewById(R.id.textHoraPrograma);
         textHoraPrograma.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,10 +111,8 @@ public class ActivityProgramaTermostato extends AppCompatActivity implements Tim
         textFecha = (TextView) findViewById(R.id.textFecha);
         textFecha.setOnClickListener(this);
         imageDuracion = (ImageView) findViewById(R.id.imageIconoTemperatura);
-        textDuracionEntero = (TextView) findViewById(R.id.textDuracionEnteroTemperatura);
-        textDuracionDecimal = (TextView) findViewById(R.id.textDuracionDecimalTemperatura);
+        textUmbralTemperatura = (TextView) findViewById(R.id.textDuracionEnteroTemperatura);
         textUnidadEntero = (TextView) findViewById(R.id.textUnidadEnteroTemperatura);
-        textUnidadDecimal = (TextView) findViewById(R.id.textUnidadDecimalTemperatura);
         idBotonMenos = (ImageButton) findViewById(R.id.idBotonMasTemperatura);
         idBotonMenos.setOnClickListener(this);
         idBotonMenos.setOnLongClickListener(this);
@@ -126,124 +131,28 @@ public class ActivityProgramaTermostato extends AppCompatActivity implements Tim
 
     }
 
-    void calculoIncrementoDecremento() {
 
-
-        if (duracionPrograma <= 120) {
-            INCREMENTO_DURACION = 1;
-            DECREMENTO_DURACION = 1;
-            INCREMENTO_DURACION_LARGO = 5;
-            DECREMENTO_DURACION_LARGO = 5;
-        }
-
-        if ( (duracionPrograma > 120) && (duracionPrograma <= 3600*2)) {
-            INCREMENTO_DURACION = 60;
-            DECREMENTO_DURACION = 60;
-            INCREMENTO_DURACION_LARGO = 300;
-            DECREMENTO_DURACION_LARGO = 300;
-        }
-
-        if (duracionPrograma > 3600*2) {
-            INCREMENTO_DURACION = 60;
-            DECREMENTO_DURACION = 60;
-            INCREMENTO_DURACION_LARGO = 3000;
-            DECREMENTO_DURACION_LARGO = 3000;
-
-        }
-
-
-
-    }
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_programa_interruptor);
+        setContentView(R.layout.activity_programa_termostato);
 
         registrarControles();
         inicializarActivity();
     }
 
 
-    private void presentarDuracion(int duracion, boolean incremento) {
-
-        double duracionPrograma = 0;
-        int horas, minutos, segundos;
-        segundos = duracion;
-        this.duracionPrograma = duracion;
-        //Representacion de 0 segundos
-        if (duracion ==0) {
-            segundos = duracion;
-            textUnidadEntero.setVisibility(View.INVISIBLE);
-            textDuracionDecimal.setVisibility(View.INVISIBLE);
-            textUnidadDecimal.setVisibility(View.INVISIBLE);
-            textDuracionEntero.setText(String.valueOf(segundos));
-
-        }
-        //Representacion en segundos
-        if ((duracion > 0) &&(duracion < 120)) {
-            duracionPrograma = duracion;
-
-            textDuracionEntero.setVisibility(View.VISIBLE);
-            textUnidadEntero.setVisibility(View.VISIBLE);
-            textDuracionDecimal.setVisibility(View.INVISIBLE);
-            textUnidadDecimal.setVisibility(View.INVISIBLE);
-            textUnidadEntero.setText("seg");
-            textDuracionEntero.setText(String.valueOf(segundos));
-
-        }
-
-        //Representacion en minutos
-        if ((duracion >= 120) && (duracion < 3600*2)) {
-            textDuracionEntero.setVisibility(View.VISIBLE);
-            textUnidadEntero.setVisibility(View.VISIBLE);
-            textDuracionDecimal.setVisibility(View.INVISIBLE);
-            textUnidadDecimal.setVisibility(View.INVISIBLE);
-            minutos = duracion/60;
-            textUnidadEntero.setText("min");
-            textDuracionEntero.setText(String.valueOf(minutos));
-        }
-
-        //Representacion en horas y minutos
-        if (duracion >= 3600*2) {
-            int max;
-            textDuracionEntero.setVisibility(View.VISIBLE);
-            textUnidadEntero.setVisibility(View.VISIBLE);
-            textDuracionDecimal.setVisibility(View.VISIBLE);
-            textUnidadDecimal.setVisibility(View.VISIBLE);
-            max = Integer.valueOf(textDuracionEntero.getText().toString());
-            if (((max <= DURACION_MAXIMA) && (incremento == true)) || (incremento == false)){
-                horas = (int) duracion / 3600;
-                minutos = (int) (duracion % 3600)/60;
-                duracionPrograma = duracion/3600;
-                textDuracionEntero.setText(String.valueOf(horas));
-                textUnidadEntero.setText("horas");
-                textDuracionDecimal.setText(String.valueOf(minutos));
-                textUnidadDecimal.setText("min");
-            } else {
-                textDuracionEntero.setText(String.valueOf(DURACION_MAXIMA));
-                textUnidadDecimal.setText(String.valueOf(0));
-            }
-
-        }
-
-    }
 
 
-    private void presentarProgramaInterruptor(COMANDO_IOT tipoComando) {
+
+    private void presentarProgramaTermostato(COMANDO_IOT tipoComando) {
 
         TIPO_PROGRAMA tipoPrograma;
         tipoPrograma = programaIotTermostato.getTipoPrograma();
         int i;
         if (tipoComando == COMANDO_IOT.MODIFICAR_PROGRAMACION) {
-            if (programaIotTermostato.getEstadoRele() == ESTADO_RELE.ON) {
-                imageOnOff.setImageResource(R.drawable.switchon);
-                imageOnOff.setTag(true);
-            } else {
-                imageOnOff.setImageResource(R.drawable.switchoff);
-                imageOnOff.setTag(false);
-            }
             switch (tipoPrograma) {
 
                 case PROGRAMA_DESCONOCIDO:
@@ -253,6 +162,7 @@ public class ActivityProgramaTermostato extends AppCompatActivity implements Tim
                     panelRepetir.setVisibility(View.VISIBLE);
                     textFecha.setVisibility(View.INVISIBLE);
                     textHoraPrograma.setText(formatearHora(programaIotTermostato.getHora(), programaIotTermostato.getMinuto()));
+                    textoHoraHasta.setText(duracionAfecha(textHoraPrograma.getText().toString(), programaIotTermostato.getDuracion()));
                     actualizarSemanaCompleta();
 
                     break;
@@ -279,7 +189,7 @@ public class ActivityProgramaTermostato extends AppCompatActivity implements Tim
 
                 if (tipoComando == COMANDO_IOT.MODIFICAR_PROGRAMACION) {
                     programaIotTermostato = (ProgramaDispositivoIotTermostato) intent.getSerializableExtra(TEXTOS_DIALOGO_IOT.ID_PROGRAMA.getValorTextoJson());
-                    presentarProgramaInterruptor(COMANDO_IOT.MODIFICAR_PROGRAMACION);
+                    presentarProgramaTermostato(COMANDO_IOT.MODIFICAR_PROGRAMACION);
 
                 } else {
 
@@ -325,7 +235,7 @@ public class ActivityProgramaTermostato extends AppCompatActivity implements Tim
         Calendar fecha = Calendar.getInstance();
 
         if(tipoOperacion == COMANDO_IOT.MODIFICAR_PROGRAMACION) {
-            presentarProgramaInterruptor(COMANDO_IOT.MODIFICAR_PROGRAMACION);
+            presentarProgramaTermostato(COMANDO_IOT.MODIFICAR_PROGRAMACION);
 
         } else {
             programaIotTermostato = new ProgramaDispositivoIotTermostato();
@@ -347,8 +257,10 @@ public class ActivityProgramaTermostato extends AppCompatActivity implements Tim
             programaIotTermostato.setSegundo(0);
             programaIotTermostato.setMascara(calcularMascara());
             programaIotTermostato.actualizarDiasActivos();
+            programaIotTermostato.setUmbralTemperatura(19.0);
             textFecha.setVisibility(View.INVISIBLE);
             textHoraPrograma.setText(formatearHora(programaIotTermostato.getHora(), programaIotTermostato.getMinuto()));
+            textUmbralTemperatura.setText(String.valueOf(programaIotTermostato.getUmbralTemperatura()));
             imageOnOff.setTag(true);
 
 
@@ -370,7 +282,21 @@ public class ActivityProgramaTermostato extends AppCompatActivity implements Tim
         hora = hora.substring(0,2);
         minuto = control.getText().toString().substring(3,5);
 
-        timePickerDialog = new TimePickerDialog(this, ActivityProgramaTermostato.this, Integer.valueOf(hora),Integer.valueOf(minuto), true);
+        timePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                control.setText(formatearHora(hourOfDay, minute));
+                if (control == textHoraPrograma) {
+                    programaIotTermostato.setHora(hourOfDay);
+                    programaIotTermostato.setMinuto(minute);
+                } else {
+
+                    programaIotTermostato.setDuracion(restarFechas());
+
+
+                }
+            }
+        }, Integer.valueOf(hora), Integer.valueOf(minuto), true);
         timePickerDialog.show();
 
     }
@@ -521,16 +447,14 @@ public class ActivityProgramaTermostato extends AppCompatActivity implements Tim
                 pulsacionDiaSemana((TextView) v);
                 break;
             case R.id.idBotonMasTemperatura:
-                if (!(textUnidadEntero.getText().toString().equals("horas")) ||
-                        (textUnidadEntero.getText().toString().equals("horas") && (Integer.valueOf(textDuracionEntero.getText().toString()) < 16))) {
-                    incrementarDecrementarDuracion(true, true);
-
-                }
+                incrementarDecrementarDuracion(true, true);
+                textUmbralTemperatura.setText(String.valueOf(programaIotTermostato.getUmbralTemperatura()));
 
                 break;
             case R.id.idBotonMenosTemperatura:
 
                 incrementarDecrementarDuracion(false, true);
+                textUmbralTemperatura.setText(String.valueOf(programaIotTermostato.getUmbralTemperatura()));
                 break;
             case R.id.botonCancelar:
                 finish();
@@ -563,38 +487,34 @@ public class ActivityProgramaTermostato extends AppCompatActivity implements Tim
 
     void incrementarDecrementarDuracion(boolean incrementar, boolean corto) {
 
-        int duracion;
+        double umbral;
         int valor;
 
-        //String temp = textDuracion.getText().toString();
-        //duracion = Integer.valueOf(temp);
-        calculoIncrementoDecremento();
-        duracion = duracionPrograma;
+        umbral = programaIotTermostato.getUmbralTemperatura();
         if (incrementar == true) {
             if (corto == true) {
-                duracion += INCREMENTO_DURACION;
+
+
+                umbral += INCREMENTO_UMBRAL;
             } else {
-                duracion += INCREMENTO_DURACION_LARGO;
+                umbral += INCREMENTO_UMBRAL_LARGO;
 
             }
 
         } else {
             if (corto == true) {
-                duracion -= DECREMENTO_DURACION;
+                umbral -= DECREMENTO_DURACION;
 
             } else {
-                duracion -= DECREMENTO_DURACION_LARGO;
+                umbral -= DECREMENTO_UMBRAL_LARGO;
 
             }
 
         }
-        if (duracion < 0) duracion = 0;
-        //temperatura = presentarDecimales(temperatura, 1);
-        presentarDuracion(duracion, incrementar);
-        //textDuracion.setText(String.valueOf(duracion));
-        //programa.setDuracion
 
-        Log.i(getLocalClassName(), "Duracion: " + duracion);
+
+        programaIotTermostato.setUmbralTemperatura(umbral);
+        Log.i(getLocalClassName(), "Duracion: " + umbral);
 
 
     }
@@ -618,11 +538,11 @@ public class ActivityProgramaTermostato extends AppCompatActivity implements Tim
 */
             case R.id.idBotonMasTemperatura:
                 autoIncremento = true;
-                repetidor.post(new RepetirDuracion());
+                repetidor.post(new IncrementoLargoUmbral());
                 break;
             case R.id.idBotonMenosTemperatura:
                 autoDecremento = true;
-                repetidor.post(new RepetirDuracion());
+                repetidor.post(new IncrementoLargoUmbral());
                 break;
             case R.id.textoLunes:
             case R.id.textoMartes:
@@ -667,22 +587,20 @@ public class ActivityProgramaTermostato extends AppCompatActivity implements Tim
 
     }
 
-    class RepetirDuracion implements Runnable {
+    class IncrementoLargoUmbral implements Runnable {
 
         public void run() {
             if (autoIncremento) {
-                repetidor.postDelayed(new RepetirDuracion(), 200);
-                if (!(textUnidadEntero.getText().toString().equals("horas")) ||
-                        (textUnidadEntero.getText().toString().equals("horas") && (Integer.valueOf(textDuracionEntero.getText().toString()) < 16))) {
-                    incrementarDecrementarDuracion(true, false);
-                    Log.i(getLocalClassName(), "Incrementando");
-                }
+                repetidor.postDelayed(new IncrementoLargoUmbral(), 200);
+                incrementarDecrementarDuracion(true, false);
 
             } else if (autoDecremento){
-                repetidor.postDelayed(new RepetirDuracion(), 200);
+                repetidor.postDelayed(new IncrementoLargoUmbral(), 200);
                 incrementarDecrementarDuracion(false, false);
 
+
             }
+            textUmbralTemperatura.setText(String.valueOf(programaIotTermostato.getUmbralTemperatura()));
 
         }
     }
@@ -790,6 +708,7 @@ public class ActivityProgramaTermostato extends AppCompatActivity implements Tim
         String textoComando;
         dialogo = new dialogoIot();
         programaIotTermostato.setMascara(calcularMascara());
+        programaIotTermostato.setDuracion(restarFechas());
         if (tipoOperacion == COMANDO_IOT.MODIFICAR_PROGRAMACION) {
             textoComando = dialogo.comandoModificarPrograma(programaIotTermostato);
             Intent datosDevueltos = new Intent();
@@ -825,6 +744,42 @@ public class ActivityProgramaTermostato extends AppCompatActivity implements Tim
         Formatter formato;
         formato = new Formatter();
         return formato.format("%02d:%02d", hora, minuto).toString();
+
+    }
+
+    private int restarFechas() {
+
+        Calendar fecha1;
+        Calendar fecha2;
+        int hora;
+        int minuto;
+
+
+        hora = Integer.valueOf(textoHoraHasta.getText().toString().substring(0,2));
+        minuto = Integer.valueOf(textoHoraHasta.getText().toString().substring(3,5));
+        fecha1 = Calendar.getInstance();
+        fecha2 = Calendar.getInstance();
+        fecha1.set(fecha1.get(Calendar.YEAR), fecha1.get(Calendar.MONTH), fecha1.get(Calendar.DAY_OF_MONTH), programaIotTermostato.getHora(), programaIotTermostato.getMinuto());
+        fecha2.set(fecha1.get(Calendar.YEAR), fecha1.get(Calendar.MONTH), fecha1.get(Calendar.DAY_OF_MONTH), hora, minuto);
+        return (int) ((fecha2.getTime().getTime() - fecha1.getTime().getTime())/1000);
+    }
+
+    private String duracionAfecha(String inicio, int duracion) {
+
+        Calendar fecha;
+        int hora;
+        int minuto;
+        String horaFinal;
+
+        fecha = Calendar.getInstance();
+        hora = Integer.valueOf(inicio.substring(0,2));
+        minuto = Integer.valueOf(inicio.substring(3,5));
+        fecha.set(fecha.get(Calendar.YEAR), fecha.get(Calendar.MONTH), fecha.get(Calendar.DAY_OF_MONTH), hora, minuto);
+        fecha.setTimeInMillis(fecha.getTimeInMillis() + duracion * 1000);
+
+        horaFinal = formatearHora(fecha.get(Calendar.HOUR_OF_DAY), fecha.get(Calendar.MINUTE));
+        return horaFinal;
+
 
     }
 

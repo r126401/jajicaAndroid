@@ -22,7 +22,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ControlIot">
         <activity
+            android:name=".ActivitySettings"
+            android:exported="false" />
+        <activity
             android:name=".ActivityProgramaInterruptor"
+            android:exported="false" />
+        <activity
+            android:name=".ActivityProgramaTermostato"
             android:exported="false" />
         <activity
             android:name=".ActivityInterruptor"

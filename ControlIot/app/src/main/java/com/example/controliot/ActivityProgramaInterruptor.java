@@ -24,8 +24,10 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Formatter;
 
 public class ActivityProgramaInterruptor extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener, View.OnClickListener, View.OnLongClickListener, View.OnTouchListener {
@@ -835,6 +837,8 @@ public class ActivityProgramaInterruptor extends AppCompatActivity implements Ti
         return formato.format("%02d:%02d", hora, minuto).toString();
 
     }
+
+
 
 
 }

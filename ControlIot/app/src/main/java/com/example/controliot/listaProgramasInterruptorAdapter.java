@@ -81,7 +81,7 @@ public class listaProgramasInterruptorAdapter extends ArrayAdapter<ProgramaDispo
             holder.textoSabado = (TextView) convertView.findViewById(R.id.textoSabado);
             holder.textoDomingo = (TextView) convertView.findViewById(R.id.textoDomingo);
             holder.panelDiasSemana = (ConstraintLayout) convertView.findViewById(R.id.panelDiasSemana);
-            holder.textDurante = (TextView) convertView.findViewById(R.id.textDurante);
+            holder.textDurante = (TextView) convertView.findViewById(R.id.textTemperatura);
             holder.textDuracionPrograma = (TextView) convertView.findViewById(R.id.textoUmbral);
             holder.imageBorrarPrograma = (ImageView) convertView.findViewById(R.id.imageBorrarPrograma);
             holder.imageProgramaActivado = (ImageView) convertView.findViewById(R.id.imageProgramaActivado);

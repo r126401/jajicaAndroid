@@ -633,10 +633,10 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
 
             }
         });
-
         cnx.setOnProcesarMensajesTermostato(new conexionMqtt.OnProcesarMensajesTermostato() {
             @Override
-            public void estadoTermostato(String topic, String message, dispositivoIotTermostato dispositivo) {actualizarEstadoTermometroTermostato(dispositivo);
+            public void estadoTermostato(String topic, String message, dispositivoIotTermostato dispositivo) {
+                actualizarEstadoTermometroTermostato(dispositivo);
             }
 
             @Override
@@ -660,15 +660,44 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
             }
 
             @Override
-            public void eliminarProgramacionTermostato(String topic, String texto, String idDispositivo, ProgramaDispositivoIotTermostato programa) {
+            public void eliminarProgramacionTermostato(String topic, String texto, String idDispositivo, String idPrograma) {
 
             }
 
             @Override
-            public void modificarProgramacionTermostato(String topic, String texto, String idDispositivo, ProgramaDispositivoIotTermostato programa) {
+            public void modificarProgramacionTermostato(String topic, String texto) {
+
+            }
+
+            @Override
+            public void informacionDispositivo(String topic, String texto) {
+
+            }
+
+            @Override
+            public void resetTermostato(String topic, String texto, String idDispositivo) {
+
+            }
+
+            @Override
+            public void factoryResetTermostato(String topic, String texto, String idDispositivo) {
+
+            }
+
+            @Override
+            public void upgradeFirmwareTermostato(String topic, String texto, String idDispositivo, OtaVersion otaVersion) {
+
+            }
+
+            @Override
+            public void modificarUmbralTemperatura(String topic, String texto, String idDispositivo) {
 
             }
         });
+
+
+
+
         cnx.setOnProcesarMensajesTermometro(new conexionMqtt.OnProcesarMensajesTermometro() {
             @Override
             public void estadoTermometro(String topic, String message, dispositivoIotTermostato dispositivo) {

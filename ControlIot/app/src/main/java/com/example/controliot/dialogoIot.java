@@ -508,6 +508,7 @@ public class dialogoIot implements Serializable {
             e.printStackTrace();
             return COMANDO_IOT.ESPONTANEO;
         }
+
         return COMANDO_IOT.ESPONTANEO.fromId(idComando);
 
     }
@@ -990,6 +991,9 @@ public class dialogoIot implements Serializable {
             parametros.put(TEXTOS_DIALOGO_IOT.UMBRAL_TEMPERATURA.getValorTextoJson(), programa.getUmbralTemperatura());
             parametros.put(TEXTOS_DIALOGO_IOT.ESTADO_RELE.getValorTextoJson(), ESTADO_RELE.ON.getEstadoRele());
             comando.remove(TEXTOS_DIALOGO_IOT.PROGRAMAS.getValorTextoJson());
+            if (programa.getDuracion() > 0) {
+                parametros.put((TEXTOS_DIALOGO_IOT.DURACION.getValorTextoJson()), programa.getDuracion());
+            }
             comando.put(TEXTOS_DIALOGO_IOT.PROGRAMAS.getValorTextoJson(), parametros);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -1204,6 +1208,9 @@ public class dialogoIot implements Serializable {
             parametroProgram = comando.getJSONObject(TEXTOS_DIALOGO_IOT.PROGRAMAS.getValorTextoJson());
             parametroProgram.put(TEXTOS_DIALOGO_IOT.ID_PROGRAMA.getValorTextoJson(), programa.getIdProgramacion());
             parametroProgram.put(TEXTOS_DIALOGO_IOT.UMBRAL_TEMPERATURA.getValorTextoJson(), programa.getUmbralTemperatura());
+            if (programa.getDuracion() > 0) {
+                parametroProgram.put((TEXTOS_DIALOGO_IOT.DURACION.getValorTextoJson()), programa.getDuracion());
+            }
         } catch (JSONException e) {
             e.printStackTrace();
             Log.e(getClass().toString(), "No se ha encontrado los parametros del programa");

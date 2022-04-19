@@ -198,16 +198,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.495"
-            app:srcCompat="@drawable/icono_duracion" />
+            app:srcCompat="@drawable/ic_teperatura" />
 
         <TextView
-            android:id="@+id/textDurante"
+            android:id="@+id/textTemperatura"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:fontFamily="@font/poetsenone"
             android:inputType="number"
-            android:text="duracion"
+            android:text="Temperatura"
             android:textSize="20dp"
             app:layout_constraintBottom_toBottomOf="@+id/imageIconoTemperatura"
             app:layout_constraintStart_toEndOf="@+id/imageIconoTemperatura"
@@ -223,7 +223,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/icono_menos"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/textDurante"
+            app:layout_constraintStart_toEndOf="@+id/textTemperatura"
             app:layout_constraintTop_toTopOf="parent">
 
         </ImageButton>
@@ -245,11 +245,15 @@
             android:layout_height="wrap_content"
 
             android:fontFamily="@font/poetsenone"
-            android:text="hora"
+            android:text=" ºC"
             android:textAlignment="center"
             android:textSize="20dp"
-            app:layout_constraintStart_toStartOf="@+id/textUnidadDecimalTemperatura"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintBottom_toBottomOf="@+id/textDuracionEnteroTemperatura"
+            app:layout_constraintEnd_toStartOf="@+id/idBotonMasTemperatura"
+            app:layout_constraintHorizontal_bias="0.342"
+            app:layout_constraintStart_toEndOf="@+id/textDuracionEnteroTemperatura"
+            app:layout_constraintTop_toTopOf="@+id/textDuracionEnteroTemperatura"
+            app:layout_constraintVertical_bias="0.0">
 
         </TextView>
 
@@ -257,43 +261,16 @@
             android:id="@+id/textDuracionEnteroTemperatura"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
             android:fontFamily="@font/poetsenone"
             android:inputType="number"
-            android:text="1"
-            android:textAlignment="center"
-            android:textSize="20dp"
-            app:layout_constraintStart_toStartOf="@+id/textDuracionDecimalTemperatura"
-            app:layout_constraintTop_toTopOf="@+id/textUnidadEnteroTemperatura">
-
-        </TextView>
-
-        <TextView
-            android:id="@+id/textDuracionDecimalTemperatura"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:fontFamily="@font/poetsenone"
-            android:text="25"
+            android:text="25.5"
             android:textAlignment="center"
             android:textSize="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/idBotonMenosTemperatura"
-            app:layout_constraintTop_toBottomOf="@+id/textDuracionEnteroTemperatura">
-
-        </TextView>
-
-        <TextView
-            android:id="@+id/textUnidadDecimalTemperatura"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/poetsenone"
-            android:text="minutos"
-            android:textAlignment="center"
-            android:textSize="20dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/idBotonMasTemperatura"
-            app:layout_constraintStart_toEndOf="@+id/textDuracionDecimalTemperatura"
-            app:layout_constraintTop_toBottomOf="@+id/textUnidadEnteroTemperatura">
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.485">
 
         </TextView>
 
@@ -320,20 +297,73 @@
         android:id="@+id/botonAceptar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="76dp"
         android:text="@string/aceptar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageOnOff" />
 
+
     <ImageView
         android:id="@+id/imageOnOff"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/panelDuracion"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
         app:srcCompat="@drawable/switchon" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/panelDuracion">
+
+        <ImageView
+            android:id="@+id/imageHasta"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icono_duracion"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </ImageView>
+
+        <TextView
+            android:id="@+id/textHasta"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="84dp"
+            android:fontFamily="@font/poetsenone"
+            android:text="hasta"
+            android:textSize="20dp"
+            app:layout_constraintBottom_toBottomOf="@+id/imageHasta"
+            app:layout_constraintStart_toEndOf="@+id/imageHasta"
+            app:layout_constraintTop_toTopOf="@+id/imageHasta">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/textoHoraHasta"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poetsenone"
+            android:inputType="datetime"
+            android:text="12:45"
+            android:textSize="20dp"
+            app:layout_constraintBottom_toBottomOf="@+id/textHasta"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.565"
+            app:layout_constraintStart_toEndOf="@+id/textHasta"
+            app:layout_constraintTop_toTopOf="@+id/textHasta"
+            app:layout_constraintVertical_bias="0.0">
+
+        </TextView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

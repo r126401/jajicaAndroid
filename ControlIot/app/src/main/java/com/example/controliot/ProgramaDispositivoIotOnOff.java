@@ -6,7 +6,7 @@ public class ProgramaDispositivoIotOnOff extends ProgramaDispositivoIot implemen
 
 
     private ESTADO_RELE estadoRele;
-    private int duracion;
+
 
     ProgramaDispositivoIotOnOff() {
         super();
@@ -79,21 +79,9 @@ public class ProgramaDispositivoIotOnOff extends ProgramaDispositivoIot implemen
     }
 
 
-    public  void setDuracion(int duracion) {
-        this.duracion = duracion;
-    }
-
-    public int getDuracion() {
-
-        return this.duracion;
-    }
-
-    public int getDuracion(String texto) {
 
 
-        return 0;
 
-    }
 
 
 

@@ -201,7 +201,7 @@
             app:srcCompat="@drawable/icono_duracion" />
 
         <TextView
-            android:id="@+id/textDurante"
+            android:id="@+id/textTemperatura"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -223,7 +223,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/icono_menos"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/textDurante"
+            app:layout_constraintStart_toEndOf="@+id/textTemperatura"
             app:layout_constraintTop_toTopOf="parent">
 
         </ImageButton>

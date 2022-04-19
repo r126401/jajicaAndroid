@@ -164,13 +164,13 @@
         android:fontFamily="@font/poetsenone"
         android:text="12:00"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/textDurante"
-        app:layout_constraintStart_toEndOf="@+id/textDurante"/>
+        app:layout_constraintBottom_toBottomOf="@+id/textTemperatura"
+        app:layout_constraintStart_toEndOf="@+id/textTemperatura"/>
 
 
 
     <TextView
-        android:id="@+id/textDurante"
+        android:id="@+id/textTemperatura"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/poetsenone"

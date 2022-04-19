@@ -70,6 +70,7 @@ public class ProgramaDispositivoIot implements Serializable {
     protected TIPO_DISPOSITIVO_IOT tipoDispositivo;
     protected boolean[] diasActivos;
     protected boolean programaEnCurso;
+    protected int duracion;
 
     ProgramaDispositivoIot() {
 
@@ -349,4 +350,12 @@ public class ProgramaDispositivoIot implements Serializable {
 
     }
 
+    public  void setDuracion(int duracion) {
+        this.duracion = duracion;
+    }
+
+    public int getDuracion() {
+
+        return this.duracion;
+    }
 }

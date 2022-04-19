@@ -161,8 +161,13 @@ public class conexionMqtt implements Serializable, Parcelable {
         void actuacionReleRemotoTermostato(String topic, String message, dispositivoIotTermostato dispositivo);
         void consultarProgramacionTermostato(String topic, String texto, String idDispositivo, ArrayList<ProgramaDispositivoIotTermostato> programa);
         void nuevoProgramacionTermostato(String topic, String texto, String idDispositivo);
-        void eliminarProgramacionTermostato(String topic, String texto, String idDispositivo, ProgramaDispositivoIotTermostato programa);
-        void modificarProgramacionTermostato(String topic, String texto, String idDispositivo, ProgramaDispositivoIotTermostato programa);
+        void eliminarProgramacionTermostato(String topic, String texto, String idDispositivo, String idPrograma);
+        void modificarProgramacionTermostato(String topic, String texto);
+        void informacionDispositivo(String topic, String texto);
+        void resetTermostato(String topic, String texto, String idDispositivo);
+        void factoryResetTermostato(String topic, String texto, String idDispositivo);
+        void upgradeFirmwareTermostato(String topic, String texto, String idDispositivo, OtaVersion otaVersion);
+        void modificarUmbralTemperatura(String topic, String texto, String idDispositivo);
 
 
 
@@ -887,8 +892,7 @@ public class conexionMqtt implements Serializable, Parcelable {
 
     private void procesarMensajesTermometroTermostato(String topic, MqttMessage message, Context contexto) {
         COMANDO_IOT idComando;
-        dispositivoIot dispositivo;
-        dispositivo = new dispositivoIotTermostato();
+        dispositivoTermostato = new dispositivoIotTermostato();
         String texto = new String(message.getPayload());
         idComando = dialogo.descubrirComando(texto);
 
@@ -965,47 +969,68 @@ public class conexionMqtt implements Serializable, Parcelable {
     private void procesarRespuestaComandoTermometroTermostato(String topic, MqttMessage message, Context contexto) {
 
         COMANDO_IOT idComando;
-        dispositivoIotTermostato dispositivo;
         String texto = new String(message.getPayload());
         idComando = dialogo.descubrirComando(texto);
-        ArrayList<ProgramaDispositivoIotTermostato> programa;
+        ArrayList<ProgramaDispositivoIotTermostato> programa = null;
         COMANDO_IOT_TERMOMETRO idcomandoTermostato;
+        JSONObject textoJson = null;
+        try {
+            textoJson = new JSONObject(texto);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        String idDispositivo = textoJson.optString(TEXTOS_DIALOGO_IOT.ID_DISPOSITIVO.getValorTextoJson());
+
+
+
+
 
         switch (idComando) {
 
             case CONSULTAR_CONF_APP:
+                if (listenerMensajesTermostato != null) listenerMensajesTermostato.informacionDispositivo(topic, texto);
                 break;
             case ACTUAR_RELE:
                 break;
             case ESTADO:
-                dispositivo = procesarEstadoDispositivoTermometroTermostato(topic, texto, contexto);
-                if (listenerMensajesTermostato!= null) listenerMensajesTermostato.estadoTermostato(topic, texto, dispositivo);
-                if (listenerMensajesTermometro!= null) listenerMensajesTermometro.estadoTermometro(topic, texto, dispositivo);
+                dispositivoTermostato = procesarEstadoDispositivoTermometroTermostato(topic, texto, contexto);
+                if (listenerMensajesTermostato!= null) listenerMensajesTermostato.estadoTermostato(topic, texto, dispositivoTermostato);
+                if (listenerMensajesTermometro!= null) listenerMensajesTermometro.estadoTermometro(topic, texto, dispositivoTermostato);
                 break;
             case CONSULTAR_PROGRAMACION:
                 programa = procesarConsultaProgramaTermostato(texto, contexto);
-                dispositivo = procesarEstadoDispositivoTermometroTermostato(topic, texto, contexto);
-                dispositivo.setProgramasTermostato(programa);
-                if (listenerMensajesTermostato != null) listenerMensajesTermostato.consultarProgramacionTermostato(topic, texto, dispositivo.idDispositivo, programa);
+                //dispositivo = procesarEstadoDispositivoTermometroTermostato(topic, texto, contexto);
+                //dispositivo.setProgramasTermostato(programa);
+                if (listenerMensajesTermostato != null) listenerMensajesTermostato.consultarProgramacionTermostato(topic, texto, idDispositivo, programa);
 
                 break;
             case NUEVA_PROGRAMACION:
+                if (listenerMensajesTermostato != null) listenerMensajesTermostato.nuevoProgramacionTermostato(topic, texto,idDispositivo);
                 break;
             case ELIMINAR_PROGRAMACION:
+                int indice;
+                String idPrograma = dialogo.extraerDatoJsonString(texto, TEXTOS_DIALOGO_IOT.ID_PROGRAMA.getValorTextoJson());
+                if (listenerMensajesTermostato != null) listenerMensajesTermostato.eliminarProgramacionTermostato(topic, texto, idDispositivo, idPrograma);
                 break;
             case MODIFICAR_PROGRAMACION:
+                if (listenerMensajesTermostato != null) listenerMensajesTermostato.modificarProgramacionTermostato(topic, texto);
                 break;
             case MODIFICAR_APP:
                 break;
             case RESET:
+                if (listenerMensajesTermostato != null) listenerMensajesTermostato.resetTermostato(topic, texto, idDispositivo);
                 break;
             case FACTORY_RESET:
+                if (listenerMensajesTermostato != null) listenerMensajesTermostato.factoryResetTermostato(topic, texto, idDispositivo);
                 break;
             case MODIFY_CLOCK:
                 break;
             case UPGRADE_FIRMWARE:
+                OtaVersion otaVersion = null;
+                if (listenerMensajesTermostato != null) listenerMensajesTermostato.upgradeFirmwareTermostato(topic, texto, idDispositivo, otaVersion);
                 break;
             case MODIFICAR_UMBRAL_TEMPERATURA:
+                if (listenerMensajesTermostato != null) listenerMensajesTermostato.modificarUmbralTemperatura(topic, texto, idDispositivo);
                 break;
             case ESPONTANEO:
                 break;
@@ -1258,6 +1283,20 @@ public class conexionMqtt implements Serializable, Parcelable {
         dispositivo = new dispositivoIotTermostato();
 
         return (dispositivo.cargarProgramas(texto));
+
+    }
+
+    private void procesarInformacionOta(String texto, Context contexto) {
+
+        JSONObject mensaje;
+
+        try {
+            mensaje = new JSONObject(texto);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
 
     }
 

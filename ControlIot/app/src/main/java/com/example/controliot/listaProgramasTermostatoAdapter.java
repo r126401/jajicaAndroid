@@ -83,6 +83,7 @@ public class listaProgramasTermostatoAdapter extends ArrayAdapter<ProgramaDispos
             holder.panelDiasSemana = (ConstraintLayout) convertView.findViewById(R.id.panelDiasSemana);
             holder.textoUmbral = (TextView) convertView.findViewById(R.id.textoUmbral);
             holder.imageBorrarPrograma = (ImageView) convertView.findViewById(R.id.imageBorrarPrograma);
+            holder.textoHoraHasta = (TextView) convertView.findViewById(R.id.textoHoraHasta);
             holder.imageProgramaActivado = (ImageView) convertView.findViewById(R.id.imageProgramaActivado);
             holder.imageBorrarPrograma.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -213,6 +214,7 @@ public class listaProgramasTermostatoAdapter extends ArrayAdapter<ProgramaDispos
                     actualizarPanelDiaSemana(holder.textoDomingo, false);
                 }
                 holder.textHoraPrograma.setText(formatearHora(programa.getHora(), programa.getMinuto()));
+                holder.textoHoraHasta.setText(duracionAfecha(holder.textHoraPrograma.getText().toString(), programa.getDuracion()));
 
                 break;
             case PROGRAMA_SEMANAL:
@@ -245,6 +247,7 @@ public class listaProgramasTermostatoAdapter extends ArrayAdapter<ProgramaDispos
         ImageView imageHeating;
         SwitchCompat switchProgramaActivo;
         TextView textHoraPrograma;
+        TextView textoHoraHasta;
         TextView textoUmbral;
         ImageView imageBorrarPrograma;
         ImageView imageProgramaActivado;
@@ -276,6 +279,24 @@ public class listaProgramasTermostatoAdapter extends ArrayAdapter<ProgramaDispos
 
         }
         return horafinal;
+
+    }
+
+    private String duracionAfecha(String inicio, int duracion) {
+
+        Calendar fecha;
+        int hora;
+        int minuto;
+        String horaFinal;
+
+        fecha = Calendar.getInstance();
+        hora = Integer.valueOf(inicio.substring(0,2));
+        minuto = Integer.valueOf(inicio.substring(3,5));
+        fecha.set(fecha.get(Calendar.YEAR), fecha.get(Calendar.MONTH), fecha.get(Calendar.DAY_OF_MONTH), hora, minuto);
+        fecha.setTimeInMillis(fecha.getTimeInMillis() + duracion * 1000);
+
+        horaFinal = formatearHora(fecha.get(Calendar.HOUR_OF_DAY), fecha.get(Calendar.MINUTE));
+        return horaFinal;
 
 
     }

@@ -407,7 +407,8 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
             public void consultarProgramacionInterruptor(String topic, String texto, ArrayList<ProgramaDispositivoIotOnOff> programa) {
 
                 Log.i(TAG, texto);
-                procesarProgramasRecibidos(programa);
+                dispositivo.setProgramasOnOff(programa);
+                procesarProgramasRecibidos();
 
 
             }
@@ -574,9 +575,9 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
 
 
 
-    private void procesarProgramasRecibidos(ArrayList<ProgramaDispositivoIotOnOff> programas) {
+    private void procesarProgramasRecibidos() {
 
-        programasInterruptorAdapter = new listaProgramasInterruptorAdapter(this, R.layout.vista_programas_interruptor, programas, cnx, dispositivo);
+        programasInterruptorAdapter = new listaProgramasInterruptorAdapter(this, R.layout.vista_programas_interruptor, dispositivo.getProgramasOnOff(), cnx, dispositivo);
         listViewSchedule.setAdapter(programasInterruptorAdapter);
         programasInterruptorAdapter.notifyDataSetChanged();
 

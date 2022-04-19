@@ -7,14 +7,25 @@
     android:orientation="horizontal">
 
 
+    <TextView
+        android:id="@+id/textoHasta"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poetsenone"
+        android:text=" a "
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/textHoraPrograma"
+        app:layout_constraintStart_toEndOf="@+id/textHoraPrograma"
+        app:layout_constraintTop_toTopOf="@+id/textHoraPrograma" />
+
     <ImageView
         android:id="@+id/imageHeating"
         android:layout_width="43dp"
         android:layout_height="39dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/panelDiasSemana"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/switchon"/>
+        app:srcCompat="@drawable/switchon" />
 
     <ImageView
         android:id="@+id/imageBorrarPrograma"
@@ -22,6 +33,7 @@
         android:layout_height="32dp"
         android:layout_marginEnd="12dp"
         android:focusable="false"
+        app:layout_constraintBottom_toTopOf="@+id/panelDiasSemana"
         app:layout_constraintEnd_toStartOf="@+id/switchProgramaActivo"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_delete" />
@@ -47,10 +59,11 @@
     </androidx.appcompat.widget.SwitchCompat>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/panelDiasSemana"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/imageHeating"
-        android:id="@+id/panelDiasSemana">
+        app:layout_constraintBottom_toBottomOf="parent"
+>
 
 
         <TextView
@@ -139,7 +152,6 @@
         </TextView>
 
 
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -147,27 +159,34 @@
         android:id="@+id/textHoraPrograma"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
         android:fontFamily="@font/poetsenone"
         android:text="12:00"
         android:textSize="20dp"
-        app:layout_constraintEnd_toStartOf="@+id/switchProgramaActivo"
-        app:layout_constraintHorizontal_bias="0.103"
-        app:layout_constraintStart_toEndOf="@+id/imageHeating"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintBottom_toBottomOf="@+id/textDesde"
+        app:layout_constraintStart_toEndOf="@+id/textDesde"
+        app:layout_constraintTop_toTopOf="@+id/textDesde" />
 
+    <TextView
+        android:id="@+id/textoHoraHasta"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poetsenone"
+        android:text="12:00"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/textDesde"
+        app:layout_constraintStart_toEndOf="@+id/textoHasta"
+        app:layout_constraintTop_toTopOf="@+id/textDesde" />
 
     <TextView
         android:id="@+id/textoUmbral"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="72dp"
         android:fontFamily="@font/poetsenone"
         android:text="12:00"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/textHoraPrograma"
-        app:layout_constraintStart_toEndOf="@+id/textHoraPrograma"
-        app:layout_constraintTop_toTopOf="@+id/textHoraPrograma" />
+        app:layout_constraintEnd_toEndOf="@+id/textoHoraHasta"
+        app:layout_constraintStart_toStartOf="@+id/textDesde"
+        app:layout_constraintTop_toBottomOf="@+id/textHoraPrograma" />
 
     <ImageView
         android:id="@+id/imageProgramaActivado"
@@ -177,4 +196,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/led"/>
+
+    <TextView
+        android:id="@+id/textDesde"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="64dp"
+        android:fontFamily="@font/poetsenone"
+        android:text="de "
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/imageHeating"
+        app:layout_constraintStart_toEndOf="@+id/imageHeating"
+        app:layout_constraintTop_toTopOf="@+id/imageHeating"
+        app:layout_constraintVertical_bias="0.333" />
 </androidx.constraintlayout.widget.ConstraintLayout>

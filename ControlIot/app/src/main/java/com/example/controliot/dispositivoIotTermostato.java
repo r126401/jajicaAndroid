@@ -41,6 +41,7 @@ public class dispositivoIotTermostato extends dispositivoIot implements Serializ
         margenTemperatura = 0;
         reintentosLectura = 0;
         intervaloReintentos = 0;
+        programas = null;
 
 
 
@@ -189,6 +190,7 @@ public class dispositivoIotTermostato extends dispositivoIot implements Serializ
         JSONObject objeto, respuesta;
         JSONArray arrayProgramas;
         int i;
+        int duracion;
         ProgramaDispositivoIotTermostato programa;
         dialogoIot dialogo = new dialogoIot();
 
@@ -207,6 +209,10 @@ public class dispositivoIotTermostato extends dispositivoIot implements Serializ
                 programa.setIdProgramacion(objeto.getString(TEXTOS_DIALOGO_IOT.ID_PROGRAMA.getValorTextoJson()));
                 if (programaActivo != null) programa.setProgramaEnCurso(programaActivo);
                 programa.setUmbralTemperatura(objeto.getDouble(TEXTOS_DIALOGO_IOT.UMBRAL_TEMPERATURA.getValorTextoJson()));
+                duracion = objeto.getInt(TEXTOS_DIALOGO_IOT.DURACION.getValorTextoJson());
+                if (duracion > 0 ) {
+                    programa.setDuracion(duracion);
+                }
                 anadirPrograma(programa);
                 //programas.add(programa);
 
@@ -219,7 +225,7 @@ public class dispositivoIotTermostato extends dispositivoIot implements Serializ
         }
 
 
-        return programas;
+        return this.programas;
     }
 
 
@@ -303,16 +309,21 @@ public class dispositivoIotTermostato extends dispositivoIot implements Serializ
 
     }
 
-    public boolean modificarPrograma(String idPrograma, String idNuevoPrograma, String estadoPrograma, double umbral) {
+    public boolean modificarPrograma(String idPrograma, String idNuevoPrograma, String estadoPrograma, double umbral, int duracion) {
 
         int i;
+
+        ESTADO_PROGRAMA estado = ESTADO_PROGRAMA.PROGRAMA_DESCONOCIDO;
 
         i= buscarPrograma(idPrograma);
         idNuevoPrograma += estadoPrograma;
         idNuevoPrograma += "1";
         if (i!= -1) {
+            estado = estado.fromId(Integer.valueOf(estadoPrograma));
             programas.get(i).setIdProgramacion(idNuevoPrograma);
             programas.get(i).setUmbralTemperatura(umbral);
+            programas.get(i).setDuracion(duracion);
+            programas.get(i).setEstadoPrograma(estado);
 
         }
 

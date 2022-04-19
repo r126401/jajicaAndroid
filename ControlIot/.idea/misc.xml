@@ -15,7 +15,8 @@
         <entry key="app/src/main/res/layout/activity_nuevo_dispositivo.xml" value="0.33" />
         <entry key="app/src/main/res/layout/activity_principal.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_programa_interruptor.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/activity_programa_termostato.xml" value="0.228125" />
+        <entry key="app/src/main/res/layout/activity_programa_termostato.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/activity_settings.xml" value="0.3416666666666667" />
         <entry key="app/src/main/res/layout/activity_termostato.xml" value="0.33" />
         <entry key="app/src/main/res/layout/dias_semana.xml" value="0.34739583333333335" />
         <entry key="app/src/main/res/layout/duracion_fecha.xml" value="0.34739583333333335" />
@@ -25,7 +26,7 @@
         <entry key="app/src/main/res/layout/vista_dispositivo_desconocido.xml" value="0.34739583333333335" />
         <entry key="app/src/main/res/layout/vista_interruptor.xml" value="0.25" />
         <entry key="app/src/main/res/layout/vista_programas_interruptor.xml" value="0.33" />
-        <entry key="app/src/main/res/layout/vista_programas_termostato.xml" value="0.3453125" />
+        <entry key="app/src/main/res/layout/vista_programas_termostato.xml" value="0.5" />
         <entry key="app/src/main/res/layout/vista_termometro.xml" value="0.34739583333333335" />
         <entry key="app/src/main/res/layout/vista_termostato.xml" value="0.5" />
         <entry key="app/src/main/res/menu/menu_interruptor.xml" value="0.34739583333333335" />
