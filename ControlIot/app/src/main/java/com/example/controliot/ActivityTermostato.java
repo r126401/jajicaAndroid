@@ -432,6 +432,8 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
                 envioComando(dialogo.escribirComandoInfoApp());
                 break;
             case(R.id.itemConfiguracion):
+                lanzarActivitySettingsTermostato();
+
                 break;
             case(R.id.itemNuevoProgramaTermostato):
                 lanzarActivityProgramaTermostato(0, COMANDO_IOT.NUEVA_PROGRAMACION);
@@ -747,6 +749,21 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
 
         lanzadorActivityProgramaTermostato.launch(lanzador);
     }
+
+    private void lanzarActivitySettingsTermostato() {
+
+
+
+        Intent lanzador = new Intent(ActivityTermostato.this, ActivitySettingsTermostato.class);
+        lanzador.putExtra(TEXTOS_DIALOGO_IOT.MARGEN_TEMPERATURA.getValorTextoJson(), dispositivoCronotermostato.getMargenTemperatura());
+        lanzador.putExtra(TEXTOS_DIALOGO_IOT.INTERVALO_LECTURA.getValorTextoJson(), dispositivoCronotermostato.getIntervaloLectura());
+        lanzador.putExtra(TEXTOS_DIALOGO_IOT.REINTENTOS_LECTURA.getValorTextoJson(), dispositivoCronotermostato.getReintentosLectura());
+        lanzador.putExtra(TEXTOS_DIALOGO_IOT.INTERVALO_REINTENTOS.getValorTextoJson(), dispositivoCronotermostato.getIntervaloReintentos());
+        lanzador.putExtra(TEXTOS_DIALOGO_IOT.VALOR_CALIBRADO.getValorTextoJson(), dispositivoCronotermostato.getValorCalibrado());
+        lanzadorActivityProgramaTermostato.launch(lanzador);
+    }
+
+
 
     private void procesarModificarPrograma(String textoRecibido) {
 

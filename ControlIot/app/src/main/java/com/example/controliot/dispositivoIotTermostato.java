@@ -24,6 +24,8 @@ public class dispositivoIotTermostato extends dispositivoIot implements Serializ
     protected int reintentosLectura;
     protected int intervaloReintentos;
     protected double valorCalibrado;
+    protected Boolean sensorLocal;
+    protected String sensorRemoto;
 
 
 
@@ -42,6 +44,8 @@ public class dispositivoIotTermostato extends dispositivoIot implements Serializ
         reintentosLectura = 0;
         intervaloReintentos = 0;
         programas = null;
+        sensorLocal = true;
+        sensorRemoto = null;
 
 
 
@@ -181,6 +185,33 @@ public class dispositivoIotTermostato extends dispositivoIot implements Serializ
     public ESTADO_PROGRAMACION getEstadoProgramacion() {
 
         return this.estadoProgramacion;
+    }
+
+    public Boolean isSensorLocal() {
+        return this.sensorLocal;
+    }
+
+    public String getSensorLocal() {
+
+        if (sensorLocal == false) {
+            return this.sensorRemoto;
+        } else {
+            return null;
+        }
+
+    }
+
+    public void setSensorRemoto(String sensorRemoto) {
+
+        this.sensorLocal = false;
+        this.sensorRemoto = sensorRemoto;
+
+    }
+
+    public void setSensorLocal() {
+
+        this.sensorLocal = true;
+        this.sensorRemoto = null;
     }
 
 

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ActivitySettings">
+    tools:context=".ActivitySettingsTermostato">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -20,7 +20,9 @@
             android:src="@drawable/icono_duracion"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"></ImageView>
+            app:layout_constraintTop_toTopOf="parent">
+
+        </ImageView>
 
         <TextView
             android:id="@+id/etiqueta_margen_temperatura"
@@ -83,7 +85,6 @@
         app:layout_constraintTop_toBottomOf="@+id/panelMargenTemperatura">
 
 
-
         <ImageView
             android:id="@+id/image_intervalo_lectura"
             android:layout_width="wrap_content"
@@ -123,8 +124,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/poetsenone"
-            android:inputType="numberDecimal"
-            android:text="0.0"
+            android:inputType="number"
+            android:text="60"
             android:textSize="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/boton_mas_intervalo_lectura"
@@ -155,7 +156,6 @@
         app:layout_constraintTop_toBottomOf="@+id/panelIntervaloLectura">
 
 
-
         <ImageView
             android:id="@+id/image_reintentos_lectura"
             android:layout_width="wrap_content"
@@ -163,7 +163,9 @@
             android:src="@drawable/icono_duracion"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"></ImageView>
+            app:layout_constraintTop_toTopOf="parent">
+
+        </ImageView>
 
         <TextView
             android:id="@+id/etiqueta_reintentos_lectura"
@@ -196,7 +198,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/poetsenone"
             android:inputType="numberDecimal"
-            android:text="0.0"
+            android:text="3"
             android:textSize="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/boton_mas_reintentos_lectura"
@@ -227,7 +229,6 @@
         app:layout_constraintTop_toBottomOf="@+id/panelReintentosLectura">
 
 
-
         <ImageView
             android:id="@+id/imageIntervaloReintentos"
             android:layout_width="wrap_content"
@@ -235,7 +236,9 @@
             android:src="@drawable/icono_duracion"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"></ImageView>
+            app:layout_constraintTop_toTopOf="parent">
+
+        </ImageView>
 
         <TextView
             android:id="@+id/etiqueta_intervalo_reintentos"
@@ -267,8 +270,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/poetsenone"
-            android:inputType="numberDecimal"
-            android:text="0.0"
+            android:inputType="number"
+            android:text="30"
             android:textSize="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/boton_mas_intervalo_reintentos"
@@ -299,7 +302,6 @@
         app:layout_constraintTop_toBottomOf="@+id/panelIntervaloReintentos">
 
 
-
         <ImageView
             android:id="@+id/imageCalibrado"
             android:layout_width="wrap_content"
@@ -307,7 +309,9 @@
             android:src="@drawable/icono_duracion"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"></ImageView>
+            app:layout_constraintTop_toTopOf="parent">
+
+        </ImageView>
 
         <TextView
             android:id="@+id/etiqueta_calibrado"
@@ -363,4 +367,101 @@
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        app:layout_constraintTop_toBottomOf="@id/panelCalibrado"
+        tools:layout_editor_absoluteX="0dp">
+
+        <TextView
+            android:id="@+id/etiqueta_seleccion_sensor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poetsenone"
+            android:text="Seleccion de sensor"
+            android:textSize="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </TextView>
+
+        <RadioGroup
+            android:id="@+id/radioGrupoSensor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/etiqueta_seleccion_sensor"
+            android:layout_marginTop="20dp">
+
+            <RadioButton
+                android:id="@+id/radioSensorLocal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poetsenone"
+                android:text="Sensor en dispositivo"
+                android:textSize="20dp">
+
+            </RadioButton>
+
+            <RadioButton
+                android:id="@+id/radioSensorRemoto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poetsenone"
+                android:text="Sensor remoto"
+                android:textSize="20dp">
+
+            </RadioButton>
+
+
+        </RadioGroup>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poetsenone"
+            android:text="24:32:34:54:43"
+            android:textSize="20dp"
+            app:layout_constraintBottom_toBottomOf="@+id/radioGrupoSensor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/radioGrupoSensor">
+
+        </TextView>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <Button
+        android:id="@+id/botonCancelar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poetsenone"
+        android:text="Cancelar"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/botonAceptar"
+        app:layout_constraintEnd_toStartOf="@+id/botonAceptar"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/botonAceptar">
+
+    </Button>
+
+    <Button
+        android:id="@+id/botonAceptar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="68dp"
+        android:fontFamily="@font/poetsenone"
+        android:text="Aplicar cambios"
+        android:textSize="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/botonCancelar"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout2">
+
+    </Button>
 </androidx.constraintlayout.widget.ConstraintLayout>
