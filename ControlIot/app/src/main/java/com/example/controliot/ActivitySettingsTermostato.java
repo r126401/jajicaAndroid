@@ -2,6 +2,7 @@ package com.example.controliot;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -48,6 +49,8 @@ public class ActivitySettingsTermostato extends AppCompatActivity implements Vie
     private Boolean autoincremento;
     private Boolean autodecremento;
     private Handler handler;
+
+    dispositivoIotTermostato dispositivo;
 
 
 
@@ -107,7 +110,9 @@ public class ActivitySettingsTermostato extends AppCompatActivity implements Vie
         radioGrupoSensor = (RadioGroup) findViewById(R.id.radioGrupoSensor);
         radioGrupoSensor.setOnCheckedChangeListener(this);
         radioSensorLocal = (RadioButton) findViewById(R.id.radioSensorLocal);
+        radioSensorLocal.setOnClickListener(this);
         radioSensorRemoto = (RadioButton) findViewById(R.id.radioSensorRemoto);
+        radioSensorRemoto.setOnClickListener(this);
 
         textSensorRemoto = (TextView) findViewById(R.id.textSensorRemoto);
 
@@ -117,7 +122,54 @@ public class ActivitySettingsTermostato extends AppCompatActivity implements Vie
         botonAceptar.setOnClickListener(this);
     }
 
-    void inicializarActivity() {
+    private void recibirDatosActivity() {
+
+        Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
+        double valorDouble;
+        int valorInt;
+        Boolean master;
+        String idSensorRemoto;
+        dispositivo = new dispositivoIotTermostato();
+
+        valorDouble = (Double) bundle.get(TEXTOS_DIALOGO_IOT.MARGEN_TEMPERATURA.getValorTextoJson());
+        textMargenTemperatura.setText(String.valueOf(valorDouble));
+        valorInt = (int) bundle.get(TEXTOS_DIALOGO_IOT.INTERVALO_LECTURA.getValorTextoJson());
+        textIntervaloLectura.setText(String.valueOf(valorInt));
+        valorInt = (int) bundle.get(TEXTOS_DIALOGO_IOT.REINTENTOS_LECTURA.getValorTextoJson());
+        textReintentosLectura.setText(String.valueOf(valorInt));
+        valorInt = (int) bundle.get(TEXTOS_DIALOGO_IOT.INTERVALO_REINTENTOS.getValorTextoJson());
+        textIntervaloReintentos.setText(String.valueOf(valorInt));
+        valorDouble = (double) bundle.get(TEXTOS_DIALOGO_IOT.VALOR_CALIBRADO.getValorTextoJson());
+        textCalibrado.setText(String.valueOf(valorDouble));
+        master = (Boolean) bundle.get(TEXTOS_DIALOGO_IOT.TIPO_SENSOR.getValorTextoJson());
+        idSensorRemoto = (String) bundle.get(TEXTOS_DIALOGO_IOT.ID_SENSOR.getValorTextoJson());
+        seleccionarSensor(master, idSensorRemoto);
+
+
+
+
+    }
+
+    private void seleccionarSensor(Boolean master, String sensor) {
+
+        if (master == true) {
+            radioSensorLocal.setChecked(true);
+            textSensorRemoto.setText("");
+            textSensorRemoto.setVisibility(View.INVISIBLE);
+        } else {
+            radioSensorRemoto.setChecked(true);
+            if (sensor != null) textSensorRemoto.setText(sensor);
+            textSensorRemoto.setVisibility(View.VISIBLE);
+        }
+
+
+    }
+
+
+
+
+    private void inicializarActivity() {
 
         handler = new Handler();
 
@@ -129,6 +181,7 @@ public class ActivitySettingsTermostato extends AppCompatActivity implements Vie
         setContentView(R.layout.activity_settings_termostato);
         registrarControles();
         inicializarActivity();
+        recibirDatosActivity();
     }
 
 
@@ -170,6 +223,12 @@ public class ActivitySettingsTermostato extends AppCompatActivity implements Vie
             case R.id.botonCancelar:
                 break;
             case R.id.botonAceptar:
+                break;
+            case R.id.radioSensorLocal:
+                seleccionarSensor(true, null);
+                break;
+            case R.id.radioSensorRemoto:
+                seleccionarSensor(false, null);
                 break;
             default:
                 break;

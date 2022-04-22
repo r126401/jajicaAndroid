@@ -307,10 +307,15 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
 
     }
 
+    public void registrarTermostato(dispositivoIotTermostato dispositivo) {
+        this.dispositivoCronotermostato = dispositivo;
+        actualizarTermostato(dispositivo);
+
+    }
+
     public void actualizarTermostato(dispositivoIotTermostato dispositivo) {
 
         dispositivoDisponible();
-        this.dispositivoCronotermostato = dispositivo;
         actualizarEstadoRele();
         actualizarModo();
         actualizarTemperatura();
@@ -464,7 +469,7 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
         cnx.setOnProcesarMensajesTermostato(new conexionMqtt.OnProcesarMensajesTermostato() {
             @Override
             public void estadoTermostato(String topic, String message, dispositivoIotTermostato dispositivo) {
-                actualizarTermostato(dispositivo);
+                registrarTermostato(dispositivo);
             }
 
             @Override
@@ -529,7 +534,7 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
         cnx.setOnProcesarEspontaneosTermostato(new conexionMqtt.OnProcesarEspontaneosTermostato() {
             @Override
             public void arranqueAplicacionTermostato(String topic, String texto, dispositivoIotTermostato dispoisitivo) {
-                actualizarTermostato(dispositivoCronotermostato);
+                registrarTermostato(dispositivoCronotermostato);
             }
 
             @Override
@@ -760,6 +765,8 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
         lanzador.putExtra(TEXTOS_DIALOGO_IOT.REINTENTOS_LECTURA.getValorTextoJson(), dispositivoCronotermostato.getReintentosLectura());
         lanzador.putExtra(TEXTOS_DIALOGO_IOT.INTERVALO_REINTENTOS.getValorTextoJson(), dispositivoCronotermostato.getIntervaloReintentos());
         lanzador.putExtra(TEXTOS_DIALOGO_IOT.VALOR_CALIBRADO.getValorTextoJson(), dispositivoCronotermostato.getValorCalibrado());
+        lanzador.putExtra(TEXTOS_DIALOGO_IOT.TIPO_SENSOR.getValorTextoJson(), dispositivoCronotermostato.isSensorLocal());
+        lanzador.putExtra(TEXTOS_DIALOGO_IOT.ID_SENSOR.getValorTextoJson(), dispositivoCronotermostato.getMaster());
         lanzadorActivityProgramaTermostato.launch(lanzador);
     }
 

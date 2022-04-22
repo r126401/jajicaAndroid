@@ -916,30 +916,30 @@ public class conexionMqtt implements Serializable, Parcelable {
             switch (tipoInformeEspontaneo) {
 
                 case ARRANQUE_APLICACION:
-                    dispositivo = procesarEstadoDispositivoTermometroTermostato(topic, texto, contexto);
+                    dispositivo = procesarActualizacionEstadoTermostato(topic, texto, contexto);
                     listenerMensajesTermostato.estadoTermostato(topic, texto, dispositivo);
                     listenerMensajesTermometro.estadoTermometro(topic, texto, dispositivo);
                     break;
                 case ACTUACION_RELE_LOCAL:
-                    dispositivo = procesarEstadoDispositivoTermometroTermostato(topic, texto, contexto);
+                    dispositivo = procesarActualizacionEstadoTermostato(topic, texto, contexto);
                     listenerMensajesTermostato.actuacionReleLocalTermostato(topic, texto, dispositivo);
                     listenerMensajesTermometro.actuacionReleLocalTermometro(topic, texto, dispositivo);
                     break;
                 case ACTUACION_RELE_REMOTO:
-                    dispositivo = procesarEstadoDispositivoTermometroTermostato(topic, texto, contexto);
+                    dispositivo = procesarActualizacionEstadoTermostato(topic, texto, contexto);
                     listenerMensajesTermostato.actuacionReleRemotoTermostato(topic, texto, dispositivo);
                     listenerMensajesTermometro.actuacionReleRemotoTermometro(topic, texto, dispositivo);
                     break;
                 case UPGRADE_FIRMWARE_FOTA:
                     break;
                 case CAMBIO_DE_PROGRAMA:
-                    dispositivo = procesarEstadoDispositivoTermometroTermostato(topic, texto, contexto);
+                    dispositivo = procesarActualizacionEstadoTermostato(topic, texto, contexto);
                     listenerMensajesTermostato.estadoTermostato(topic, texto, dispositivo);
                     break;
                 case COMANDO_APLICACION:
                     break;
                 case CAMBIO_TEMPERATURA:
-                    dispositivo = procesarEstadoDispositivoTermometroTermostato(topic, texto, contexto);
+                    dispositivo = procesarActualizacionEstadoTermostato(topic, texto, contexto);
                     listenerMensajesTermostato.estadoTermostato(topic, texto, dispositivo);
                     listenerMensajesTermometro.estadoTermometro(topic, texto, dispositivo);
                     break;
@@ -950,7 +950,7 @@ public class conexionMqtt implements Serializable, Parcelable {
                 case INFORME_ALARMA:
                     break;
                 case CAMBIO_UMBRAL_TEMPERATURA:
-                    dispositivo = procesarEstadoDispositivoTermometroTermostato(topic, texto, contexto);
+                    dispositivo = procesarActualizacionEstadoTermostato(topic, texto, contexto);
                     listenerMensajesTermostato.estadoTermostato(topic, texto, dispositivo);
                     break;
                 case CAMBIO_ESTADO_APLICACION:
@@ -1231,6 +1231,44 @@ public class conexionMqtt implements Serializable, Parcelable {
         return dispIotOnOff;
     }
 
+    private dispositivoIotTermostato procesarActualizacionEstadoTermostato(String topic, String texto, Context contexto) {
+        JSONObject mensaje;
+        String idDispositivo;
+        configuracionDispositivos confDisp;
+        try {
+            mensaje = new JSONObject(texto);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.e(getClass().toString(), "El mensaje no es json");
+            return null;
+
+        }
+
+        dispositivoIot dispositivo;
+        idDispositivo = mensaje.optString(TEXTOS_DIALOGO_IOT.ID_DISPOSITIVO.getValorTextoJson());
+        confDisp = new configuracionDispositivos(contexto);
+        dispositivo = confDisp.getDispositivoPorId(idDispositivo);
+        dispositivoIotTermostato dispositivoTermometroTermostato;
+        dispositivoTermometroTermostato = new dispositivoIotTermostato(dispositivo);
+        ESTADO_RELE estadoRele = dialogo.getEstadoRele(texto);
+        dispositivoTermometroTermostato.setEstadoRele(estadoRele);
+        dispositivoTermometroTermostato.setUmbralTemperatura(dialogo.getUmbralTemperatura(texto));
+        dispositivoTermometroTermostato.setTemperatura(dialogo.getTemperatura(texto));
+        dispositivoTermometroTermostato.setHumedad(dialogo.getHumedad(texto));
+        dispositivoTermometroTermostato.setEstadoDispositivo(dialogo.getEstadoDispositivo(texto));
+        dispositivoTermometroTermostato.setTipoDispositivo(dialogo.getTipoDispositivo(texto));
+        dispositivoTermometroTermostato.setEstadoConexion(ESTADO_CONEXION_IOT.CONECTADO);
+        dispositivoTermometroTermostato.setEstadoDispositivo(dialogo.getEstadoDispositivo(texto));
+        dispositivoTermometroTermostato.setProgramaActivo(dialogo.getProgramaActivo(texto));
+
+
+
+        return dispositivoTermometroTermostato;
+
+    }
+
+
+
     private dispositivoIotTermostato procesarEstadoDispositivoTermometroTermostato(String topic, String texto, Context contexto) {
         JSONObject mensaje;
         String idDispositivo;
@@ -1260,6 +1298,15 @@ public class conexionMqtt implements Serializable, Parcelable {
         dispositivoTermometroTermostato.setEstadoConexion(ESTADO_CONEXION_IOT.CONECTADO);
         dispositivoTermometroTermostato.setEstadoDispositivo(dialogo.getEstadoDispositivo(texto));
         dispositivoTermometroTermostato.setProgramaActivo(dialogo.getProgramaActivo(texto));
+        dispositivoTermometroTermostato.setMargenTemperatura(dialogo.getmargenTemperatura(texto));
+        dispositivoTermometroTermostato.setIntervaloLectura(dialogo.getIntervaloLectura(texto));
+        dispositivoTermometroTermostato.setReintentoLectura(dialogo.getReintentosLectura(texto));
+        dispositivoTermometroTermostato.setIntervaloReintentos(dialogo.getIntervaloReintentos(texto));
+        dispositivoTermometroTermostato.setValorCalibrado(dialogo.getCalibradoTemperatura(texto));
+        dispositivoTermometroTermostato.setSensorMaster(dialogo.isSensorMaster(texto));
+        dispositivoTermometroTermostato.setIdSensor(dialogo.getIdSensorRemoto(texto));
+
+
         return dispositivoTermometroTermostato;
 
     }

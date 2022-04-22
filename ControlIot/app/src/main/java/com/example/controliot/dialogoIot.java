@@ -9,6 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
+import java.nio.DoubleBuffer;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -414,7 +415,10 @@ enum TEXTOS_DIALOGO_IOT {
     MASCARA_PROGRAMA("programMask"),
     DURACION("durationProgram"),
     DIA_SEMANA("weekDay"),
-    CODIGO_OTA("otaCode");
+    CODIGO_OTA("otaCode"),
+    TIPO_SENSOR("master"),
+    ID_SENSOR("idsensor");
+
 
 
 
@@ -902,6 +906,60 @@ public class dialogoIot implements Serializable {
 
         return extraerDatoJsonString(texto, TEXTOS_DIALOGO_IOT.PROGRAMA_ACTIVO.getValorTextoJson());
     }
+
+    public Double getmargenTemperatura(String texto) {
+
+        return extraerDatoJsonDouble(texto, TEXTOS_DIALOGO_IOT.MARGEN_TEMPERATURA.getValorTextoJson());
+
+    }
+
+    public int getIntervaloLectura(String texto) {
+        return extraerDatoJsonInt(texto, TEXTOS_DIALOGO_IOT.INTERVALO_LECTURA.getValorTextoJson());
+    }
+
+    public int getReintentosLectura(String texto) {
+        return extraerDatoJsonInt(texto, TEXTOS_DIALOGO_IOT.REINTENTOS_LECTURA.getValorTextoJson());
+    }
+
+    public int getIntervaloReintentos(String texto) {
+        return extraerDatoJsonInt(texto, TEXTOS_DIALOGO_IOT.INTERVALO_REINTENTOS.getValorTextoJson());
+    }
+
+    public double getCalibradoTemperatura(String texto) {
+        return extraerDatoJsonDouble(texto, TEXTOS_DIALOGO_IOT.VALOR_CALIBRADO.getValorTextoJson());
+    }
+
+    public Boolean isSensorMaster(String texto) {
+
+        int tipoSensor;
+
+        tipoSensor = extraerDatoJsonInt(texto, TEXTOS_DIALOGO_IOT.TIPO_SENSOR.getValorTextoJson());
+        if (tipoSensor == 0) {
+            return false;
+
+        } else {
+            return true;
+        }
+
+    }
+
+    public String getIdSensorRemoto(String texto) {
+
+        Boolean master;
+
+        master = isSensorMaster(texto);
+
+        if (master == true) {
+            return null;
+        } else {
+            return extraerDatoJsonString(texto, TEXTOS_DIALOGO_IOT.ID_SENSOR.getValorTextoJson());
+        }
+
+
+    }
+
+
+
 
 
     public String comandoModificarUmbralTemperatura(double temperatura) {

@@ -8,7 +8,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class dispositivoIotTermostato extends dispositivoIot implements Serializable {
@@ -24,8 +23,8 @@ public class dispositivoIotTermostato extends dispositivoIot implements Serializ
     protected int reintentosLectura;
     protected int intervaloReintentos;
     protected double valorCalibrado;
-    protected Boolean sensorLocal;
-    protected String sensorRemoto;
+    protected Boolean master;
+    protected String idSensor;
 
 
 
@@ -44,8 +43,8 @@ public class dispositivoIotTermostato extends dispositivoIot implements Serializ
         reintentosLectura = 0;
         intervaloReintentos = 0;
         programas = null;
-        sensorLocal = true;
-        sensorRemoto = null;
+        master = true;
+        idSensor = null;
 
 
 
@@ -70,6 +69,8 @@ public class dispositivoIotTermostato extends dispositivoIot implements Serializ
         margenTemperatura = 0;
         reintentosLectura = 0;
         intervaloReintentos = 0;
+        master = true;
+        idSensor = null;
 
 
     }
@@ -91,6 +92,9 @@ public class dispositivoIotTermostato extends dispositivoIot implements Serializ
         reintentosLectura = 0;
         intervaloReintentos = 0;
         this.tipoDispositivo = tipo;
+        master = true;
+        idSensor = null;
+
 
 
     }
@@ -188,30 +192,34 @@ public class dispositivoIotTermostato extends dispositivoIot implements Serializ
     }
 
     public Boolean isSensorLocal() {
-        return this.sensorLocal;
+        return this.master;
     }
 
-    public String getSensorLocal() {
+    public String getMaster() {
 
-        if (sensorLocal == false) {
-            return this.sensorRemoto;
+        if (master == false) {
+            return this.idSensor;
         } else {
             return null;
         }
 
     }
 
-    public void setSensorRemoto(String sensorRemoto) {
+    public void setIdSensor(String idSensor) {
 
-        this.sensorLocal = false;
-        this.sensorRemoto = sensorRemoto;
+        this.idSensor = idSensor;
+        if (idSensor == null) {
+            this.master = true;
+        } else {
+            this.master = false;
+        }
 
     }
 
-    public void setSensorLocal() {
+    public void setSensorMaster(Boolean master) {
 
-        this.sensorLocal = true;
-        this.sensorRemoto = null;
+        this.master = master;
+        if (master == true) this.idSensor = null;
     }
 
 
