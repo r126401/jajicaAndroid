@@ -784,4 +784,6 @@ public class ActivityProgramaTermostato extends AppCompatActivity implements Tim
     }
 
 
+
+
 }

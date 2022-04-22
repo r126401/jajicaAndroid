@@ -3,6 +3,8 @@ package com.example.controliot;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -11,7 +13,9 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-public class ActivitySettingsTermostato extends AppCompatActivity implements View.OnClickListener, View.OnLongClickListener, View.OnTouchListener {
+import java.text.DecimalFormat;
+
+public class ActivitySettingsTermostato extends AppCompatActivity implements View.OnClickListener, View.OnLongClickListener, View.OnTouchListener, RadioGroup.OnCheckedChangeListener {
 
     private ImageButton botonMenosMargen;
     private TextView textMargenTemperatura;
@@ -36,9 +40,14 @@ public class ActivitySettingsTermostato extends AppCompatActivity implements Vie
     private RadioGroup radioGrupoSensor;
     private RadioButton radioSensorLocal;
     private RadioButton radioSensorRemoto;
+    private TextView textSensorRemoto;
 
     private Button botonCancelar;
     private Button botonAceptar;
+
+    private Boolean autoincremento;
+    private Boolean autodecremento;
+    private Handler handler;
 
 
 
@@ -96,8 +105,11 @@ public class ActivitySettingsTermostato extends AppCompatActivity implements Vie
         botonMasCalibrado.setOnTouchListener(this);
 
         radioGrupoSensor = (RadioGroup) findViewById(R.id.radioGrupoSensor);
+        radioGrupoSensor.setOnCheckedChangeListener(this);
         radioSensorLocal = (RadioButton) findViewById(R.id.radioSensorLocal);
         radioSensorRemoto = (RadioButton) findViewById(R.id.radioSensorRemoto);
+
+        textSensorRemoto = (TextView) findViewById(R.id.textSensorRemoto);
 
         botonCancelar = (Button) findViewById(R.id.botonCancelar);
         botonCancelar.setOnClickListener(this);
@@ -105,26 +117,306 @@ public class ActivitySettingsTermostato extends AppCompatActivity implements Vie
         botonAceptar.setOnClickListener(this);
     }
 
+    void inicializarActivity() {
+
+        handler = new Handler();
+
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings_termostato);
         registrarControles();
+        inicializarActivity();
     }
 
 
     @Override
     public void onClick(View v) {
 
+        switch (v.getId()) {
+
+            case R.id.idBotonMenosMargen:
+                modificarValorDouble(textMargenTemperatura, false, 0.1, -4, 10);
+                break;
+            case R.id.idBotonMasMargen:
+                modificarValorDouble(textMargenTemperatura, true, 0.1, -4, 10);
+                break;
+            case R.id.boton_menos_intervalo_lectura:
+                modificarValorInt(textIntervaloLectura, false, 1, 10, 120);
+                break;
+            case R.id.boton_mas_intervalo_lectura:
+                modificarValorInt(textIntervaloLectura, true, 1, 10, 120);
+                break;
+            case R.id.boton_menos_reintentos_lectura:
+                modificarValorInt(textReintentosLectura, false, 1, 0, 10);
+                break;
+            case R.id.boton_mas_reintentos_lectura:
+                modificarValorInt(textReintentosLectura, true, 1, 0, 10);
+                break;
+            case R.id.boton_menos_intervalo_reintentos:
+                modificarValorInt(textIntervaloReintentos, false, 1, 10, 120);
+                break;
+            case R.id.boton_mas_intervalo_reintentos:
+                modificarValorInt(textIntervaloReintentos, true, 1, 10, 120);
+                break;
+            case R.id.boton_menos_calibrado:
+                modificarValorDouble(textCalibrado, false, 0.5, -4, 10);
+                break;
+            case R.id.boton_mas_calibrado:
+                modificarValorDouble(textCalibrado, true, 0.5, -4, 10);
+                break;
+            case R.id.botonCancelar:
+                break;
+            case R.id.botonAceptar:
+                break;
+            default:
+                break;
+
+
+
+        }
+
     }
 
     @Override
     public boolean onLongClick(View v) {
-        return false;
+
+        switch (v.getId()) {
+
+            case R.id.idBotonMenosMargen:
+                autodecremento = true;
+                autoincremento = false;
+                handler.post(new modificacionPulsacionLargaDoble(textMargenTemperatura, false, 1.0, -4.0, 10.0));
+                break;
+            case R.id.idBotonMasMargen:
+                autoincremento = true;
+                autodecremento = false;
+                handler.post(new modificacionPulsacionLargaDoble(textMargenTemperatura, true, 1.0, -4.0, 10.0));
+                break;
+            case R.id.boton_menos_intervalo_lectura:
+                autodecremento = true;
+                autoincremento = false;
+                handler.post(new modificacionPulsacionLargaInt(textIntervaloLectura, false, 5, 10 ,120));
+                break;
+            case R.id.boton_mas_intervalo_lectura:
+                autoincremento = true;
+                autodecremento = false;
+                handler.post(new modificacionPulsacionLargaInt(textIntervaloLectura, true, 5, 10, 120));
+                break;
+            case R.id.boton_menos_reintentos_lectura:
+                autodecremento = true;
+                autoincremento = false;
+                handler.post(new modificacionPulsacionLargaInt(textReintentosLectura, false, 2, 0, 10));
+
+
+                break;
+            case R.id.boton_mas_reintentos_lectura:
+                autoincremento = true;
+                autodecremento = false;
+                handler.post(new modificacionPulsacionLargaInt(textReintentosLectura, true, 2, 0, 10));
+
+
+                break;
+            case R.id.boton_menos_intervalo_reintentos:
+                autodecremento = true;
+                autoincremento = false;
+                handler.post(new modificacionPulsacionLargaInt(textIntervaloReintentos, false, 5, 10, 120));
+
+
+                break;
+            case R.id.boton_mas_intervalo_reintentos:
+                autoincremento = true;
+                autodecremento = false;
+                handler.post(new modificacionPulsacionLargaInt(textIntervaloReintentos, true, 5, 10, 120));
+
+
+                break;
+            case R.id.boton_menos_calibrado:
+                autodecremento = true;
+                autoincremento = false;
+                handler.post(new modificacionPulsacionLargaDoble(textCalibrado, false, 1.0, -4.0, 10.0));
+                break;
+            case R.id.boton_mas_calibrado:
+                autoincremento = true;
+                autodecremento = false;
+                handler.post(new modificacionPulsacionLargaDoble(textCalibrado, true, 1.0, -4.0, 10.0));
+                break;
+            case R.id.botonCancelar:
+                break;
+            case R.id.botonAceptar:
+                break;
+            default:
+                break;
+        }
+
+
+
+            return false;
     }
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
+
+
+        switch (v.getId()) {
+            case R.id.boton_menos_calibrado:
+            case R.id.boton_menos_intervalo_reintentos:
+            case R.id.boton_menos_reintentos_lectura:
+            case R.id.boton_menos_intervalo_lectura:
+            case R.id.idBotonMenosMargen:
+                if ((event.getAction() == MotionEvent.ACTION_UP) || (event.getAction() == MotionEvent.ACTION_CANCEL)) {
+                    autodecremento = false;
+                }
+
+                break;
+            case R.id.boton_mas_calibrado:
+            case R.id.boton_mas_intervalo_reintentos:
+            case R.id.boton_mas_reintentos_lectura:
+            case R.id.boton_mas_intervalo_lectura:
+            case R.id.idBotonMasMargen:
+                if ((event.getAction() == MotionEvent.ACTION_UP) || (event.getAction() == MotionEvent.ACTION_CANCEL)) {
+                autoincremento = false;
+            }
+
+                break;
+            default:
+                break;
+        }
+
+
         return false;
     }
+
+
+    @Override
+    public void onCheckedChanged(RadioGroup group, int checkedId) {
+
+        if (checkedId == R.id.radioSensorLocal) {
+            textSensorRemoto.setVisibility(View.INVISIBLE);
+
+        } else {
+            textSensorRemoto.setVisibility(View.VISIBLE);
+
+
+        }
+
+    }
+
+    private void modificarValorDouble(TextView controlTexto, Boolean incremento, double valor, double minVal, double maxVal) {
+
+        double cantidad;
+
+        cantidad = Double.valueOf(controlTexto.getText().toString());
+        if (incremento == true) {
+            cantidad += valor;
+            if (cantidad >= maxVal) cantidad = maxVal;
+        } else {
+            cantidad -= valor;
+            if (cantidad <= minVal) cantidad = minVal;
+        }
+
+        DecimalFormat formater = new DecimalFormat("0.0");
+        controlTexto.setText(String.valueOf(formater.format(cantidad)));
+
+
+    }
+
+    private void modificarValorInt(TextView controlTexto, Boolean incremento, int valor, int minVal, int maxVal) {
+
+        int cantidad;
+
+        cantidad = Integer.valueOf(controlTexto.getText().toString());
+        if (incremento == true) {
+            cantidad += valor;
+            if (cantidad >= maxVal) cantidad = maxVal;
+        } else {
+            cantidad -= valor;
+            if (cantidad <= minVal) cantidad = minVal;
+        }
+
+        controlTexto.setText(String.valueOf(cantidad));
+
+
+    }
+
+
+    class modificacionPulsacionLargaDoble implements Runnable {
+
+        TextView textControl;
+        Boolean incremento;
+        Double valor;
+        Double minVal;
+        Double maxVal;
+
+        modificacionPulsacionLargaDoble(TextView control, Boolean incremento, Double valor, Double minVal, Double maxVal) {
+            textControl = control;
+            this.incremento = incremento;
+            this.valor = valor;
+            this.minVal = minVal;
+            this.maxVal = maxVal;
+
+
+
+        }
+
+        public void run() {
+            if (autoincremento) {
+                handler.postDelayed(new modificacionPulsacionLargaDoble(textControl, incremento, valor, minVal, maxVal), 200);
+                Log.i(getLocalClassName().toString(), "incrementando");
+                modificarValorDouble(textControl, incremento, valor, minVal, maxVal);
+
+            } else if (autodecremento){
+                handler.postDelayed(new modificacionPulsacionLargaDoble(textControl, incremento, valor, minVal, maxVal), 200);
+                Log.i(getLocalClassName().toString(), "decrementando");
+                modificarValorDouble(textControl, incremento, valor, minVal, maxVal);
+
+
+
+            }
+            //textUmbralTemperatura.setText(String.valueOf(programaIotTermostato.getUmbralTemperatura()));
+
+        }
+    }
+
+    class modificacionPulsacionLargaInt implements Runnable {
+
+        TextView textControl;
+        Boolean incremento;
+        int valor;
+        int minVal;
+        int maxVal;
+
+        modificacionPulsacionLargaInt(TextView control, Boolean incremento, int valor, int minVal, int maxVal) {
+            textControl = control;
+            this.incremento = incremento;
+            this.valor = valor;
+            this.minVal = minVal;
+            this.maxVal = maxVal;
+
+
+
+        }
+
+        public void run() {
+            if (autoincremento) {
+                handler.postDelayed(new modificacionPulsacionLargaInt(textControl, incremento, valor, minVal, maxVal), 200);
+                Log.i(getLocalClassName().toString(), "incrementando");
+                modificarValorInt(textControl, incremento, valor, minVal, maxVal);
+
+            } else if (autodecremento){
+                handler.postDelayed(new modificacionPulsacionLargaInt(textControl, incremento, valor, minVal, maxVal), 200);
+                Log.i(getLocalClassName().toString(), "decrementando");
+                modificarValorInt(textControl, incremento, valor, minVal, maxVal);
+
+
+
+            }
+            //textUmbralTemperatura.setText(String.valueOf(programaIotTermostato.getUmbralTemperatura()));
+
+        }
+    }
+
+
 }
