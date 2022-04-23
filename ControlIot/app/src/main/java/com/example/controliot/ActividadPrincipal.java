@@ -693,6 +693,14 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
             public void modificarUmbralTemperatura(String topic, String texto, String idDispositivo) {
 
             }
+            @Override
+            public void modificarConfiguracionTermostato(String topic, String texto) {
+
+            }
+            @Override
+            public void seleccionarSensorTemperatura(String topic, String texto) {
+
+            }
         });
 
 

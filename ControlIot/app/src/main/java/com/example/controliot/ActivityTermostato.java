@@ -38,6 +38,7 @@ import org.json.JSONObject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Formatter;
 
 public class ActivityTermostato extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener, Serializable {
@@ -280,20 +281,24 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
         int hora;
         int minuto;
         int i;
+        int duracion;
+        String hasta;
         ProgramaDispositivoIotTermostato programa;
         i = dispositivoCronotermostato.buscarPrograma(idPrograma);
         programa = dispositivoCronotermostato.getProgramasTermostato().get(i);
+        hasta = duracionAfecha(formatearHora(programa.getHora(), programa.getMinuto()), programa.getDuracion());
         hora = programa.getHora();
         minuto = programa.getMinuto();
         textoProgramaDesde.setText(formatearHora(hora, minuto));
-        if ((i + 1) < dispositivoCronotermostato.getProgramasTermostato().size()) {
-            programa = dispositivoCronotermostato.getProgramasTermostato().get(i+1);
-            hora = programa.getHora();
-            minuto = programa.getMinuto();
-            textoProgramaHasta.setText(formatearHora(hora, minuto));
-        } else {
-            textoProgramaHasta.setText(formatearHora(0, 0));
+        textoProgramaHasta.setText(hasta);
+        duracion = restarHoras(textoProgramaDesde.getText().toString(), textoProgramaHasta.getText().toString());
+        if (duracion >= programa.getDuracion()) {
+            dispositivoCronotermostato.actualizarProgramaActivo("");
+            programasTermostatoAdapter.notifyDataSetChanged();
+
+
         }
+
 
 
 
@@ -315,10 +320,17 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
 
     public void actualizarTermostato(dispositivoIotTermostato dispositivo) {
 
+        if (this.dispositivoCronotermostato == null) {
+            this.dispositivoCronotermostato = dispositivo;
+        }
+        //Modifica la vista para indicar que el dispositivo esta disponible.
         dispositivoDisponible();
-        actualizarEstadoRele();
+        //Actualiza el texto del panel para indicar el modo del termostato
         actualizarModo();
+        //Actualiza los valores de temperatura del termostato
         actualizarTemperatura();
+        //Actualiza la vista para indicar el programa en curso.
+        actualizarProgramaEnCurso(dispositivo.getProgramaActivo());
 
 
 
@@ -528,28 +540,37 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
             public void modificarUmbralTemperatura(String topic, String texto, String idDispositivo) {
 
             }
+            @Override
+            public void modificarConfiguracionTermostato(String topic, String texto) {
+
+
+            }
+            @Override
+            public void seleccionarSensorTemperatura(String topic, String texto) {
+
+            }
+
         });
 
 
         cnx.setOnProcesarEspontaneosTermostato(new conexionMqtt.OnProcesarEspontaneosTermostato() {
             @Override
             public void arranqueAplicacionTermostato(String topic, String texto, dispositivoIotTermostato dispoisitivo) {
-                registrarTermostato(dispositivoCronotermostato);
+                actualizarTermostato(dispositivoCronotermostato);
             }
 
             @Override
-            public void cambioProgramaTermostato(String topic, String texto, String idDispositivo, String idPrograma) {
-
+            public void cambioProgramaTermostato(String topic, String texto, dispositivoIotTermostato dispositivo) {
+                actualizarTermostato(dispositivoCronotermostato);
             }
 
             @Override
             public void atuacionReleLocalTermostato(String topic, String texto, String idDisositivo, ESTADO_RELE estadoRele) {
-                actualizarTermostato(dispositivoCronotermostato);
+
             }
 
             @Override
             public void actuacionReleRemotoTermostato(String topic, String texto, String idDispositivo, ESTADO_RELE estadoRele) {
-                actualizarTermostato(dispositivoCronotermostato);
 
             }
 
@@ -559,8 +580,18 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
             }
 
             @Override
-            public void cambioTemperaturaTermostato(String topic, String texto, String idDispositivo, long temperatura, long humedadad) {
+            public void cambioTemperaturaTermostato(String topic, String texto) {
+                actualizarTermostato(dispositivoCronotermostato);
+            }
 
+            @Override
+            public void temporizadorCumplido(String topic, String texto, dispositivoIotTermostato dispositivo) {
+                actualizarTermostato(dispositivoCronotermostato);
+            }
+
+            @Override
+            public void cambioUmbralTemperatura(String topic, String texto, dispositivoIotTermostato dispositivo) {
+                actualizarTermostato(dispositivoCronotermostato);
             }
         });
 
@@ -766,7 +797,7 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
         lanzador.putExtra(TEXTOS_DIALOGO_IOT.INTERVALO_REINTENTOS.getValorTextoJson(), dispositivoCronotermostato.getIntervaloReintentos());
         lanzador.putExtra(TEXTOS_DIALOGO_IOT.VALOR_CALIBRADO.getValorTextoJson(), dispositivoCronotermostato.getValorCalibrado());
         lanzador.putExtra(TEXTOS_DIALOGO_IOT.TIPO_SENSOR.getValorTextoJson(), dispositivoCronotermostato.isSensorLocal());
-        lanzador.putExtra(TEXTOS_DIALOGO_IOT.ID_SENSOR.getValorTextoJson(), dispositivoCronotermostato.getMaster());
+        lanzador.putExtra(TEXTOS_DIALOGO_IOT.ID_SENSOR.getValorTextoJson(), dispositivoCronotermostato.getIdSensor());
         lanzadorActivityProgramaTermostato.launch(lanzador);
     }
 
@@ -797,13 +828,13 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
         } else {
             dispositivoCronotermostato.setEstadoRele(ESTADO_RELE.ON);
         }
-        actualizarEstadoRele();
         duracion = dialogo.extraerDatoJsonInt(textoRecibido, TEXTOS_DIALOGO_IOT.DURACION.getValorTextoJson());
         if(duracion == -1000) duracion = 0;
         dispositivoCronotermostato.setProgramasTermostato(this.programas);
         dispositivoCronotermostato.modificarPrograma(idPrograma, idNuevoPrograma, estadoPrograma, umbral, duracion );
         dispositivoCronotermostato.actualizarProgramaActivo(idProgramaActivo);
         programasTermostatoAdapter.notifyDataSetChanged();
+        actualizarProgramaEnCurso(idProgramaActivo);
 
     }
 
@@ -863,17 +894,42 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
 
     }
 
-    private void actualizarEstadoRele() {
+    private String duracionAfecha(String inicio, int duracion) {
 
-        if (dispositivoCronotermostato.getEstadoRele() == ESTADO_RELE.ON) {
-            imageHeating.setImageResource(R.drawable.heating_on);
-            imageHeating.setTag(true);
+        Calendar fecha;
+        int hora;
+        int minuto;
+        String horaFinal;
 
-        } else {
-            imageHeating.setImageResource(R.drawable.heating_off);
-            imageHeating.setTag(false);
-        }
+        fecha = Calendar.getInstance();
+        hora = Integer.valueOf(inicio.substring(0,2));
+        minuto = Integer.valueOf(inicio.substring(3,5));
+        fecha.set(fecha.get(Calendar.YEAR), fecha.get(Calendar.MONTH), fecha.get(Calendar.DAY_OF_MONTH), hora, minuto);
+        fecha.setTimeInMillis(fecha.getTimeInMillis() + duracion * 1000);
 
+        horaFinal = formatearHora(fecha.get(Calendar.HOUR_OF_DAY), fecha.get(Calendar.MINUTE));
+        return horaFinal;
+
+
+    }
+
+    private int restarHoras(String hora1, String hora2) {
+
+        Calendar fecha1;
+        Calendar fecha2;
+        int hora;
+        int minuto;
+
+
+        hora = Integer.valueOf(hora1.substring(0,2));
+        minuto = Integer.valueOf(hora1.substring(3,5));
+        fecha1 = Calendar.getInstance();
+        fecha2 = Calendar.getInstance();
+        fecha1.set(fecha1.get(Calendar.YEAR), fecha1.get(Calendar.MONTH), fecha1.get(Calendar.DAY_OF_MONTH), Integer.valueOf(hora), Integer.valueOf(minuto));
+        hora = Integer.valueOf(hora2.substring(0,2));
+        minuto = Integer.valueOf(hora2.substring(3,5));
+        //fecha2.set(fecha1.get(Calendar.YEAR), fecha1.get(Calendar.MONTH), fecha1.get(Calendar.DAY_OF_MONTH), Integer.valueOf(hora), Integer.valueOf(minuto));
+        return (int) ((fecha2.getTime().getTime() - fecha1.getTime().getTime())/1000);
     }
 
 }

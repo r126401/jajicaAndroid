@@ -15,6 +15,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 
 public class ActivitySettingsTermostato extends AppCompatActivity implements View.OnClickListener, View.OnLongClickListener, View.OnTouchListener, RadioGroup.OnCheckedChangeListener {
 
@@ -50,7 +51,17 @@ public class ActivitySettingsTermostato extends AppCompatActivity implements Vie
     private Boolean autodecremento;
     private Handler handler;
 
-    dispositivoIotTermostato dispositivo;
+    private dispositivoIotTermostato dispositivo;
+    private Boolean modificadaConfiguracion;
+    private Boolean modificadoSensor;
+
+    private double margen;
+    private int intervaloLectura;
+    private int reintentosLectura;
+    private int intervaloReintentos;
+    private double calibrado;
+    Boolean master;
+    String idSensorRemoto;
 
 
 
@@ -128,23 +139,23 @@ public class ActivitySettingsTermostato extends AppCompatActivity implements Vie
         Bundle bundle = intent.getExtras();
         double valorDouble;
         int valorInt;
-        Boolean master;
-        String idSensorRemoto;
+
         dispositivo = new dispositivoIotTermostato();
 
-        valorDouble = (Double) bundle.get(TEXTOS_DIALOGO_IOT.MARGEN_TEMPERATURA.getValorTextoJson());
-        textMargenTemperatura.setText(String.valueOf(valorDouble));
-        valorInt = (int) bundle.get(TEXTOS_DIALOGO_IOT.INTERVALO_LECTURA.getValorTextoJson());
-        textIntervaloLectura.setText(String.valueOf(valorInt));
-        valorInt = (int) bundle.get(TEXTOS_DIALOGO_IOT.REINTENTOS_LECTURA.getValorTextoJson());
-        textReintentosLectura.setText(String.valueOf(valorInt));
-        valorInt = (int) bundle.get(TEXTOS_DIALOGO_IOT.INTERVALO_REINTENTOS.getValorTextoJson());
-        textIntervaloReintentos.setText(String.valueOf(valorInt));
-        valorDouble = (double) bundle.get(TEXTOS_DIALOGO_IOT.VALOR_CALIBRADO.getValorTextoJson());
-        textCalibrado.setText(String.valueOf(valorDouble));
+        margen = (Double) bundle.get(TEXTOS_DIALOGO_IOT.MARGEN_TEMPERATURA.getValorTextoJson());
+        textMargenTemperatura.setText(String.valueOf(margen));
+        intervaloLectura = (int) bundle.get(TEXTOS_DIALOGO_IOT.INTERVALO_LECTURA.getValorTextoJson());
+        textIntervaloLectura.setText(String.valueOf(intervaloLectura));
+        reintentosLectura = (int) bundle.get(TEXTOS_DIALOGO_IOT.REINTENTOS_LECTURA.getValorTextoJson());
+        textReintentosLectura.setText(String.valueOf(reintentosLectura));
+        intervaloReintentos = (int) bundle.get(TEXTOS_DIALOGO_IOT.INTERVALO_REINTENTOS.getValorTextoJson());
+        textIntervaloReintentos.setText(String.valueOf(intervaloReintentos));
+        calibrado = (double) bundle.get(TEXTOS_DIALOGO_IOT.VALOR_CALIBRADO.getValorTextoJson());
+        textCalibrado.setText(String.valueOf(calibrado));
         master = (Boolean) bundle.get(TEXTOS_DIALOGO_IOT.TIPO_SENSOR.getValorTextoJson());
         idSensorRemoto = (String) bundle.get(TEXTOS_DIALOGO_IOT.ID_SENSOR.getValorTextoJson());
         seleccionarSensor(master, idSensorRemoto);
+
 
 
 
@@ -172,6 +183,8 @@ public class ActivitySettingsTermostato extends AppCompatActivity implements Vie
     private void inicializarActivity() {
 
         handler = new Handler();
+        modificadaConfiguracion = false;
+        modificadoSensor = false;
 
     }
 
@@ -221,14 +234,16 @@ public class ActivitySettingsTermostato extends AppCompatActivity implements Vie
                 modificarValorDouble(textCalibrado, true, 0.5, -4, 10);
                 break;
             case R.id.botonCancelar:
+                finish();
                 break;
             case R.id.botonAceptar:
+                procesarBotonAceptar();
                 break;
             case R.id.radioSensorLocal:
                 seleccionarSensor(true, null);
                 break;
             case R.id.radioSensorRemoto:
-                seleccionarSensor(false, null);
+                seleccionarSensor(false, "Escanea sensor");
                 break;
             default:
                 break;
@@ -475,6 +490,55 @@ public class ActivitySettingsTermostato extends AppCompatActivity implements Vie
             //textUmbralTemperatura.setText(String.valueOf(programaIotTermostato.getUmbralTemperatura()));
 
         }
+    }
+
+    private void procesarBotonAceptar() {
+
+        ArrayList<String> listaComandos;
+        String comando;
+        listaComandos = new ArrayList<String>();
+        dialogoIot dialogo;
+        dialogo = new dialogoIot();
+
+
+
+        if ((Double.valueOf(textMargenTemperatura.getText().toString()) == margen) &&
+                (Integer.valueOf(textIntervaloLectura.getText().toString()) == intervaloLectura) &&
+                (Integer.valueOf(textReintentosLectura.getText().toString()) == reintentosLectura) &&
+                (Integer.valueOf(textIntervaloReintentos.getText().toString()) == intervaloReintentos) &&
+                (Double.valueOf(textCalibrado.getText().toString()) == calibrado)) {
+
+            modificadaConfiguracion = false;
+        } else {
+            modificadaConfiguracion = true;
+            dispositivo.setMargenTemperatura(Double.valueOf(textMargenTemperatura.getText().toString()));
+            dispositivo.setIntervaloLectura(Integer.valueOf(textIntervaloLectura.getText().toString()));
+            dispositivo.setIntervaloReintentos(Integer.valueOf(textIntervaloReintentos.getText().toString()));
+            dispositivo.setReintentoLectura(Integer.valueOf(textReintentosLectura.getText().toString()));
+            dispositivo.setValorCalibrado(Double.valueOf(textCalibrado.getText().toString()));
+            comando = dialogo.comandoConfigurarTermostato(dispositivo);
+            Log.i(getLocalClassName().toString(), "comando");
+            listaComandos.add(comando);
+        }
+
+        if (master == radioSensorLocal.isChecked()) {
+            modificadoSensor = false;
+        } else {
+            modificadoSensor = true;
+            if (radioSensorLocal.isChecked() == true) {
+                dispositivo.setSensorMaster(true);
+            } else {
+                dispositivo.setSensorMaster(false);
+                dispositivo.setIdSensor(textSensorRemoto.getText().toString());
+
+            }
+            comando = dialogo.comandoSeleccionarSensorTemperatura(dispositivo);
+            listaComandos.add(comando);
+
+        }
+
+
+
     }
 
 

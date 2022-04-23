@@ -195,7 +195,7 @@ public class dispositivoIotTermostato extends dispositivoIot implements Serializ
         return this.master;
     }
 
-    public String getMaster() {
+    public String getIdSensor() {
 
         if (master == false) {
             return this.idSensor;

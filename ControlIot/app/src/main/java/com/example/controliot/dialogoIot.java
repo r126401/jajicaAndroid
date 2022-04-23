@@ -1,15 +1,11 @@
 package com.example.controliot;
 
-import android.content.Context;
-import android.os.CountDownTimer;
 import android.util.Log;
 
-import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
-import java.nio.DoubleBuffer;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -329,7 +325,7 @@ enum COMANDO_IOT {
     CONSULTAR_PROGRAMACION(6), NUEVA_PROGRAMACION(7),
     ELIMINAR_PROGRAMACION(9), MODIFICAR_PROGRAMACION(8), MODIFICAR_APP(12),
     RESET(10), FACTORY_RESET(11), MODIFY_CLOCK(15),
-    UPGRADE_FIRMWARE(26), MODIFICAR_UMBRAL_TEMPERATURA(52),
+    UPGRADE_FIRMWARE(26), MODIFICAR_UMBRAL_TEMPERATURA(52), SELECCIONAR_SENSOR_TEMPERATURA(53),
     ESPONTANEO(-1), VERSION_OTA(100), ERROR_RESPUESTA(-100);
 
     private int idComando;
@@ -417,7 +413,8 @@ enum TEXTOS_DIALOGO_IOT {
     DIA_SEMANA("weekDay"),
     CODIGO_OTA("otaCode"),
     TIPO_SENSOR("master"),
-    ID_SENSOR("idsensor");
+    ID_SENSOR("idsensor"),
+    SENSOR_TEMPERATURA("sensorTemperatura");
 
 
 
@@ -1161,6 +1158,34 @@ public class dialogoIot implements Serializable {
 
     }
 
+    public String comandoSeleccionarSensorTemperatura(dispositivoIotTermostato dispositivo) {
+
+        JSONObject comando = null;
+        String parteComando;
+        JSONObject parametros;
+
+        parteComando = escribirComandoGenerico(COMANDO_IOT.SELECCIONAR_SENSOR_TEMPERATURA);
+
+        try {
+            comando = new JSONObject(parteComando);
+            parametros = new JSONObject();
+            parametros.put(TEXTOS_DIALOGO_IOT.TIPO_SENSOR.getValorTextoJson(), dispositivo.isSensorLocal());
+            if (dispositivo.isSensorLocal() == false) {
+                parametros.put(TEXTOS_DIALOGO_IOT.ID_SENSOR.getValorTextoJson(), dispositivo.getIdSensor());
+
+            } else {
+
+            }
+            comando.put(TEXTOS_DIALOGO_IOT.SENSOR_TEMPERATURA.getValorTextoJson(), parametros);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return comando.toString();
+
+
+    }
 
     public String comandoNuevoPrograma(ProgramaDispositivoIot programa) {
 
@@ -1288,7 +1313,7 @@ public class dialogoIot implements Serializable {
      * @param dispositivo
      * @return
      */
-    public String configurarTermostato(dispositivoIotTermostato dispositivo) {
+    public String comandoConfigurarTermostato(dispositivoIotTermostato dispositivo) {
 
         JSONObject comando = null;
         JSONObject intermedio;
@@ -1303,14 +1328,16 @@ public class dialogoIot implements Serializable {
             parametros.put(TEXTOS_DIALOGO_IOT.REINTENTOS_LECTURA.getValorTextoJson(), dispositivo.getReintentosLectura());
             parametros.put(TEXTOS_DIALOGO_IOT.INTERVALO_REINTENTOS.getValorTextoJson(), dispositivo.getIntervaloReintentos());
             parametros.put(TEXTOS_DIALOGO_IOT.INTERVALO_LECTURA.getValorTextoJson(), dispositivo.getIntervaloLectura());
+            parametros.put(TEXTOS_DIALOGO_IOT.VALOR_CALIBRADO.getValorTextoJson(), dispositivo.getValorCalibrado());
             comando.put(TEXTOS_DIALOGO_IOT.CONFIGURACION_APP.getValorTextoJson(), parametros);
         } catch (JSONException e) {
             e.printStackTrace();
+            return null;
         }
 
 
 
-        return null;
+        return comando.toString();
     }
 
 
@@ -1332,7 +1359,7 @@ public class dialogoIot implements Serializable {
         return escribirComandoGenerico(COMANDO_IOT.FACTORY_RESET);
     }
 
-    public String escribirComandoModficarParametrosApp(dispositivoIotTermostato dispositivo) {
+    public String escribirComandoModificarParametrosApp(dispositivoIotTermostato dispositivo) {
 
         JSONObject comando;
         JSONObject intermedio;
@@ -1371,83 +1398,9 @@ public class dialogoIot implements Serializable {
         }
         return textoComando;
     }
-    public String escribirComando (COMANDO_IOT comando, dispositivoIotTermostato dispositivo ) {
-
-        return configurarTermostato(dispositivo);
-    }
-    public String escribirComando(COMANDO_IOT comando, ESTADO_RELE estado) {
-
-        return comandoActuarRele(estado);
-    }
-    public String escribirComando(COMANDO_IOT comando, ProgramaDispositivoIotTermostato programa) {
-
-        String textoComando = null;
-        switch (comando) {
-            case NUEVA_PROGRAMACION:
-                textoComando = comandoNuevoPrograma(programa);
-                break;
-            case MODIFICAR_PROGRAMACION:
-                textoComando = comandoModificarPrograma(programa);
-                break;
-            default:
-                Log.e(getClass().toString(), "Comando no implementado en esta funcion");
-                break;
-
-        }
-        return textoComando;
-
-    }
-
-    public String escribirComando(COMANDO_IOT comando) {
-
-        String textoComando = null;
-
-        switch (comando) {
-
-            case CONSULTAR_CONF_APP:
-                textoComando = escribirComandoEstadoConfiguracionTermostato();
-                break;
-            case ACTUAR_RELE:
-                break;
-            case ESTADO:
-                textoComando = comandoEstadoDispositivo();
-                break;
-            case CONSULTAR_PROGRAMACION:
-                textoComando = escribirComandoConsultarProgramacion();
-                break;
-            case NUEVA_PROGRAMACION:
-                break;
-            case ELIMINAR_PROGRAMACION:
-                break;
-            case MODIFICAR_PROGRAMACION:
-                break;
-            case MODIFICAR_APP:
-                break;
-            case RESET:
-                textoComando = escribirComandoReset();
-                break;
-            case FACTORY_RESET:
-                textoComando = escribirComandoFactoryReset();
-                break;
-            case MODIFY_CLOCK:
-                break;
-            case UPGRADE_FIRMWARE:
-                break;
-            case MODIFICAR_UMBRAL_TEMPERATURA:
-                break;
-            case VERSION_OTA:
-                break;
-                default:
-                    Log.e(getClass().toString(), "Error, comando no implementado");
-                    break;
 
 
-        }
 
-        return textoComando;
-
-
-    }
 
     public String escribirComandoUpgradeFirmware(dispositivoIot dispositivo) {
 

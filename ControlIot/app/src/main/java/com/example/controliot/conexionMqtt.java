@@ -168,6 +168,8 @@ public class conexionMqtt implements Serializable, Parcelable {
         void factoryResetTermostato(String topic, String texto, String idDispositivo);
         void upgradeFirmwareTermostato(String topic, String texto, String idDispositivo, OtaVersion otaVersion);
         void modificarUmbralTemperatura(String topic, String texto, String idDispositivo);
+        void seleccionarSensorTemperatura(String topic, String texto);
+        void modificarConfiguracionTermostato(String topic, String texto);
 
 
 
@@ -178,11 +180,13 @@ public class conexionMqtt implements Serializable, Parcelable {
     public interface OnProcesarEspontaneosTermostato{
 
         void arranqueAplicacionTermostato(String topic, String texto, dispositivoIotTermostato dispoisitivo);
-        void cambioProgramaTermostato(String topic, String texto, String idDispositivo, String idPrograma);
+        void cambioProgramaTermostato(String topic, String texto, dispositivoIotTermostato dispositivo);
         void atuacionReleLocalTermostato(String topic, String texto, String idDisositivo, ESTADO_RELE estadoRele);
         void actuacionReleRemotoTermostato(String topic, String texto, String idDispositivo, ESTADO_RELE estadoRele);
         void upgradeFirmwareTermostato(String topic, String texto, String idDispositivo, OtaVersion otaVersion);
-        void cambioTemperaturaTermostato(String topic, String texto, String idDispositivo, long temperatura, long humedadad);
+        void cambioTemperaturaTermostato(String topic, String texto);
+        void temporizadorCumplido(String topic, String texto, dispositivoIotTermostato dispositivo);
+        void cambioUmbralTemperatura(String topic, String texto, dispositivoIotTermostato dispositivo);
 
     }
     public void setOnProcesarEspontaneosTermostato(OnProcesarEspontaneosTermostato listener) {
@@ -909,7 +913,7 @@ public class conexionMqtt implements Serializable, Parcelable {
         ESPONTANEO_IOT tipoInformeEspontaneo;
         dispositivoIotTermostato dispositivo;
 
-        if (listenerMensajesTermostato != null) {
+        if (listenerEspontaneosTermostato != null) {
             String texto = new String(message.getPayload());
 
             tipoInformeEspontaneo = dialogo.descubrirTipoInformeEspontaneo(texto);
@@ -917,41 +921,36 @@ public class conexionMqtt implements Serializable, Parcelable {
 
                 case ARRANQUE_APLICACION:
                     dispositivo = procesarActualizacionEstadoTermostato(topic, texto, contexto);
-                    listenerMensajesTermostato.estadoTermostato(topic, texto, dispositivo);
-                    listenerMensajesTermometro.estadoTermometro(topic, texto, dispositivo);
+                    listenerEspontaneosTermostato.arranqueAplicacionTermostato(topic, texto, dispositivo);
                     break;
                 case ACTUACION_RELE_LOCAL:
-                    dispositivo = procesarActualizacionEstadoTermostato(topic, texto, contexto);
-                    listenerMensajesTermostato.actuacionReleLocalTermostato(topic, texto, dispositivo);
-                    listenerMensajesTermometro.actuacionReleLocalTermometro(topic, texto, dispositivo);
+;
                     break;
                 case ACTUACION_RELE_REMOTO:
-                    dispositivo = procesarActualizacionEstadoTermostato(topic, texto, contexto);
-                    listenerMensajesTermostato.actuacionReleRemotoTermostato(topic, texto, dispositivo);
-                    listenerMensajesTermometro.actuacionReleRemotoTermometro(topic, texto, dispositivo);
                     break;
                 case UPGRADE_FIRMWARE_FOTA:
                     break;
                 case CAMBIO_DE_PROGRAMA:
                     dispositivo = procesarActualizacionEstadoTermostato(topic, texto, contexto);
-                    listenerMensajesTermostato.estadoTermostato(topic, texto, dispositivo);
+                    listenerEspontaneosTermostato.cambioProgramaTermostato(topic, texto, dispositivo);
                     break;
                 case COMANDO_APLICACION:
                     break;
                 case CAMBIO_TEMPERATURA:
                     dispositivo = procesarActualizacionEstadoTermostato(topic, texto, contexto);
-                    listenerMensajesTermostato.estadoTermostato(topic, texto, dispositivo);
-                    listenerMensajesTermometro.estadoTermometro(topic, texto, dispositivo);
+                    listenerEspontaneosTermostato.cambioTemperaturaTermostato(topic, texto);
                     break;
                 case CAMBIO_ESTADO:
                     break;
                 case RELE_TEMPORIZADO:
+                    dispositivo = procesarActualizacionEstadoTermostato(topic, texto, contexto);
+                    if (listenerEspontaneosTermostato != null ) listenerEspontaneosTermostato.temporizadorCumplido(topic, texto, dispositivo);
                     break;
                 case INFORME_ALARMA:
                     break;
                 case CAMBIO_UMBRAL_TEMPERATURA:
                     dispositivo = procesarActualizacionEstadoTermostato(topic, texto, contexto);
-                    listenerMensajesTermostato.estadoTermostato(topic, texto, dispositivo);
+                    listenerEspontaneosTermostato.cambioUmbralTemperatura(topic, texto, dispositivo);
                     break;
                 case CAMBIO_ESTADO_APLICACION:
                     break;
@@ -1016,6 +1015,7 @@ public class conexionMqtt implements Serializable, Parcelable {
                 if (listenerMensajesTermostato != null) listenerMensajesTermostato.modificarProgramacionTermostato(topic, texto);
                 break;
             case MODIFICAR_APP:
+                if (listenerMensajesTermostato != null) listenerMensajesTermostato.modificarConfiguracionTermostato(topic, texto);
                 break;
             case RESET:
                 if (listenerMensajesTermostato != null) listenerMensajesTermostato.resetTermostato(topic, texto, idDispositivo);
@@ -1035,6 +1035,9 @@ public class conexionMqtt implements Serializable, Parcelable {
             case ESPONTANEO:
                 break;
             case VERSION_OTA:
+                break;
+            case SELECCIONAR_SENSOR_TEMPERATURA:
+                if (listenerMensajesTermostato != null) listenerMensajesTermostato.seleccionarSensorTemperatura(topic, texto);
                 break;
             case ERROR_RESPUESTA:
                 break;
@@ -1260,6 +1263,7 @@ public class conexionMqtt implements Serializable, Parcelable {
         dispositivoTermometroTermostato.setEstadoConexion(ESTADO_CONEXION_IOT.CONECTADO);
         dispositivoTermometroTermostato.setEstadoDispositivo(dialogo.getEstadoDispositivo(texto));
         dispositivoTermometroTermostato.setProgramaActivo(dialogo.getProgramaActivo(texto));
+
 
 
 
