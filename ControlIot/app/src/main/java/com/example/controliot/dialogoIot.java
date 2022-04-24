@@ -380,6 +380,7 @@ enum TEXTOS_DIALOGO_IOT {
     TEMPERATURA("temperatura"),
     HUMEDAD("humedad"),
     UMBRAL_TEMPERATURA("temperaturaUmbral"),
+    UMBRAL_TEMPERATURA_DEFECTO("umbralDefecto"),
     MARGEN_TEMPERATURA("margenTemperatura"),
     INTERVALO_LECTURA("intervaloLectura"),
     INTERVALO_REINTENTOS("intervaloReintentos"),
@@ -1329,6 +1330,7 @@ public class dialogoIot implements Serializable {
             parametros.put(TEXTOS_DIALOGO_IOT.INTERVALO_REINTENTOS.getValorTextoJson(), dispositivo.getIntervaloReintentos());
             parametros.put(TEXTOS_DIALOGO_IOT.INTERVALO_LECTURA.getValorTextoJson(), dispositivo.getIntervaloLectura());
             parametros.put(TEXTOS_DIALOGO_IOT.VALOR_CALIBRADO.getValorTextoJson(), dispositivo.getValorCalibrado());
+            parametros.put(TEXTOS_DIALOGO_IOT.UMBRAL_TEMPERATURA_DEFECTO.getValorTextoJson(), dispositivo.getUmbralTemperaturaDefecto());
             comando.put(TEXTOS_DIALOGO_IOT.CONFIGURACION_APP.getValorTextoJson(), parametros);
         } catch (JSONException e) {
             e.printStackTrace();

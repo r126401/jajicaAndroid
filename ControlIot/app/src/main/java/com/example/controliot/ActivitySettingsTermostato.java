@@ -3,6 +3,7 @@ package com.example.controliot;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -39,6 +40,12 @@ public class ActivitySettingsTermostato extends AppCompatActivity implements Vie
     private TextView textCalibrado;
     private ImageButton botonMasCalibrado;
 
+    private ImageButton botonMenosUmbral;
+    private TextView textUmbral;
+    private ImageButton botonMasUmbral;
+
+
+
     private RadioGroup radioGrupoSensor;
     private RadioButton radioSensorLocal;
     private RadioButton radioSensorRemoto;
@@ -60,6 +67,7 @@ public class ActivitySettingsTermostato extends AppCompatActivity implements Vie
     private int reintentosLectura;
     private int intervaloReintentos;
     private double calibrado;
+    private double umbral;
     Boolean master;
     String idSensorRemoto;
 
@@ -68,6 +76,15 @@ public class ActivitySettingsTermostato extends AppCompatActivity implements Vie
 
     private void registrarControles() {
 
+        botonMenosUmbral = (ImageButton) findViewById(R.id.boton_menos_umbral);
+        botonMenosUmbral.setOnClickListener(this);
+        botonMenosUmbral.setOnLongClickListener(this);
+        botonMenosUmbral.setOnTouchListener(this);
+        textUmbral = (TextView) findViewById(R.id.text_umbral);
+        botonMasUmbral = (ImageButton) findViewById(R.id.boton_mas_umbral);
+        botonMasUmbral.setOnClickListener(this);
+        botonMasUmbral.setOnLongClickListener(this);
+        botonMasUmbral.setOnTouchListener(this);
         botonMenosMargen = (ImageButton) findViewById(R.id.idBotonMenosMargen);
         botonMenosMargen.setOnClickListener(this);
         botonMenosMargen.setOnLongClickListener(this);
@@ -155,6 +172,8 @@ public class ActivitySettingsTermostato extends AppCompatActivity implements Vie
         master = (Boolean) bundle.get(TEXTOS_DIALOGO_IOT.TIPO_SENSOR.getValorTextoJson());
         idSensorRemoto = (String) bundle.get(TEXTOS_DIALOGO_IOT.ID_SENSOR.getValorTextoJson());
         seleccionarSensor(master, idSensorRemoto);
+        umbral = (Double) bundle.get(TEXTOS_DIALOGO_IOT.UMBRAL_TEMPERATURA.getValorTextoJson());
+        textUmbral.setText(String.valueOf(umbral));
 
 
 
@@ -232,6 +251,12 @@ public class ActivitySettingsTermostato extends AppCompatActivity implements Vie
                 break;
             case R.id.boton_mas_calibrado:
                 modificarValorDouble(textCalibrado, true, 0.5, -4, 10);
+                break;
+            case R.id.boton_menos_umbral:
+                modificarValorDouble(textUmbral, false, 0.5, 0, 30);
+                break;
+            case R.id.boton_mas_umbral:
+                modificarValorDouble(textUmbral, true, 0.5, 0, 30);
                 break;
             case R.id.botonCancelar:
                 finish();
@@ -317,6 +342,16 @@ public class ActivitySettingsTermostato extends AppCompatActivity implements Vie
                 autodecremento = false;
                 handler.post(new modificacionPulsacionLargaDoble(textCalibrado, true, 1.0, -4.0, 10.0));
                 break;
+            case R.id.boton_menos_umbral:
+                autodecremento = true;
+                autoincremento = false;
+                handler.post(new modificacionPulsacionLargaDoble(textUmbral, false, 1.0, 0.0, 30.0));
+                break;
+            case R.id.boton_mas_umbral:
+                autoincremento = true;
+                autodecremento = false;
+                handler.post(new modificacionPulsacionLargaDoble(textUmbral, true, 1.0, 0.0, 30.0));
+                break;
             case R.id.botonCancelar:
                 break;
             case R.id.botonAceptar:
@@ -333,8 +368,14 @@ public class ActivitySettingsTermostato extends AppCompatActivity implements Vie
     @Override
     public boolean onTouch(View v, MotionEvent event) {
 
+        if ((event.getAction() == MotionEvent.ACTION_UP) || (event.getAction() == MotionEvent.ACTION_CANCEL)) {
+            autodecremento = false;
+            autoincremento = false;
+        }
 
+    /*
         switch (v.getId()) {
+            case R.id.boton_menos_umbral:
             case R.id.boton_menos_calibrado:
             case R.id.boton_menos_intervalo_reintentos:
             case R.id.boton_menos_reintentos_lectura:
@@ -350,6 +391,7 @@ public class ActivitySettingsTermostato extends AppCompatActivity implements Vie
             case R.id.boton_mas_reintentos_lectura:
             case R.id.boton_mas_intervalo_lectura:
             case R.id.idBotonMasMargen:
+            case R.id.boton_mas_umbral:
                 if ((event.getAction() == MotionEvent.ACTION_UP) || (event.getAction() == MotionEvent.ACTION_CANCEL)) {
                 autoincremento = false;
             }
@@ -359,7 +401,7 @@ public class ActivitySettingsTermostato extends AppCompatActivity implements Vie
                 break;
         }
 
-
+*/
         return false;
     }
 
@@ -496,9 +538,9 @@ public class ActivitySettingsTermostato extends AppCompatActivity implements Vie
 
         ArrayList<String> listaComandos;
         String comando;
-        listaComandos = new ArrayList<String>();
         dialogoIot dialogo;
         dialogo = new dialogoIot();
+        Intent datosDevueltos = new Intent();
 
 
 
@@ -506,7 +548,8 @@ public class ActivitySettingsTermostato extends AppCompatActivity implements Vie
                 (Integer.valueOf(textIntervaloLectura.getText().toString()) == intervaloLectura) &&
                 (Integer.valueOf(textReintentosLectura.getText().toString()) == reintentosLectura) &&
                 (Integer.valueOf(textIntervaloReintentos.getText().toString()) == intervaloReintentos) &&
-                (Double.valueOf(textCalibrado.getText().toString()) == calibrado)) {
+                (Double.valueOf(textCalibrado.getText().toString()) == calibrado)&&
+                (Double.valueOf(textUmbral.getText().toString()) == umbral)) {
 
             modificadaConfiguracion = false;
         } else {
@@ -516,9 +559,10 @@ public class ActivitySettingsTermostato extends AppCompatActivity implements Vie
             dispositivo.setIntervaloReintentos(Integer.valueOf(textIntervaloReintentos.getText().toString()));
             dispositivo.setReintentoLectura(Integer.valueOf(textReintentosLectura.getText().toString()));
             dispositivo.setValorCalibrado(Double.valueOf(textCalibrado.getText().toString()));
+            dispositivo.setUmbralTemperaturaDefecto(Double.valueOf(textUmbral.getText().toString()));
             comando = dialogo.comandoConfigurarTermostato(dispositivo);
-            Log.i(getLocalClassName().toString(), "comando");
-            listaComandos.add(comando);
+            datosDevueltos.putExtra(COMANDO_IOT.MODIFICAR_APP.toString(), comando);
+
         }
 
         if (master == radioSensorLocal.isChecked()) {
@@ -533,11 +577,17 @@ public class ActivitySettingsTermostato extends AppCompatActivity implements Vie
 
             }
             comando = dialogo.comandoSeleccionarSensorTemperatura(dispositivo);
-            listaComandos.add(comando);
+            datosDevueltos.putExtra(COMANDO_IOT.SELECCIONAR_SENSOR_TEMPERATURA.toString(), comando);
 
         }
 
 
+        if ((modificadaConfiguracion == true) || (modificadoSensor == true)) {
+            setResult(RESULT_OK, datosDevueltos);
+        } else {
+            setResult(RESULT_CANCELED);
+        }
+        finish();
 
     }
 

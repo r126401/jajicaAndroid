@@ -369,11 +369,86 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout2"
+        android:id="@+id/panelUmbralDefecto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        app:layout_constraintTop_toBottomOf="@id/panelCalibrado"
+        app:layout_constraintTop_toBottomOf="@+id/panelCalibrado">
+
+
+        <ImageView
+            android:id="@+id/imageUmbral"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icono_duracion"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </ImageView>
+
+        <TextView
+            android:id="@+id/etiqueta_umbral"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poetsenone"
+            android:text="Umbral de temperatura"
+            android:textAlignment="center"
+            android:textSize="20dp"
+            app:layout_constraintBottom_toBottomOf="@+id/imageUmbral"
+            app:layout_constraintStart_toEndOf="@+id/imageUmbral"
+            app:layout_constraintTop_toTopOf="@+id/imageUmbral">
+
+        </TextView>
+
+        <ImageButton
+            android:id="@+id/boton_menos_umbral"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icono_menos"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/etiqueta_umbral"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </ImageButton>
+
+        <TextView
+            android:id="@+id/text_umbral"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poetsenone"
+            android:inputType="numberDecimal"
+            android:text="0.0"
+            android:textSize="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/boton_mas_umbral"
+            app:layout_constraintStart_toEndOf="@+id/boton_menos_umbral"
+            app:layout_constraintTop_toTopOf="@+id/boton_menos_umbral">
+
+        </TextView>
+
+
+        <ImageButton
+            android:id="@+id/boton_mas_umbral"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icono_mas"
+            app:layout_constraintBottom_toBottomOf="@+id/boton_menos_umbral"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/boton_menos_umbral">
+
+        </ImageButton>
+
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/panelSensor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/panelUmbralDefecto"
         tools:layout_editor_absoluteX="0dp">
 
         <TextView
@@ -392,10 +467,10 @@
             android:id="@+id/radioGrupoSensor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:orientation="vertical"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/etiqueta_seleccion_sensor"
-            android:layout_marginTop="20dp">
+            app:layout_constraintTop_toBottomOf="@id/etiqueta_seleccion_sensor">
 
             <RadioButton
                 android:id="@+id/radioSensorLocal"
@@ -462,7 +537,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/botonCancelar"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout2">
+        app:layout_constraintTop_toBottomOf="@+id/panelSensor">
 
     </Button>
 </androidx.constraintlayout.widget.ConstraintLayout>

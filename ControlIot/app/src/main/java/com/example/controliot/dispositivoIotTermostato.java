@@ -25,6 +25,7 @@ public class dispositivoIotTermostato extends dispositivoIot implements Serializ
     protected double valorCalibrado;
     protected Boolean master;
     protected String idSensor;
+    protected double umbralTemperaturaDefecto;
 
 
 
@@ -45,6 +46,7 @@ public class dispositivoIotTermostato extends dispositivoIot implements Serializ
         programas = null;
         master = true;
         idSensor = null;
+        umbralTemperaturaDefecto = 19;
 
 
 
@@ -69,6 +71,7 @@ public class dispositivoIotTermostato extends dispositivoIot implements Serializ
         margenTemperatura = 0;
         reintentosLectura = 0;
         intervaloReintentos = 0;
+        umbralTemperaturaDefecto = 19;
         master = true;
         idSensor = null;
 
@@ -92,11 +95,16 @@ public class dispositivoIotTermostato extends dispositivoIot implements Serializ
         reintentosLectura = 0;
         intervaloReintentos = 0;
         this.tipoDispositivo = tipo;
+        umbralTemperaturaDefecto = 19;
         master = true;
         idSensor = null;
 
 
 
+    }
+
+    public void setUmbralTemperaturaDefecto(double umbralTemperaturaDefecto) {
+        this.umbralTemperaturaDefecto = umbralTemperaturaDefecto;
     }
 
     public void setMargenTemperatura(double margenTemperatura) {
@@ -157,6 +165,8 @@ public class dispositivoIotTermostato extends dispositivoIot implements Serializ
 
         return estadoRele;
     }
+
+    public double getUmbralTemperaturaDefecto() { return umbralTemperaturaDefecto;}
 
     public double getMargenTemperatura() {
         return margenTemperatura;

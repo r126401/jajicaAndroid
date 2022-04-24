@@ -275,6 +275,7 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
     private void actualizarTemperatura() {
         textoTemperatura.setText(dispositivoCronotermostato.getTemperatura() + " ºC");
         textoUmbralTemperatura.setText(dispositivoCronotermostato.getUmbralTemperatura() + " ºC");
+
     }
 
     private void actualizarProgramaEnCurso(String idPrograma) {
@@ -294,6 +295,8 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
         duracion = restarHoras(textoProgramaDesde.getText().toString(), textoProgramaHasta.getText().toString());
         if (duracion >= programa.getDuracion()) {
             dispositivoCronotermostato.actualizarProgramaActivo("");
+            dispositivoCronotermostato.setUmbralTemperatura(dispositivoCronotermostato.getUmbralTemperaturaDefecto());
+            actualizarTemperatura();
             programasTermostatoAdapter.notifyDataSetChanged();
 
 
@@ -328,7 +331,7 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
         //Actualiza el texto del panel para indicar el modo del termostato
         actualizarModo();
         //Actualiza los valores de temperatura del termostato
-        actualizarTemperatura();
+        //actualizarTemperatura();
         //Actualiza la vista para indicar el programa en curso.
         actualizarProgramaEnCurso(dispositivo.getProgramaActivo());
 
@@ -515,6 +518,7 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
             @Override
             public void modificarProgramacionTermostato(String topic, String texto) {
                 procesarModificarPrograma(texto);
+                actualizarTermostato(dispositivoCronotermostato);
 
             }
             @Override
@@ -769,6 +773,38 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
             }
     );
 
+
+
+    //Rutina para lanzar una activityForResult
+    ActivityResultLauncher<Intent> lanzadorActivitySettingsTermostato = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+
+                    if (result.getResultCode() == RESULT_OK) {
+                        String comando1 = result.getData().getStringExtra(COMANDO_IOT.MODIFICAR_APP.toString());
+                        String comando2 = result.getData().getStringExtra(COMANDO_IOT.SELECCIONAR_SENSOR_TEMPERATURA.toString());
+                        //Introducimos loa logica para modificar la programacion.
+                        if (comando1 != null) {
+                            cnx.publicarTopic(dispositivoCronotermostato.getTopicPublicacion(), comando1);
+                        }
+                        if (comando2 != null) {
+                            cnx.publicarTopic(dispositivoCronotermostato.getTopicPublicacion(), comando2);
+                        }
+
+
+                    } else {
+                        Log.w(getLocalClassName(), "No de modifica nada de la configuracion");
+                    }
+                }
+            }
+    );
+
+
+
+
+
     private void lanzarActivityProgramaTermostato(int posicion, COMANDO_IOT idComando) {
 
         ProgramaDispositivoIotTermostato programa;
@@ -798,7 +834,8 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
         lanzador.putExtra(TEXTOS_DIALOGO_IOT.VALOR_CALIBRADO.getValorTextoJson(), dispositivoCronotermostato.getValorCalibrado());
         lanzador.putExtra(TEXTOS_DIALOGO_IOT.TIPO_SENSOR.getValorTextoJson(), dispositivoCronotermostato.isSensorLocal());
         lanzador.putExtra(TEXTOS_DIALOGO_IOT.ID_SENSOR.getValorTextoJson(), dispositivoCronotermostato.getIdSensor());
-        lanzadorActivityProgramaTermostato.launch(lanzador);
+        lanzador.putExtra(TEXTOS_DIALOGO_IOT.UMBRAL_TEMPERATURA.getValorTextoJson(), dispositivoCronotermostato.getUmbralTemperatura());
+        lanzadorActivitySettingsTermostato.launch(lanzador);
     }
 
 
@@ -823,6 +860,7 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
         estadoPrograma = dialogo.extraerDatoJsonString(textoRecibido, TEXTOS_DIALOGO_IOT.ESTADO_PROGRAMACION.getValorTextoJson());
         estadoRele = dialogo.extraerDatoJsonInt(textoRecibido, TEXTOS_DIALOGO_IOT.ESTADO_RELE.getValorTextoJson());
         umbral = dialogo.extraerDatoJsonDouble(textoRecibido, TEXTOS_DIALOGO_IOT.UMBRAL_TEMPERATURA.getValorTextoJson());
+        dispositivoCronotermostato.setUmbralTemperatura(umbral);
         if (estadoRele == 0) {
             dispositivoCronotermostato.setEstadoRele(ESTADO_RELE.OFF);
         } else {
