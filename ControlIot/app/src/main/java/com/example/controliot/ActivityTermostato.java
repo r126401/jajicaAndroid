@@ -7,12 +7,15 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupMenu;
@@ -37,11 +40,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Formatter;
 
-public class ActivityTermostato extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener, Serializable {
+public class ActivityTermostato extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener, View.OnTouchListener, View.OnLongClickListener, Serializable {
 
     private ImageView imageUpgrade;
     private ImageView imageHeating;
@@ -70,14 +74,38 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
     private TextView textoProgramaDesde;
     private ProgressBar progresoPrograma;
     private TextView textoProgramaHasta;
+    private ImageButton botonMenosUmbral;
+    private ImageButton botonMasUmbral;
     private ArrayList<ProgramaDispositivoIotTermostato> programas;
 
+    private Boolean autoincremento;
+    private Boolean autodecremento;
+    private Handler handler;
+
+    private CountDownTimer contador;
 
 
+
+    private void inicializarActivity() {
+        autodecremento = false;
+        autoincremento = false;
+        handler = new Handler();
+        contador = null;
+    }
 
 
     private void registrarControles() {
 
+
+
+        botonMenosUmbral = (ImageButton) findViewById(R.id.boton_menos_umbral);
+        botonMenosUmbral.setOnClickListener(this);
+        botonMenosUmbral.setOnLongClickListener(this);
+        botonMenosUmbral.setOnTouchListener(this);
+        botonMasUmbral = (ImageButton) findViewById(R.id.boton_mas_umbral);
+        botonMasUmbral.setOnClickListener(this);
+        botonMasUmbral.setOnLongClickListener(this);
+        botonMasUmbral.setOnTouchListener(this);
         textoProgramaDesde = (TextView) findViewById(R.id.programa_desde);
         textoProgramaHasta = (TextView) findViewById(R.id.programa_hasta);
         progresoPrograma = (ProgressBar) findViewById(R.id.progreso_programa);
@@ -243,6 +271,7 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_termostato);
+        inicializarActivity();
         registrarControles();
         ConectarAlBrokerMqtt();
         subscribirDispositivo();
@@ -273,8 +302,8 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
     }
 
     private void actualizarTemperatura() {
-        textoTemperatura.setText(dispositivoCronotermostato.getTemperatura() + " ºC");
-        textoUmbralTemperatura.setText(dispositivoCronotermostato.getUmbralTemperatura() + " ºC");
+        textoTemperatura.setText(String.valueOf(dispositivoCronotermostato.getTemperatura()));
+        textoUmbralTemperatura.setText(String.valueOf(dispositivoCronotermostato.getUmbralTemperatura()));
 
     }
 
@@ -546,11 +575,13 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
             }
             @Override
             public void modificarConfiguracionTermostato(String topic, String texto) {
+                Log.i(TAG, "ConfiguracionModificada");
 
 
             }
             @Override
             public void seleccionarSensorTemperatura(String topic, String texto) {
+                Log.i(TAG, "Sensor seleccionado");
 
             }
 
@@ -642,6 +673,18 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
             case R.id.imageUpgrade:
                 ventanaConfirmacionComando(R.drawable.ic_upgrade, "Se va a actualizar el dispositivo. Pulsa Aceptar para continuar", COMANDO_IOT.UPGRADE_FIRMWARE, this);
                 break;
+
+            case R.id.boton_menos_umbral:
+                cancelarContador();
+                modificarValorDouble(textoUmbralTemperatura, false, 0.5, 0, 30);
+                crearContador();
+                break;
+            case R.id.boton_mas_umbral:
+                cancelarContador();
+                modificarValorDouble(textoUmbralTemperatura, true, 0.5, 0, 30);
+                crearContador();
+                break;
+
 
 
             default:
@@ -969,5 +1012,173 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
         //fecha2.set(fecha1.get(Calendar.YEAR), fecha1.get(Calendar.MONTH), fecha1.get(Calendar.DAY_OF_MONTH), Integer.valueOf(hora), Integer.valueOf(minuto));
         return (int) ((fecha2.getTime().getTime() - fecha1.getTime().getTime())/1000);
     }
+
+    @Override
+    public boolean onLongClick(View v) {
+
+        switch (v.getId()) {
+            case R.id.boton_menos_umbral:
+                autodecremento = true;
+                autoincremento = false;
+                handler.post(new ActivityTermostato.modificacionPulsacionLargaDoble(textoUmbralTemperatura, false, 1.0, 0.0, 30.0));
+
+
+                break;
+            case R.id.boton_mas_umbral:
+                autoincremento = true;
+                autodecremento = false;
+                handler.post(new ActivityTermostato.modificacionPulsacionLargaDoble(textoUmbralTemperatura, true, 1.0, 0.0, 30.0));
+                break;
+            default:
+                break;
+        }
+
+
+        return false;
+    }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+
+        long antes;
+        long despues;
+        long diferencia;
+
+
+        switch (v.getId()) {
+            case R.id.boton_menos_umbral:
+            case R.id.boton_mas_umbral:
+
+                if ((event.getAction() == MotionEvent.ACTION_UP) || (event.getAction() == MotionEvent.ACTION_CANCEL)) {
+                    autodecremento = false;
+                    autoincremento = false;
+                    antes = event.getEventTime();
+                    despues = event.getDownTime();
+                    diferencia = antes - despues;
+                    if (diferencia > 500) {
+                        cancelarContador();
+                        crearContador();
+                        Log.w(TAG, "contador de pulsacion larga");
+
+                    }
+                }
+
+                break;
+            default:
+                break;
+
+        }
+
+
+        return false;
+    }
+
+    class modificacionPulsacionLargaDoble implements Runnable {
+
+        TextView textControl;
+        Boolean incremento;
+        Double valor;
+        Double minVal;
+        Double maxVal;
+
+        modificacionPulsacionLargaDoble(TextView control, Boolean incremento, Double valor, Double minVal, Double maxVal) {
+            textControl = control;
+            this.incremento = incremento;
+            this.valor = valor;
+            this.minVal = minVal;
+            this.maxVal = maxVal;
+
+
+
+        }
+
+        public void run() {
+            if (autoincremento) {
+                handler.postDelayed(new ActivityTermostato.modificacionPulsacionLargaDoble(textControl, incremento, valor, minVal, maxVal), 200);
+                Log.i(getLocalClassName().toString(), "incrementando");
+                modificarValorDouble(textControl, incremento, valor, minVal, maxVal);
+
+            } else if (autodecremento){
+                handler.postDelayed(new ActivityTermostato.modificacionPulsacionLargaDoble(textControl, incremento, valor, minVal, maxVal), 200);
+                Log.i(getLocalClassName().toString(), "decrementando");
+                modificarValorDouble(textControl, incremento, valor, minVal, maxVal);
+
+
+
+            }
+            //textUmbralTemperatura.setText(String.valueOf(programaIotTermostato.getUmbralTemperatura()));
+
+        }
+    }
+
+    private void modificarValorDouble(TextView controlTexto, Boolean incremento, double valor, double minVal, double maxVal) {
+
+        double cantidad;
+
+        cantidad = Double.valueOf(controlTexto.getText().toString());
+        if (incremento == true) {
+            cantidad += valor;
+            if (cantidad >= maxVal) cantidad = maxVal;
+        } else {
+            cantidad -= valor;
+            if (cantidad <= minVal) cantidad = minVal;
+        }
+
+        DecimalFormat formater = new DecimalFormat("##.#");
+        String dato;
+        dato = String.valueOf(formater.format(cantidad));
+        String dat;
+        dat = dato.substring(0,2);
+        if (dato.length() > 2) {
+            dat += ".";
+            dat += dato.substring(3);
+        }
+
+        controlTexto.setText(dat);
+
+
+    }
+
+    private void crearContador() {
+
+        if (contador == null) {
+            textoUmbralTemperatura.setTextColor(Color.GREEN);
+            contador = new CountDownTimer(3000, 1000) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+
+                }
+
+                @Override
+                public void onFinish() {
+                    dispositivoCronotermostato.setUmbralTemperatura(Double.valueOf(textoUmbralTemperatura.getText().toString()));
+                    dialogo.enviarComando(dispositivoCronotermostato, dialogo.comandoModificarUmbralTemperatura(dispositivoCronotermostato.getUmbralTemperatura()));
+                    Log.i(TAG, "Modificado umbral de temperatura");
+                    textoUmbralTemperatura.setTextColor(Color.BLACK);
+                }
+            };
+
+            contador.start();
+            Log.w(TAG, "Creado temporizador");
+        }
+
+
+
+
+    }
+
+    private void cancelarContador() {
+
+        if (contador != null) {
+            contador.cancel();
+            contador = null;
+            Log.w(TAG, "Cancelado temporizador");
+            textoUmbralTemperatura.setTextColor(Color.RED);
+        }
+
+
+    }
+
+
 
 }

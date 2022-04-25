@@ -1,8 +1,10 @@
 package com.example.controliot;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -14,6 +16,14 @@ import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.zxing.client.android.Intents;
+import com.journeyapps.barcodescanner.ScanContract;
+import com.journeyapps.barcodescanner.ScanOptions;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -61,6 +71,8 @@ public class ActivitySettingsTermostato extends AppCompatActivity implements Vie
     private dispositivoIotTermostato dispositivo;
     private Boolean modificadaConfiguracion;
     private Boolean modificadoSensor;
+
+    private Button botonEscanear;
 
     private double margen;
     private int intervaloLectura;
@@ -148,6 +160,10 @@ public class ActivitySettingsTermostato extends AppCompatActivity implements Vie
         botonCancelar.setOnClickListener(this);
         botonAceptar = (Button)  findViewById(R.id.botonAceptar);
         botonAceptar.setOnClickListener(this);
+
+        botonEscanear = (Button) findViewById(R.id.boton_escanear);
+        botonEscanear.setOnClickListener(this);
+
     }
 
     private void recibirDatosActivity() {
@@ -187,10 +203,12 @@ public class ActivitySettingsTermostato extends AppCompatActivity implements Vie
             radioSensorLocal.setChecked(true);
             textSensorRemoto.setText("");
             textSensorRemoto.setVisibility(View.INVISIBLE);
+            botonEscanear.setVisibility(View.INVISIBLE);
         } else {
             radioSensorRemoto.setChecked(true);
             if (sensor != null) textSensorRemoto.setText(sensor);
             textSensorRemoto.setVisibility(View.VISIBLE);
+            botonEscanear.setVisibility(View.VISIBLE);
         }
 
 
@@ -269,6 +287,9 @@ public class ActivitySettingsTermostato extends AppCompatActivity implements Vie
                 break;
             case R.id.radioSensorRemoto:
                 seleccionarSensor(false, "Escanea sensor");
+                break;
+            case R.id.boton_escanear:
+                escanearSensorRemoto();
                 break;
             default:
                 break;
@@ -591,5 +612,56 @@ public class ActivitySettingsTermostato extends AppCompatActivity implements Vie
 
     }
 
+
+
+
+    private final ActivityResultLauncher<ScanOptions> barcodeLauncher = registerForActivityResult(new ScanContract(),
+            result -> {
+                if(result.getContents() == null) {
+                    Intent originalIntent = result.getOriginalIntent();
+                    if (originalIntent == null) {
+                        Log.d("MainActivity", "Cancelled scan");
+                        Toast.makeText(ActivitySettingsTermostato.this, "Cancelled", Toast.LENGTH_LONG).show();
+                    } else if(originalIntent.hasExtra(Intents.Scan.MISSING_CAMERA_PERMISSION)) {
+                        Log.d("MainActivity", "Cancelled scan due to missing camera permission");
+                        Toast.makeText(ActivitySettingsTermostato.this, "Cancelled due to missing camera permission", Toast.LENGTH_LONG).show();
+                    }
+                } else {
+                    Log.d("MainActivity", "Scanned");
+                    Toast.makeText(ActivitySettingsTermostato.this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+                    resultadoEscaneo(result.getContents());
+                }
+            });
+
+    private boolean resultadoEscaneo(String resultado) {
+
+        JSONObject captura;
+        int tipoDispositivo;
+        String idSensor;
+        dialogoIot dialogo;
+        dialogo = new dialogoIot();
+
+        idSensor = dialogo.extraerDatoJsonString(resultado, TEXTOS_DIALOGO_IOT.ID_SENSOR.getValorTextoJson());
+        if (idSensor != null) {
+            textSensorRemoto.setTextColor(Color.GREEN);
+            textSensorRemoto.setText(idSensor);
+            return true;
+        } else {
+            textSensorRemoto.setTextColor(Color.RED);
+            textSensorRemoto.setText("Error!!!!");
+            return false;
+        }
+
+
+    }
+
+    private void escanearSensorRemoto() {
+        ScanOptions opcionesEscaneo;
+        opcionesEscaneo = new ScanOptions();
+        opcionesEscaneo.setOrientationLocked(false);
+        opcionesEscaneo.setBarcodeImageEnabled(true);
+        opcionesEscaneo.setCaptureActivity(activityEscaneo.class);
+        barcodeLauncher.launch(opcionesEscaneo);
+    }
 
 }

@@ -74,13 +74,28 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:fontFamily="@font/poetsenone"
-            android:text="21.5 ºC"
+            android:text="21.5"
             android:textSize="30dp"
             app:layout_constraintBottom_toTopOf="@+id/panelProgresoPrograma"
             app:layout_constraintEnd_toEndOf="@+id/textoTemperatura"
             app:layout_constraintStart_toStartOf="@+id/textoTemperatura"
             app:layout_constraintTop_toBottomOf="@+id/textModo"
             app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/textGrado"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poetsenone"
+            android:text=" ºC"
+            android:textSize="30dp"
+            app:layout_constraintBottom_toBottomOf="@+id/textoUmbralTemperatura"
+            app:layout_constraintStart_toEndOf="@+id/textoUmbralTemperatura"
+            app:layout_constraintTop_toTopOf="@+id/textoUmbralTemperatura">
+
+        </TextView>
+
+
 
         <ImageView
             android:id="@+id/imageUpgrade"
@@ -124,15 +139,29 @@
             app:layout_constraintTop_toBottomOf="@+id/imageEstadoBroker"
             app:srcCompat="@drawable/dispositivo_indisponible" />
 
+        <ImageButton
+            android:id="@+id/boton_menos_umbral"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toStartOf="@+id/textoUmbralTemperatura"
+            app:layout_constraintTop_toTopOf="@+id/boton_mas_umbral"
+            app:srcCompat="@drawable/icono_menos" />
+
+        <ImageButton
+            android:id="@+id/boton_mas_umbral"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            app:layout_constraintBottom_toBottomOf="@+id/textoUmbralTemperatura"
+            app:layout_constraintStart_toEndOf="@+id/textGrado"
+            app:layout_constraintTop_toTopOf="@+id/textoUmbralTemperatura"
+            app:srcCompat="@drawable/icono_mas" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/panelProgresoPrograma"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintTop_toBottomOf="@id/boton_menos_umbral">
 
             <TextView
                 android:id="@+id/programa_desde"
@@ -153,7 +182,7 @@
                 app:layout_constraintBottom_toBottomOf="@+id/programa_desde"
                 app:layout_constraintEnd_toStartOf="@+id/programa_hasta"
                 app:layout_constraintStart_toEndOf="@+id/programa_desde"
-                app:layout_constraintTop_toTopOf="@+id/programa_desde" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/programa_hasta"
@@ -170,6 +199,10 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
+
+
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
@@ -180,7 +213,7 @@
         android:text="Lista de programas"
         android:textAlignment="center"
         android:textSize="20dp"
-        app:layout_constraintTop_toBottomOf="@+id/panelTermostato" />
+        app:layout_constraintTop_toBottomOf="@+id/bottommenuTermostato" />
 
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -189,8 +222,8 @@
         android:layout_height="407dp"
         android:focusable="false"
         android:focusableInTouchMode="false"
-        app:layout_constraintBottom_toTopOf="@id/bottommenuTermostato"
-        app:layout_constraintTop_toBottomOf="@id/textListaProgramas">
+
+        app:layout_constraintTop_toBottomOf="@+id/textListaProgramas">
 
         <ListView
             android:id="@+id/listViewSchedule"
@@ -212,9 +245,7 @@
         android:layout_width="match_parent"
         android:layout_height="64dp"
         android:background="#cccccc"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/panelTermostato"
         app:menu="@menu/menu_termostato" />
 
 

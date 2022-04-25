@@ -825,6 +825,45 @@ public class dialogoIot implements Serializable {
 
     }
 
+    public Boolean extraerDatoJsonBoolean(String texto, String parametro) {
+        JSONObject objetoJson = null;
+        Boolean dato = true;
+
+        objetoJson = obtenerparteJson(texto, TEXTOS_DIALOGO_IOT.COMANDO);
+        if (objetoJson != null) {
+
+            try {
+                dato = objetoJson.getBoolean(parametro);
+                return dato;
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Log.w(getClass().toString(), "No se ha encontrado el parametro en la parte " + TEXTOS_DIALOGO_IOT.COMANDO.toString());
+            }
+        }
+        objetoJson = obtenerparteJson(texto, TEXTOS_DIALOGO_IOT.DLG_RESPUESTA);
+        if (objetoJson != null) {
+            try {
+                dato = objetoJson.getBoolean(parametro);
+                return dato;
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Log.w(getClass().toString(), "No se ha encontrado el parametro en la parte " + TEXTOS_DIALOGO_IOT.DLG_RESPUESTA.toString());
+                //return -1000;
+            }
+        }
+
+        try {
+            objetoJson = new JSONObject(texto);
+            dato = objetoJson.getBoolean(parametro);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return true;
+        }
+
+
+        return dato;
+    }
+
 
     public String comandoActuarRele(ESTADO_RELE estado) {
 
@@ -929,15 +968,10 @@ public class dialogoIot implements Serializable {
 
     public Boolean isSensorMaster(String texto) {
 
-        int tipoSensor;
+        Boolean tipoSensor;
 
-        tipoSensor = extraerDatoJsonInt(texto, TEXTOS_DIALOGO_IOT.TIPO_SENSOR.getValorTextoJson());
-        if (tipoSensor == 0) {
-            return false;
-
-        } else {
-            return true;
-        }
+        tipoSensor = extraerDatoJsonBoolean(texto, TEXTOS_DIALOGO_IOT.TIPO_SENSOR.getValorTextoJson());
+        return tipoSensor;
 
     }
 

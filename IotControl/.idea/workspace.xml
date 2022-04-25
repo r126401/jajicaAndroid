@@ -67,12 +67,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="23d00115-d3af-48c2-a0e5-936070caa06f" name="Default Changelist" comment="se hace el ubgrade de gradel a 7.1.0">
+      <change beforePath="$PROJECT_DIR$/../ControlIot/.idea/deploymentTargetDropDown.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/.idea/deploymentTargetDropDown.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/ActivitySettingsTermostato.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/ActivitySettingsTermostato.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/ActivityTermostato.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/ActivityTermostato.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/dialogoIot.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/dialogoIot.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/dispositivoIotTermostato.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/dispositivoIotTermostato.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/res/layout/activity_settings_termostato.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/layout/activity_settings_termostato.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/res/layout/activity_termostato.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/layout/activity_termostato.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/iotcontrol/cronotermostato.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/iotcontrol/cronotermostato.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -82,7 +84,7 @@
   <component name="Cvs2Configuration">
     <option name="OVERRIDE_EXISTING_TAG_FOR_PROJECT" value="false" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[/home/t126401/.android/avd/Nexus_6_API_30.avd]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[5ab456a8]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />

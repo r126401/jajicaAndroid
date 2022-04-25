@@ -540,4 +540,17 @@
         app:layout_constraintTop_toBottomOf="@+id/panelSensor">
 
     </Button>
+
+    <Button
+        android:id="@+id/boton_escanear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poetsenone"
+        android:text="Escanear Sensor"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/botonAceptar"
+        app:layout_constraintEnd_toStartOf="@+id/botonAceptar"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/panelSensor" />
 </androidx.constraintlayout.widget.ConstraintLayout>

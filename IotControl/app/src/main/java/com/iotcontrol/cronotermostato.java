@@ -1014,6 +1014,7 @@ public class cronotermostato extends AppCompatActivity implements Serializable, 
             case R.id.botonMenos:
                 autoDecremento = true;
                 repetidor.post(new RepetirLong());
+                wait();
 
                 break;
 
