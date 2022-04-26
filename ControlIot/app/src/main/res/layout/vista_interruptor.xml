@@ -3,55 +3,60 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:layout_height="96dp"
+    android:orientation="horizontal"
+    android:background="@drawable/fondo_lista_dispositivos">
 
 
     <ImageView
         android:id="@+id/imageEliminarSwitch"
-        android:layout_width="49dp"
-        android:layout_height="wrap_content"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         app:layout_constraintStart_toEndOf="@+id/imageOnOff"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_delete" />
 
     <ImageView
         android:id="@+id/imageOnOff"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/switchon" />
+        app:srcCompat="@drawable/switch_off" />
 
     <ProgressBar
         android:id="@+id/progresoOperacionInterruptor"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="49dp"
-        android:layout_height="46dp"
+        style="@style/CustomProgressBar"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_marginTop="3dp"
+        android:indeterminateDrawable="@drawable/estilo_progress_bar"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageOnOff"
+        app:layout_constraintEnd_toEndOf="@+id/imageEliminarSwitch"
+        app:layout_constraintStart_toStartOf="@+id/imageEliminarSwitch"
         app:layout_constraintTop_toBottomOf="@+id/imageEliminarSwitch" />
 
     <TextView
         android:id="@+id/textoInterruptor"
+        style="@style/fuentes_datos"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/poetsenone"
+        android:maxLength="12"
         android:text="Interruptor"
+
+        android:textSize="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/estadoConexionInterruptor"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/imageEliminarSwitch"
+        app:layout_constraintHorizontal_bias="0.571"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/estadoConexionInterruptor"
-        android:layout_width="85dp"
-        android:layout_height="95dp"
-        android:layout_marginTop="4dp"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/bk_conectado" />

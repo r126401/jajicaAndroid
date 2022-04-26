@@ -34,7 +34,7 @@
             app:layout_constraintEnd_toStartOf="@+id/textoTemperatura"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="1.0"
-            app:srcCompat="@drawable/ic_teperatura" />
+            app:srcCompat="@drawable/ic_temperatura" />
 
         <TextView
             android:id="@+id/textoTemperatura"
@@ -56,7 +56,7 @@
             app:layout_constraintBottom_toTopOf="@+id/textoUmbralTemperatura"
             app:layout_constraintStart_toEndOf="@+id/textoTemperatura"
             app:layout_constraintTop_toBottomOf="@+id/textoTemperatura"
-            app:srcCompat="@drawable/switchon" />
+            app:srcCompat="@drawable/switch_on" />
 
         <ProgressBar
             android:id="@+id/barraProgreso"

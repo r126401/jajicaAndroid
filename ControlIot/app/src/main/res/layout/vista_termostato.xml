@@ -4,117 +4,104 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="96dp"
-    android:background="@drawable/fondo_termostato"
+    android:background="@drawable/fondo_lista_dispositivos"
     android:orientation="horizontal">
 
     <ImageView
         android:id="@+id/imageHeatingOnOff"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/heating_on" />
 
     <TextView
         android:id="@+id/textNombreTermostato"
+        style="@style/fuentes_datos"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="64dp"
-        android:fontFamily="@font/poetsenone"
+        android:maxLength="12"
         android:text="Termometro"
+        android:textSize="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/estadoConexionTermostato"
-        app:layout_constraintHorizontal_bias="0.096"
-        app:layout_constraintStart_toEndOf="@+id/imageEliminarTermostato"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintHorizontal_bias="0.578"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.142" />
 
     <ImageView
         android:id="@+id/imageEliminarTermostato"
-        android:layout_width="49dp"
-        android:layout_height="wrap_content"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         app:layout_constraintStart_toEndOf="@+id/imageHeatingOnOff"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_delete" />
 
     <TextView
         android:id="@+id/textoTemperatura"
-        android:layout_width="94dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="12dp"
-        android:fontFamily="@font/poetsenone"
+        style="@style/fuentes_datos"
+        android:layout_width="wrap_content"
+
+        android:layout_height="wrap_content"
         android:text="--.-ºC"
         android:textAlignment="center"
-        android:textSize="25sp"
+        android:textSize="30dp"
+
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageIconoTermometro"
-        app:layout_constraintTop_toBottomOf="@+id/textNombreTermostato" />
+        app:layout_constraintTop_toTopOf="@+id/imageIconoTermometro" />
 
     <ImageView
         android:id="@+id/imageIconoTermometro"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="12dp"
-        app:layout_constraintStart_toEndOf="@+id/imageEliminarTermostato"
-        app:layout_constraintTop_toBottomOf="@+id/textNombreTermostato"
-        app:srcCompat="@drawable/ic_teperatura" />
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginBottom="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/progresoOperacionTermostato"
+        app:srcCompat="@drawable/ic_temperatura" />
 
     <TextView
         android:id="@+id/textoUmbralTemperatura"
-        android:layout_width="65dp"
+        android:layout_width="wrap_content"
         android:layout_height="28dp"
-
+        android:textSize="20dp"
         android:textAlignment="center"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:text="21.5 ºC"
+        style="@style/fuentes_datos"
+        app:layout_constraintBottom_toBottomOf="@+id/imageIconoUmbralTemperatura"
         app:layout_constraintEnd_toStartOf="@+id/estadoConexionTermostato"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/imageIconoUmbralTemperatura" />
-
-    <TextView
-        android:id="@+id/textoHumedad"
-        android:layout_width="63dp"
-        android:layout_height="27dp"
-        android:text="21.5ºC"
-        android:textAlignment="center"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="159dp"
-        tools:layout_editor_absoluteY="68dp" />
+        app:layout_constraintStart_toEndOf="@+id/imageIconoUmbralTemperatura"
+        app:layout_constraintTop_toTopOf="@+id/imageIconoUmbralTemperatura" />
 
     <ImageView
         android:id="@+id/imageIconoUmbralTemperatura"
-        android:layout_width="33dp"
-        android:layout_height="28dp"
-        android:layout_marginStart="56dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageIconoTermometro"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="10dp"
+        app:layout_constraintBottom_toBottomOf="@+id/textoTemperatura"
+        app:layout_constraintStart_toEndOf="@+id/textoTemperatura"
+        app:layout_constraintTop_toTopOf="@+id/textoTemperatura"
         app:srcCompat="@drawable/ic_umbral_temp" />
 
     <ImageView
-        android:id="@+id/imageIconoHumedad"
-        android:layout_width="33dp"
-        android:layout_height="28dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/textoHumedad"
-        app:layout_constraintStart_toEndOf="@+id/progresoOperacionTermostato"
-        app:layout_constraintTop_toBottomOf="@+id/imageIconoTermometro"
-        app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@drawable/ic_humedad" />
-
-    <ImageView
         android:id="@+id/estadoConexionTermostato"
-        android:layout_width="72dp"
-        android:layout_height="72dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/bk_conectado" />
 
     <ProgressBar
         android:id="@+id/progresoOperacionTermostato"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="49dp"
-        android:layout_height="46dp"
+        style="@style/CustomProgressBar"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:indeterminateDrawable="@drawable/estilo_progress_bar"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/imageEliminarTermostato"
         app:layout_constraintStart_toEndOf="@+id/imageHeatingOnOff"
         app:layout_constraintTop_toBottomOf="@+id/imageEliminarTermostato" />
 </androidx.constraintlayout.widget.ConstraintLayout>

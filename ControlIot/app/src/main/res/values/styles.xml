@@ -43,4 +43,21 @@
 
     </style>
 
+
+    <style name="CustomProgressBar" parent="android:Widget.ProgressBar.Horizontal">
+        <item name="android:indeterminateOnly">true</item>
+        <item name="android:progressDrawable">@drawable/estilo_progress_bar</item>
+        <item name="android:minHeight">10dip</item>
+        <item name="android:maxHeight">20dip</item>
+    </style>
+    <style name="AppTheme" parent="android:Theme.Light" />
+
+
+    <style name="fuentes_datos">
+        <item name="android:textColor">#20264E</item>
+        <item name="android:textStyle">bold</item>
+
+
+    </style>
+
 </resources>

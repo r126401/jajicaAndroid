@@ -146,7 +146,7 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
         int i;
         imageViewEstadoBroker.setImageResource(R.drawable.bk_conectado);
         textIdBroker.setText(cnx.getBrokerId());
-        textIdBroker.setTextColor(Color.GREEN);
+        textIdBroker.setTextColor(Color.BLACK);
         progressEspera.setVisibility(View.INVISIBLE);
         if (adapter != null) {
             if (lista != null) {
@@ -204,7 +204,6 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
         textIdBroker = (TextView) findViewById(R.id.textEstadoBroker);
         imageViewEstadoBroker = (ImageView) findViewById(R.id.imageViewEstadoBroker);
         textListaDispositivo = (TextView) findViewById(R.id.textListaDispositivo);
-        imageViewImagenDecorativa = (ImageView) findViewById(R.id.imageViewImagenDecorativa);
         swipeListaDispositivos = (SwipeRefreshLayout) findViewById(R.id.swipeProgramasInterruptor);
         swipeListaDispositivos.setOnRefreshListener(this);
         listViewListaDispositivos = (ListView) findViewById(R.id.listViewProgramasInterruptor);

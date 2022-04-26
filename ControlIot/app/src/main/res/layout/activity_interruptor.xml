@@ -15,7 +15,7 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textConsolaMensajes"
-        app:srcCompat="@drawable/switchon" />
+        app:srcCompat="@drawable/switch_on" />
 
 
     <ProgressBar

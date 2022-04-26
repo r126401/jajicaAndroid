@@ -62,7 +62,7 @@ public class ListaDispositivosAdapter extends ArrayAdapter<dispositivoIot> {
             holder.estadoConexionInterruptor = (ImageView) fila.findViewById(R.id.estadoConexionInterruptor);
             holder.imageHeatingOnOff = (ImageView) fila.findViewById(R.id.imageHeatingOnOff);
             holder.textoTemperatura = (TextView) fila.findViewById(R.id.textoTemperatura);
-            holder.textoHumedad = (TextView) fila.findViewById(R.id.textoHumedad);
+            //holder.textoHumedad = (TextView) fila.findViewById(R.id.textoHumedad);
             holder.textoUmbralTemperatura = (TextView) fila.findViewById(R.id.textoUmbralTemperatura);
             holder.estadoConexionTermostato = (ImageView) fila.findViewById(R.id.estadoConexionTermostato);
             holder.vista_interruptor = (ConstraintLayout) fila.findViewById(R.id.layoutVistaInterruptor);
@@ -71,7 +71,7 @@ public class ListaDispositivosAdapter extends ArrayAdapter<dispositivoIot> {
             holder.barraProgresoTermostato = (ProgressBar) fila.findViewById(R.id.progresoOperacionTermostato);
             holder.textNombreTermostato = (TextView) fila.findViewById(R.id.textNombreTermostato);
             holder.imageIconoUmbralTemperatura = (ImageView) fila.findViewById(R.id.imageIconoUmbralTemperatura);
-            holder.imageIconoHumedad = (ImageView) fila.findViewById(R.id.imageIconoHumedad);
+            //holder.imageIconoHumedad = (ImageView) fila.findViewById(R.id.imageIconoHumedad);
             holder.imageEliminarSwitch = (ImageView) fila.findViewById(R.id.imageEliminarSwitch);
             holder.imageEliminarTermostato = (ImageView) fila.findViewById(R.id.imageEliminarTermostato);
 
@@ -100,18 +100,18 @@ public class ListaDispositivosAdapter extends ArrayAdapter<dispositivoIot> {
                     valorIcono = (Integer) holder.imageOnOff.getTag();
                     switch (valorIcono) {
 
-                        case R.drawable.switchon:
+                        case R.drawable.switch_on:
                             dialogo.enviarComando(dispositivo, dialogo.comandoActuarRele(ESTADO_RELE.OFF));
                             dispositivo.setEstadoConexion(ESTADO_CONEXION_IOT.ESPERANDO_RESPUESTA);
                             holder.barraProgresoInterruptor.setVisibility(View.VISIBLE);
-                            holder.imageOnOff.setTag(R.drawable.switchon);
+                            holder.imageOnOff.setTag(R.drawable.switch_on);
                             //cnx.publicarTopic(dispositivo.getTopicPublicacion(), dialogo.comandoActuarRele(ESTADO_RELE.OFF));
                             break;
-                        case R.drawable.switchoff:
+                        case R.drawable.switch_off:
                             dialogo.enviarComando(dispositivo, dialogo.comandoActuarRele(ESTADO_RELE.ON));
                             dispositivo.setEstadoConexion(ESTADO_CONEXION_IOT.ESPERANDO_RESPUESTA);
                             holder.barraProgresoInterruptor.setVisibility(View.VISIBLE);
-                            holder.imageOnOff.setTag(R.drawable.switchoff);
+                            holder.imageOnOff.setTag(R.drawable.switch_off);
                             //cnx.publicarTopic(dispositivo.getTopicPublicacion(), dialogo.comandoActuarRele(ESTADO_RELE.ON));
                             break;
 
@@ -196,7 +196,7 @@ public class ListaDispositivosAdapter extends ArrayAdapter<dispositivoIot> {
         ImageView estadoConexionInterruptor;
         ImageView imageHeatingOnOff;
         TextView textoTemperatura;
-        TextView textoHumedad;
+        //TextView textoHumedad;
         TextView textoUmbralTemperatura;
         ImageView estadoConexionTermostato;
         TextView textNombreTermostato;
@@ -205,7 +205,7 @@ public class ListaDispositivosAdapter extends ArrayAdapter<dispositivoIot> {
         ConstraintLayout vista_termostato;
         ProgressBar barraProgresoInterruptor;
         ProgressBar barraProgresoTermostato;
-        ImageView imageIconoHumedad;
+        //ImageView imageIconoHumedad;
         ImageView imageEliminarTermostato;
         ImageView imageEliminarSwitch;
 
@@ -240,10 +240,10 @@ private void rellenarControlesDesconocidoSinEstado(ListaDispositivosAdapterHolde
         switch (dispositivo.getEstadoRele()) {
 
             case OFF:
-                valor = R.drawable.switchoff;
+                valor = R.drawable.switch_off;
                 break;
             case ON:
-                valor = R.drawable.switchon;
+                valor = R.drawable.switch_on;
                 break;
             case INDETERMINADO:
                 valor = R.drawable.switch_indeterminado;
@@ -337,8 +337,8 @@ private void rellenarControlesDesconocidoSinEstado(ListaDispositivosAdapterHolde
         holder.textNombreTermostato.setText(dispositivo.nombreDispositivo);
         holder.imageHeatingOnOff.setVisibility(View.INVISIBLE);
         holder.imageIconoUmbralTemperatura.setVisibility(View.INVISIBLE);
-        holder.textoHumedad.setVisibility(View.INVISIBLE);
-        holder.imageIconoHumedad.setVisibility(View.INVISIBLE);
+        //holder.textoHumedad.setVisibility(View.INVISIBLE);
+        //holder.imageIconoHumedad.setVisibility(View.INVISIBLE);
 
 
         //Actualizamos el valor de la conexion
@@ -372,9 +372,9 @@ private void rellenarControlesDesconocidoSinEstado(ListaDispositivosAdapterHolde
 
             dato = dispositivo.redondearDatos(dispositivo.getHumedad(), 1);
             if(dato == -1000) {
-                holder.textoHumedad.setText("--.- %");
+                //holder.textoHumedad.setText("--.- %");
             } else {
-                holder.textoHumedad.setText(String.valueOf(dato));
+                //holder.textoHumedad.setText(String.valueOf(dato));
             }
 
 

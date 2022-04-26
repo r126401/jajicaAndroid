@@ -407,12 +407,12 @@ public class ActivityProgramaTermostato extends AppCompatActivity implements Tim
 
 
         if ((Boolean) imageOnOff.getTag() == true) {
-            imageOnOff.setImageResource(R.drawable.switchoff);
+            imageOnOff.setImageResource(R.drawable.switch_off);
             imageOnOff.setTag(false);
             programaIotTermostato.setEstadoRele(ESTADO_RELE.OFF);
 
         } else {
-            imageOnOff.setImageResource(R.drawable.switchon);
+            imageOnOff.setImageResource(R.drawable.switch_on);
             imageOnOff.setTag(true);
             programaIotTermostato.setEstadoRele(ESTADO_RELE.ON);
         }

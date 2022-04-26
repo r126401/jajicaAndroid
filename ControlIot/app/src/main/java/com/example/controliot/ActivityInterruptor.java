@@ -652,7 +652,7 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
         caja = new AlertDialog.Builder(this);
 
         caja.setTitle("Informacion del dispositivo");
-        caja.setIcon(R.drawable.switchon);
+        caja.setIcon(R.drawable.switch_on);
         View contenedor = getLayoutInflater().inflate(R.layout.info_dispositivo_interruptor, null);
         caja.setView(contenedor);
         listaInfo = (ListView) contenedor.findViewById(R.id.listaInfoDispositivo);
@@ -796,11 +796,11 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
     private void actualizarEstadoRele() {
 
         if (dispositivo.getEstadoRele() == ESTADO_RELE.ON) {
-            imageBotonOnOff.setImageResource(R.drawable.switchon);
+            imageBotonOnOff.setImageResource(R.drawable.switch_on);
             imageBotonOnOff.setTag(true);
 
         } else {
-            imageBotonOnOff.setImageResource(R.drawable.switchoff);
+            imageBotonOnOff.setImageResource(R.drawable.switch_off);
             imageBotonOnOff.setTag(false);
         }
 

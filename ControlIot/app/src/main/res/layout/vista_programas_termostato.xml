@@ -25,7 +25,7 @@
         app:layout_constraintBottom_toTopOf="@+id/panelDiasSemana"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/switchon" />
+        app:srcCompat="@drawable/switch_on" />
 
     <ImageView
         android:id="@+id/imageBorrarPrograma"

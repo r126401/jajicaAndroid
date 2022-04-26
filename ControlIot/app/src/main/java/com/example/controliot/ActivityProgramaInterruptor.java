@@ -24,10 +24,8 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Formatter;
 
 public class ActivityProgramaInterruptor extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener, View.OnClickListener, View.OnLongClickListener, View.OnTouchListener {
@@ -241,10 +239,10 @@ public class ActivityProgramaInterruptor extends AppCompatActivity implements Ti
         int i;
         if (tipoComando == COMANDO_IOT.MODIFICAR_PROGRAMACION) {
             if (programaIotOnOff.getEstadoRele() == ESTADO_RELE.ON) {
-                imageOnOff.setImageResource(R.drawable.switchon);
+                imageOnOff.setImageResource(R.drawable.switch_on);
                 imageOnOff.setTag(true);
             } else {
-                imageOnOff.setImageResource(R.drawable.switchoff);
+                imageOnOff.setImageResource(R.drawable.switch_off);
                 imageOnOff.setTag(false);
             }
             switch (tipoPrograma) {
@@ -490,12 +488,12 @@ public class ActivityProgramaInterruptor extends AppCompatActivity implements Ti
 
 
         if ((Boolean) imageOnOff.getTag() == true) {
-            imageOnOff.setImageResource(R.drawable.switchoff);
+            imageOnOff.setImageResource(R.drawable.switch_off);
             imageOnOff.setTag(false);
             programaIotOnOff.setEstadoRele(ESTADO_RELE.OFF);
 
         } else {
-            imageOnOff.setImageResource(R.drawable.switchon);
+            imageOnOff.setImageResource(R.drawable.switch_on);
             imageOnOff.setTag(true);
             programaIotOnOff.setEstadoRele(ESTADO_RELE.ON);
         }

@@ -136,10 +136,10 @@ public class listaProgramasInterruptorAdapter extends ArrayAdapter<ProgramaDispo
         }
 
         if (programa.getEstadoRele() == ESTADO_RELE.ON) {
-            holder.imageInterruptor.setImageResource(R.drawable.switchon);
+            holder.imageInterruptor.setImageResource(R.drawable.switch_on);
             holder.imageInterruptor.setTag(true);
         } else {
-            holder.imageInterruptor.setImageResource(R.drawable.switchoff);
+            holder.imageInterruptor.setImageResource(R.drawable.switch_off);
             holder.imageInterruptor.setTag(false);
         }
 
