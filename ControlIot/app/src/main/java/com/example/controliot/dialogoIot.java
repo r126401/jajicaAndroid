@@ -1565,6 +1565,14 @@ public class dialogoIot implements Serializable {
         }
         Log.e(getClass().toString(), "eliminarTemporizador: No se ha encontrado el Temporizador con clave " + clave + " y valor " + String.valueOf(i));
     }
+
+    public double getUmbralTemperaturaDefecto(String texto) {
+
+        return extraerDatoJsonDouble(texto, TEXTOS_DIALOGO_IOT.UMBRAL_TEMPERATURA_DEFECTO.getValorTextoJson() );
+
+    }
+
+
 }
 
 

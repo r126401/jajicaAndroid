@@ -329,10 +329,13 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
             programasTermostatoAdapter.notifyDataSetChanged();
 
 
+        } else {
+            int lleva = fechaADuracion(textoProgramaDesde.getText().toString());
+
+            Log.i(TAG, "duracion es " + lleva);
+            int progreso = ((int) lleva * 100) / programa.getDuracion();
+            progresoPrograma.setProgress(progreso);
         }
-
-
-
 
     }
 
@@ -350,6 +353,22 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
 
     }
 
+    public void actualizarDispositivo(dispositivoIotTermostato dispositivo) {
+
+        dispositivoCronotermostato.setEstadoRele(dispositivo.getEstadoRele());
+        dispositivoCronotermostato.setEstadoDispositivo(dispositivo.getEstadoDispositivo());
+        dispositivoCronotermostato.setEstadoProgramacion(dispositivo.getEstadoProgramacion());
+        dispositivoCronotermostato.setTemperatura(dispositivo.getTemperatura());
+        dispositivoCronotermostato.setUmbralTemperatura(dispositivo.getUmbralTemperatura());
+        dispositivoCronotermostato.setSensorMaster(dispositivo.isSensorLocal());
+        dispositivoCronotermostato.setIdSensor(dispositivo.getIdSensor());
+        dispositivoCronotermostato.setProgramaActivo(dispositivo.getProgramaActivo());
+        actualizarTermostato(dispositivo);
+
+
+
+    }
+
     public void actualizarTermostato(dispositivoIotTermostato dispositivo) {
 
         if (this.dispositivoCronotermostato == null) {
@@ -360,11 +379,10 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
         //Actualiza el texto del panel para indicar el modo del termostato
         actualizarModo();
         //Actualiza los valores de temperatura del termostato
-        //actualizarTemperatura();
+        actualizarTemperatura();
+        actualizarRele();
         //Actualiza la vista para indicar el programa en curso.
         actualizarProgramaEnCurso(dispositivo.getProgramaActivo());
-
-
 
         if (versionComprobada == false) {
             consultarNuevaVersionOta();
@@ -509,7 +527,6 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
 
     private void procesarMensajesTermostato (){
 
-
         cnx.setOnProcesarMensajesTermostato(new conexionMqtt.OnProcesarMensajesTermostato() {
             @Override
             public void estadoTermostato(String topic, String message, dispositivoIotTermostato dispositivo) {
@@ -570,7 +587,11 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
             }
 
             @Override
-            public void modificarUmbralTemperatura(String topic, String texto, String idDispositivo) {
+            public void modificarUmbralTemperatura(String topic, String texto, double umbral) {
+                Log.i(TAG, "el umbral es " + umbral);
+                dispositivoCronotermostato.setUmbralTemperatura(umbral);
+                textoUmbralTemperatura.setText(String.valueOf(umbral));
+                dialogo.enviarComando(dispositivoCronotermostato, dialogo.comandoEstadoDispositivo());
 
             }
             @Override
@@ -586,17 +607,15 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
             }
 
         });
-
-
         cnx.setOnProcesarEspontaneosTermostato(new conexionMqtt.OnProcesarEspontaneosTermostato() {
             @Override
             public void arranqueAplicacionTermostato(String topic, String texto, dispositivoIotTermostato dispoisitivo) {
-                actualizarTermostato(dispositivoCronotermostato);
+                actualizarDispositivo(dispositivoCronotermostato);
             }
 
             @Override
             public void cambioProgramaTermostato(String topic, String texto, dispositivoIotTermostato dispositivo) {
-                actualizarTermostato(dispositivoCronotermostato);
+                actualizarDispositivo(dispositivoCronotermostato);
             }
 
             @Override
@@ -615,25 +634,20 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
             }
 
             @Override
-            public void cambioTemperaturaTermostato(String topic, String texto) {
-                actualizarTermostato(dispositivoCronotermostato);
+            public void cambioTemperaturaTermostato(String topic, String texto, dispositivoIotTermostato dispositivo) {
+                actualizarDispositivo(dispositivo);
             }
 
             @Override
             public void temporizadorCumplido(String topic, String texto, dispositivoIotTermostato dispositivo) {
-                actualizarTermostato(dispositivoCronotermostato);
+                actualizarDispositivo(dispositivoCronotermostato);
             }
 
             @Override
             public void cambioUmbralTemperatura(String topic, String texto, dispositivoIotTermostato dispositivo) {
-                actualizarTermostato(dispositivoCronotermostato);
+                actualizarDispositivo(dispositivoCronotermostato);
             }
         });
-
-
-
-
-
         cnx.setOnProcesarVersionServidorOta(new conexionMqtt.OnProcesarVersionServidorOta() {
             @Override
             public void lastVersion(OtaVersion otaVersion) {
@@ -994,6 +1008,27 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
 
     }
 
+    private int fechaADuracion(String inicio) {
+
+        Calendar fechaInicio, fechaFin;
+        int hora;
+        int minuto;
+        long milisFin, milisInicio;
+        hora = Integer.valueOf(inicio.substring(0,2));
+        minuto = Integer.valueOf(inicio.substring(3,5));
+        fechaFin = Calendar.getInstance();
+        fechaInicio = Calendar.getInstance();
+        fechaInicio.set(fechaInicio.get(Calendar.YEAR), fechaInicio.get(Calendar.MONTH), fechaInicio.get(Calendar.DAY_OF_MONTH), hora, minuto);
+        milisInicio = fechaInicio.getTimeInMillis()/1000;
+        milisFin = fechaFin.getTimeInMillis()/1000;
+
+
+        return (int) (milisFin - milisInicio);
+
+
+
+    }
+
     private int restarHoras(String hora1, String hora2) {
 
         Calendar fecha1;
@@ -1062,11 +1097,9 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
 
                     }
                 }
-
                 break;
             default:
                 break;
-
         }
 
 
@@ -1132,6 +1165,8 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
         if (dato.length() > 2) {
             dat += ".";
             dat += dato.substring(3);
+        } else {
+            dat += ".0";
         }
 
         controlTexto.setText(dat);
@@ -1142,7 +1177,7 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
     private void crearContador() {
 
         if (contador == null) {
-            textoUmbralTemperatura.setTextColor(Color.GREEN);
+            textoUmbralTemperatura.setTextColor(Color.rgb(0xFF, 0x3c, 0x00));
             contador = new CountDownTimer(3000, 1000) {
                 @Override
                 public void onTick(long millisUntilFinished) {
@@ -1177,6 +1212,28 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
         }
 
 
+    }
+
+    private void actualizarRele() {
+
+        switch (dispositivoCronotermostato.getEstadoRele()) {
+
+
+            case OFF:
+                imageHeating.setImageResource(R.drawable.heating_off);
+                imageHeating.setTag(ESTADO_RELE.OFF);
+                imageHeating.setVisibility(View.INVISIBLE);
+                break;
+            case ON:
+                imageHeating.setImageResource(R.drawable.heating_on);
+                imageHeating.setTag(ESTADO_RELE.ON);
+                imageHeating.setVisibility(View.VISIBLE);
+                break;
+            case INDETERMINADO:
+                imageHeating.setImageResource(R.drawable.switch_indeterminado);
+                imageHeating.setTag(ESTADO_RELE.INDETERMINADO);
+                break;
+        }
     }
 
 

@@ -70,7 +70,6 @@ public class listaProgramasTermostatoAdapter extends ArrayAdapter<ProgramaDispos
             LayoutInflater inflater = ((Activity) contexto).getLayoutInflater();
             convertView = inflater.inflate(idLayout, parent, false);
             holder = new ListaProgramasInterruptorAdapterHolder();
-            holder.imageHeating = (ImageView) convertView.findViewById(R.id.imageHeating);
             holder.switchProgramaActivo = (SwitchCompat) convertView.findViewById(R.id.switchProgramaActivo);
             holder.textHoraPrograma = (TextView) convertView.findViewById(R.id.textHoraPrograma);
             holder.textoLunes = (TextView) convertView.findViewById(R.id.textoLunes);
@@ -134,8 +133,7 @@ public class listaProgramasTermostatoAdapter extends ArrayAdapter<ProgramaDispos
         } else {
             holder.imageProgramaActivado.setVisibility(View.INVISIBLE);
         }
-
-        holder.imageHeating.setImageResource(R.drawable.heating_on);
+        
 
 
         holder.textoUmbral.setText(programa.getUmbralTemperatura() + " ºC");
@@ -244,7 +242,6 @@ public class listaProgramasTermostatoAdapter extends ArrayAdapter<ProgramaDispos
 
     static class ListaProgramasInterruptorAdapterHolder {
 
-        ImageView imageHeating;
         SwitchCompat switchProgramaActivo;
         TextView textHoraPrograma;
         TextView textoHoraHasta;

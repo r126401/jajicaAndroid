@@ -7,246 +7,267 @@
     android:orientation="vertical"
     tools:context=".ActivityTermostato">
 
-    <TextView
-        android:id="@+id/textConsolaMensajes"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/poetsenone"
-        android:text="TextView"
-        android:textSize="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/panelTermostato"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeSchedule"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/textConsolaMensajes"
-        tools:layout_editor_absoluteX="0dp">
+        android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/imageTermometro"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            app:layout_constraintBottom_toBottomOf="@+id/textoTemperatura"
-            app:layout_constraintEnd_toStartOf="@+id/textoTemperatura"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0"
-            app:srcCompat="@drawable/ic_temperatura" />
-
-        <TextView
-            android:id="@+id/textoTemperatura"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:fontFamily="@font/poetsenone"
-            android:text="25.4 ºC"
-            android:textSize="40dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:id="@+id/imageHeating"
-            android:layout_width="32dp"
-            android:layout_height="33dp"
-            app:layout_constraintBottom_toTopOf="@+id/textoUmbralTemperatura"
-            app:layout_constraintStart_toEndOf="@+id/textoTemperatura"
-            app:layout_constraintTop_toBottomOf="@+id/textoTemperatura"
-            app:srcCompat="@drawable/switch_on" />
-
-        <ProgressBar
-            android:id="@+id/barraProgreso"
-            style="?android:attr/progressBarStyle"
-            android:layout_width="32dp"
-            android:layout_height="36dp"
-            app:layout_constraintBottom_toBottomOf="@+id/imageHeating"
-            app:layout_constraintStart_toStartOf="@+id/imageTermometro"
-            app:layout_constraintTop_toTopOf="@+id/imageHeating"
-            app:layout_constraintVertical_bias="0.0" />
-
-        <TextView
-            android:id="@+id/textoUmbralTemperatura"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:fontFamily="@font/poetsenone"
-            android:text="21.5"
-            android:textSize="30dp"
-            app:layout_constraintBottom_toTopOf="@+id/panelProgresoPrograma"
-            app:layout_constraintEnd_toEndOf="@+id/textoTemperatura"
-            app:layout_constraintStart_toStartOf="@+id/textoTemperatura"
-            app:layout_constraintTop_toBottomOf="@+id/textModo"
-            app:layout_constraintVertical_bias="0.0" />
-
-        <TextView
-            android:id="@+id/textGrado"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/poetsenone"
-            android:text=" ºC"
-            android:textSize="30dp"
-            app:layout_constraintBottom_toBottomOf="@+id/textoUmbralTemperatura"
-            app:layout_constraintStart_toEndOf="@+id/textoUmbralTemperatura"
-            app:layout_constraintTop_toTopOf="@+id/textoUmbralTemperatura">
-
-        </TextView>
-
-
-
-        <ImageView
-            android:id="@+id/imageUpgrade"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-            app:layout_constraintBottom_toBottomOf="@+id/textoUmbralTemperatura"
-            app:layout_constraintStart_toStartOf="parent"
-            app:srcCompat="@drawable/ic_upgrade" />
-
-        <TextView
-            android:id="@+id/textModo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-            android:layout_marginTop="36dp"
-            android:fontFamily="@font/poetsenone"
-            android:text="AUTO"
-            android:textSize="20dp"
-
-            app:layout_constraintEnd_toStartOf="@+id/imageHeating"
-            app:layout_constraintHorizontal_bias="0.552"
-            app:layout_constraintStart_toEndOf="@+id/barraProgreso"
-            app:layout_constraintTop_toBottomOf="@+id/textoTemperatura" />
-
-        <ImageView
-            android:id="@+id/imageEstadoBroker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/bk_conectado" />
-
-        <ImageView
-            android:id="@+id/imageEstadoDispositivo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/imageEstadoBroker"
-            app:layout_constraintStart_toStartOf="@+id/imageEstadoBroker"
-            app:layout_constraintTop_toBottomOf="@+id/imageEstadoBroker"
-            app:srcCompat="@drawable/dispositivo_indisponible" />
-
-        <ImageButton
-            android:id="@+id/boton_menos_umbral"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toStartOf="@+id/textoUmbralTemperatura"
-            app:layout_constraintTop_toTopOf="@+id/boton_mas_umbral"
-            app:srcCompat="@drawable/icono_menos" />
-
-        <ImageButton
-            android:id="@+id/boton_mas_umbral"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-            app:layout_constraintBottom_toBottomOf="@+id/textoUmbralTemperatura"
-            app:layout_constraintStart_toEndOf="@+id/textGrado"
-            app:layout_constraintTop_toTopOf="@+id/textoUmbralTemperatura"
-            app:srcCompat="@drawable/icono_mas" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/panelProgresoPrograma"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/boton_menos_umbral">
+            android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/programa_desde"
+                android:id="@+id/textConsolaMensajes"
+                style="@style/fuentes_datos"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:fontFamily="@font/poetsenone"
-                android:text="10:00"
+                android:layout_height="wrap_content"
+                android:text="TextView"
                 android:textSize="20dp"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <ProgressBar
-                android:id="@+id/progreso_programa"
-                style="?android:attr/progressBarStyleHorizontal"
-                android:layout_width="300dp"
-                android:layout_height="match_parent"
-                app:layout_constraintBottom_toBottomOf="@+id/programa_desde"
-                app:layout_constraintEnd_toStartOf="@+id/programa_hasta"
-                app:layout_constraintStart_toEndOf="@+id/programa_desde"
-                app:layout_constraintTop_toTopOf="parent" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/panelTermostato"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:background="@drawable/fondo_termostato"
+                app:layout_constraintTop_toBottomOf="@+id/textConsolaMensajes"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp">
+
+                <ProgressBar
+                    android:id="@+id/barraProgreso"
+                    style="@style/CustomProgressBar"
+                    android:indeterminateDrawable="@drawable/estilo_progress_bar"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/imageEstadoBroker"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/bk_conectado"
+                    android:layout_marginEnd="5dp"/>
+
+                <ImageView
+                    android:id="@+id/imageEstadoDispositivo"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/imageEstadoBroker"
+                    app:layout_constraintEnd_toStartOf="@+id/imageEstadoBroker"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/dispositivo_indisponible" />
+
+                <ImageView
+                    android:id="@+id/imageTermometro"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/textoTemperatura"
+                    app:layout_constraintEnd_toStartOf="@+id/textoTemperatura"
+                    app:layout_constraintTop_toTopOf="@+id/textoTemperatura"
+                    app:srcCompat="@drawable/ic_temperatura" />
+
+                <TextView
+                    android:id="@+id/textoTemperatura"
+                    style="@style/fuentes_datos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="25.4"
+                    android:textSize="60dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.411"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.322" />
+
+                <TextView
+                    android:id="@+id/textUnidadTemperatura"
+                    style="@style/fuentes_datos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ºC"
+                    android:textSize="60dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/textoTemperatura"
+                    app:layout_constraintStart_toEndOf="@+id/textoTemperatura"
+                    app:layout_constraintTop_toTopOf="@+id/textoTemperatura">
+
+                </TextView>
+
+                <ImageView
+                    android:id="@+id/imageHeating"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/textUnidadTemperatura"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/textUnidadTemperatura"
+                    app:layout_constraintTop_toTopOf="@+id/textUnidadTemperatura"
+                    app:srcCompat="@drawable/heating_on" />
+
+                <TextView
+                    android:id="@+id/textoUmbralTemperatura"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="40dp"
+                    android:layout_marginTop="44dp"
+                    style="@style/fuentes_datos"
+                    android:text="21.5"
+                    android:textSize="30dp"
+                    app:layout_constraintStart_toEndOf="@+id/imageTermometro"
+                    app:layout_constraintTop_toBottomOf="@+id/textoTemperatura" />
+
+                <TextView
+                    android:id="@+id/textUnidadUmbral"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poetsenone"
+                    android:text=" ºC"
+                    android:textSize="30dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/textoUmbralTemperatura"
+                    app:layout_constraintStart_toEndOf="@+id/textoUmbralTemperatura"
+                    app:layout_constraintTop_toTopOf="@+id/textoUmbralTemperatura">
+
+                </TextView>
+
+                <ImageButton
+                    android:id="@+id/boton_menos_umbral"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/textoUmbralTemperatura"
+                    app:layout_constraintEnd_toStartOf="@+id/textoUmbralTemperatura"
+                    app:layout_constraintTop_toTopOf="@+id/textoUmbralTemperatura"
+                    app:layout_constraintVertical_bias="0.521"
+                    app:srcCompat="@drawable/ic_down" />
+
+                <ImageButton
+                    android:id="@+id/boton_mas_umbral"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/textoUmbralTemperatura"
+                    app:layout_constraintStart_toEndOf="@+id/textUnidadUmbral"
+                    app:layout_constraintTop_toTopOf="@+id/textoUmbralTemperatura"
+                    app:srcCompat="@drawable/ic_up" />
+
+
+                <ImageView
+                    android:id="@+id/imageUpgrade"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="4dp"
+                    app:layout_constraintEnd_toStartOf="@+id/imageEstadoDispositivo"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_upgrade" />
+
+                <TextView
+                    android:id="@+id/textModo"
+                    style="@style/fuentes_datos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="AUTO"
+                    android:textColor="#172E49"
+                    android:textSize="20dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/imageUpgrade"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/imageUpgrade" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/panelProgresoPrograma"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/boton_menos_umbral"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="20dp">
+
+                    <TextView
+                        android:id="@+id/programa_desde"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        style="@style/fuentes_datos"
+                        android:text="10:00"
+                        android:textSize="20dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ProgressBar
+                        android:id="@+id/progreso_programa"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="250dp"
+                        android:layout_height="20dp"
+
+                        app:layout_constraintBottom_toBottomOf="@+id/programa_desde"
+                        app:layout_constraintEnd_toStartOf="@+id/programa_hasta"
+                        app:layout_constraintStart_toEndOf="@+id/programa_desde"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:background="@drawable/fondo_progress_bar"
+                        android:progressDrawable="@drawable/textura_progress_bar"
+                        />
+
+                    <TextView
+                        android:id="@+id/programa_hasta"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        style="@style/fuentes_datos"
+                        android:text="22:00"
+                        android:textSize="20dp"
+                        app:layout_constraintBottom_toBottomOf="@+id/progreso_programa"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/progreso_programa" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <ListView
+                android:id="@+id/listViewSchedule"
+                android:layout_width="match_parent"
+                android:layout_height="268dp"
+                android:clickable="false"
+                android:descendantFocusability="blocksDescendants"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                app:layout_constraintTop_toBottomOf="@+id/textListaProgramas">
+
+            </ListView>
+
+            <com.google.android.material.bottomnavigation.BottomNavigationView
+                android:id="@+id/bottommenuTermostato"
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:background="#cccccc"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:menu="@menu/menu_termostato" />
 
             <TextView
-                android:id="@+id/programa_hasta"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:fontFamily="@font/poetsenone"
-                android:text="22:00"
-                android:textSize="20dp"
-                app:layout_constraintBottom_toBottomOf="@+id/progreso_programa"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/progreso_programa" />
-
+                android:id="@+id/textListaProgramas"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                style="@style/fuentes_datos"
+                android:text="Lista de programas"
+                android:textAlignment="center"
+                android:textSize="15dp"
+                app:layout_constraintTop_toBottomOf="@+id/panelTermostato" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 
 
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <TextView
-        android:id="@+id/textListaProgramas"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/poetsenone"
-        android:text="Lista de programas"
-        android:textAlignment="center"
-        android:textSize="20dp"
-        app:layout_constraintTop_toBottomOf="@+id/bottommenuTermostato" />
-
-
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipeSchedule"
-        android:layout_width="match_parent"
-        android:layout_height="407dp"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-
-        app:layout_constraintTop_toBottomOf="@+id/textListaProgramas">
-
-        <ListView
-            android:id="@+id/listViewSchedule"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clickable="false"
-            android:descendantFocusability="blocksDescendants"
-            android:focusable="false"
-            android:focusableInTouchMode="false">
-
-
-        </ListView>
-
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottommenuTermostato"
-        android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:background="#cccccc"
-        app:layout_constraintTop_toBottomOf="@+id/panelTermostato"
-        app:menu="@menu/menu_termostato" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -103,6 +103,8 @@ public class dispositivoIotTermostato extends dispositivoIot implements Serializ
 
     }
 
+
+
     public void setUmbralTemperaturaDefecto(double umbralTemperaturaDefecto) {
         this.umbralTemperaturaDefecto = umbralTemperaturaDefecto;
     }

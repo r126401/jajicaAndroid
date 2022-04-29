@@ -689,7 +689,7 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
             }
 
             @Override
-            public void modificarUmbralTemperatura(String topic, String texto, String idDispositivo) {
+            public void modificarUmbralTemperatura(String topic, String texto, double umbral) {
 
             }
             @Override
@@ -702,8 +702,49 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
             }
         });
 
+        cnx.setOnProcesarEspontaneosTermostato(new conexionMqtt.OnProcesarEspontaneosTermostato() {
+            @Override
+            public void arranqueAplicacionTermostato(String topic, String texto, dispositivoIotTermostato dispoisitivo) {
+                actualizarEstadoTermometroTermostato(dispoisitivo);
 
+            }
 
+            @Override
+            public void cambioProgramaTermostato(String topic, String texto, dispositivoIotTermostato dispositivo) {
+                actualizarEstadoTermometroTermostato(dispositivo);
+            }
+
+            @Override
+            public void atuacionReleLocalTermostato(String topic, String texto, String idDisositivo, ESTADO_RELE estadoRele) {
+
+            }
+
+            @Override
+            public void actuacionReleRemotoTermostato(String topic, String texto, String idDispositivo, ESTADO_RELE estadoRele) {
+
+            }
+
+            @Override
+            public void upgradeFirmwareTermostato(String topic, String texto, String idDispositivo, OtaVersion otaVersion) {
+
+            }
+
+            @Override
+            public void cambioTemperaturaTermostato(String topic, String texto, dispositivoIotTermostato dispositivo) {
+                actualizarEstadoTermometroTermostato(dispositivo);
+            }
+
+            @Override
+            public void temporizadorCumplido(String topic, String texto, dispositivoIotTermostato dispositivo) {
+                actualizarEstadoTermometroTermostato(dispositivo);
+
+            }
+
+            @Override
+            public void cambioUmbralTemperatura(String topic, String texto, dispositivoIotTermostato dispositivo) {
+
+            }
+        });
 
         cnx.setOnProcesarMensajesTermometro(new conexionMqtt.OnProcesarMensajesTermometro() {
             @Override
