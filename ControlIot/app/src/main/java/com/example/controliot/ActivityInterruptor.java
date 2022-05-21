@@ -38,13 +38,14 @@ import org.json.JSONObject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Formatter;
 
-public class ActivityInterruptor extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener, Serializable {
+public class ActivityInterruptor extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener, View.OnClickListener, Serializable {
 
     private ImageView imageUpgrade;
     private ImageView imageBotonOnOff;
     private ImageView imageEstadoBroker;
-    private SwipeRefreshLayout swipeSchedule;
     private ListView listViewSchedule;
     private ImageView imageEstadoDispositivo;
     private BottomNavigationView bottommenuInterruptor;
@@ -62,6 +63,9 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
     private final String topicRespuestaOta = "newVersionOtaIotOnOff";
     private boolean versionComprobada = false;
     private boolean nuevaVersionDisponible = false;
+    private TextView textoProgramaDesde;
+    private ProgressBar progresoPrograma;
+    private TextView textoProgramaHasta;
 
 
 
@@ -69,13 +73,14 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
 
     private void registrarControles() {
 
+        textoProgramaDesde = (TextView) findViewById(R.id.programa_desde);
+        textoProgramaHasta = (TextView) findViewById(R.id.programa_hasta);
+        progresoPrograma = (ProgressBar) findViewById(R.id.progreso_programa);
         imageEstadoDispositivo = (ImageView) findViewById(R.id.imageEstadoDispositivo);
         imageBotonOnOff = (ImageView) findViewById(R.id.imageHeating);
         imageBotonOnOff.setImageResource(R.drawable.switch_indeterminado);
         imageBotonOnOff.setOnClickListener(this);
         imageEstadoBroker = (ImageView) findViewById(R.id.imageEstadoBroker);
-        swipeSchedule = (SwipeRefreshLayout) findViewById(R.id.swipeSchedule);
-        swipeSchedule.setOnRefreshListener(this);
         listViewSchedule = (ListView) findViewById(R.id.listViewSchedule);
         bottommenuInterruptor = (BottomNavigationView) findViewById(R.id.bottommenuInterruptor);
         bottommenuInterruptor.setOnNavigationItemSelectedListener(this);
@@ -243,6 +248,10 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
         dispositivoDisponible();
         this.dispositivo = dispositivo;
         actualizarEstadoRele();
+        if (dispositivo.getProgramas() != null) {
+            actualizarProgramaEnCurso(dispositivo.getProgramaActivo());
+        }
+
 
         if (versionComprobada == false) {
             consultarNuevaVersionOta();
@@ -580,6 +589,7 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
         programasInterruptorAdapter = new listaProgramasInterruptorAdapter(this, R.layout.vista_programas_interruptor, dispositivo.getProgramasOnOff(), cnx, dispositivo);
         listViewSchedule.setAdapter(programasInterruptorAdapter);
         programasInterruptorAdapter.notifyDataSetChanged();
+        actualizarProgramaEnCurso(dispositivo.getProgramaActivo());
 
     }
 
@@ -599,11 +609,7 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
     }
 
 
-    @Override
-    public void onRefresh() {
-        refrescarDispositivo();
-        swipeSchedule.setRefreshing(false);
-    }
+
 
     private void actualizarProgramacion() {
         envioComando(dialogo.escribirComandoConsultarProgramacion());
@@ -693,7 +699,7 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
 
         ProgramaDispositivoIotOnOff programa;
 
-        Intent lanzador = new Intent(ActivityInterruptor.this, ActivityProgramaInterruptor.class);
+        Intent lanzador = new Intent(ActivityInterruptor.this, ActivityProgramador.class);
         lanzador.putExtra(TEXTOS_DIALOGO_IOT.TIPO_DISPOSITIVO.getValorTextoJson(), TIPO_DISPOSITIVO_IOT.INTERRUPTOR);
         //lanzador.putExtra(TEXTOS_DIALOGO_IOT.ID_DISPOSITIVO.getValorTextoJson(), dispositivo.idDispositivo);
         lanzador.putExtra(TEXTOS_DIALOGO_IOT.COMANDO.getValorTextoJson(), idComando);
@@ -803,6 +809,105 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
             imageBotonOnOff.setImageResource(R.drawable.switch_off);
             imageBotonOnOff.setTag(false);
         }
+
+    }
+
+    private void actualizarProgramaEnCurso(String idPrograma) {
+        int hora;
+        int minuto;
+        int i;
+        int duracion;
+        String hasta;
+        ProgramaDispositivoIotOnOff programa;
+        i = dispositivo.buscarPrograma(idPrograma);
+        programa = dispositivo.getProgramasOnOff().get(i);
+        hasta = duracionAfecha(formatearHora(programa.getHora(), programa.getMinuto()), programa.getDuracion());
+        hora = programa.getHora();
+        minuto = programa.getMinuto();
+        textoProgramaDesde.setText(formatearHora(hora, minuto));
+        textoProgramaHasta.setText(hasta);
+        duracion = restarHoras(textoProgramaDesde.getText().toString(), textoProgramaHasta.getText().toString());
+        if (duracion >= programa.getDuracion()) {
+            dispositivo.actualizarProgramaActivo("");
+
+
+            programasInterruptorAdapter.notifyDataSetChanged();
+
+
+        } else {
+            int lleva = fechaADuracion(textoProgramaDesde.getText().toString());
+
+            Log.i(TAG, "duracion es " + lleva);
+            int progreso = ((int) lleva * 100) / programa.getDuracion();
+            progresoPrograma.setProgress(progreso);
+        }
+
+    }
+
+    private String duracionAfecha(String inicio, int duracion) {
+
+        Calendar fecha;
+        int hora;
+        int minuto;
+        String horaFinal;
+
+        fecha = Calendar.getInstance();
+        hora = Integer.valueOf(inicio.substring(0,2));
+        minuto = Integer.valueOf(inicio.substring(3,5));
+        fecha.set(fecha.get(Calendar.YEAR), fecha.get(Calendar.MONTH), fecha.get(Calendar.DAY_OF_MONTH), hora, minuto);
+        fecha.setTimeInMillis(fecha.getTimeInMillis() + duracion * 1000);
+
+        horaFinal = formatearHora(fecha.get(Calendar.HOUR_OF_DAY), fecha.get(Calendar.MINUTE));
+        return horaFinal;
+
+
+    }
+
+    private String formatearHora(int hora, int minuto) {
+
+        Formatter formato;
+        formato = new Formatter();
+        return formato.format("%02d:%02d", hora, minuto).toString();
+
+    }
+
+    private int restarHoras(String hora1, String hora2) {
+
+        Calendar fecha1;
+        Calendar fecha2;
+        int hora;
+        int minuto;
+
+
+        hora = Integer.valueOf(hora1.substring(0,2));
+        minuto = Integer.valueOf(hora1.substring(3,5));
+        fecha1 = Calendar.getInstance();
+        fecha2 = Calendar.getInstance();
+        fecha1.set(fecha1.get(Calendar.YEAR), fecha1.get(Calendar.MONTH), fecha1.get(Calendar.DAY_OF_MONTH), Integer.valueOf(hora), Integer.valueOf(minuto));
+        hora = Integer.valueOf(hora2.substring(0,2));
+        minuto = Integer.valueOf(hora2.substring(3,5));
+        //fecha2.set(fecha1.get(Calendar.YEAR), fecha1.get(Calendar.MONTH), fecha1.get(Calendar.DAY_OF_MONTH), Integer.valueOf(hora), Integer.valueOf(minuto));
+        return (int) ((fecha2.getTime().getTime() - fecha1.getTime().getTime())/1000);
+    }
+
+    private int fechaADuracion(String inicio) {
+
+        Calendar fechaInicio, fechaFin;
+        int hora;
+        int minuto;
+        long milisFin, milisInicio;
+        hora = Integer.valueOf(inicio.substring(0,2));
+        minuto = Integer.valueOf(inicio.substring(3,5));
+        fechaFin = Calendar.getInstance();
+        fechaInicio = Calendar.getInstance();
+        fechaInicio.set(fechaInicio.get(Calendar.YEAR), fechaInicio.get(Calendar.MONTH), fechaInicio.get(Calendar.DAY_OF_MONTH), hora, minuto);
+        milisInicio = fechaInicio.getTimeInMillis()/1000;
+        milisFin = fechaFin.getTimeInMillis()/1000;
+
+
+        return (int) (milisFin - milisInicio);
+
+
 
     }
 

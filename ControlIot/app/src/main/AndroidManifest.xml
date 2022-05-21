@@ -28,7 +28,7 @@
             android:name=".ActivityProgramaInterruptor"
             android:exported="false" />
         <activity
-            android:name=".ActivityProgramaTermostato"
+            android:name=".ActivityProgramador"
             android:exported="false" />
         <activity
             android:name=".ActivityInterruptor"

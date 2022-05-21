@@ -11,19 +11,20 @@
         android:id="@+id/imageHeating"
         android:layout_width="43dp"
         android:layout_height="39dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginStart="80dp"
+        app:layout_constraintBottom_toBottomOf="@+id/textHoraPrograma"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/switch_on"/>
+        app:layout_constraintTop_toTopOf="@+id/textHoraPrograma"
+        app:srcCompat="@drawable/switch_on" />
 
     <ImageView
         android:id="@+id/imageBorrarPrograma"
         android:layout_width="32dp"
         android:layout_height="32dp"
-        android:layout_marginEnd="12dp"
         android:focusable="false"
-        app:layout_constraintEnd_toStartOf="@+id/switchProgramaActivo"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/textoUmbral"
+        app:layout_constraintEnd_toStartOf="@+id/imageProgramaActivado"
+        app:layout_constraintTop_toTopOf="@+id/textoUmbral"
         app:srcCompat="@drawable/ic_delete" />
 
     <androidx.appcompat.widget.SwitchCompat
@@ -33,36 +34,39 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:checked="true"
+        android:focusable="false"
         android:textOff="INH"
         android:textOn="ACT"
         android:thumb="@drawable/thumb"
+        app:layout_constraintBottom_toBottomOf="@+id/imageHeating"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/imageHeating"
         app:showText="true"
-        app:track="@drawable/track"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:focusable="false">
+        app:track="@drawable/track">
 
     </androidx.appcompat.widget.SwitchCompat>
 
+
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/panelDiasSemana"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/imageHeating"
-        android:id="@+id/panelDiasSemana">
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        app:layout_constraintBottom_toBottomOf="parent">
 
 
         <TextView
             android:id="@+id/textoLunes"
             style="@style/diasDeLaSemanaProgramadorReducido"
-            android:layout_marginStart="68dp"
+            android:layout_marginStart="36dp"
             android:focusable="false"
             android:focusableInTouchMode="false"
             android:text="L"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="parent">
+            app:layout_constraintTop_toBottomOf="parent"
+            app:layout_constraintVertical_bias="1.0">
 
         </TextView>
 
@@ -139,52 +143,52 @@
         </TextView>
 
 
-
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
     <TextView
         android:id="@+id/textHoraPrograma"
+        style="@style/fuentes_datos"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:fontFamily="@font/poetsenone"
+        android:layout_marginStart="72dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
         android:text="12:00"
         android:textSize="20dp"
-        app:layout_constraintEnd_toStartOf="@+id/switchProgramaActivo"
-        app:layout_constraintHorizontal_bias="0.103"
-        app:layout_constraintStart_toEndOf="@+id/imageHeating"
-        app:layout_constraintTop_toTopOf="parent"/>
-
+        app:layout_constraintBottom_toTopOf="@+id/panelDiasSemana"
+        app:layout_constraintStart_toEndOf="@+id/switchProgramaActivo"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
 
     <TextView
         android:id="@+id/textoUmbral"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/poetsenone"
+        style="@style/fuentes_datos"
         android:text="12:00"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@+id/textTemperatura"
-        app:layout_constraintStart_toEndOf="@+id/textTemperatura"/>
-
+        app:layout_constraintStart_toEndOf="@+id/textTemperatura"
+        app:layout_constraintTop_toTopOf="@+id/textTemperatura" />
 
 
     <TextView
         android:id="@+id/textTemperatura"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/poetsenone"
+        style="@style/fuentes_datos"
         android:text=" hasta "
         android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="@+id/textHoraPrograma"
-        app:layout_constraintStart_toEndOf="@+id/textHoraPrograma"/>
+        app:layout_constraintStart_toEndOf="@+id/textHoraPrograma"
+        app:layout_constraintTop_toTopOf="@+id/textHoraPrograma" />
 
     <ImageView
         android:id="@+id/imageProgramaActivado"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/switchProgramaActivo"
+        app:layout_constraintBottom_toBottomOf="@+id/imageBorrarPrograma"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/led"/>
+        app:layout_constraintTop_toTopOf="@+id/imageBorrarPrograma"
+        app:srcCompat="@drawable/led" />
 </androidx.constraintlayout.widget.ConstraintLayout>

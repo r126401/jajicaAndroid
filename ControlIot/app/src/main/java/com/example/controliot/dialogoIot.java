@@ -627,7 +627,7 @@ public class dialogoIot implements Serializable {
             devuelto = objeto.getJSONObject(parte.getValorTextoJson());
         } catch (JSONException e) {
             //e.printStackTrace();
-            Log.e(getClass().toString(), "No se encuentra la parte del json: " + parte.toString());
+            //Log.w(getClass().toString(), "No se encuentra la parte del json: " + parte.toString());
         }
 
         return devuelto;

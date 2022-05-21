@@ -7,55 +7,66 @@
     tools:context=".ActivityProgramaInterruptor">
 
 
-    <TextView
-        android:id="@+id/textRepetir"
-        android:layout_width="301dp"
-        android:layout_height="32dp"
-        android:fontFamily="@font/poetsenone"
-        android:text="Repetir"
-        android:textSize="20dp"
-        app:layout_constraintBottom_toBottomOf="@+id/imageRepetir"
-        app:layout_constraintStart_toEndOf="@+id/imageRepetir"
-        app:layout_constraintTop_toTopOf="@+id/imageRepetir"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <ImageView
-        android:id="@+id/imageRepetir"
-        android:layout_width="wrap_content"
-        android:layout_height="32sp"
-        android:layout_gravity="center"
-        android:layout_marginTop="36dp"
-        android:src="@drawable/ic_repetir"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-    </ImageView>
-
-    <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/switchRepetir"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:checked="true"
-        android:textOff="NO"
-        android:textOn="SI"
-        android:thumb="@drawable/thumb"
-        app:showText="true"
-        app:track="@drawable/track"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/textRepetir"
-        app:layout_constraintTop_toTopOf="@+id/imageRepetir">
-
-    </androidx.appcompat.widget.SwitchCompat>
-
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/panelRepetir"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="20dp">
+
+
+
+        <ImageView
+            android:id="@+id/imageRepetir"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:src="@drawable/ic_repetir"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </ImageView>
+
+        <TextView
+            android:id="@+id/textRepetir"
+            android:layout_width="301dp"
+            android:layout_height="32dp"
+            style="@style/fuentes_datos"
+            android:text="Dias de la semana:"
+            android:textSize="20dp"
+            app:layout_constraintBottom_toBottomOf="@+id/imageRepetir"
+            app:layout_constraintStart_toEndOf="@+id/imageRepetir"
+            app:layout_constraintTop_toTopOf="@+id/imageRepetir" />
+
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/switchRepetir"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:textOff="NO"
+            android:textOn="SI"
+            android:thumb="@drawable/thumb"
+            app:layout_constraintBottom_toBottomOf="@+id/imageRepetir"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@+id/textRepetir"
+            app:layout_constraintTop_toTopOf="@+id/imageRepetir"
+            app:showText="true"
+            app:track="@drawable/track"
+            android:visibility="invisible">
+
+        </androidx.appcompat.widget.SwitchCompat>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/diaSemana"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
 
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageRepetir">
+        app:layout_constraintTop_toBottomOf="@+id/panelRepetir">
 
         <TextView
             android:id="@+id/textoLunes"
@@ -108,12 +119,13 @@
         <TextView
             android:id="@+id/textoViernes"
             style="@style/diasDeLaSemanaProgramador"
-
+            android:layout_marginStart="10sp"
             android:focusable="false"
             android:focusableInTouchMode="false"
             android:text="V"
-            app:layout_constraintStart_toStartOf="@+id/textoLunes"
-            app:layout_constraintTop_toTopOf="@+id/textoSabado">
+            app:layout_constraintBottom_toBottomOf="@+id/textoJueves"
+            app:layout_constraintStart_toEndOf="@+id/textoJueves"
+            app:layout_constraintTop_toTopOf="@+id/textoJueves">
 
         </TextView>
 
@@ -121,12 +133,12 @@
             android:id="@+id/textoSabado"
             style="@style/diasDeLaSemanaProgramador"
             android:layout_marginStart="10sp"
-            android:layout_marginTop="20dp"
             android:focusable="false"
             android:focusableInTouchMode="false"
             android:text="S"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/textoViernes"
-            app:layout_constraintTop_toBottomOf="@+id/textoLunes">
+            app:layout_constraintTop_toTopOf="@+id/textoViernes">
 
         </TextView>
 
@@ -148,50 +160,82 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-    <TextView
-        android:id="@+id/textHoraPrograma"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/panelDesde"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/poetsenone"
-        android:inputType="time"
-        android:text="08:25"
-        android:textAlignment="center"
-        android:textSize="40dp"
-        app:layout_constraintBottom_toTopOf="@+id/panelDuracion"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/panelRepetir"
-        app:layout_constraintTop_toBottomOf="@+id/textRepetir">
+        app:layout_constraintTop_toBottomOf="@+id/diaSemana"
+        android:layout_marginTop="20dp">
 
-    </TextView>
 
-    <TextView
-        android:id="@+id/textFecha"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/poetsenone"
-        android:inputType="date"
-        android:text="10/12/2022"
-        android:textAlignment="center"
-        android:textSize="40dp"
-        app:layout_constraintBottom_toTopOf="@+id/panelDuracion"
-        app:layout_constraintEnd_toStartOf="@+id/textHoraPrograma"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textRepetir">
+        <ImageView
+            android:id="@+id/imageDesde"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icono_duracion"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-    </TextView>
+        </ImageView>
+
+        <TextView
+            android:id="@+id/textDesde"
+            style="@style/fuentes_datos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Desde"
+            android:textSize="30dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/imageDesde"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginStart="80dp"/>
+
+        <TextView
+            android:id="@+id/textFecha"
+            style="@style/fuentes_datos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="date"
+            android:text="10/12/2022"
+            android:textAlignment="center"
+            android:textSize="5dp"
+            app:layout_constraintBottom_toBottomOf="@+id/imageDesde"
+            app:layout_constraintStart_toEndOf="@+id/imageDesde"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.761">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/textHoraPrograma"
+            style="@style/fuentes_datos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="30dp"
+            android:inputType="time"
+            android:text="08:25"
+            android:textAlignment="center"
+            android:textSize="40dp"
+            app:layout_constraintBottom_toBottomOf="@+id/textDesde"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/textDesde">
+
+        </TextView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/panelDuracion"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@+id/dividirRepetir"
-        tools:layout_editor_absoluteX="0dp">
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
+        android:layout_marginTop="20dp">
 
 
         <ImageView
             android:id="@+id/imageIconoTemperatura"
-            android:layout_width="wrap_content"
+            android:layout_width="46dp"
             android:layout_height="46sp"
             android:layout_marginStart="4dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -205,7 +249,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:fontFamily="@font/poetsenone"
+            style="@style/fuentes_datos"
             android:inputType="number"
             android:text="Temperatura"
             android:textSize="20dp"
@@ -243,8 +287,7 @@
             android:id="@+id/textUnidadEnteroTemperatura"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
-            android:fontFamily="@font/poetsenone"
+            style="@style/fuentes_datos"
             android:text=" ºC"
             android:textAlignment="center"
             android:textSize="20dp"
@@ -262,7 +305,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:fontFamily="@font/poetsenone"
+            style="@style/fuentes_datos"
             android:inputType="number"
             android:text="25.5"
             android:textAlignment="center"
@@ -276,22 +319,56 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <View
-        android:id="@+id/dividirRepetir"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="8dp"
-        android:background="?android:attr/listDivider"
-        app:layout_constraintTop_toBottomOf="@+id/panelRepetir"
-        tools:layout_editor_absoluteX="0dp" />
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/panelDesde"
+        android:layout_marginTop="20dp">
 
-    <View
-        android:id="@+id/dividerDuracion"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="?android:attr/listDivider"
-        app:layout_constraintTop_toBottomOf="@+id/panelDuracion"
-        tools:layout_editor_absoluteX="0dp" />
+        <ImageView
+            android:id="@+id/imageHasta"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icono_duracion"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0">
+
+        </ImageView>
+
+        <TextView
+            android:id="@+id/textHasta"
+            style="@style/fuentes_datos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="80dp"
+            android:text="hasta"
+            android:textSize="30dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/imageHasta"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/textoHoraHasta"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="30dp"
+            style="@style/fuentes_datos"
+            android:inputType="datetime"
+            android:text="12:45"
+            android:textSize="40dp"
+            app:layout_constraintBottom_toBottomOf="@+id/textHasta"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/textHasta">
+
+        </TextView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     <Button
         android:id="@+id/botonAceptar"
@@ -302,68 +379,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageOnOff" />
+        app:layout_constraintTop_toBottomOf="@+id/panelDuracion"
+        android:background="@drawable/texto_redondeado"/>
 
-
-    <ImageView
-        android:id="@+id/imageOnOff"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
-        app:srcCompat="@drawable/switch_on" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/panelDuracion">
-
-        <ImageView
-            android:id="@+id/imageHasta"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/icono_duracion"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-        </ImageView>
-
-        <TextView
-            android:id="@+id/textHasta"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="84dp"
-            android:fontFamily="@font/poetsenone"
-            android:text="hasta"
-            android:textSize="20dp"
-            app:layout_constraintBottom_toBottomOf="@+id/imageHasta"
-            app:layout_constraintStart_toEndOf="@+id/imageHasta"
-            app:layout_constraintTop_toTopOf="@+id/imageHasta">
-
-        </TextView>
-
-        <TextView
-            android:id="@+id/textoHoraHasta"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/poetsenone"
-            android:inputType="datetime"
-            android:text="12:45"
-            android:textSize="20dp"
-            app:layout_constraintBottom_toBottomOf="@+id/textHasta"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.565"
-            app:layout_constraintStart_toEndOf="@+id/textHasta"
-            app:layout_constraintTop_toTopOf="@+id/textHasta"
-            app:layout_constraintVertical_bias="0.0">
-
-        </TextView>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -117,8 +117,8 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
         imageHeating.setImageResource(R.drawable.switch_indeterminado);
         imageHeating.setOnClickListener(this);
         imageEstadoBroker = (ImageView) findViewById(R.id.imageEstadoBroker);
-        swipeSchedule = (SwipeRefreshLayout) findViewById(R.id.swipeSchedule);
-        swipeSchedule.setOnRefreshListener(this);
+        //swipeSchedule = (SwipeRefreshLayout) findViewById(R.id.swipeSchedule);
+        //swipeSchedule.setOnRefreshListener(this);
         listViewSchedule = (ListView) findViewById(R.id.listViewSchedule);
         bottommenuTermostato = (BottomNavigationView) findViewById(R.id.bottommenuTermostato);
         bottommenuTermostato.setOnNavigationItemSelectedListener(this);
@@ -159,6 +159,7 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
         envioComando(dialogo.comandoEstadoDispositivo());
         actualizarProgramacion();
     }
+
 
     private void notificarBrokerDesconectado() {
         pintarDispositivoIndisponible();
@@ -743,7 +744,7 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
     @Override
     public void onRefresh() {
         refrescarDispositivo();
-        swipeSchedule.setRefreshing(false);
+        //swipeSchedule.setRefreshing(false);
     }
 
     private void actualizarProgramacion() {
@@ -866,7 +867,7 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
 
         ProgramaDispositivoIotTermostato programa;
 
-        Intent lanzador = new Intent(ActivityTermostato.this, ActivityProgramaTermostato.class);
+        Intent lanzador = new Intent(ActivityTermostato.this, ActivityProgramador.class);
         lanzador.putExtra(TEXTOS_DIALOGO_IOT.TIPO_DISPOSITIVO.getValorTextoJson(), TIPO_DISPOSITIVO_IOT.CRONOTERMOSTATO);
         //lanzador.putExtra(TEXTOS_DIALOGO_IOT.ID_DISPOSITIVO.getValorTextoJson(), dispositivo.idDispositivo);
         lanzador.putExtra(TEXTOS_DIALOGO_IOT.COMANDO.getValorTextoJson(), idComando);

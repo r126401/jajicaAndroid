@@ -1230,6 +1230,7 @@ public class conexionMqtt implements Serializable, Parcelable {
         dispIotOnOff.setEstadoConexion(ESTADO_CONEXION_IOT.CONECTADO);
         dispIotOnOff.setEstadoDispositivo(dialogo.getEstadoDispositivo(texto));
         dispIotOnOff.setVersionOta(dialogo.getOtaVersion(texto));
+        dispIotOnOff.setProgramaActivo(dialogo.getProgramaActivo(texto));
 
 
         return dispIotOnOff;
