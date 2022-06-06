@@ -81,12 +81,14 @@
             <com.google.android.material.bottomnavigation.BottomNavigationView
                 android:id="@+id/navigationMenuPrincipal"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:layout_marginTop="1dp"
+                android:layout_height="64dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:menu="@menu/menu_principal" />
+                app:menu="@menu/menu_principal"
+                app:itemBackground="@color/design_default_color_primary"
+                app:itemIconTint="@color/white"
+                app:itemTextColor="@color/white"/>
 
 
 

@@ -763,7 +763,7 @@ public class ActivityProgramaInterruptor extends AppCompatActivity implements Ti
     private void actualizarDiasSemana(TextView idTexto, boolean activo) {
 
         if (activo == true) {
-            idTexto.setBackgroundResource(R.drawable.texto_redondeado);
+            idTexto.setBackgroundResource(R.drawable.redondeado);
             idTexto.setTag((boolean) true);
         } else {
             idTexto.setBackgroundResource(R.drawable.texto_redondeado_desactivado);

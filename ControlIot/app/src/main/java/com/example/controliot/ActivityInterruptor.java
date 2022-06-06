@@ -7,6 +7,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Context;
@@ -66,6 +67,7 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
     private TextView textoProgramaDesde;
     private ProgressBar progresoPrograma;
     private TextView textoProgramaHasta;
+    private ConstraintLayout panelProgresoPrograma;
 
 
 
@@ -73,6 +75,7 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
 
     private void registrarControles() {
 
+        panelProgresoPrograma = (ConstraintLayout) findViewById(R.id.panelProgresoPrograma);
         textoProgramaDesde = (TextView) findViewById(R.id.programa_desde);
         textoProgramaHasta = (TextView) findViewById(R.id.programa_hasta);
         progresoPrograma = (ProgressBar) findViewById(R.id.progreso_programa);
@@ -131,6 +134,55 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
         barraProgreso.setVisibility(View.VISIBLE);
     }
 
+    private void crearConexion() {
+        cnx = new conexionMqtt(getApplicationContext(), dialogo);
+        cnx.setOnRecibirMensajes(new conexionMqtt.OnRecibirMensaje() {
+            @Override
+            public void recibirMensaje() {
+                pararAnimacionComando();
+                dispositivoDisponible();
+            }
+        });
+        cnx.setOnConexionMqtt(new conexionMqtt.OnConexionMqtt() {
+            @Override
+            public void conexionEstablecida(boolean reconnect, String serverURI) {
+                dialogo.setConexionMqtt(cnx);
+                notificarBrokerConectado();
+
+            }
+
+            @Override
+            public void conexionPerdida(Throwable cause) {
+                notificarBrokerReintentoConexion();
+
+            }
+
+            @Override
+            public void mensajeRecibido(String topic, MqttMessage message) {
+                Log.i(TAG, "mensaje recibido");
+
+            }
+
+            @Override
+            public void entregaCompletada(IMqttDeliveryToken token) {
+
+            }
+
+            @Override
+            public void notificacionIntermediaReintento(long intervalo) {
+
+            }
+
+            @Override
+            public void finTemporizacionReintento(long temporizador) {
+                notificarBrokerDesconectado();
+
+            }
+        });
+        imageEstadoBroker.setImageResource(R.drawable.bk_no_conectado);
+        cnx.conectarseAlBrokerConReintento(10000, 1000);
+
+    }
 
 
     private void ConectarAlBrokerMqtt() {
@@ -164,6 +216,8 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
         listaDispositivos.leerDispositivos(contexto);
         disp = listaDispositivos.getDispositivoPorId(idDispositivo);
         dispositivo = new dispositivoIotOnOff(disp);
+        crearConexion();
+        /*
         cnx = new conexionMqtt(getApplicationContext(), dialogo);
         cnx.setOnRecibirMensajes(new conexionMqtt.OnRecibirMensaje() {
             @Override
@@ -212,6 +266,8 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
         cnx.conectarseAlBrokerConReintento(10000, 1000);
 
 
+         */
+
 
 
 
@@ -243,14 +299,20 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
 
 
 
+
+
     public void actualizarInterruptor(dispositivoIotOnOff dispositivo) {
 
         dispositivoDisponible();
-        this.dispositivo = dispositivo;
-        actualizarEstadoRele();
-        if (dispositivo.getProgramas() != null) {
-            actualizarProgramaEnCurso(dispositivo.getProgramaActivo());
-        }
+
+        this.dispositivo.setEstadoRele(dispositivo.getEstadoRele());
+        this.dispositivo.setTipoDispositivo(dispositivo.getTipoDispositivo());
+        this.dispositivo.setVersionOta(dispositivo.getVersionOta());
+        this.dispositivo.setProgramaActivo(dispositivo.getProgramaActivo());
+        actualizarProgramaEnCurso(this.dispositivo.getProgramaActivo());
+        actualizarEstadoRele(dispositivo);
+        //actualizarProgramaEnCurso(dispositivo.getProgramaActivo());
+
 
 
         if (versionComprobada == false) {
@@ -396,7 +458,7 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
 
         cnx.setOnProcesarMensajesInterruptor(new conexionMqtt.OnProcesarMensajesInterruptor() {
             @Override
-            public void estadoAplicacion(String topic, String mensaje, dispositivoIotOnOff dispositivo) {
+            public void estadoInterruptor(String topic, String mensaje, dispositivoIotOnOff dispositivo) {
                 actualizarInterruptor(dispositivo);
 
             }
@@ -699,6 +761,7 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
 
         ProgramaDispositivoIotOnOff programa;
 
+
         Intent lanzador = new Intent(ActivityInterruptor.this, ActivityProgramador.class);
         lanzador.putExtra(TEXTOS_DIALOGO_IOT.TIPO_DISPOSITIVO.getValorTextoJson(), TIPO_DISPOSITIVO_IOT.INTERRUPTOR);
         //lanzador.putExtra(TEXTOS_DIALOGO_IOT.ID_DISPOSITIVO.getValorTextoJson(), dispositivo.idDispositivo);
@@ -706,8 +769,9 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
         if (idComando == COMANDO_IOT.MODIFICAR_PROGRAMACION) {
             programa = programasInterruptorAdapter.listaProgramas.get(posicion);
             lanzador.putExtra(TEXTOS_DIALOGO_IOT.ID_PROGRAMA.getValorTextoJson(), programa);
-        }
 
+        }
+        lanzador.putExtra(TEXTOS_DIALOGO_IOT.PROGRAMAS.getValorTextoJson(), dispositivo.getProgramasOnOff());
 
         lanzadorActivityProgramaInterruptor.launch(lanzador);
     }
@@ -728,13 +792,16 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
         idPrograma = dialogo.extraerDatoJsonString(textoRecibido, TEXTOS_DIALOGO_IOT.ID_PROGRAMA.getValorTextoJson());
         idProgramaActivo = dialogo.extraerDatoJsonString(textoRecibido, TEXTOS_DIALOGO_IOT.PROGRAMA_ACTIVO.getValorTextoJson());
         estadoPrograma = dialogo.extraerDatoJsonString(textoRecibido, TEXTOS_DIALOGO_IOT.ESTADO_PROGRAMACION.getValorTextoJson());
+
         estadoRele = dialogo.extraerDatoJsonInt(textoRecibido, TEXTOS_DIALOGO_IOT.ESTADO_RELE.getValorTextoJson());
+        /*
         if (estadoRele == 0) {
             dispositivo.setEstadoRele(ESTADO_RELE.OFF);
         } else {
             dispositivo.setEstadoRele(ESTADO_RELE.ON);
         }
-        actualizarEstadoRele();
+        actualizarEstadoRele(dispositivo);
+        */
         duracion = dialogo.extraerDatoJsonInt(textoRecibido, TEXTOS_DIALOGO_IOT.DURACION.getValorTextoJson());
         if(duracion == -1000) duracion = 0;
         dispositivo.modificarPrograma(idPrograma, idNuevoPrograma, estadoPrograma, String.valueOf(estadoRele), duracion );
@@ -799,7 +866,7 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
 
     }
 
-    private void actualizarEstadoRele() {
+    private void actualizarEstadoRele(dispositivoIotOnOff dispositivo) {
 
         if (dispositivo.getEstadoRele() == ESTADO_RELE.ON) {
             imageBotonOnOff.setImageResource(R.drawable.switch_on);
@@ -819,7 +886,18 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
         int duracion;
         String hasta;
         ProgramaDispositivoIotOnOff programa;
+
         i = dispositivo.buscarPrograma(idPrograma);
+        if ( i < 0 ) {
+            panelProgresoPrograma.setVisibility(View.INVISIBLE);
+            for(i=0;i<dispositivo.getProgramasOnOff().size();i++) {
+                dispositivo.getProgramasOnOff().get(i).setProgramaEnCurso(false);
+            }
+            return;
+        } else {
+            panelProgresoPrograma.setVisibility(View.VISIBLE);
+
+        }
         programa = dispositivo.getProgramasOnOff().get(i);
         hasta = duracionAfecha(formatearHora(programa.getHora(), programa.getMinuto()), programa.getDuracion());
         hora = programa.getHora();
@@ -827,10 +905,10 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
         textoProgramaDesde.setText(formatearHora(hora, minuto));
         textoProgramaHasta.setText(hasta);
         duracion = restarHoras(textoProgramaDesde.getText().toString(), textoProgramaHasta.getText().toString());
+        dispositivo.getProgramasOnOff().get(i).setProgramaEnCurso(true);
+        programasInterruptorAdapter.notifyDataSetChanged();
         if (duracion >= programa.getDuracion()) {
             dispositivo.actualizarProgramaActivo("");
-
-
             programasInterruptorAdapter.notifyDataSetChanged();
 
 
@@ -910,5 +988,7 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
 
 
     }
+
+
 
 }

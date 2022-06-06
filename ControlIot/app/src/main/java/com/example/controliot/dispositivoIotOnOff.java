@@ -182,6 +182,7 @@ public class dispositivoIotOnOff extends dispositivoIot implements Serializable 
     public int buscarPrograma(String idPrograma) {
 
         int i;
+        if (programas == null) return -1;
         int tam = programas.size();
         for(i=0;i<tam;i++) {
             if (programas.get(i).getIdProgramacion().equals(idPrograma)) {

@@ -152,12 +152,16 @@ public class listaProgramasInterruptorAdapter extends ArrayAdapter<ProgramaDispo
     private void actualizarPanelDiaSemana(TextView dia, boolean activado) {
 
         if (activado == false) {
-            dia.setBackgroundColor(Color.rgb(0xcc, 0xcc, 0xcc));
+            //dia.setBackgroundColor(Color.rgb(0xcc, 0xcc, 0xcc));
+            dia.setBackgroundResource(R.drawable.texto_redondeado_desactivado);
             dia.setTag(false);
         } else {
-            dia.setBackgroundColor(Color.rgb(0x34, 0x98, 0xdb));
+            dia.setBackgroundResource(R.drawable.redondeado);
+            //dia.setBackgroundColor(Color.rgb(0x34, 0x98, 0xdb));
             dia.setTag(true);
         }
+
+
 
     }
 

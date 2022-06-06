@@ -50,4 +50,10 @@
     <string name="esptouch1_configure_result_success">Con exito!</string>
     <string name="esptouch1_configure_result_success_item">BSSID = %1$s, IP = %2$s</string>
 
+    <string name="titulo_error_programacion">Error de programa</string>
+    <string name="texto_error_programa">El programa se solapa con otro existente</string>
+    <string name="titulo_error_horas_programa">Error en Horas del programa</string>
+    <string name="texto_error_horas_programa">La hora final debe ser mayor que la incicial</string>
+
+
 </resources>

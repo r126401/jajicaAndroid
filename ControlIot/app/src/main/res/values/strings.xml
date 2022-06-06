@@ -49,4 +49,10 @@
     <string name="esptouch1_configure_result_success">Succesfull!</string>
     <string name="esptouch1_configure_result_success_item">BSSID = %1$s, InetAddress = %2$s</string>
 
+    <string name="titulo_error_programacion">Program error</string>
+    <string name="texto_error_programa">Error, programa exists</string>
+    <string name="titulo_error_horas_programa">Error in hours assigment</string>
+    <string name="texto_error_horas_programa">The final date must be greater tha initial date</string>
+
+
 </resources>

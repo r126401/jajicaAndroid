@@ -29,6 +29,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -64,8 +65,8 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
     private CountDownTimer temporizador;
     private dispositivoIotTermostato dispositivoCronotermostato;
     private listaProgramasTermostatoAdapter programasTermostatoAdapter;
-    private final String topicPeticionOta = "OtaIotOnOff";
-    private final String topicRespuestaOta = "newVersionOtaIotOnOff";
+    private final String topicPeticionOta = "OtaIotCronoTemp";
+    private final String topicRespuestaOta = "newVersionOtaIotCronoTemp";
     private boolean versionComprobada = false;
     private boolean nuevaVersionDisponible = false;
     private TextView textoTemperatura;
@@ -76,6 +77,7 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
     private TextView textoProgramaHasta;
     private ImageButton botonMenosUmbral;
     private ImageButton botonMasUmbral;
+    ConstraintLayout panelProgresoPrograma;
     private ArrayList<ProgramaDispositivoIotTermostato> programas;
 
     private Boolean autoincremento;
@@ -96,8 +98,7 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
 
     private void registrarControles() {
 
-
-
+        panelProgresoPrograma = (ConstraintLayout) findViewById(R.id.panelProgresoPrograma);
         botonMenosUmbral = (ImageButton) findViewById(R.id.boton_menos_umbral);
         botonMenosUmbral.setOnClickListener(this);
         botonMenosUmbral.setOnLongClickListener(this);
@@ -314,15 +315,22 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
         int i;
         int duracion;
         String hasta;
+        CalculoFechas calculo;
+        calculo = new CalculoFechas();
         ProgramaDispositivoIotTermostato programa;
         i = dispositivoCronotermostato.buscarPrograma(idPrograma);
+        if ( i < 0 ) {
+            panelProgresoPrograma.setVisibility(View.INVISIBLE);
+        } else {
+            panelProgresoPrograma.setVisibility(View.VISIBLE);
+        }
         programa = dispositivoCronotermostato.getProgramasTermostato().get(i);
-        hasta = duracionAfecha(formatearHora(programa.getHora(), programa.getMinuto()), programa.getDuracion());
+        hasta = calculo.duracionAfecha(calculo.formatearHora(programa.getHora(), programa.getMinuto()), programa.getDuracion());
         hora = programa.getHora();
         minuto = programa.getMinuto();
-        textoProgramaDesde.setText(formatearHora(hora, minuto));
+        textoProgramaDesde.setText(calculo.formatearHora(hora, minuto));
         textoProgramaHasta.setText(hasta);
-        duracion = restarHoras(textoProgramaDesde.getText().toString(), textoProgramaHasta.getText().toString());
+        duracion = calculo.restarHoras(textoProgramaDesde.getText().toString(), textoProgramaHasta.getText().toString());
         if (duracion >= programa.getDuracion()) {
             dispositivoCronotermostato.actualizarProgramaActivo("");
             dispositivoCronotermostato.setUmbralTemperatura(dispositivoCronotermostato.getUmbralTemperaturaDefecto());
@@ -331,7 +339,8 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
 
 
         } else {
-            int lleva = fechaADuracion(textoProgramaDesde.getText().toString());
+
+            int lleva = calculo.fechaADuracion(textoProgramaDesde.getText().toString());
 
             Log.i(TAG, "duracion es " + lleva);
             int progreso = ((int) lleva * 100) / programa.getDuracion();
@@ -340,13 +349,7 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
 
     }
 
-    private String formatearHora(int hora, int minuto) {
 
-        Formatter formato;
-        formato = new Formatter();
-        return formato.format("%02d:%02d", hora, minuto).toString();
-
-    }
 
     public void registrarTermostato(dispositivoIotTermostato dispositivo) {
         this.dispositivoCronotermostato = dispositivo;
@@ -713,12 +716,14 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
 
     private void procesarProgramasRecibidos(ArrayList<ProgramaDispositivoIotTermostato> programas) {
 
-        this.programas = programas;
-        dispositivoCronotermostato.setProgramasTermostato(this.programas);
-        programasTermostatoAdapter = new listaProgramasTermostatoAdapter(this, R.layout.vista_programas_termostato, dispositivoCronotermostato.getProgramasTermostato(), cnx, dispositivoCronotermostato);
-        listViewSchedule.setAdapter(programasTermostatoAdapter);
-        programasTermostatoAdapter.notifyDataSetChanged();
-        //dispositivo.setProgramasTermostato(dispositivo.getProgramasTermostato());
+        if (programas != null) {
+            this.programas = programas;
+            dispositivoCronotermostato.setProgramasTermostato(this.programas);
+            programasTermostatoAdapter = new listaProgramasTermostatoAdapter(this, R.layout.vista_programas_termostato, dispositivoCronotermostato.getProgramasTermostato(), cnx, dispositivoCronotermostato);
+            listViewSchedule.setAdapter(programasTermostatoAdapter);
+            programasTermostatoAdapter.notifyDataSetChanged();
+        }
+
         actualizarProgramaEnCurso(dispositivoCronotermostato.getProgramaActivo());
 
 
@@ -874,7 +879,9 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
         if (idComando == COMANDO_IOT.MODIFICAR_PROGRAMACION) {
             programa = programasTermostatoAdapter.listaProgramas.get(posicion);
             lanzador.putExtra(TEXTOS_DIALOGO_IOT.ID_PROGRAMA.getValorTextoJson(), programa);
+
         }
+        lanzador.putExtra(TEXTOS_DIALOGO_IOT.PROGRAMAS.getValorTextoJson(), programas);
 
 
         lanzadorActivityProgramaTermostato.launch(lanzador);
@@ -990,64 +997,10 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
 
     }
 
-    private String duracionAfecha(String inicio, int duracion) {
-
-        Calendar fecha;
-        int hora;
-        int minuto;
-        String horaFinal;
-
-        fecha = Calendar.getInstance();
-        hora = Integer.valueOf(inicio.substring(0,2));
-        minuto = Integer.valueOf(inicio.substring(3,5));
-        fecha.set(fecha.get(Calendar.YEAR), fecha.get(Calendar.MONTH), fecha.get(Calendar.DAY_OF_MONTH), hora, minuto);
-        fecha.setTimeInMillis(fecha.getTimeInMillis() + duracion * 1000);
-
-        horaFinal = formatearHora(fecha.get(Calendar.HOUR_OF_DAY), fecha.get(Calendar.MINUTE));
-        return horaFinal;
-
-
-    }
-
-    private int fechaADuracion(String inicio) {
-
-        Calendar fechaInicio, fechaFin;
-        int hora;
-        int minuto;
-        long milisFin, milisInicio;
-        hora = Integer.valueOf(inicio.substring(0,2));
-        minuto = Integer.valueOf(inicio.substring(3,5));
-        fechaFin = Calendar.getInstance();
-        fechaInicio = Calendar.getInstance();
-        fechaInicio.set(fechaInicio.get(Calendar.YEAR), fechaInicio.get(Calendar.MONTH), fechaInicio.get(Calendar.DAY_OF_MONTH), hora, minuto);
-        milisInicio = fechaInicio.getTimeInMillis()/1000;
-        milisFin = fechaFin.getTimeInMillis()/1000;
-
-
-        return (int) (milisFin - milisInicio);
 
 
 
-    }
 
-    private int restarHoras(String hora1, String hora2) {
-
-        Calendar fecha1;
-        Calendar fecha2;
-        int hora;
-        int minuto;
-
-
-        hora = Integer.valueOf(hora1.substring(0,2));
-        minuto = Integer.valueOf(hora1.substring(3,5));
-        fecha1 = Calendar.getInstance();
-        fecha2 = Calendar.getInstance();
-        fecha1.set(fecha1.get(Calendar.YEAR), fecha1.get(Calendar.MONTH), fecha1.get(Calendar.DAY_OF_MONTH), Integer.valueOf(hora), Integer.valueOf(minuto));
-        hora = Integer.valueOf(hora2.substring(0,2));
-        minuto = Integer.valueOf(hora2.substring(3,5));
-        //fecha2.set(fecha1.get(Calendar.YEAR), fecha1.get(Calendar.MONTH), fecha1.get(Calendar.DAY_OF_MONTH), Integer.valueOf(hora), Integer.valueOf(minuto));
-        return (int) ((fecha2.getTime().getTime() - fecha1.getTime().getTime())/1000);
-    }
 
     @Override
     public boolean onLongClick(View v) {

@@ -358,4 +358,8 @@ public class ProgramaDispositivoIot implements Serializable {
 
         return this.duracion;
     }
+
+
+
+
 }

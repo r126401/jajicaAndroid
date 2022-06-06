@@ -5,7 +5,7 @@
 
         <item name="android:gravity">center</item>
         <item name="android:layout_gravity">center</item>
-        <item name="android:background">@drawable/texto_redondeado</item>
+        <item name="android:background">@drawable/redondeado</item>
         <item name="android:textColor">#FFFFFF</item>
         <item name="android:layout_width">40sp</item>
         <item name="android:layout_height">40sp</item>
@@ -17,13 +17,13 @@
 
         <item name="android:gravity">center</item>
         <item name="android:layout_gravity">center</item>
-        <item name="android:background">@drawable/texto_redondeado</item>
         <item name="android:textColor">#FFFFFF</item>
         <item name="android:layout_width">40dp</item>
         <item name="android:layout_height">40dp</item>
         <item name="android:layout_marginEnd">10dp</item>
         <item name="android:layout_marginLeft">10dp</item>
         <item name="android:layout_marginStart">10dp</item>
+        <item name="android:background">@drawable/redondeado</item>
 
 
     </style>
@@ -32,7 +32,7 @@
 
         <item name="android:gravity">center</item>
         <item name="android:layout_gravity">center</item>
-        <item name="android:background">@drawable/texto_redondeado</item>
+        <item name="android:background">@drawable/redondeado</item>
         <item name="android:textColor">#FFFFFF</item>
         <item name="android:layout_width">40sp</item>
         <item name="android:layout_height">40sp</item>

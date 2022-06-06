@@ -96,6 +96,26 @@ public class DialogosAplicacion extends DialogFragment {
     }
 
 
+    public AlertDialog mensajeError(Context contexto, String titulo, String mensaje, int icono) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(contexto);
+
+        builder.setTitle(titulo);
+        builder.setMessage(mensaje);
+        builder.setIcon(icono);
+        builder.setPositiveButton(contexto.getResources().getString(R.string.aceptar), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
+        return builder.create();
+
+
+
+    }
+
 
 
 

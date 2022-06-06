@@ -64,6 +64,7 @@ public class ProgramasInterruptorAdapter extends ArrayAdapter<ProgramaDispositiv
             holder.textoDuracion = (TextView) fila.findViewById(R.id.textoDuracion);
             holder.layoutDiaSemana = (LinearLayout) fila.findViewById(R.id.layoutDiaSemana);
             holder.textoLunes = (TextView) fila.findViewById(R.id.textoLunes);
+            holder.textoLunes.setTextAppearance(R.style.);
             holder.textoMartes = (TextView) fila.findViewById(R.id.textoMartes);
             holder.textoMiercoles = (TextView) fila.findViewById(R.id.textoMiercoles);
             holder.textoJueves = (TextView) fila.findViewById(R.id.textoJueves);

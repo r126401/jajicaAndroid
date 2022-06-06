@@ -196,7 +196,7 @@ public class conexionMqtt implements Serializable, Parcelable {
 /*******************************************************************************************************/
 
     public interface OnProcesarMensajesInterruptor {
-        void estadoAplicacion(String topic, String mensaje, dispositivoIotOnOff dispositivo );
+        void estadoInterruptor(String topic, String mensaje, dispositivoIotOnOff dispositivo );
         void actuacionReleLocalInterruptor(String topic, String message, dispositivoIotOnOff dispositivo);
         void actuacionReleRemotoInterruptor(String topic, String message, dispositivoIotOnOff dispositivo);
         void consultarProgramacionInterruptor(String topic, String texto, ArrayList<ProgramaDispositivoIotOnOff> programa);
@@ -347,7 +347,7 @@ public class conexionMqtt implements Serializable, Parcelable {
             opcionesConexion = new MqttConnectOptions();
             opcionesConexion.setAutomaticReconnect(true);
             opcionesConexion.setCleanSession(false);
-            opcionesConexion.setConnectionTimeout(120);
+            opcionesConexion.setConnectionTimeout(20);
             opcionesConexion.setMqttVersion(3);
             opcionesConexion.setHttpsHostnameVerificationEnabled(false);
             cliente = new MqttAndroidClient(contexto, cadenaConexion, idCliente );
@@ -661,7 +661,11 @@ public class conexionMqtt implements Serializable, Parcelable {
      */
     public void cerrarConexion() {
         try {
-            cliente.disconnect();
+            if (cliente != null) {
+                if (cliente.isConnected() == true) {
+                    cliente.disconnect();
+                }
+            }
             cliente = null;
             this.estadoConexion = false;
             //cliente.close();
@@ -1153,7 +1157,7 @@ public class conexionMqtt implements Serializable, Parcelable {
             case ESTADO:
 
                 dispositivo = procesarEstadoDispositivoInterruptor(topic, texto, contexto);
-                listenerMensajesInterruptor.estadoAplicacion(topic, texto, dispositivo);
+                if (listenerMensajesInterruptor != null) listenerMensajesInterruptor.estadoInterruptor(topic, texto, dispositivo);
                 break;
             case CONSULTAR_PROGRAMACION:
                 programa = procesarConsultaProgramaInterruptor(texto, contexto);
@@ -1231,6 +1235,8 @@ public class conexionMqtt implements Serializable, Parcelable {
         dispIotOnOff.setEstadoDispositivo(dialogo.getEstadoDispositivo(texto));
         dispIotOnOff.setVersionOta(dialogo.getOtaVersion(texto));
         dispIotOnOff.setProgramaActivo(dialogo.getProgramaActivo(texto));
+        dispIotOnOff.setTipoDispositivo(dialogo.getTipoDispositivo(texto));
+
 
 
         return dispIotOnOff;

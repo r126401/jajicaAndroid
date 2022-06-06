@@ -8,6 +8,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.app.Application;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -54,23 +57,15 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
     private String texto;
     private ArrayList<dispositivoIot> lista = null;
     private ListaDispositivosAdapter adapter = null;
+    private Boolean arrancando;
 
 
 
+    private void crearConexion() {
 
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_principal);
-
-
-         // Se registran todos los controles de la activity
-        registrarControles();
-        inicializacionParametros();
-        //Se crea la conexion mqtt. A partir de aqui el programa es asincrono y gobernado por los
-        //eventos que lleguen.
         cnx = new conexionMqtt(getApplicationContext(), dialogo);
+        cnx.setEstadoConexion(false);
         cnx.setOnConexionMqtt(new conexionMqtt.OnConexionMqtt() {
             @Override
             public void conexionEstablecida(boolean reconnect, String serverURI) {
@@ -83,8 +78,8 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
 
             @Override
             public void conexionPerdida(Throwable cause) {
-                notificarBrokerReintentoConexion();
 
+                notificarBrokerReintentoConexion();
             }
 
             @Override
@@ -111,6 +106,68 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
             }
         });
         cnx.conectarseAlBrokerConReintento(10000, 1000);
+
+
+
+    }
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_principal);
+
+
+        arrancando = true;
+         // Se registran todos los controles de la activity
+        registrarControles();
+        inicializacionParametros();
+        crearConexion();
+        //Se crea la conexion mqtt. A partir de aqui el programa es asincrono y gobernado por los
+        //eventos que lleguen.
+        /*
+        cnx = new conexionMqtt(getApplicationContext(), dialogo);
+        cnx.setOnConexionMqtt(new conexionMqtt.OnConexionMqtt() {
+            @Override
+            public void conexionEstablecida(boolean reconnect, String serverURI) {
+
+                dialogo.setConexionMqtt(cnx);
+                notificarBrokerActivado();
+
+
+            }
+
+            @Override
+            public void conexionPerdida(Throwable cause) {
+                notificarBrokerReintentoConexion();
+                mensajeError(ActividadPrincipal.this, "hola", "suspendido", R.drawable.ic_info).show();
+            }
+
+            @Override
+            public void mensajeRecibido(String topic, MqttMessage message) {
+                //procesarMensajeRecibido(message);
+
+            }
+
+            @Override
+            public void entregaCompletada(IMqttDeliveryToken token) {
+
+            }
+
+            @Override
+            public void notificacionIntermediaReintento(long intervalo) {
+                Log.i(getLocalClassName(), "reintentando");
+
+            }
+
+            @Override
+            public void finTemporizacionReintento(long temporizador) {
+                Log.i(getLocalClassName(), "Temporizacion de reintento terminada");
+
+            }
+        });
+        cnx.conectarseAlBrokerConReintento(10000, 1000);
+         */
         if (adapter == null) presentarDispositivos();
         procesarMensajes();
 
@@ -144,6 +201,7 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
     }
     private void notificarBrokerActivado() {
         int i;
+        cnx.setEstadoConexion(true);
         imageViewEstadoBroker.setImageResource(R.drawable.bk_conectado);
         textIdBroker.setText(cnx.getBrokerId());
         textIdBroker.setTextColor(Color.BLACK);
@@ -161,6 +219,7 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
     }
     private void notificarBrokerReintentoConexion() {
         int i;
+        cnx.setEstadoConexion(false);
         imageViewEstadoBroker.setImageResource(R.drawable.bk_no_conectado);
         textIdBroker.setTextColor(Color.MAGENTA);
         textIdBroker.setText("Reintentando conexion a " + cnx.getBrokerId());
@@ -406,7 +465,9 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
 
     @Override
     protected void onPostResume() {
+
         super.onPostResume();
+        mensajeError(getApplicationContext(), "post", "post", R.drawable.ic_info);
     }
 
 
@@ -425,6 +486,19 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
     @Override
     protected void onResume() {
         super.onResume();
+
+
+        if (arrancando == false )  {
+
+            if (cnx.getEstadoConexion()== false) {
+                mensajeError(getApplicationContext(), "resume", "resume", R.drawable.ic_info);
+                cnx.cerrarConexion();
+                crearConexion();
+                //procesarMensajes();
+            }
+        } else {
+            arrancando = false;
+        }
         refrescarLista();
 
     }
@@ -432,6 +506,7 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
     @Override
     protected void onRestart() {
         super.onRestart();
+        mensajeError(getApplicationContext(), "retart", "restart", R.drawable.ic_info);
         refrescarLista();
     }
 
@@ -521,7 +596,7 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
 
         cnx.setOnProcesarMensajesInterruptor(new conexionMqtt.OnProcesarMensajesInterruptor() {
             @Override
-            public void estadoAplicacion(String topic, String mensaje, dispositivoIotOnOff dispositivo) {
+            public void estadoInterruptor(String topic, String mensaje, dispositivoIotOnOff dispositivo) {
                 actualizarEstadoInteruptor(dispositivo);
             }
 
@@ -762,6 +837,26 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
 
             }
         });
+    }
+
+    public android.app.AlertDialog mensajeError(Context contexto, String titulo, String mensaje, int icono) {
+
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(contexto);
+
+        builder.setTitle(titulo);
+        builder.setMessage(mensaje);
+        builder.setIcon(icono);
+        builder.setPositiveButton(contexto.getResources().getString(R.string.aceptar), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
+        return builder.create();
+
+
+
     }
 
 

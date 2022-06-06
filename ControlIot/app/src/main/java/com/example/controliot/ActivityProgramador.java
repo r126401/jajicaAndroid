@@ -2,6 +2,7 @@ package com.example.controliot;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -23,10 +24,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Formatter;
 
 public class ActivityProgramador extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener, View.OnClickListener, View.OnLongClickListener, View.OnTouchListener {
 
@@ -52,10 +51,8 @@ public class ActivityProgramador extends AppCompatActivity implements TimePicker
     private Button botonAceptar;
     private TextView textHasta;
     private TextView textoHoraHasta;
-
     private ProgramaDispositivoIotTermostato programaIotTermostato;
     private ProgramaDispositivoIotOnOff programaIotOnOff;
-    //private ProgramaDispositivoIotTermostato programaTermostato;
     final double INCREMENTO = 0.5;
     final double DECREMENTO = 0.5;
     final double INCREMENTO_LARGO = 1;
@@ -70,6 +67,8 @@ public class ActivityProgramador extends AppCompatActivity implements TimePicker
     private COMANDO_IOT tipoOperacion;
     private TIPO_DISPOSITIVO_IOT tipoDispositivo;
     private final int DURACION_MAXIMA = 16;
+    CalculoFechas listaProgramas;
+
 
     private String [] diasSemana = {"No repetir", "Repetir"};
     private boolean[] checkDias = new boolean[]{true, true,true,true,true,true,true};
@@ -153,6 +152,8 @@ public class ActivityProgramador extends AppCompatActivity implements TimePicker
 
     private void presentarProgramaInterruptor(COMANDO_IOT tipoComando) {
         TIPO_PROGRAMA tipoPrograma;
+        CalculoFechas calculo;
+        calculo = new CalculoFechas();
         tipoPrograma = programaIotOnOff.getTipoPrograma();
         int i;
         if (tipoComando == COMANDO_IOT.MODIFICAR_PROGRAMACION) {
@@ -163,8 +164,8 @@ public class ActivityProgramador extends AppCompatActivity implements TimePicker
                 case PROGRAMA_DIARIO:
                     switchRepetir.setChecked(true);
                     textFecha.setVisibility(View.INVISIBLE);
-                    textHoraPrograma.setText(formatearHora(programaIotOnOff.getHora(), programaIotOnOff.getMinuto()));
-                    textoHoraHasta.setText(duracionAfecha(textHoraPrograma.getText().toString(), programaIotOnOff.getDuracion()));
+                    textHoraPrograma.setText(calculo.formatearHora(programaIotOnOff.getHora(), programaIotOnOff.getMinuto()));
+                    textoHoraHasta.setText(calculo.duracionAfecha(textHoraPrograma.getText().toString(), programaIotOnOff.getDuracion()));
                     actualizarSemanaCompletaInterruptor();
 
                     break;
@@ -173,7 +174,7 @@ public class ActivityProgramador extends AppCompatActivity implements TimePicker
                 case PROGRAMA_FECHADO:
                     switchRepetir.setChecked(false);
                     textFecha.setVisibility(View.VISIBLE);
-                    textHoraPrograma.setText(formatearHora(programaIotOnOff.getHora(), programaIotOnOff.getMinuto()));
+                    textHoraPrograma.setText(calculo.formatearHora(programaIotOnOff.getHora(), programaIotOnOff.getMinuto()));
                     break;
             }
 
@@ -187,6 +188,8 @@ public class ActivityProgramador extends AppCompatActivity implements TimePicker
 
         TIPO_PROGRAMA tipoPrograma;
         tipoPrograma = programaIotTermostato.getTipoPrograma();
+        CalculoFechas calculo;
+        calculo = new CalculoFechas();
         int i;
         if (tipoComando == COMANDO_IOT.MODIFICAR_PROGRAMACION) {
             textUmbralTemperatura.setText(String.valueOf(programaIotTermostato.getUmbralTemperatura()));
@@ -197,8 +200,8 @@ public class ActivityProgramador extends AppCompatActivity implements TimePicker
                 case PROGRAMA_DIARIO:
                     switchRepetir.setChecked(true);
                     textFecha.setVisibility(View.INVISIBLE);
-                    textHoraPrograma.setText(formatearHora(programaIotTermostato.getHora(), programaIotTermostato.getMinuto()));
-                    textoHoraHasta.setText(duracionAfecha(textHoraPrograma.getText().toString(), programaIotTermostato.getDuracion()));
+                    textHoraPrograma.setText(calculo.formatearHora(programaIotTermostato.getHora(), programaIotTermostato.getMinuto()));
+                    textoHoraHasta.setText(calculo.duracionAfecha(textHoraPrograma.getText().toString(), programaIotTermostato.getDuracion()));
                     actualizarSemanaCompletaTermostato();
 
                     break;
@@ -207,41 +210,12 @@ public class ActivityProgramador extends AppCompatActivity implements TimePicker
                 case PROGRAMA_FECHADO:
                     switchRepetir.setChecked(false);
                     textFecha.setVisibility(View.VISIBLE);
-                    textHoraPrograma.setText(formatearHora(programaIotTermostato.getHora(), programaIotTermostato.getMinuto()));
+                    textHoraPrograma.setText(calculo.formatearHora(programaIotTermostato.getHora(), programaIotTermostato.getMinuto()));
                     break;
             }
 
         }
 
-
-    }
-    private void seleccionarTipoProgramaDispositivo(TIPO_DISPOSITIVO_IOT tipo, Intent intent, COMANDO_IOT tipoComando) {
-
-        switch (tipo) {
-
-
-            case INTERRUPTOR:
-
-                if (tipoComando == COMANDO_IOT.MODIFICAR_PROGRAMACION) {
-                    programaIotTermostato = (ProgramaDispositivoIotTermostato) intent.getSerializableExtra(TEXTOS_DIALOGO_IOT.ID_PROGRAMA.getValorTextoJson());
-                    presentarProgramaTermostato(COMANDO_IOT.MODIFICAR_PROGRAMACION);
-
-                } else {
-
-                }
-                break;
-            case TERMOMETRO:
-
-                if (tipoComando == COMANDO_IOT.MODIFICAR_PROGRAMACION) {
-                    programaIotTermostato = (ProgramaDispositivoIotTermostato) intent.getSerializableExtra(COMANDO_IOT.MODIFICAR_PROGRAMACION.toString());
-                } else {
-
-                }
-                break;
-            default:
-                break;
-
-        }
 
     }
 
@@ -250,14 +224,67 @@ public class ActivityProgramador extends AppCompatActivity implements TimePicker
     private void recibirDatosActivity() {
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
+        ArrayList<ProgramaDispositivoIotTermostato> listaProgramasTermostato;
+        ArrayList<ProgramaDispositivoIotOnOff> listaProgramasInterruptor;
+        int i;
 
+
+
+        listaProgramas = new CalculoFechas();
         if (bundle != null) {
             tipoDispositivo = (TIPO_DISPOSITIVO_IOT) bundle.get(TEXTOS_DIALOGO_IOT.TIPO_DISPOSITIVO.getValorTextoJson());
             tipoOperacion = (COMANDO_IOT) bundle.get(TEXTOS_DIALOGO_IOT.COMANDO.getValorTextoJson());
             if (tipoDispositivo == TIPO_DISPOSITIVO_IOT.CRONOTERMOSTATO) {
                 programaIotTermostato = (ProgramaDispositivoIotTermostato) intent.getSerializableExtra(TEXTOS_DIALOGO_IOT.ID_PROGRAMA.getValorTextoJson());
+                listaProgramasTermostato = (ArrayList<ProgramaDispositivoIotTermostato>) intent.getSerializableExtra(TEXTOS_DIALOGO_IOT.PROGRAMAS.getValorTextoJson());
+                if (listaProgramasTermostato != null) {
+                    for(i=0;i < listaProgramasTermostato.size(); i++) {
+
+                        if (programaIotTermostato != null) {
+                            if (programaIotTermostato.getHora() == listaProgramasTermostato.get(i).getHora()) {
+                                if (programaIotTermostato.getMinuto() == listaProgramasTermostato.get(i).getMinuto()) {
+                                    Log.i(TAG, "programa encontrado");
+                                    continue;
+                                }
+
+                            }
+
+                        }
+
+                        listaProgramas.insertarIntervalo(
+                                listaProgramasTermostato.get(i).getHora(),
+                                listaProgramasTermostato.get(i).getMinuto(),
+                                listaProgramasTermostato.get(i).getDuracion(),
+                                listaProgramasTermostato.get(i).getMascara());
+
+                    }
+                }
+                Log.i(TAG, "hola");
             } else {
                 programaIotOnOff = (ProgramaDispositivoIotOnOff) intent.getSerializableExtra(TEXTOS_DIALOGO_IOT.ID_PROGRAMA.getValorTextoJson());
+                listaProgramasInterruptor = (ArrayList<ProgramaDispositivoIotOnOff>) intent.getSerializableExtra(TEXTOS_DIALOGO_IOT.PROGRAMAS.getValorTextoJson());
+                if (listaProgramasInterruptor != null) {
+                    for(i=0;i < listaProgramasInterruptor.size(); i++) {
+
+                        if (programaIotOnOff != null) {
+                            if (programaIotOnOff.getHora() == listaProgramasInterruptor.get(i).getHora()) {
+                                if (programaIotOnOff.getMinuto() == listaProgramasInterruptor.get(i).getMinuto()) {
+                                    Log.i(TAG, "programa encontrado");
+                                    continue;
+                                }
+
+                            }
+                        }
+
+                        listaProgramas.insertarIntervalo(
+                                listaProgramasInterruptor.get(i).getHora(),
+                                listaProgramasInterruptor.get(i).getMinuto(),
+                                listaProgramasInterruptor.get(i).getDuracion(),
+                                listaProgramasInterruptor.get(i).getMascara());
+
+                    }
+                }
+                Log.i(TAG, "hola");
             }
 
 
@@ -268,8 +295,11 @@ public class ActivityProgramador extends AppCompatActivity implements TimePicker
 
     private void inicializarDatosInterruptor() {
 
+        CalculoFechas calculo;
+        calculo = new CalculoFechas();
         repetidor = new Handler();
         Calendar fecha = Calendar.getInstance();
+
 
         if(tipoOperacion == COMANDO_IOT.MODIFICAR_PROGRAMACION) {
             presentarProgramaInterruptor(COMANDO_IOT.MODIFICAR_PROGRAMACION);
@@ -295,7 +325,7 @@ public class ActivityProgramador extends AppCompatActivity implements TimePicker
             programaIotOnOff.setMascara(calcularMascara());
             programaIotOnOff.actualizarDiasActivos();
             textFecha.setVisibility(View.INVISIBLE);
-            textHoraPrograma.setText(formatearHora(programaIotOnOff.getHora(), programaIotOnOff.getMinuto()));
+            textHoraPrograma.setText(calculo.formatearHora(programaIotOnOff.getHora(), programaIotOnOff.getMinuto()));
 
         }
         panelDuracion.setVisibility(View.GONE);
@@ -305,6 +335,8 @@ public class ActivityProgramador extends AppCompatActivity implements TimePicker
 
     private void inicializarDatosTermostato() {
 
+        CalculoFechas calculo;
+        calculo = new CalculoFechas();
         repetidor = new Handler();
         Calendar fecha = Calendar.getInstance();
 
@@ -333,7 +365,7 @@ public class ActivityProgramador extends AppCompatActivity implements TimePicker
             programaIotTermostato.actualizarDiasActivos();
             programaIotTermostato.setUmbralTemperatura(19.0);
             textFecha.setVisibility(View.INVISIBLE);
-            textHoraPrograma.setText(formatearHora(programaIotTermostato.getHora(), programaIotTermostato.getMinuto()));
+            textHoraPrograma.setText(calculo.formatearHora(programaIotTermostato.getHora(), programaIotTermostato.getMinuto()));
             textUmbralTemperatura.setText(String.valueOf(programaIotTermostato.getUmbralTemperatura()));
 
 
@@ -348,6 +380,8 @@ public class ActivityProgramador extends AppCompatActivity implements TimePicker
 
     private void anotarHoraPrograma(TextView control) {
 
+        CalculoFechas calculo;
+        calculo = new CalculoFechas();
         TimePickerDialog timePickerDialog;
         String hora;
         String minuto;
@@ -358,7 +392,7 @@ public class ActivityProgramador extends AppCompatActivity implements TimePicker
         timePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                control.setText(formatearHora(hourOfDay, minute));
+                control.setText(calculo.formatearHora(hourOfDay, minute));
                 if (tipoDispositivo == TIPO_DISPOSITIVO_IOT.CRONOTERMOSTATO) {
                     if (control == textHoraPrograma) {
 
@@ -366,8 +400,11 @@ public class ActivityProgramador extends AppCompatActivity implements TimePicker
                         programaIotTermostato.setMinuto(minute);
                     } else {
 
-                        programaIotTermostato.setDuracion(restarFechas(programaIotTermostato.getHora(), programaIotTermostato.getMinuto()));
-
+                        int diferencia = calculo.restarFechas(programaIotTermostato.getHora(),
+                                programaIotTermostato.getMinuto(),
+                                Integer.valueOf(textoHoraHasta.getText().toString().substring(0,2)),
+                                Integer.valueOf(textoHoraHasta.getText().toString().substring(3,5)));
+                        programaIotTermostato.setDuracion(diferencia);
 
                     }
                 } else {
@@ -377,7 +414,12 @@ public class ActivityProgramador extends AppCompatActivity implements TimePicker
                         programaIotOnOff.setMinuto(minute);
                     } else {
 
-                        programaIotOnOff.setDuracion(restarFechas(programaIotOnOff.getHora(), programaIotOnOff.getMinuto()));
+                        int diferencia = calculo.restarFechas(programaIotOnOff.getHora(),
+                                programaIotOnOff.getMinuto(),
+                                Integer.valueOf(textoHoraHasta.getText().toString().substring(0,2)),
+                                Integer.valueOf(textoHoraHasta.getText().toString().substring(3,5)));
+                        programaIotOnOff.setDuracion(diferencia);
+                        //programaIotOnOff.setDuracion(restarFechas(programaIotOnOff.getHora(), programaIotOnOff.getMinuto()));
 
 
                     }
@@ -396,8 +438,10 @@ public class ActivityProgramador extends AppCompatActivity implements TimePicker
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
 
         Log.i(TAG, "hola");
+        CalculoFechas calculo;
+        calculo = new CalculoFechas();
 
-        textHoraPrograma.setText(formatearHora(hourOfDay, minute));
+        textHoraPrograma.setText(calculo.formatearHora(hourOfDay, minute));
         programaIotTermostato.setHora(hourOfDay);
         programaIotTermostato.setMinuto(minute);
     }
@@ -685,36 +729,25 @@ public class ActivityProgramador extends AppCompatActivity implements TimePicker
     }
 
 
-    private String ponerFechaDeHoy() {
-        Calendar calendario;
-        String hoy;
-        long tiempo;
-
-        calendario = Calendar.getInstance();
-        tiempo = calendario.getTime().getTime();
-        DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-        hoy = formatter.format(tiempo);
-        return hoy;
-
-
-    }
 
     private void presentarProgramaFechado() {
 
         Calendar calendario;
         long fecha;
+        CalculoFechas calculo;
+        calculo = new CalculoFechas();
         if (!switchRepetir.isChecked()) {
 
             textFecha.setVisibility(View.INVISIBLE);
             if (tipoOperacion == COMANDO_IOT.MODIFICAR_PROGRAMACION) {
                 if (programaIotTermostato.getDia() == 0) {
-                    textFecha.setText(ponerFechaDeHoy());
+                    textFecha.setText(calculo.ponerFechaDeHoy());
                 } else {
                     textFecha.setText(programaIotTermostato.getDia() + "/"+programaIotTermostato.getMes() + "/" +programaIotTermostato.getAno());
 
                 }
             } else {
-                textFecha.setText(ponerFechaDeHoy());
+                textFecha.setText(calculo.ponerFechaDeHoy());
 
 
             }
@@ -751,7 +784,7 @@ public class ActivityProgramador extends AppCompatActivity implements TimePicker
     private void actualizarDiasSemana(TextView idTexto, boolean activo) {
 
         if (activo == true) {
-            idTexto.setBackgroundResource(R.drawable.texto_redondeado);
+            idTexto.setBackgroundResource(R.drawable.redondeado);
             idTexto.setTag((boolean) true);
         } else {
             idTexto.setBackgroundResource(R.drawable.texto_redondeado_desactivado);
@@ -784,8 +817,37 @@ public class ActivityProgramador extends AppCompatActivity implements TimePicker
         dialogoIot dialogo;
         String textoComando;
         dialogo = new dialogoIot();
+        CalculoFechas calculo;
+        calculo = new CalculoFechas();
+        int diferencia;
         programaIotOnOff.setMascara(calcularMascara());
-        programaIotOnOff.setDuracion(restarFechas(programaIotOnOff.getHora(), programaIotOnOff.minuto));
+        //programaIotOnOff.setDuracion(restarFechas(programaIotOnOff.getHora(), programaIotOnOff.minuto));
+        diferencia = calculo.restarFechas(programaIotOnOff.getHora(),
+                programaIotOnOff.getMinuto(),
+                Integer.valueOf(textoHoraHasta.getText().toString().substring(0,2)),
+                Integer.valueOf(textoHoraHasta.getText().toString().substring(3,5)));
+        programaIotOnOff.setDuracion(diferencia);
+        if (chequeosConsistencia(programaIotOnOff) == false) {
+            return;
+        }
+        /*
+        if (listaProgramas.intervaloAsignable(
+                programaIotOnOff.getHora(),
+                programaIotOnOff.getMinuto(),
+                programaIotOnOff.getDuracion(),
+                programaIotOnOff.getMascara())) {
+            Log.i(TAG, "Intervalo asignable");
+        } else {
+            Log.w(TAG, "Intervalo no asignable");
+            mensajeError(this,
+                    getResources().getString(R.string.titulo_error_programacion),
+                    getResources().getString(R.string.texto_error_programa),
+                    R.drawable.ic_info).show();
+            return;
+
+        }
+        */
+
         programaIotOnOff.setEstadoRele(ESTADO_RELE.ON);
         if (tipoOperacion == COMANDO_IOT.MODIFICAR_PROGRAMACION) {
             textoComando = dialogo.comandoModificarPrograma(programaIotOnOff);
@@ -810,8 +872,37 @@ public class ActivityProgramador extends AppCompatActivity implements TimePicker
         dialogoIot dialogo;
         String textoComando;
         dialogo = new dialogoIot();
+
+        int diferencia;
+
         programaIotTermostato.setMascara(calcularMascara());
-        programaIotTermostato.setDuracion(restarFechas(programaIotTermostato.getHora(), programaIotTermostato.getMinuto()));
+        diferencia = listaProgramas.restarFechas(programaIotTermostato.getHora(),
+                programaIotTermostato.getMinuto(),
+                Integer.valueOf(textoHoraHasta.getText().toString().substring(0,2)),
+                Integer.valueOf(textoHoraHasta.getText().toString().substring(3,5)));
+        programaIotTermostato.setDuracion(diferencia);
+        if (chequeosConsistencia(programaIotTermostato) == false) {
+            return;
+        }
+        /*
+        if (listaProgramas.intervaloAsignable(
+                programaIotTermostato.getHora(),
+                programaIotTermostato.getMinuto(),
+                programaIotTermostato.getDuracion(),
+                programaIotTermostato.getMascara())) {
+            Log.i(TAG, "Intervalo asignable");
+        } else {
+            Log.w(TAG, "Intervalo no asignable");
+            mensajeError(this,
+                    getResources().getString(R.string.titulo_error_programacion),
+                    getResources().getString(R.string.texto_error_programa),
+                    R.drawable.ic_info).show();
+            return;
+
+        }
+        */
+
+
         if (tipoOperacion == COMANDO_IOT.MODIFICAR_PROGRAMACION) {
             textoComando = dialogo.comandoModificarPrograma(programaIotTermostato);
             Intent datosDevueltos = new Intent();
@@ -853,51 +944,71 @@ public class ActivityProgramador extends AppCompatActivity implements TimePicker
 
     }
 
-    private String formatearHora(int hora, int minuto) {
-
-        Formatter formato;
-        formato = new Formatter();
-        return formato.format("%02d:%02d", hora, minuto).toString();
-
-    }
-
-    private int restarFechas(int horaControl, int minutoControl) {
-
-        Calendar fecha1;
-        Calendar fecha2;
-        int hora;
-        int minuto;
 
 
-        hora = Integer.valueOf(textoHoraHasta.getText().toString().substring(0,2));
-        minuto = Integer.valueOf(textoHoraHasta.getText().toString().substring(3,5));
-        fecha1 = Calendar.getInstance();
-        fecha2 = Calendar.getInstance();
-        fecha1.set(fecha1.get(Calendar.YEAR), fecha1.get(Calendar.MONTH), fecha1.get(Calendar.DAY_OF_MONTH), horaControl, minutoControl);
-        fecha2.set(fecha1.get(Calendar.YEAR), fecha1.get(Calendar.MONTH), fecha1.get(Calendar.DAY_OF_MONTH), hora, minuto);
-        return (int) ((fecha2.getTime().getTime() - fecha1.getTime().getTime())/1000);
-    }
 
-    private String duracionAfecha(String inicio, int duracion) {
 
-        Calendar fecha;
-        int hora;
-        int minuto;
-        String horaFinal;
+    public android.app.AlertDialog mensajeError(Context contexto, String titulo, String mensaje, int icono) {
 
-        fecha = Calendar.getInstance();
-        hora = Integer.valueOf(inicio.substring(0,2));
-        minuto = Integer.valueOf(inicio.substring(3,5));
-        fecha.set(fecha.get(Calendar.YEAR), fecha.get(Calendar.MONTH), fecha.get(Calendar.DAY_OF_MONTH), hora, minuto);
-        fecha.setTimeInMillis(fecha.getTimeInMillis() + duracion * 1000);
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(contexto);
 
-        horaFinal = formatearHora(fecha.get(Calendar.HOUR_OF_DAY), fecha.get(Calendar.MINUTE));
-        return horaFinal;
+        builder.setTitle(titulo);
+        builder.setMessage(mensaje);
+        builder.setIcon(icono);
+        builder.setPositiveButton(contexto.getResources().getString(R.string.aceptar), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
+        return builder.create();
+
 
 
     }
 
+    private boolean chequeosConsistencia(ProgramaDispositivoIot programa) {
+
+        CalculoFechas calculo;
+        int horaInicial, horaFinal;
+        calculo = new CalculoFechas();
+        //Chequeo programa asignable
+        if (listaProgramas.intervaloAsignable(
+                programa.getHora(),
+                programa.getMinuto(),
+                programa.getDuracion(),
+                programa.getMascara())) {
+            Log.i(TAG, "Intervalo asignable");
+        } else {
+            Log.w(TAG, "Intervalo no asignable");
+            mensajeError(this,
+                    getResources().getString(R.string.titulo_error_programacion),
+                    getResources().getString(R.string.texto_error_programa),
+                    R.drawable.ic_info).show();
+            return false;
+
+        }
+
+        //Chequeo orden de las horas
+
+        horaInicial = calculo.horaStringASegundos(textHoraPrograma.getText().toString());
+        horaFinal = calculo.horaStringASegundos(textoHoraHasta.getText().toString());
+
+        if (horaInicial >= horaFinal) {
+            mensajeError(this,
+                    getResources().getString(R.string.titulo_error_horas_programa),
+                    getResources().getString(R.string.texto_error_horas_programa),
+                    R.drawable.ic_info).show();
+            return false;
+        }
 
 
+
+
+
+
+        return true;
+    }
 
 }

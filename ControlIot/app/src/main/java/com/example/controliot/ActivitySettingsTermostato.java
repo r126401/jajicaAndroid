@@ -455,7 +455,12 @@ public class ActivitySettingsTermostato extends AppCompatActivity implements Vie
         }
 
         DecimalFormat formater = new DecimalFormat("0.0");
-        controlTexto.setText(String.valueOf(formater.format(cantidad)));
+        String texto = formater.format((cantidad));
+        texto = texto.replace(",", ".");
+        controlTexto.setText(texto);
+        //controlTexto.setText(String.valueOf(formater.format(cantidad)));
+
+
 
 
     }

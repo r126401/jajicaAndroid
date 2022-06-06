@@ -123,12 +123,15 @@
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottommenuInterruptor"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="64dp"
 
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/panelPrincipal"
-        app:menu="@menu/menu_interruptor" />
+        app:menu="@menu/menu_interruptor"
+        app:itemBackground="@color/design_default_color_primary"
+        app:itemIconTint="@color/white"
+        app:itemTextColor="@color/white"/>
 
     <TextView
         android:id="@+id/textListaProgramas"
