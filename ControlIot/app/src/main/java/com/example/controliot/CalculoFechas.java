@@ -36,6 +36,11 @@ public class CalculoFechas {
         int minuto;
         hora = Integer.valueOf(fecha.substring(0,2));
         minuto = Integer.valueOf(fecha.substring(3,5));
+        if ((hora == 0) && (minuto == 0)) {
+            hora = 23;
+            minuto = 59;
+        }
+
 
         return fechaASegundos(hora, minuto);
     }
@@ -85,8 +90,8 @@ public class CalculoFechas {
                 if ((diaActivo == true) && (diaProgramaListaActivo == true)) {
                     inferior = intervalos.get(i).get(0);
                     superior = intervalos.get(i).get(1);
-                    if (((intervalo > inferior) && (intervalo < superior)) ||
-                            (((intervalo + duracion) > inferior) && ((intervalo + duracion) < superior))) {
+                    if (((intervalo >= inferior) && (intervalo < superior)) ||
+                            (((intervalo + duracion) > inferior) )) {
                         Log.w(getClass().toString(), "intervalo no asignable");
                         return false;
                     }
@@ -193,7 +198,12 @@ public class CalculoFechas {
         fecha1 = Calendar.getInstance();
         fecha2 = Calendar.getInstance();
         fecha1.set(fecha1.get(Calendar.YEAR), fecha1.get(Calendar.MONTH), fecha1.get(Calendar.DAY_OF_MONTH), hora1, minuto1);
-        fecha2.set(fecha1.get(Calendar.YEAR), fecha1.get(Calendar.MONTH), fecha1.get(Calendar.DAY_OF_MONTH), hora2, minuto2);
+        if ((hora2 == 0) && (minuto2 == 0)) {
+            fecha2.set(fecha1.get(Calendar.YEAR), fecha1.get(Calendar.MONTH), 1 + fecha1.get(Calendar.DAY_OF_MONTH), hora2, minuto2);
+        } else {
+            fecha2.set(fecha1.get(Calendar.YEAR), fecha1.get(Calendar.MONTH), fecha1.get(Calendar.DAY_OF_MONTH), hora2, minuto2);
+        }
+
         return (int) ((fecha2.getTime().getTime() - fecha1.getTime().getTime())/1000);
     }
 

@@ -51,7 +51,10 @@
         app:layout_constraintEnd_toStartOf="@+id/estadoConexionInterruptor"
         app:layout_constraintHorizontal_bias="0.571"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:descendantFocusability="blocksDescendants"
+        android:focusable="false"
+        android:focusableInTouchMode="false"/>
 
     <ImageView
         android:id="@+id/estadoConexionInterruptor"

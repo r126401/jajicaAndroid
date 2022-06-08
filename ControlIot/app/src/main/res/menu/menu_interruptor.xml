@@ -8,12 +8,7 @@
         android:title="info">
     </item>
 
-    <item
-        android:id="@+id/itemConfiguracion"
-        android:checked="false"
-        android:icon="@drawable/ic_settings"
-        android:title="conf">
-    </item>
+
     <item
         android:id="@+id/itemNuevoProgramaInterruptor"
         android:checked="false"

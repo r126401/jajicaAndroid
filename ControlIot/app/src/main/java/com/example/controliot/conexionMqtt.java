@@ -1157,7 +1157,7 @@ public class conexionMqtt implements Serializable, Parcelable {
             case ESTADO:
 
                 dispositivo = procesarEstadoDispositivoInterruptor(topic, texto, contexto);
-                if (listenerMensajesInterruptor != null) listenerMensajesInterruptor.estadoInterruptor(topic, texto, dispositivo);
+                listenerMensajesInterruptor.estadoInterruptor(topic, texto, dispositivo);
                 break;
             case CONSULTAR_PROGRAMACION:
                 programa = procesarConsultaProgramaInterruptor(texto, contexto);

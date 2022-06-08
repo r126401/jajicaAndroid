@@ -460,6 +460,7 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
             @Override
             public void estadoInterruptor(String topic, String mensaje, dispositivoIotOnOff dispositivo) {
                 actualizarInterruptor(dispositivo);
+                Log.i(TAG, "Actualizando interruptor...");
 
             }
 
@@ -843,6 +844,7 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
     
     private void envioComando(String comando) {
 
+        Log.w(TAG, "Enviando Comando " + comando);
         dialogo.enviarComando(dispositivo, comando);
         iniciarAnimacionComando();
     }
@@ -890,9 +892,12 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
         i = dispositivo.buscarPrograma(idPrograma);
         if ( i < 0 ) {
             panelProgresoPrograma.setVisibility(View.INVISIBLE);
-            for(i=0;i<dispositivo.getProgramasOnOff().size();i++) {
-                dispositivo.getProgramasOnOff().get(i).setProgramaEnCurso(false);
+            if (dispositivo.getProgramas() != null) {
+                for(i=0;i<dispositivo.getProgramasOnOff().size();i++) {
+                    dispositivo.getProgramasOnOff().get(i).setProgramaEnCurso(false);
+                }
             }
+
             return;
         } else {
             panelProgresoPrograma.setVisibility(View.VISIBLE);

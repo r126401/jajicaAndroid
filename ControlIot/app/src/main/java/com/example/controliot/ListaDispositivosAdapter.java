@@ -126,7 +126,7 @@ public class ListaDispositivosAdapter extends ArrayAdapter<dispositivoIot> {
                     Log.i(TAG, "He pulsado el boton del interruptor");
                 }
             });
-
+/*
             holder.textoInterruptor.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
@@ -142,7 +142,7 @@ public class ListaDispositivosAdapter extends ArrayAdapter<dispositivoIot> {
                     return false;
                 }
             });
-
+*/
             // Inicializamos los valores
             inicializarControles(holder);
             fila.setTag(holder);

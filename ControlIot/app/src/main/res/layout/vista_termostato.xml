@@ -94,6 +94,14 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/bk_conectado" />
 
+    <ImageView
+        android:id="@+id/settingsInterruptor"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/ic_editar" />
+
     <ProgressBar
         android:id="@+id/progresoOperacionTermostato"
         style="@style/CustomProgressBar"

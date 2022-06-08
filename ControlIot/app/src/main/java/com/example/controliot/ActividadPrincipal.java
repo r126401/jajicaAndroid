@@ -8,7 +8,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.app.Application;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -36,7 +35,7 @@ import org.json.JSONException;
 import java.util.ArrayList;
 
 
-public class ActividadPrincipal extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener, SwipeRefreshLayout.OnRefreshListener, AdapterView.OnItemClickListener {
+public class ActividadPrincipal extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener, SwipeRefreshLayout.OnRefreshListener, AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
 
     /**
      * identifica la conexion mqtt principal del dispositivo
@@ -265,8 +264,9 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
         textListaDispositivo = (TextView) findViewById(R.id.textListaDispositivo);
         swipeListaDispositivos = (SwipeRefreshLayout) findViewById(R.id.swipeProgramasInterruptor);
         swipeListaDispositivos.setOnRefreshListener(this);
-        listViewListaDispositivos = (ListView) findViewById(R.id.listViewProgramasInterruptor);
+        listViewListaDispositivos = (ListView) findViewById(R.id.listViewListaDispositivos);
         listViewListaDispositivos.setOnItemClickListener(this);
+        listViewListaDispositivos.setOnItemLongClickListener(this);
         navigationMenuPrincipal = (BottomNavigationView) findViewById(R.id.navigationMenuPrincipal);
         navigationMenuPrincipal.setOnNavigationItemSelectedListener(this);
         progressEspera = (ProgressBar)  findViewById(R.id.barraProgreso);
@@ -861,7 +861,22 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
 
 
 
+    @Override
+    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 
+        String nombreDispositivo = null;
+        switch (parent.getId()) {
+            case (R.id.listViewListaDispositivos):
+                Log.i(getLocalClassName().toString(), "pulsacion larga en listview");
+                nombreDispositivo = adapter.listaDispositivos.get(position).getNombreDispositivo();
+                Log.i(getLocalClassName().toString(), "nombreDispositivo " + nombreDispositivo);
+                break;
+
+            default:
+                break;
+        }
+        return false;
+    }
 }
 
 
