@@ -7,11 +7,13 @@
     <string name="instalar_dispositivo">Inst. Device</string>
     <string name="nuevo_dispositivo">New Device</string>
     <string name="broker_no_configurado">No broker</string>
-    <string name="nombre_dispositivo">Name :</string>
+    <string name="nombre_dispositivo">Device name</string>
+    <string name="id_dispositivo">Device id</string>
     <string name="menu_item_about">About App</string>
     <string name="about_app_version">App Version: %s</string>
-    <string name="aceptar">Acept</string>
+    <string name="aceptar">Ok</string>
     <string name="cancelar">Cancel</string>
+    <string name="escanear">Scan</string>
     <string name="avisoEliminarDispositivo">The action will delete device.</string>
     <string name="eliminarDispositivo">Delete device</string>
     <string name="esperando_respuesta">Waiting</string>

@@ -4,9 +4,11 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="../../../../layout/custom_preview.xml" value="0.14268585131894485" />
+        <entry key="app/src/main/res/drawable/botones.xml" value="0.1845" />
         <entry key="app/src/main/res/drawable/estilo_progress_bar.xml" value="0.1695" />
         <entry key="app/src/main/res/drawable/fondo_progress_bar.xml" value="0.2775" />
         <entry key="app/src/main/res/drawable/fondo_termostato.xml" value="0.303" />
+        <entry key="app/src/main/res/drawable/redondeado.xml" value="0.1845" />
         <entry key="app/src/main/res/drawable/texto_redondeado.xml" value="0.2035" />
         <entry key="app/src/main/res/drawable/texto_redondeado_desactivado.xml" value="0.2355" />
         <entry key="app/src/main/res/drawable/textura_progress_bar.xml" value="0.2775" />

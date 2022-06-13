@@ -126,51 +126,6 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
         registrarControles();
         inicializacionParametros();
         crearConexion();
-        //Se crea la conexion mqtt. A partir de aqui el programa es asincrono y gobernado por los
-        //eventos que lleguen.
-        /*
-        cnx = new conexionMqtt(getApplicationContext(), dialogo);
-        cnx.setOnConexionMqtt(new conexionMqtt.OnConexionMqtt() {
-            @Override
-            public void conexionEstablecida(boolean reconnect, String serverURI) {
-
-                dialogo.setConexionMqtt(cnx);
-                notificarBrokerActivado();
-
-
-            }
-
-            @Override
-            public void conexionPerdida(Throwable cause) {
-                notificarBrokerReintentoConexion();
-                mensajeError(ActividadPrincipal.this, "hola", "suspendido", R.drawable.ic_info).show();
-            }
-
-            @Override
-            public void mensajeRecibido(String topic, MqttMessage message) {
-                //procesarMensajeRecibido(message);
-
-            }
-
-            @Override
-            public void entregaCompletada(IMqttDeliveryToken token) {
-
-            }
-
-            @Override
-            public void notificacionIntermediaReintento(long intervalo) {
-                Log.i(getLocalClassName(), "reintentando");
-
-            }
-
-            @Override
-            public void finTemporizacionReintento(long temporizador) {
-                Log.i(getLocalClassName(), "Temporizacion de reintento terminada");
-
-            }
-        });
-        cnx.conectarseAlBrokerConReintento(10000, 1000);
-         */
         if (adapter == null) presentarDispositivos();
         procesarMensajes();
 
@@ -487,10 +442,6 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
         lista.clear();
         presentarDispositivos();
         actualizarDispositivos();
-
-
-
-
     }
 
 
@@ -505,12 +456,13 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
                 mensajeError(getApplicationContext(), "resume", "resume", R.drawable.ic_info);
                 cnx.cerrarConexion();
                 crearConexion();
+                refrescarLista();
                 //procesarMensajes();
             }
         } else {
             arrancando = false;
         }
-        refrescarLista();
+
 
     }
 

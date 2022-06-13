@@ -10,10 +10,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.zxing.client.android.Intents;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
@@ -29,11 +29,12 @@ public class ActivityNuevoDispositivo extends AppCompatActivity implements View.
     private Button botonEscanear;
     private Button botonCancelar;
     private Button botonAceptar;
-    private EditText editIdDispositivo;
-    private EditText editNombreDispositivo;
+    private TextInputEditText editIdDispositivo;
+    private TextInputEditText editNombreDispositivo;
     private TextView textIdDispositivo;
     private TextView textNombreDispositivo;
     private TextView textResultadoOperacion;
+
 
 
     @Override
@@ -53,11 +54,9 @@ public class ActivityNuevoDispositivo extends AppCompatActivity implements View.
         botonCancelar.setOnClickListener(this);
         botonAceptar = (Button) findViewById(R.id.botonAceptar);
         botonAceptar.setOnClickListener(this);
-        editIdDispositivo = (EditText) findViewById(R.id.editIdDispositivo);
-        editNombreDispositivo = (EditText) findViewById(R.id.apNombreDispositivo);
-        textIdDispositivo = (TextView) findViewById(R.id.textIdDispositivo);
+        editIdDispositivo = (TextInputEditText) findViewById(R.id.apidDispositivo);
+        editNombreDispositivo = (TextInputEditText) findViewById(R.id.appNombreDispositivo);
         textNombreDispositivo = (TextView) findViewById(R.id.textNombreDispositivo);
-        textResultadoOperacion = (TextView) findViewById(R.id.textResultadoOperacion);
     }
 
 
@@ -119,21 +118,22 @@ public class ActivityNuevoDispositivo extends AppCompatActivity implements View.
 
     }
 
-    private void nuevoDispositivo() {
+    private void procesarBotonAceptar() {
+
         dispositivoIotDesconocido dispositivo;
 
-        if (!editIdDispositivo.getText().toString().isEmpty() || !editNombreDispositivo.toString().isEmpty()) {
+        if (chequeoConsistencia()) {
             dispositivo = new dispositivoIotDesconocido(editNombreDispositivo.getText().toString(),
                     editIdDispositivo.getText().toString(), TIPO_DISPOSITIVO_IOT.DESCONOCIDO);
             if (dispositivo.guardarDispositivo(getApplicationContext())) {
                 Intent datos = new Intent();
                 datos.setData(Uri.parse(editNombreDispositivo.getText().toString()));
                 setResult(RESULT_OK, datos);
-            } else {
-                setResult(RESULT_CANCELED);
+                finish();
             }
 
-            finish();
+        } else {
+            setResult(RESULT_CANCELED);
         }
 
 
@@ -150,11 +150,44 @@ public class ActivityNuevoDispositivo extends AppCompatActivity implements View.
                 finish();
                 break;
             case (R.id.botonAceptar):
-                nuevoDispositivo();
+                procesarBotonAceptar();
                 break;
             default:
                 break;
         }
 
     }
+
+    private Boolean chequeoConsistencia() {
+
+        configuracionDispositivos conf;
+        conf = new configuracionDispositivos(this);
+
+        if (editIdDispositivo.getText().toString().isEmpty() || editNombreDispositivo.toString().isEmpty()) {
+            DialogosAplicacion dlg;
+            dlg = new DialogosAplicacion();
+            dlg.mensajeError(this, "Error en nuevo dispositivo", "Rellena los datos", R.drawable.ic_info).show();
+            return false;
+
+        }
+
+
+        if (conf.leerDispositivos(this) == true) {
+            if ((conf.buscarDispositivoPorEtiqueta(TEXTOS_DIALOGO_IOT.ID_DISPOSITIVO.getValorTextoJson(), editIdDispositivo.getText().toString()) >= 0) ||
+                    (conf.buscarDispositivoPorEtiqueta(TEXTOS_DIALOGO_IOT.NOMBRE_DISPOSITIVO.getValorTextoJson(), editNombreDispositivo.getText().toString()) >= 0)) {
+                DialogosAplicacion dlg;
+                dlg = new DialogosAplicacion();
+                dlg.mensajeError(this, "Error en nuevo dispositivo", "El dispositivo ya existe", R.drawable.ic_info).show();
+                return false;
+            }
+        } else {
+            return false;
+        }
+
+        return true;
+    }
+
+
+
+
 }
