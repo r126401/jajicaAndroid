@@ -429,6 +429,41 @@ public  class configuracionDispositivos implements Serializable {
         return disp;
     }
 
+    public dispositivoIot getDispositivoPorEtiqueta(String nombreEtiqueta, String valorEtiqueta) {
+        int i;
+
+        JSONObject dispositivo;
+        JSONArray array;
+        dispositivoIot disp;
+
+        if (datosDispositivos == null) {
+            if (!leerDispositivos(contexto)) {
+                Log.e(getClass().toString(), "No se ha podido leer la configuracion de disositivos");
+                return null;
+
+            }
+        }
+        i = buscarDispositivoPorEtiqueta(nombreEtiqueta, valorEtiqueta);
+
+        try {
+            array = datosDispositivos.getJSONArray(TEXTOS_DIALOGO_IOT.DISPOSITIVOS.getValorTextoJson());
+            dispositivo = array.getJSONObject(i);
+            disp = json2Dispositivo(dispositivo);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+
+
+
+
+
+
+        return disp;
+    }
+
+
     public int buscarDispositivoPorId(String idDispositivo) {
 
         int i;
@@ -463,5 +498,41 @@ public  class configuracionDispositivos implements Serializable {
 
         return -1;
     }
+
+    public int buscarDispositivoPorEtiqueta(String etiqueta, String valorEtiqueta) {
+
+        int i;
+        JSONArray array;
+        int tamArray;
+        String id = null;
+        try {
+            array = datosDispositivos.getJSONArray(TEXTOS_DIALOGO_IOT.DISPOSITIVOS.getValorTextoJson());
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.e(getClass().toString(), "json de configuracion corrupto");
+            return -1;
+        }
+        tamArray = array.length();
+        for (i=0;i<tamArray;i++) {
+
+            try {
+                id = array.getJSONObject(i).getString(etiqueta);
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Log.e(getClass().toString(), "Error al extraer el idDispositivo del json");
+            }
+            if (id.equals(valorEtiqueta)) {
+
+                Log.i(getClass().toString(), "indice encontrado: " + i);
+                return i;
+
+            }
+
+        }
+
+
+        return -1;
+    }
+
 
 }

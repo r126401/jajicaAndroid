@@ -9,6 +9,14 @@
 
 
     <ImageView
+        android:id="@+id/settingsInterruptor"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/ic_editar" />
+
+    <ImageView
         android:id="@+id/imageEliminarSwitch"
         android:layout_width="48dp"
         android:layout_height="48dp"
@@ -43,18 +51,18 @@
         style="@style/fuentes_datos"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:maxLength="12"
-        android:text="Interruptor"
-
-        android:textSize="30dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/estadoConexionInterruptor"
-        app:layout_constraintHorizontal_bias="0.571"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         android:descendantFocusability="blocksDescendants"
         android:focusable="false"
-        android:focusableInTouchMode="false"/>
+
+        android:focusableInTouchMode="false"
+        android:maxLength="15"
+        android:text="Interruptor"
+        android:textSize="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.489" />
 
     <ImageView
         android:id="@+id/estadoConexionInterruptor"

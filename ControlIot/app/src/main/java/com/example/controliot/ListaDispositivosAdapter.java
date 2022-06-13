@@ -1,12 +1,16 @@
 package com.example.controliot;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -14,6 +18,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
+
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
 
@@ -51,9 +57,15 @@ public class ListaDispositivosAdapter extends ArrayAdapter<dispositivoIot> {
         ListaDispositivosAdapterHolder holder;
         dispositivoIot dispositivo;
         dispositivo = listaDispositivos.get(position);
+        ConstraintLayout pp;
+
+
+
 
 
         if (fila == null) {
+            //pp = (ConstraintLayout) parent.getParent();
+            //pp.setBackgroundResource(R.drawable.sin_dispositivos);
             LayoutInflater inflater = ((Activity) contexto).getLayoutInflater();
             fila = inflater.inflate(idLayout, parent, false);
             holder = new ListaDispositivosAdapterHolder();
@@ -74,21 +86,39 @@ public class ListaDispositivosAdapter extends ArrayAdapter<dispositivoIot> {
             //holder.imageIconoHumedad = (ImageView) fila.findViewById(R.id.imageIconoHumedad);
             holder.imageEliminarSwitch = (ImageView) fila.findViewById(R.id.imageEliminarSwitch);
             holder.imageEliminarTermostato = (ImageView) fila.findViewById(R.id.imageEliminarTermostato);
+            holder.settingsInterruptor = (ImageView) fila.findViewById(R.id.settingsInterruptor);
+            holder.settingsTermostato = (ImageView) fila.findViewById(R.id.settingsTermostato);
 
 
+            holder.settingsInterruptor.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.i(TAG, "click en editar");
+                    ventanaSettings(holder.textoInterruptor);
+                }
+            });
+
+            holder.settingsTermostato.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.i(TAG, "click en editar");
+                    ventanaSettings(holder.textNombreTermostato);
+                }
+            });
 
             holder.imageEliminarTermostato.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    borrarDispositivo(dispositivo, position);
+                    borrarDispositivo(dispositivo, position, parent);
                     Log.i(TAG, "he pulsado el boton de eliminar termometro");
+
                 }
             });
 
             holder.imageEliminarSwitch.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    borrarDispositivo(dispositivo, position);
+                    borrarDispositivo(dispositivo, position, parent);
                 }
             });
 
@@ -208,6 +238,8 @@ public class ListaDispositivosAdapter extends ArrayAdapter<dispositivoIot> {
         //ImageView imageIconoHumedad;
         ImageView imageEliminarTermostato;
         ImageView imageEliminarSwitch;
+        ImageView settingsInterruptor;
+        ImageView settingsTermostato;
 
 
 
@@ -386,21 +418,13 @@ private void rellenarControlesDesconocidoSinEstado(ListaDispositivosAdapterHolde
 
     }
 
-    private void accionarBotonEliminarInterruptor(dispositivoIot dispositivo, int position) {
-
-
-        Log.i(TAG, "he pulsado el boton eliminar switch");
-        borrarDispositivo(dispositivo, position);
-
-
-
-    }
 
 
 
 
 
-    boolean borrarDispositivo(dispositivoIot dispositivo, int position) {
+
+    boolean borrarDispositivo(dispositivoIot dispositivo, int position, ViewGroup parent) {
 
         final configuracionDispositivos lista;
         DialogosAplicacion dial;
@@ -422,6 +446,15 @@ private void rellenarControlesDesconocidoSinEstado(ListaDispositivosAdapterHolde
                     listaDispositivos.remove(position);
                     remove(dispositivo);
                     notifyDataSetChanged();
+                    ConstraintLayout padre;
+                    padre = (ConstraintLayout) parent.getParent();
+                    if (listaDispositivos.size() == 0) {
+                        padre.setBackgroundResource(R.drawable.sin_dispositivos);
+
+
+                    } else {
+                        padre.setBackgroundResource(0);
+                    }
 
                 }
 
@@ -439,6 +472,36 @@ private void rellenarControlesDesconocidoSinEstado(ListaDispositivosAdapterHolde
 
     }
 
+    public void ventanaSettings(TextView holder) {
+
+        Dialog dialogo;
+        String nombre;
+        nombre = holder.getText().toString();
+        dialogo = new Dialog(contexto);
+        dialogo.setContentView(R.layout.cambio_nombre);
+        TextInputEditText edit = (TextInputEditText) dialogo.findViewById(R.id.apNombreDispositivo);
+        Button botonAceptar = (Button) dialogo.findViewById(R.id.botonAceptar);
+        botonAceptar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i(TAG, "boton aceptar");
+                configuracionDispositivos conf;
+                conf = new configuracionDispositivos(contexto);
+                conf.leerDispositivos(contexto);
+                dispositivoIot dispositivo;
+                dispositivo = conf.getDispositivoPorEtiqueta(TEXTOS_DIALOGO_IOT.NOMBRE_DISPOSITIVO.getValorTextoJson(), nombre);
+                dispositivo.setNombreDispositivo(edit.getText().toString());
+                conf.modificarDispositivo(dispositivo, contexto);
+                holder.setText(edit.getText().toString());
+                dialogo.cancel();
+            }
+        });
+        edit.setText(nombre);
+        dialogo.show();
+
+
+
+    }
 
 
 }

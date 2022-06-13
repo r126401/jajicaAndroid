@@ -6,8 +6,11 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -57,6 +60,7 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
     private ArrayList<dispositivoIot> lista = null;
     private ListaDispositivosAdapter adapter = null;
     private Boolean arrancando;
+    private ConstraintLayout panelBroker;
 
 
 
@@ -270,6 +274,7 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
         navigationMenuPrincipal = (BottomNavigationView) findViewById(R.id.navigationMenuPrincipal);
         navigationMenuPrincipal.setOnNavigationItemSelectedListener(this);
         progressEspera = (ProgressBar)  findViewById(R.id.barraProgreso);
+        panelBroker = (ConstraintLayout) findViewById(R.id.idPanelBroker);
 
     }
 
@@ -383,6 +388,12 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
             }
 
             tamArray = arrayDispositivos.length();
+            if (tamArray == 0) {
+                mensajeSinDispositivosConfigurados(true);
+
+            } else {
+                mensajeSinDispositivosConfigurados(false);
+            }
             if (lista == null) {
                 lista = new ArrayList<dispositivoIot>();
             }
@@ -870,6 +881,7 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
                 Log.i(getLocalClassName().toString(), "pulsacion larga en listview");
                 nombreDispositivo = adapter.listaDispositivos.get(position).getNombreDispositivo();
                 Log.i(getLocalClassName().toString(), "nombreDispositivo " + nombreDispositivo);
+
                 break;
 
             default:
@@ -877,6 +889,21 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
         }
         return false;
     }
+
+
+    private void mensajeSinDispositivosConfigurados(Boolean pintar) {
+
+        if (pintar == true) {
+
+            panelBroker.setBackgroundResource(R.drawable.sin_dispositivos);
+        } else {
+            panelBroker.setBackgroundResource(0);
+        }
+
+    }
+
+
+
 }
 
 

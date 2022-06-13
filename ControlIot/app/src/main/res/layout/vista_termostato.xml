@@ -16,17 +16,18 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/heating_on" />
 
+
     <TextView
         android:id="@+id/textNombreTermostato"
         style="@style/fuentes_datos"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:maxLength="12"
+        android:maxLength="15"
         android:text="Termometro"
         android:textSize="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/estadoConexionTermostato"
-        app:layout_constraintHorizontal_bias="0.578"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.609"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.142" />
@@ -95,7 +96,7 @@
         app:srcCompat="@drawable/bk_conectado" />
 
     <ImageView
-        android:id="@+id/settingsInterruptor"
+        android:id="@+id/settingsTermostato"
         android:layout_width="20dp"
         android:layout_height="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
