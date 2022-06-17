@@ -68,6 +68,8 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
     private ProgressBar progresoPrograma;
     private TextView textoProgramaHasta;
     private ConstraintLayout panelProgresoPrograma;
+    private ProgressBar progressUpdate;
+    CountDownTimer contador;
 
 
 
@@ -75,6 +77,7 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
 
     private void registrarControles() {
 
+        progressUpdate = (ProgressBar) findViewById(R.id.progress_update);
         panelProgresoPrograma = (ConstraintLayout) findViewById(R.id.panelProgresoPrograma);
         textoProgramaDesde = (TextView) findViewById(R.id.programa_desde);
         textoProgramaHasta = (TextView) findViewById(R.id.programa_hasta);
@@ -119,7 +122,7 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
 
     private void notificarBrokerConectado() {
 
-        dispositivoDisponible();
+        dispositivoDisponible("");
         cnx.subscribirTopic(dispositivo.getTopicSubscripcion());
         envioComando(dialogo.comandoEstadoDispositivo());
         actualizarProgramacion();
@@ -140,7 +143,7 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
             @Override
             public void recibirMensaje() {
                 pararAnimacionComando();
-                dispositivoDisponible();
+                dispositivoDisponible(dispositivo.getIdDispositivo() + " disponible");
             }
         });
         cnx.setOnConexionMqtt(new conexionMqtt.OnConexionMqtt() {
@@ -303,15 +306,16 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
 
     public void actualizarInterruptor(dispositivoIotOnOff dispositivo) {
 
-        dispositivoDisponible();
+        dispositivoDisponible(dispositivo.getIdDispositivo() + " disponible");
 
         this.dispositivo.setEstadoRele(dispositivo.getEstadoRele());
         this.dispositivo.setTipoDispositivo(dispositivo.getTipoDispositivo());
         this.dispositivo.setVersionOta(dispositivo.getVersionOta());
         this.dispositivo.setProgramaActivo(dispositivo.getProgramaActivo());
+        this.dispositivo.setFinUpgrade(dispositivo.getFinUpgrade());
+        notificarFinUpgrade();
         actualizarProgramaEnCurso(this.dispositivo.getProgramaActivo());
         actualizarEstadoRele(dispositivo);
-        //actualizarProgramaEnCurso(dispositivo.getProgramaActivo());
 
 
 
@@ -452,6 +456,42 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
         return false;
     }
 
+    private void procesarUpgradeFirmware() {
+
+
+        progressUpdate.setVisibility(View.VISIBLE);
+        progressUpdate.setProgress(0);
+        textConsolaMensajes.setText("Actualizando el dispositivo");
+        contador = new CountDownTimer(60000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+
+                progressUpdate.setProgress(progressUpdate.getProgress() + 2);
+                Log.i(TAG, "contador : " + progressUpdate.getProgress());
+
+            }
+
+            @Override
+            public void onFinish() {
+                if (dispositivo.getFinUpgrade() == -1000) {
+                    dispositivoDisponible("Temporizacion vencida en upgrade");
+                    progressUpdate.setVisibility(View.INVISIBLE);
+
+                }
+
+
+            }
+        };
+        contador.start();
+
+
+        //Programar el control de progreso
+        //Enseñar el control de progreso
+        //Coundowntimer para actualizar el progreso
+
+
+
+    }
 
 
     private void procesarMensajesInterruptor (){
@@ -525,11 +565,7 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
             @Override
             public void upgradeFirmwareInterruptor(String topic, String texto, String idDispositivo, OtaVersion otaVersion) {
 
-                AlertDialog.Builder ventana;
-                ventana = new AlertDialog.Builder(contexto);
-                ventana.setIcon(R.drawable.ic_upgrade);
-                ventana.setTitle("Actualizando");
-                ventana.show();
+                procesarUpgradeFirmware();
 
 
             }
@@ -820,12 +856,12 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
         barraProgreso.setVisibility(View.INVISIBLE);
     }
 
-    private void dispositivoDisponible()
+    private void dispositivoDisponible(String mensaje)
     {
         imageEstadoDispositivo.setImageResource(R.drawable.dispositivo_disponible);
         imageEstadoBroker.setImageResource(R.drawable.bk_conectado);
         barraProgreso.setVisibility(View.INVISIBLE);
-        textConsolaMensajes.setText(dispositivo.getIdDispositivo() + " disponible");
+        textConsolaMensajes.setText(mensaje);
         textConsolaMensajes.setTextColor(Color.BLUE);
         imageEstadoBroker.setImageResource(R.drawable.bk_conectado);
 
@@ -993,7 +1029,28 @@ public class ActivityInterruptor extends AppCompatActivity implements BottomNavi
 
 
     }
+    private void notificarFinUpgrade() {
 
+
+        if (dispositivo.getFinUpgrade() == 0) {
+            Log.e(TAG, "Error al hacer el upgrade");
+            contador.cancel();
+            textConsolaMensajes.setText("Error al hacer el update");
+            dispositivoDisponible("Error al hacer el update");
+        }
+
+        if (dispositivo.getFinUpgrade() == 1) {
+            Log.w(TAG, "upgrade realizado con exito");
+            contador.cancel();
+            textConsolaMensajes.setText("Actualizacion realizada con exito");
+            progressUpdate.setVisibility(View.INVISIBLE);
+            dispositivoDisponible("Actualizacion realizada con exito");
+        }
+
+
+
+
+    }
 
 
 }

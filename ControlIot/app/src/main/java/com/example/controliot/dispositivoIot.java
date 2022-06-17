@@ -176,6 +176,7 @@ public abstract class dispositivoIot extends configuracionDispositivos implement
     protected OtaVersion datosOta;
     protected String programaActivo;
     protected ArrayList<ProgramaDispositivoIot> programas;
+    protected int finUpgrade;
 
 
     dispositivoIot() {
@@ -191,11 +192,13 @@ public abstract class dispositivoIot extends configuracionDispositivos implement
         datosOta = new OtaVersion();
         programas = null;
         programaActivo = "ninguno";
+        finUpgrade = -1000;
 
 
     }
 
 
+    public int getFinUpgrade() {return finUpgrade;}
     public ArrayList<ProgramaDispositivoIot> getProgramas() {
         return programas;
     }
@@ -253,6 +256,9 @@ public abstract class dispositivoIot extends configuracionDispositivos implement
         return this.idDispositivo;
     }
 
+    public void setFinUpgrade(int upgrade) {
+        this.finUpgrade = upgrade;
+    }
     public void setTipoDispositivo(TIPO_DISPOSITIVO_IOT tipoDispositivo) {
         this.tipoDispositivo = tipoDispositivo;
     }

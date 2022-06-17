@@ -366,6 +366,7 @@ enum TEXTOS_DIALOGO_IOT {
     CLAVE("token"),
     DLG_RESPUESTA("dlgRespuesta"),
     DLG_UPGDRADE_FIRMWARE("upgradeFirmware"),
+    FIN_UPGRADE("finUpgrade"),
     TIPO_INFORME_ESPONTANEO("tipoReport"),
     CODIGO_RESPUESTA("dlgResultCode"),
     DLG_COMANDO("dlgComando"),
@@ -416,6 +417,7 @@ enum TEXTOS_DIALOGO_IOT {
     TIPO_SENSOR("master"),
     ID_SENSOR("idsensor"),
     SENSOR_TEMPERATURA("sensorTemperatura");
+
 
 
 
@@ -586,6 +588,11 @@ public class dialogoIot implements Serializable {
     public String comandoEstadoDispositivo() {
 
         return escribirComandoGenerico(COMANDO_IOT.ESTADO);
+    }
+
+    public int getFinUpgrade(String textoJson) {
+
+        return extraerDatoJsonInt(textoJson, TEXTOS_DIALOGO_IOT.FIN_UPGRADE.getValorTextoJson());
     }
 
     public TIPO_DISPOSITIVO_IOT getTipoDispositivo(String textoJson) {

@@ -1236,6 +1236,7 @@ public class conexionMqtt implements Serializable, Parcelable {
         dispIotOnOff.setVersionOta(dialogo.getOtaVersion(texto));
         dispIotOnOff.setProgramaActivo(dialogo.getProgramaActivo(texto));
         dispIotOnOff.setTipoDispositivo(dialogo.getTipoDispositivo(texto));
+        dispIotOnOff.setFinUpgrade(dialogo.getFinUpgrade(texto));
 
 
 
