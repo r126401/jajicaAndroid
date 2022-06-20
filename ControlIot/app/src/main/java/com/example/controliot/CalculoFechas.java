@@ -68,7 +68,8 @@ public class CalculoFechas {
 
     public boolean intervaloAsignable(int hora, int minuto, int duracion, int mascara) {
 
-        int intervalo;
+        int intervaloInferior;
+        int intervaloSuperior;
         int i;
         int inferior;
         int superior;
@@ -76,7 +77,8 @@ public class CalculoFechas {
         Boolean diaActivo;
         Boolean diaProgramaListaActivo;
 
-        intervalo = fechaASegundos(hora, minuto);
+        intervaloInferior = fechaASegundos(hora, minuto);
+        intervaloSuperior = intervaloInferior + duracion;
 
         if (intervalos == null) {
             return true;
@@ -90,11 +92,46 @@ public class CalculoFechas {
                 if ((diaActivo == true) && (diaProgramaListaActivo == true)) {
                     inferior = intervalos.get(i).get(0);
                     superior = intervalos.get(i).get(1);
-                    if (((intervalo >= inferior) && (intervalo < superior)) ||
-                            (((intervalo + duracion) > inferior) )) {
+                    //Chequeo tramo inferior
+                    if ((intervaloInferior >= inferior) && (intervaloInferior < superior)) {
+                        Log.i(getClass().toString(), "+++false+++ inferior " + inferior + "superior: " + superior + "intervalo Inferior: " + intervaloInferior + "intervalo superior" + intervaloSuperior);
+
+                        return false;
+                        } else {
+                        Log.i(getClass().toString(), "+++false+++ inferior " + inferior + "superior: " + superior + "intervalo Inferior: " + intervaloInferior + "intervalo superior" + intervaloSuperior);
+
+                    }
+
+                    if ((intervaloSuperior > inferior) && (intervaloSuperior <= superior)) {
+                        Log.i(getClass().toString(), "+++true+++ inferior " + inferior + "superior: " + superior + "intervalo Inferior: " + intervaloInferior + "intervalo superior" + intervaloSuperior);
+
+                        return false;
+                    } else {
+                        Log.i(getClass().toString(), "+++true+++ inferior " + inferior + "superior: " + superior + "intervalo Inferior: " + intervaloInferior + "intervalo superior" + intervaloSuperior);
+
+                    }
+
+
+
+
+
+
+
+
+
+                    //Chequeo por arriba
+                    /*
+                    if (((intervaloInferior >= inferior) && (intervaloInferior < superior)) ||
+                            (((intervaloInferior + duracion) < superior) )) {
                         Log.w(getClass().toString(), "intervalo no asignable");
                         return false;
                     }
+                    if (((intervaloInferior > inferior) && (intervaloInferior < superior)) ||
+                            (((intervaloInferior + duracion) < superior) )) {
+
+                        return false;
+                    }
+                    */
 
                 }
             }
@@ -102,6 +139,7 @@ public class CalculoFechas {
 
         }
 
+        Log.i(getClass().toString(), "+++inferior true+++");
         return true;
 
 
