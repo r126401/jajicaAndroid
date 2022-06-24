@@ -7,14 +7,20 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.NotificationCompat;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
@@ -61,6 +67,7 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
     private ListaDispositivosAdapter adapter = null;
     private Boolean arrancando;
     private ConstraintLayout panelBroker;
+    private Notificaciones notificaciones;
 
 
 
@@ -115,19 +122,25 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
     }
 
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_principal);
-
-
-        arrancando = true;
-         // Se registran todos los controles de la activity
+    protected void inicioAplicacion() {
+        // Se registran todos los controles de la activity
         registrarControles();
         inicializacionParametros();
         crearConexion();
         if (adapter == null) presentarDispositivos();
         procesarMensajes();
+    }
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_principal);
+
+        inicioAplicacion();
+
+        arrancando = true;
+
 
 
 
@@ -197,7 +210,8 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
     private void inicializacionParametros() {
         cnx = null;
         dialogo = new dialogoIot();
-
+        notificaciones = new Notificaciones("ControlIot", "ControlIOt", "Notificacines de ControlIot", getApplicationContext());
+        notificaciones.crearNotificacion();
         dialogo.setOnTemporizacionVencidaEnComando(new dialogoIot.onDialogoIot() {
             @Override
             public void temporizacionVencidaEnComando(COMANDO_IOT comando, String clave, String idDispositivo) {
@@ -453,11 +467,8 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
         if (arrancando == false )  {
 
             if (cnx.getEstadoConexion()== false) {
-                mensajeError(getApplicationContext(), "resume", "resume", R.drawable.ic_info);
-                cnx.cerrarConexion();
-                crearConexion();
-                refrescarLista();
-                //procesarMensajes();
+                mensajeError(getApplicationContext(), "post", "post", R.drawable.ic_info);
+                inicioAplicacion();
             }
         } else {
             arrancando = false;
@@ -491,6 +502,7 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
         tipoDispositivo = adapter.listaDispositivos.get(position).tipoDispositivo;
         estado_conexion_iot = adapter.listaDispositivos.get(position).getEstadoConexion();
         String idDispositivo = adapter.listaDispositivos.get(position).idDispositivo;
+
         if (estado_conexion_iot == ESTADO_CONEXION_IOT.CONECTADO) {
             switch(tipoDispositivo) {
                 case DESCONOCIDO:
@@ -632,7 +644,11 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
         cnx.setOnProcesarEspontaneosInterruptor(new conexionMqtt.OnProcesarEspontaneosInterruptor() {
             @Override
             public void arranqueAplicacionInterruptor(String topic, String texto, dispositivoIotOnOff dispositivo) {
+
                 actualizarEstadoInteruptor(dispositivo);
+
+                notificaciones.enviarNotificacion("Reinicio del dispositivo", "El " + dispositivo.getNombreDispositivo() + " se ha reiniciado", R.drawable.ic_reset, R.drawable.ic_reset);
+
             }
 
             @Override
@@ -854,6 +870,34 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
 
     }
 
+    public void Notificar(String titulo, String mensaje, int notID, Context contexto){
+        NotificationCompat.Builder creador;
+        String canalID = "MiCanal01";
+        NotificationManager notificador = (NotificationManager) getSystemService(contexto.NOTIFICATION_SERVICE);
+        creador = new NotificationCompat.Builder(contexto, canalID);
+        // Si nuestro dispositivo tiene Android 8 (API 26, Oreo) o superior
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            String canalNombre = "Mensajes";
+            String canalDescribe = "Canal de mensajes";
+            int importancia = NotificationManager.IMPORTANCE_HIGH;
+            NotificationChannel miCanal = new NotificationChannel(canalID, canalNombre, importancia);
+            miCanal.setDescription(canalDescribe);
+            miCanal.enableLights(true);
+            miCanal.setLightColor(Color.BLUE); // Esto no lo soportan todos los dispositivos
+            miCanal.enableVibration(true);
+            notificador.createNotificationChannel(miCanal);
+            creador = new NotificationCompat.Builder(contexto, canalID);
+        }
+        Bitmap iconoNotifica = BitmapFactory.decodeResource(contexto.getResources(), R.drawable.ic_info);
+        int iconoSmall = R.drawable.ic_info;
+        creador.setSmallIcon(iconoSmall);
+        creador.setLargeIcon(iconoNotifica);
+        creador.setContentTitle(titulo);
+        creador.setContentText(mensaje);
+        creador.setStyle(new NotificationCompat.BigTextStyle().bigText(mensaje));
+        creador.setChannelId(canalID);
+        notificador.notify(notID, creador.build());
+    }
 
 
 }

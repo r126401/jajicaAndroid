@@ -88,8 +88,6 @@ public class ListaDispositivosAdapter extends ArrayAdapter<dispositivoIot> {
             holder.imageEliminarTermostato = (ImageView) fila.findViewById(R.id.imageEliminarTermostato);
             holder.settingsInterruptor = (ImageView) fila.findViewById(R.id.settingsInterruptor);
             holder.settingsTermostato = (ImageView) fila.findViewById(R.id.settingsTermostato);
-
-
             holder.settingsInterruptor.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

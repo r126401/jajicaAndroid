@@ -321,6 +321,14 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
         i = dispositivoCronotermostato.buscarPrograma(idPrograma);
         if ( i < 0 ) {
             panelProgresoPrograma.setVisibility(View.INVISIBLE);
+            if (dispositivoCronotermostato.getProgramas() != null) {
+                for(i=0;i<dispositivoCronotermostato.getProgramasTermostato().size();i++) {
+                    dispositivoCronotermostato.getProgramasTermostato().get(i).setProgramaEnCurso(false);
+                }
+            }
+
+            return;
+
         } else {
             panelProgresoPrograma.setVisibility(View.VISIBLE);
         }
@@ -635,6 +643,7 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
             @Override
             public void upgradeFirmwareTermostato(String topic, String texto, String idDispositivo, OtaVersion otaVersion) {
 
+                Log.i(TAG, "hola");
             }
 
             @Override

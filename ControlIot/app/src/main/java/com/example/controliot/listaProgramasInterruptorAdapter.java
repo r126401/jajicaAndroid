@@ -7,8 +7,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -56,6 +58,8 @@ public class listaProgramasInterruptorAdapter extends ArrayAdapter<ProgramaDispo
         }
 
         dialogo.enviarComando(dispositivo, dialogo.comandoInhibirProgramacion(programa));
+
+
     }
 
 
@@ -98,6 +102,11 @@ public class listaProgramasInterruptorAdapter extends ArrayAdapter<ProgramaDispo
                 @Override
                 public void onClick(View v) {
                     Log.i(getClass().toString(), "hola");
+                    View a = parent.getRootView();
+                    ProgressBar b = a.findViewById(R.id.barraProgreso);
+                    b.setVisibility(View.VISIBLE);
+                    TextView textoConsola = a.findViewById(R.id.textConsolaMensajes);
+                    textoConsola.setText("Inhibiendo programa...");
                     inhibirPrograma(listaProgramas.get(position), holder);
                     if (holder.switchProgramaActivo.isChecked()) {
                         holder.switchProgramaActivo.setChecked(false);
@@ -111,6 +120,7 @@ public class listaProgramasInterruptorAdapter extends ArrayAdapter<ProgramaDispo
 
 
             convertView.setTag(holder);
+
 
         } else {
             holder = (ListaProgramasInterruptorAdapterHolder) convertView.getTag();

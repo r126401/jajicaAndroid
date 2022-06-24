@@ -352,6 +352,7 @@ public class conexionMqtt implements Serializable, Parcelable {
             opcionesConexion.setHttpsHostnameVerificationEnabled(false);
             cliente = new MqttAndroidClient(contexto, cadenaConexion, idCliente );
 
+
             if (cadenaConexion.contains("ssl")) {
                 SocketFactory.SocketFactoryOptions socketFactoryOptions = new SocketFactory.SocketFactoryOptions();
                 socketFactoryOptions.withCaInputStream(contexto.getResources().openRawResource(R.raw.certificado));
@@ -1040,6 +1041,7 @@ public class conexionMqtt implements Serializable, Parcelable {
             case ESPONTANEO:
                 break;
             case VERSION_OTA:
+                Log.i(getClass().toString(), "hola");
                 break;
             case SELECCIONAR_SENSOR_TEMPERATURA:
                 if (listenerMensajesTermostato != null) listenerMensajesTermostato.seleccionarSensorTemperatura(topic, texto);
