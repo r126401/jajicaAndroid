@@ -1274,6 +1274,7 @@ public class conexionMqtt implements Serializable, Parcelable {
         dispositivoTermometroTermostato.setEstadoConexion(ESTADO_CONEXION_IOT.CONECTADO);
         dispositivoTermometroTermostato.setEstadoDispositivo(dialogo.getEstadoDispositivo(texto));
         dispositivoTermometroTermostato.setProgramaActivo(dialogo.getProgramaActivo(texto));
+        dispositivoTermometroTermostato.setFinUpgrade(dialogo.getFinUpgrade(texto));
 
 
 
@@ -1321,6 +1322,8 @@ public class conexionMqtt implements Serializable, Parcelable {
         dispositivoTermometroTermostato.setSensorMaster(dialogo.isSensorMaster(texto));
         dispositivoTermometroTermostato.setIdSensor(dialogo.getIdSensorRemoto(texto));
         dispositivoTermometroTermostato.setUmbralTemperaturaDefecto(dialogo.getUmbralTemperaturaDefecto(texto));
+        dispositivoTermometroTermostato.setVersionOta(dialogo.getOtaVersion(texto));
+        dispositivoTermometroTermostato.setFinUpgrade(dialogo.getFinUpgrade(texto));
 
 
         return dispositivoTermometroTermostato;

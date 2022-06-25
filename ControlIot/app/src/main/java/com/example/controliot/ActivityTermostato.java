@@ -78,6 +78,9 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
     private ImageButton botonMenosUmbral;
     private ImageButton botonMasUmbral;
     ConstraintLayout panelProgresoPrograma;
+    private ProgressBar progressUpdate;
+
+
     private ArrayList<ProgramaDispositivoIotTermostato> programas;
 
     private Boolean autoincremento;
@@ -98,6 +101,7 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
 
     private void registrarControles() {
 
+        progressUpdate = (ProgressBar) findViewById(R.id.progress_update);
         panelProgresoPrograma = (ConstraintLayout) findViewById(R.id.panelProgresoPrograma);
         botonMenosUmbral = (ImageButton) findViewById(R.id.boton_menos_umbral);
         botonMenosUmbral.setOnClickListener(this);
@@ -155,7 +159,7 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
 
     private void notificarBrokerConectado() {
 
-        dispositivoDisponible();
+        dispositivoDisponible(dispositivoCronotermostato.getNombreDispositivo() + "disponible");
         cnx.subscribirTopic(dispositivoCronotermostato.getTopicSubscripcion());
         envioComando(dialogo.comandoEstadoDispositivo());
         actualizarProgramacion();
@@ -209,7 +213,7 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
             @Override
             public void recibirMensaje() {
                 pararAnimacionComando();
-                dispositivoDisponible();
+                dispositivoDisponible(dispositivoCronotermostato.getNombreDispositivo() + " disponible");
             }
         });
         cnx.setOnConexionMqtt(new conexionMqtt.OnConexionMqtt() {
@@ -359,13 +363,14 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
 
 
 
-    public void registrarTermostato(dispositivoIotTermostato dispositivo) {
+    public void registrarTermostato(dispositivoIotTermostato dispositivo, String texto) {
         this.dispositivoCronotermostato = dispositivo;
+        actualizarDispositivo(dispositivo, texto);
         actualizarTermostato(dispositivo);
 
     }
 
-    public void actualizarDispositivo(dispositivoIotTermostato dispositivo) {
+    public void actualizarDispositivo(dispositivoIotTermostato dispositivo, String texto) {
 
         dispositivoCronotermostato.setEstadoRele(dispositivo.getEstadoRele());
         dispositivoCronotermostato.setEstadoDispositivo(dispositivo.getEstadoDispositivo());
@@ -375,6 +380,7 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
         dispositivoCronotermostato.setSensorMaster(dispositivo.isSensorLocal());
         dispositivoCronotermostato.setIdSensor(dispositivo.getIdSensor());
         dispositivoCronotermostato.setProgramaActivo(dispositivo.getProgramaActivo());
+        dispositivoCronotermostato.setFinUpgrade(dispositivo.getFinUpgrade());
         actualizarTermostato(dispositivo);
 
 
@@ -387,7 +393,7 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
             this.dispositivoCronotermostato = dispositivo;
         }
         //Modifica la vista para indicar que el dispositivo esta disponible.
-        dispositivoDisponible();
+        dispositivoDisponible(dispositivo.getNombreDispositivo() + " disponible");
         //Actualiza el texto del panel para indicar el modo del termostato
         actualizarModo();
         //Actualiza los valores de temperatura del termostato
@@ -536,23 +542,64 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
     }
 
 
+    private void actualizarPantalla() {
+
+        dispositivoDisponible(dispositivoCronotermostato.getNombreDispositivo() + " disponible");
+        //Actualiza el texto del panel para indicar el modo del termostato
+        actualizarModo();
+        //Actualiza los valores de temperatura del termostato
+        actualizarTemperatura();
+        actualizarRele();
+        //Actualiza la vista para indicar el programa en curso.
+        actualizarProgramaEnCurso(dispositivoCronotermostato.getProgramaActivo());
+
+        if (versionComprobada == false) {
+            consultarNuevaVersionOta();
+        }
+
+
+    }
+
+    private void registrarCronotermostato(dispositivoIotTermostato dispositivo) {
+
+        this.dispositivoCronotermostato = dispositivo;
+        actualizarPantalla();
+    }
+
+    private void actualizarCronotermostato(dispositivoIotTermostato dispositivo) {
+
+        dispositivoCronotermostato.setEstadoRele(dispositivo.getEstadoRele());
+        dispositivoCronotermostato.setEstadoDispositivo(dispositivo.getEstadoDispositivo());
+        dispositivoCronotermostato.setEstadoProgramacion(dispositivo.getEstadoProgramacion());
+        dispositivoCronotermostato.setTemperatura(dispositivo.getTemperatura());
+        dispositivoCronotermostato.setUmbralTemperatura(dispositivo.getUmbralTemperatura());
+        dispositivoCronotermostato.setSensorMaster(dispositivo.isSensorLocal());
+        dispositivoCronotermostato.setIdSensor(dispositivo.getIdSensor());
+        dispositivoCronotermostato.setProgramaActivo(dispositivo.getProgramaActivo());
+        dispositivoCronotermostato.setFinUpgrade(dispositivo.getFinUpgrade());
+        actualizarPantalla();
+    }
+
 
     private void procesarMensajesTermostato (){
 
         cnx.setOnProcesarMensajesTermostato(new conexionMqtt.OnProcesarMensajesTermostato() {
             @Override
             public void estadoTermostato(String topic, String message, dispositivoIotTermostato dispositivo) {
-                registrarTermostato(dispositivo);
+                //registrarTermostato(dispositivo, message);
+                registrarCronotermostato(dispositivo);
             }
 
             @Override
             public void actuacionReleLocalTermostato(String topic, String message, dispositivoIotTermostato dispositivo) {
-                actualizarTermostato(dispositivo);
+                //actualizarTermostato(dispositivo);
+                actualizarCronotermostato(dispositivo);
             }
 
             @Override
             public void actuacionReleRemotoTermostato(String topic, String message, dispositivoIotTermostato dispositivo) {
-                actualizarTermostato(dispositivo);
+                //actualizarTermostato(dispositivo);
+                actualizarCronotermostato(dispositivo);
             }
 
             @Override
@@ -576,7 +623,7 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
             @Override
             public void modificarProgramacionTermostato(String topic, String texto) {
                 procesarModificarPrograma(texto);
-                actualizarTermostato(dispositivoCronotermostato);
+                //actualizarTermostato(dispositivoCronotermostato);
 
             }
             @Override
@@ -596,6 +643,7 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
             @Override
             public void upgradeFirmwareTermostato(String topic, String texto, String idDispositivo, OtaVersion otaVersion) {
 
+                procesarUpgradeFirmware();
             }
 
             @Override
@@ -621,13 +669,16 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
         });
         cnx.setOnProcesarEspontaneosTermostato(new conexionMqtt.OnProcesarEspontaneosTermostato() {
             @Override
-            public void arranqueAplicacionTermostato(String topic, String texto, dispositivoIotTermostato dispoisitivo) {
-                actualizarDispositivo(dispositivoCronotermostato);
+            public void arranqueAplicacionTermostato(String topic, String texto, dispositivoIotTermostato dispositivo) {
+                //actualizarTermostato(dispositivo, texto);
+                actualizarCronotermostato(dispositivo);
+                notificarFinUpgrade(texto);
             }
 
             @Override
             public void cambioProgramaTermostato(String topic, String texto, dispositivoIotTermostato dispositivo) {
-                actualizarDispositivo(dispositivoCronotermostato);
+                //actualizarDispositivo(dispositivo, texto);
+                actualizarCronotermostato((dispositivo));
             }
 
             @Override
@@ -648,17 +699,20 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
 
             @Override
             public void cambioTemperaturaTermostato(String topic, String texto, dispositivoIotTermostato dispositivo) {
-                actualizarDispositivo(dispositivo);
+                //actualizarDispositivo(dispositivo, texto);
+                actualizarCronotermostato(dispositivo);
             }
 
             @Override
             public void temporizadorCumplido(String topic, String texto, dispositivoIotTermostato dispositivo) {
-                actualizarDispositivo(dispositivoCronotermostato);
+                //actualizarDispositivo(dispositivo, texto);
+                actualizarCronotermostato(dispositivo);
             }
 
             @Override
             public void cambioUmbralTemperatura(String topic, String texto, dispositivoIotTermostato dispositivo) {
-                actualizarDispositivo(dispositivoCronotermostato);
+                //actualizarDispositivo(dispositivo, texto);
+                actualizarCronotermostato(dispositivo);
             }
         });
         cnx.setOnProcesarVersionServidorOta(new conexionMqtt.OnProcesarVersionServidorOta() {
@@ -734,6 +788,7 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
         }
 
         actualizarProgramaEnCurso(dispositivoCronotermostato.getProgramaActivo());
+
 
 
     }
@@ -959,16 +1014,18 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
         barraProgreso.setVisibility(View.INVISIBLE);
     }
 
-    private void dispositivoDisponible()
+
+    private void dispositivoDisponible(String mensaje)
     {
         imageEstadoDispositivo.setImageResource(R.drawable.dispositivo_disponible);
         imageEstadoBroker.setImageResource(R.drawable.bk_conectado);
         barraProgreso.setVisibility(View.INVISIBLE);
-        textConsolaMensajes.setText(dispositivoCronotermostato.getIdDispositivo() + " disponible");
+        textConsolaMensajes.setText(mensaje);
         textConsolaMensajes.setTextColor(Color.BLUE);
         imageEstadoBroker.setImageResource(R.drawable.bk_conectado);
 
     }
+
 
     private void dispositivoIndisponible() {
         imageEstadoDispositivo.setImageResource(R.drawable.dispositivo_indisponible);
@@ -1199,6 +1256,70 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
         }
     }
 
+    private void procesarUpgradeFirmware() {
 
+
+        progressUpdate.setVisibility(View.VISIBLE);
+        progressUpdate.setProgress(0);
+        textConsolaMensajes.setText("Actualizando el dispositivo");
+        contador = new CountDownTimer(60000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+
+                progressUpdate.setProgress(progressUpdate.getProgress() + 2);
+                Log.i(TAG, "contador : " + progressUpdate.getProgress());
+
+            }
+
+            @Override
+            public void onFinish() {
+                if (dispositivoCronotermostato.getFinUpgrade() == -1000) {
+                    dispositivoDisponible("Temporizacion vencida en upgrade");
+                    progressUpdate.setVisibility(View.INVISIBLE);
+
+                }
+
+
+            }
+        };
+        contador.start();
+
+
+        //Programar el control de progreso
+        //Enseñar el control de progreso
+        //Coundowntimer para actualizar el progreso
+
+
+
+    }
+    private void notificarFinUpgrade(String texto) {
+
+
+        if (dispositivoCronotermostato.getFinUpgrade() == 0) {
+            Log.e(TAG, "Error al hacer el upgrade");
+            contador.cancel();
+            textConsolaMensajes.setText("Error al hacer el update");
+            progressUpdate.setVisibility(View.INVISIBLE);
+            imageUpgrade.setImageResource(R.drawable.ic_info);
+            dispositivoDisponible("Error al hacer el update");
+        }
+
+        if (dispositivoCronotermostato.getFinUpgrade() == 1) {
+            Log.w(TAG, "upgrade realizado con exito");
+            contador.cancel();
+            textConsolaMensajes.setText("Actualizacion realizada con exito");
+            progressUpdate.setVisibility(View.INVISIBLE);
+            imageUpgrade.setVisibility(View.INVISIBLE);
+            dispositivoDisponible("Actualizacion realizada con exito");
+        }
+
+        if (dispositivoCronotermostato.getFinUpgrade() == -1000 ) {
+            Log.i(TAG, "No se encuentra el finUprgade" +  texto);
+        }
+
+
+
+
+    }
 
 }

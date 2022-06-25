@@ -67,25 +67,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="23d00115-d3af-48c2-a0e5-936070caa06f" name="Default Changelist" comment="se hace el ubgrade de gradel a 7.1.0">
-      <change afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/Notificaciones.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules/app/IotControl.app.androidTest.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules/app/IotControl.app.main.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules/app/IotControl.app.unitTest.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/ActividadPrincipal.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/ActividadPrincipal.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/ActivityTermostato.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/ActivityTermostato.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/ListaDispositivosAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/ListaDispositivosAdapter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/conexionMqtt.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/conexionMqtt.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/listaProgramasInterruptorAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/java/com/example/controliot/listaProgramasInterruptorAdapter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/7.2/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.2/fileHashes/fileHashes.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_ycuwq_widgets_datepicker_1_0_1_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_ycuwq_widgets_datepicker_1_0_1_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/app/IotControl.app.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/app/IotControl.app.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ControlIot/app/src/main/res/layout/activity_termostato.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../ControlIot/app/src/main/res/layout/activity_termostato.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/IotControl.iml" beforeDir="false" afterPath="$PROJECT_DIR$/IotControl.iml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
