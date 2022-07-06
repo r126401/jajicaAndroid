@@ -435,6 +435,7 @@ private void rellenarControlesDesconocidoSinEstado(ListaDispositivosAdapterHolde
         cadena = contexto.getResources();
 
 
+
         if (lista.leerDispositivos(contexto) == true) {
             dial.ventanaDialogo(contexto, COMANDO_IOT.ESTADO, cadena.getString(R.string.eliminarDispositivo), cadena.getString(R.string.avisoEliminarDispositivo), R.drawable.ic_delete).show();
             dial.setOnDialogosAplicacion(new DialogosAplicacion.OnDialogosAplicacion() {
@@ -465,7 +466,9 @@ private void rellenarControlesDesconocidoSinEstado(ListaDispositivosAdapterHolde
             return true;
 
         } else {
+
             return false;
+
         }
 
     }

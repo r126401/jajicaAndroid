@@ -129,12 +129,14 @@ public class ActivityNuevoDispositivo extends AppCompatActivity implements View.
                 Intent datos = new Intent();
                 datos.setData(Uri.parse(editNombreDispositivo.getText().toString()));
                 setResult(RESULT_OK, datos);
-                finish();
+
             }
 
         } else {
             setResult(RESULT_CANCELED);
         }
+
+        finish();
 
 
     }
@@ -180,8 +182,6 @@ public class ActivityNuevoDispositivo extends AppCompatActivity implements View.
                 dlg.mensajeError(this, "Error en nuevo dispositivo", "El dispositivo ya existe", R.drawable.ic_info).show();
                 return false;
             }
-        } else {
-            return false;
         }
 
         return true;

@@ -362,7 +362,7 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
     }
 
 
-
+/*
     public void registrarTermostato(dispositivoIotTermostato dispositivo, String texto) {
         this.dispositivoCronotermostato = dispositivo;
         actualizarDispositivo(dispositivo, texto);
@@ -410,7 +410,7 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
 
 
     }
-
+*/
     private void ventanaConfirmacionComando(int icono, String texto, COMANDO_IOT idComando, Context contexto) {
         AlertDialog.Builder ventana;
         ventana = new AlertDialog.Builder(contexto);
@@ -587,7 +587,12 @@ public class ActivityTermostato extends AppCompatActivity implements BottomNavig
             @Override
             public void estadoTermostato(String topic, String message, dispositivoIotTermostato dispositivo) {
                 //registrarTermostato(dispositivo, message);
-                registrarCronotermostato(dispositivo);
+                if (dispositivoCronotermostato == null) {
+                    registrarCronotermostato(dispositivo);
+                } else {
+                    actualizarCronotermostato(dispositivo);
+                }
+
             }
 
             @Override

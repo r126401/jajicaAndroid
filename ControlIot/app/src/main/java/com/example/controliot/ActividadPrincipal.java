@@ -5,6 +5,7 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.NotificationCompat;
@@ -19,7 +20,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.ColorFilter;
+import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -127,7 +132,11 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
         registrarControles();
         inicializacionParametros();
         crearConexion();
-        if (adapter == null) presentarDispositivos();
+        if (adapter == null) {
+            if (!presentarDispositivos()) {
+                swipeListaDispositivos.setBackgroundResource(R.drawable.sin_dispositivos);
+            }
+        }
         procesarMensajes();
     }
 
@@ -369,6 +378,7 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
             if (listViewListaDispositivos.getAdapter() == null) {
                 adapter = new ListaDispositivosAdapter(this, R.layout.vista_dispositivo_desconocido, lista, cnx, dialogo);
             }
+            if (tamArray == 0) adapter.notifyDataSetChanged();
 
             for (i = 0; i < tamArray; i++) {
 
@@ -452,10 +462,18 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
 
 
     private void refrescarLista() {
-        adapter.clear();
-        lista.clear();
-        presentarDispositivos();
-        actualizarDispositivos();
+
+
+        configuracionDispositivos conf;
+        conf = new configuracionDispositivos();
+        if (conf.leerDispositivos(getApplicationContext())) {
+            adapter.clear();
+            lista.clear();
+            presentarDispositivos();
+            actualizarDispositivos();
+        }
+
+
     }
 
 
@@ -488,6 +506,7 @@ public class ActividadPrincipal extends AppCompatActivity implements BottomNavig
     public void onRefresh() {
         refrescarLista();
         swipeListaDispositivos.setRefreshing(false);
+
 
 
 
