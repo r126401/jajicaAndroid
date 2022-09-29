@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="libIot:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/libIot_jar</output-path>
+    <root id="archive" name="libIot.jar">
+      <element id="module-output" name="libIot" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/json/json/20220320/json-20220320.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
