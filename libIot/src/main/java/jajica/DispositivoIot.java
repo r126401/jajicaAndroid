@@ -220,7 +220,8 @@ public class DispositivoIot {
     }
 
     /**
-     * Este método construye un objeto json a partir del dispositivo
+     * Este método construye un objeto json a partir del dispositivo para la insercion en la estructura de configuracion
+     * de la aplicacion.
      * @return
      */
     public JSONObject dispositivo2Json() {
