@@ -5,6 +5,7 @@
 package jajica;
 
 import java.io.*;
+import java.util.Scanner;
 
 /**
  *
@@ -64,45 +65,44 @@ public class Ficheros {
 
     /**
      * Método para leer la configuaracion de la aplicacion.
+     *
      * @param fichero Es el nombre del fichero a leer
      * @return Devuelve el estado de la operacion. Es necesario utilizar el metodo de la clase para recuperar el
      * contenido del fichero.
-     *
      */
-    public ESTADO_FICHEROS leerFichero(String fichero)  {
+    public ESTADO_FICHEROS leerFichero(String fichero) {
 
         File archivo = null;
         FileReader fr = null;
         BufferedReader br = null;
-        String texto="";
+        String texto = "";
         ESTADO_FICHEROS estado;
 
         try {
             // Apertura del fichero y creacion de BufferedReader para poder
             // hacer una lectura comoda (disponer del metodo readLine()).
-            archivo = new File (fichero);
-            fr = new FileReader (archivo);
+            archivo = new File(fichero);
+            fr = new FileReader(archivo);
             br = new BufferedReader(fr);
 
             // Lectura del fichero
             String linea;
-            while((linea=br.readLine())!=null) {
+            while ((linea = br.readLine()) != null) {
                 //System.out.println(linea);
                 texto += linea;
             }
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return ESTADO_FICHEROS.ERROR_LEER_FICHERO;
-        }finally{
+        } finally {
             // En el finally cerramos el fichero, para asegurarnos
             // que se cierra tanto si todo va bien como si salta
             // una excepcion.
-            try{
-                if( null != fr ){
+            try {
+                if (null != fr) {
                     fr.close();
                 }
-            }catch (Exception e2){
+            } catch (Exception e2) {
                 e2.printStackTrace();
                 return ESTADO_FICHEROS.ERROR_CERRAR_FICHERO;
             }
@@ -114,41 +114,30 @@ public class Ficheros {
 
     /**
      * Método para escribir la configuracion de los dispositivos.
+     *
      * @param nombreFichero Es el nombre del fichero a escribir
      * @return Devuelve el estado de la operacion.
      */
-    public ESTADO_FICHEROS escribirFichero(String nombreFichero) {
+    public ESTADO_FICHEROS escribirFichero(String nombreFichero, String texto)  {
 
-
-        FileWriter fichero = null;
-        PrintWriter pw = null;
-        try
-        {
-            fichero = new FileWriter(nombreFichero);
-            pw = new PrintWriter(fichero);
-
-            for (int i = 0; i < 10; i++)
-                pw.println("Linea " + i);
-
-        } catch (Exception e) {
+        BufferedWriter bw = null;
+        try {
+            File fichero = new File(nombreFichero);
+            bw = new BufferedWriter(new FileWriter(fichero));
+            System.out.println(fichero.getCanonicalPath());
+            bw.write(texto);
+        } catch (IOException e) {
             e.printStackTrace();
             return ESTADO_FICHEROS.ERROR_ESCRIBIR_FICHERO;
         } finally {
             try {
-                // Nuevamente aprovechamos el finally para
-                // asegurarnos que se cierra el fichero.
-                if (null != fichero)
-                    fichero.close();
-            } catch (Exception e2) {
-                e2.printStackTrace();
+                bw.close(); // Cerramos el buffer
+            } catch (Exception e) {
                 return ESTADO_FICHEROS.ERROR_CERRAR_FICHERO;
+
             }
         }
         return ESTADO_FICHEROS.FICHERO_OK;
     }
-
-
-
-
 
 }

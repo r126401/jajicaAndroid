@@ -215,6 +215,10 @@ public class DispositivoIot {
         topicSubscripcion = dispositivoJson.getString(TEXTOS_DIALOGO_IOT.TOPIC_SUBSCRICION.getValorTextoJson());
         tipo = dispositivoJson.getInt(TEXTOS_DIALOGO_IOT.TIPO_DISPOSITIVO.getValorTextoJson());
         tipoDispositivo = tipoDispositivo.fromId(tipo);
+        if (!dispositivoValido()) {
+            return OPERACION_JSON.JSON_CORRUPTO;
+        }
+        setDispositivoJson(dispositivoJson);
 
         return OPERACION_JSON.JSON_OK;
     }
@@ -248,6 +252,28 @@ public class DispositivoIot {
 
         return dispositivoJson;
 
+
+    }
+
+    private Boolean chequearNulos(String valor) {
+
+        if ((valor == null) || valor.equals("")) {
+            return false;
+        } else {
+            return true;
+        }
+
+
+    }
+
+    public Boolean dispositivoValido() {
+
+        if(!chequearNulos(nombreDispositivo)) return false;
+        if(!chequearNulos(idDispositivo)) return false;
+        if(!chequearNulos(topicPublicacion)) return false;
+        if(!chequearNulos(topicSubscripcion)) return false;
+
+        return true;
 
     }
 
