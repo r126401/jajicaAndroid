@@ -1,4 +1,6 @@
-package jajica;
+package net.jajica.libiot;
+
+import android.content.Context;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -7,22 +9,49 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 
-/**
- * Esta clase gestiona la lista de dispositivos configurados en una aplicación que gestione los dispositivos
- * conectados a un mismo usuario.
- * El formato de la lista de dispositivos es la siguiente:
- * {"dispositivos":[{"nombreDispositivo":"Interruptor","idDevice":"4417931D0126","topicPublication":"\/sub_4417931D0126","topicSubscripcion":"\/pub_4417931D0126","device":0}]}
- *
- * La clase provee los metodos para listar, modificar, crear y eliminar dispositivos. Los guarda sobre un fichero standard
- * llamado datosDispositivos.conf
- *
- */
-
 public class ConjuntoDispositivosIot {
 
-    protected final String ficheroDispositivos = "/home/t126401/jajicaAndroid/libIot/out/artifacts/libIot_jar/datosDispositivos.conf";
+    private String ficheroDispositivos = "/home/t126401/jajicaAndroid/libIot/out/artifacts/libIot_jar/datosDispositivos.conf";
     private JSONObject datosDispositivos;
     private ArrayList<DispositivoIot> dispositivosIot;
+    private Context context;
+
+
+    public Context getContext() {
+        return context;
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
+    }
+
+    public ConjuntoDispositivosIot(){
+
+        setFicheroDispositivos("datosDispositivos.conf");
+        setContext(null);
+
+
+
+    }
+
+    public ConjuntoDispositivosIot(String nombreFichero) {
+
+        setFicheroDispositivos(nombreFichero);
+        setContext(null);
+    }
+
+    public ConjuntoDispositivosIot(Context context) {
+        setFicheroDispositivos("datosDispositivos.conf");
+        setContext(context);
+    }
+
+    public String getFicheroDispositivos() {
+        return ficheroDispositivos;
+    }
+
+    public void setFicheroDispositivos(String ficheroDispositivos) {
+        this.ficheroDispositivos = ficheroDispositivos;
+    }
 
     /**
      * Esta funcion devuelve la lista de dispositivos de la configuracion de dispositivos
@@ -53,7 +82,12 @@ public class ConjuntoDispositivosIot {
         OPERACION_CONFIGURACION_DISPOSITIVOS res;
         String texto;
         configuracion = new Ficheros();
-        estadoOperacion = configuracion.leerFichero(ficheroDispositivos);
+        if (context == null) {
+            estadoOperacion = configuracion.leerFichero(ficheroDispositivos);
+        } else {
+            estadoOperacion = configuracion.leerFichero(context, ficheroDispositivos);
+        }
+
         if (estadoOperacion != ESTADO_FICHEROS.FICHERO_OK) {
             return OPERACION_CONFIGURACION_DISPOSITIVOS.NINGUN_DISPOSITIVO;
         }
@@ -92,7 +126,7 @@ public class ConjuntoDispositivosIot {
     private OPERACION_CONFIGURACION_DISPOSITIVOS cargarEstructura(JSONObject estructura) {
 
         JSONArray array;
-        JSONObject item;
+        JSONObject item = null;
         DispositivoIot dispositivo;
         int i;
         try {
@@ -111,16 +145,19 @@ public class ConjuntoDispositivosIot {
 
         for (i=0;i< array.length();i++) {
 
-            item = array.getJSONObject(i);
-            if (item != null) {
-                dispositivo = new DispositivoIot();
-                if (dispositivo.json2DispositivoIot(item) == OPERACION_JSON.JSON_OK) {
-                    if (this.dispositivosIot == null) {
-                        dispositivosIot = new ArrayList<>();
-                    }
-                    dispositivosIot.add(dispositivo);
-                }
+            try {
+                item = array.getJSONObject(i);
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
+            dispositivo = new DispositivoIot();
+            if (dispositivo.json2DispositivoIot(item) == OPERACION_JSON.JSON_OK) {
+                if (this.dispositivosIot == null) {
+                    dispositivosIot = new ArrayList<>();
+                }
+                dispositivosIot.add(dispositivo);
+            }
+
         }
         return OPERACION_CONFIGURACION_DISPOSITIVOS.CONFIGURACION_OK;
     }
@@ -182,22 +219,40 @@ public class ConjuntoDispositivosIot {
      * @param dispositivo Es el dispositivo iot
      * @return true si se ha insertado con exito
      */
-    public OPERACION_CONFIGURACION_DISPOSITIVOS insertarDispositivo(DispositivoIot dispositivo) {
+    private OPERACION_CONFIGURACION_DISPOSITIVOS nuevoDispositivo(DispositivoIot dispositivo) {
 
         OPERACION_CONFIGURACION_DISPOSITIVOS op;
-        if ((op = anadirDispositivo(dispositivo)) != OPERACION_CONFIGURACION_DISPOSITIVOS.DISPOSITIVO_INSERTADO) {
+        if ((op = anadirDispositivoAlArray(dispositivo)) != OPERACION_CONFIGURACION_DISPOSITIVOS.DISPOSITIVO_INSERTADO) {
             return op;
 
         }
          actualizarDatosDispositivos(dispositivo);
+
+
         return op;
+    }
+
+    public OPERACION_CONFIGURACION_DISPOSITIVOS insertarDispositivo(DispositivoIot dispositivo) {
+
+        OPERACION_CONFIGURACION_DISPOSITIVOS op;
+        if (dispositivo == null) {
+            return OPERACION_CONFIGURACION_DISPOSITIVOS.DISPOSITIVO_NULO;
+        }
+        if ((op = nuevoDispositivo(dispositivo)) != OPERACION_CONFIGURACION_DISPOSITIVOS.DISPOSITIVO_INSERTADO) {
+            return op;
+        }
+        dispositivo.dispositivo2Json();
+        if (guardarDispositivos(datosDispositivos.toString()) != ESTADO_FICHEROS.FICHERO_OK) {
+            return OPERACION_CONFIGURACION_DISPOSITIVOS.CONFIGURACION_CORRUPTA;
+        }
+        return OPERACION_CONFIGURACION_DISPOSITIVOS.DISPOSITIVO_INSERTADO;
     }
 
     /**
      * Este metodo inserta en la estructura ArrayList un nuevo dispositivo
      * @param dispositivo es el dispositivo json
      */
-    private OPERACION_CONFIGURACION_DISPOSITIVOS anadirDispositivo(DispositivoIot dispositivo) {
+    private OPERACION_CONFIGURACION_DISPOSITIVOS anadirDispositivoAlArray(DispositivoIot dispositivo) {
 
         if (buscarDispositivoPorId(dispositivo.getIdDispositivo()) >= 0) {
             return OPERACION_CONFIGURACION_DISPOSITIVOS.DISPOSITIVO_EXISTENTE;
@@ -238,7 +293,7 @@ public class ConjuntoDispositivosIot {
 
 
         // Insertamos el dispositivo en la estructura
-        if ((op = insertarDispositivo(dispositivo)) != OPERACION_CONFIGURACION_DISPOSITIVOS.DISPOSITIVO_INSERTADO) {
+        if ((op = nuevoDispositivo(dispositivo)) != OPERACION_CONFIGURACION_DISPOSITIVOS.DISPOSITIVO_INSERTADO) {
             return op;
         }
         if (guardarDispositivos(datosDispositivos.toString()) != ESTADO_FICHEROS.FICHERO_OK) {
@@ -279,8 +334,11 @@ public class ConjuntoDispositivosIot {
 
         Ficheros file;
         file = new Ficheros();
-        return file.escribirFichero(ficheroDispositivos, texto);
-
+        if (context == null) {
+            return file.escribirFichero(ficheroDispositivos, texto);
+        } else {
+            return file.escribirFichero(getFicheroDispositivos(), texto, context);
+        }
     }
 
 
@@ -290,15 +348,25 @@ public class ConjuntoDispositivosIot {
      */
     private void actualizarDatosDispositivos(DispositivoIot dispositivo) {
 
-        JSONArray array;
+        JSONArray array = null;
 
         if (datosDispositivos == null) {
             datosDispositivos = new JSONObject();
             array = new JSONArray();
-            datosDispositivos.put(TEXTOS_DIALOGO_IOT.DISPOSITIVOS.getValorTextoJson(), array);
+            try {
+                datosDispositivos.put(TEXTOS_DIALOGO_IOT.DISPOSITIVOS.getValorTextoJson(), array);
+            } catch (JSONException e) {
+                e.printStackTrace();
+                return;
+            }
 
         }
-        array = datosDispositivos.getJSONArray(TEXTOS_DIALOGO_IOT.DISPOSITIVOS.getValorTextoJson());
+        try {
+            array = datosDispositivos.getJSONArray(TEXTOS_DIALOGO_IOT.DISPOSITIVOS.getValorTextoJson());
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return;
+        }
         array.put(dispositivo.getDispositivoJson());
 
 
@@ -355,7 +423,12 @@ public class ConjuntoDispositivosIot {
     private void eliminar(int i) {
 
         JSONArray array;
-        array = datosDispositivos.getJSONArray(TEXTOS_DIALOGO_IOT.DISPOSITIVOS.getValorTextoJson());
+        try {
+            array = datosDispositivos.getJSONArray(TEXTOS_DIALOGO_IOT.DISPOSITIVOS.getValorTextoJson());
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return;
+        }
         array.remove(i);
         dispositivosIot.remove(i);
         guardarDispositivos(datosDispositivos.toString());
@@ -368,7 +441,12 @@ public class ConjuntoDispositivosIot {
 
 
             JSONArray array;
-            array = datosDispositivos.getJSONArray(TEXTOS_DIALOGO_IOT.DISPOSITIVOS.getValorTextoJson());
+            try {
+                array = datosDispositivos.getJSONArray(TEXTOS_DIALOGO_IOT.DISPOSITIVOS.getValorTextoJson());
+            } catch (JSONException e) {
+                e.printStackTrace();
+                return OPERACION_CONFIGURACION_DISPOSITIVOS.CONFIGURACION_CORRUPTA;
+            }
             array.remove(i);
             dispositivosIot.remove(i);
             array.put(dispositivo.dispositivo2Json());

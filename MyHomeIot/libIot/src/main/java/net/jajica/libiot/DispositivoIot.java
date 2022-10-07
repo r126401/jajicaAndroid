@@ -1,11 +1,18 @@
-package jajica;
+package net.jajica.libiot;
 
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
+enum ESTADO_CONEXION_IOT implements Serializable{
+    INDETERMINADO,
+    CONECTADO,
+    DESCONECTADO,
+    ESPERANDO_RESPUESTA;
+}
 
 public class DispositivoIot {
 
@@ -172,7 +179,7 @@ public class DispositivoIot {
     /**
      *
      */
-    DispositivoIot() {
+    public DispositivoIot() {
 
         nombreDispositivo = null;
         idDispositivo = null;
@@ -239,22 +246,47 @@ public class DispositivoIot {
 
 
         if (nombreDispositivo != null) {
-            dispositivoJson.put(TEXTOS_DIALOGO_IOT.NOMBRE_DISPOSITIVO.getValorTextoJson(), getNombreDispositivo());
+            try {
+                dispositivoJson.put(TEXTOS_DIALOGO_IOT.NOMBRE_DISPOSITIVO.getValorTextoJson(), getNombreDispositivo());
+            } catch (JSONException e) {
+                e.printStackTrace();
+                return null;
+            }
         }
 
         if (idDispositivo != null) {
-            dispositivoJson.put(TEXTOS_DIALOGO_IOT.ID_DISPOSITIVO.getValorTextoJson(), getIdDispositivo());
+            try {
+                dispositivoJson.put(TEXTOS_DIALOGO_IOT.ID_DISPOSITIVO.getValorTextoJson(), getIdDispositivo());
+            } catch (JSONException e) {
+                e.printStackTrace();
+                return null;
+            }
         }
 
         if(topicSubscripcion != null) {
-            dispositivoJson.put(TEXTOS_DIALOGO_IOT.TOPIC_SUBSCRICION.getValorTextoJson(), getTopicSubscripcion());
+            try {
+                dispositivoJson.put(TEXTOS_DIALOGO_IOT.TOPIC_SUBSCRICION.getValorTextoJson(), getTopicSubscripcion());
+            } catch (JSONException e) {
+                e.printStackTrace();
+                return null;
+            }
         }
 
 
         if (topicPublicacion != null) {
-            dispositivoJson.put(TEXTOS_DIALOGO_IOT.TOPIC_PUBLICACION.getValorTextoJson(), getTopicPublicacion());
+            try {
+                dispositivoJson.put(TEXTOS_DIALOGO_IOT.TOPIC_PUBLICACION.getValorTextoJson(), getTopicPublicacion());
+            } catch (JSONException e) {
+                e.printStackTrace();
+                return null;
+            }
         }
-        dispositivoJson.put(TEXTOS_DIALOGO_IOT.TIPO_DISPOSITIVO.getValorTextoJson(), getTipoDispositivo().getValorTipoDispositivo());
+        try {
+            dispositivoJson.put(TEXTOS_DIALOGO_IOT.TIPO_DISPOSITIVO.getValorTextoJson(), getTipoDispositivo().getValorTipoDispositivo());
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
 
         return dispositivoJson;
 

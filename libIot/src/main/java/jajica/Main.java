@@ -3,10 +3,14 @@ package jajica;
 
 import org.json.JSONObject;
 
+
+
+
 public class Main {
     public static void main(String[] args) {
         
 
+        Context context;
         System.out.println("Hello world!");
         ConjuntoDispositivosIot conf;
         OPERACION_CONFIGURACION_DISPOSITIVOS op;

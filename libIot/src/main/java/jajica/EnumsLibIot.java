@@ -397,3 +397,30 @@ enum OPERACION_CONFIGURACION_DISPOSITIVOS {
     CONFIGURACION_OK,
     CONFIGURACION_NO_JSON
 }
+
+/**
+ * Enum en el que aparecen los valores json a utilizar para el fichero de configuracion mqtt
+ */
+enum CONF_MQTT {
+    MQTT("mqtt"),
+    BROKER("broker"),
+    PUERTO("puerto"),
+    USUARIO("usuario"),
+    PASSWORD("password"),
+    TLS("tls");
+
+    private String confMqtt;
+
+    CONF_MQTT(String dato) {
+        this.confMqtt = dato;
+
+
+
+    }
+
+    String getValorTextoJson() {
+
+        return this.confMqtt;
+    }
+
+}
