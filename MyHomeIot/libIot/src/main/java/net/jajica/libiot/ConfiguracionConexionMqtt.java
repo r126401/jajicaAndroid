@@ -52,7 +52,61 @@ public class ConfiguracionConexionMqtt {
     /**
      * Etiqueta usada para identificar la clase en la traza de log.
      */
+
+
     private final String TAG = "ConfiguracionConexionMqtt";
+
+
+    private Boolean autoConnect = true;
+    private Boolean cleanSession = false;
+    private int connectionTimeout = 20;
+    private int mqttVersion = 3;
+    private Boolean hostnameVerification = false;
+
+    public Boolean getAutoConnect() {
+        return autoConnect;
+    }
+
+    public CONFIGURACION_CONEXION_MQTT setAutoConnect(Boolean autoConnect) {
+        this.autoConnect = autoConnect;
+        return escribirConfiguracionMqtt();
+    }
+
+    public Boolean getCleanSession() {
+        return cleanSession;
+    }
+
+    public CONFIGURACION_CONEXION_MQTT setCleanSession(Boolean cleanSession) {
+        this.cleanSession = cleanSession;
+        return escribirConfiguracionMqtt();
+    }
+
+    public int getConnectionTimeout() {
+        return connectionTimeout;
+    }
+
+    public CONFIGURACION_CONEXION_MQTT setConnectionTimeout(int connectionTimeout) {
+        this.connectionTimeout = connectionTimeout;
+        return escribirConfiguracionMqtt();
+    }
+
+    public int getMqttVersion() {
+        return mqttVersion;
+    }
+
+    public CONFIGURACION_CONEXION_MQTT setMqttVersion(int mqttVersion) {
+        this.mqttVersion = mqttVersion;
+        return escribirConfiguracionMqtt();
+    }
+
+    public Boolean getHostnameVerification() {
+        return hostnameVerification;
+    }
+
+    public CONFIGURACION_CONEXION_MQTT setHostnameVerification(Boolean hostnameVerification) {
+        this.hostnameVerification = hostnameVerification;
+        return escribirConfiguracionMqtt();
+    }
 
     public String getBrokerId() {
         return brokerId;
@@ -143,7 +197,8 @@ public class ConfiguracionConexionMqtt {
     }
 
     /**
-     * Constructor de la aplicacion para entorno android
+     * Constructor de la aplicacion para entorno android. En el caso de que no se encuentre configuracion,
+     * se aplica la de defecto
      * @param context Es el contexto de la aplicacion. Se establece el nombre por defecto del
      * fichero de configuracion
      */
@@ -152,6 +207,10 @@ public class ConfiguracionConexionMqtt {
         setFicheroConfiguracion(FICHERO_CONFIGURACION_MQTT);
         setDatosConfiguracion(null);
         setContext(context);
+        CONFIGURACION_CONEXION_MQTT res;
+        if (cargarConfiguracion() != CONFIGURACION_CONEXION_MQTT.CONFIGURACION_MQTT_OK) {
+            escribirConfiguracionMqtt();
+        }
 
 
     }
@@ -164,6 +223,11 @@ public class ConfiguracionConexionMqtt {
         setFicheroConfiguracion(FICHERO_CONFIGURACION_MQTT);
         setDatosConfiguracion(null);
         setContext(null);
+        if (cargarConfiguracion() != CONFIGURACION_CONEXION_MQTT.CONFIGURACION_MQTT_OK) {
+            escribirConfiguracionMqtt();
+        }
+
+
     }
 
     /**
@@ -194,7 +258,7 @@ public class ConfiguracionConexionMqtt {
             e.printStackTrace();
             return CONFIGURACION_CONEXION_MQTT.CONFIGURACION_MQTT_CORRUPTA;
         }
-        if ((res = json2Configuracion()) != CONFIGURACION_CONEXION_MQTT.CONEXION_MQTT_OK) {
+        if ((res = json2Configuracion()) != CONFIGURACION_CONEXION_MQTT.CONFIGURACION_MQTT_OK) {
             return res;
         }
 
@@ -219,6 +283,11 @@ public class ConfiguracionConexionMqtt {
             objeto.put(CONF_MQTT.USUARIO.getValorTextoJson(), getUsuario());
             objeto.put(CONF_MQTT.PASSWORD.getValorTextoJson(), getPassword());
             objeto.put(CONF_MQTT.TLS.getValorTextoJson(), getTls());
+            objeto.put(CONF_MQTT.AUTOMATIC_RECONNECT.getValorTextoJson(), getAutoConnect());
+            objeto.put(CONF_MQTT.CLEAN_SESSION.getValorTextoJson(), getCleanSession());
+            objeto.put(CONF_MQTT.CONNECTION_TIMEOUT.getValorTextoJson(), getConnectionTimeout());
+            objeto.put(CONF_MQTT.MQTT_VERSION.getValorTextoJson(), getMqttVersion());
+            objeto.put(CONF_MQTT.HOSTNAME_VERIFICATION.getValorTextoJson(), getHostnameVerification());
             datosConfiguracion.put(CONF_MQTT.MQTT.getValorTextoJson(), objeto);
 
         } catch(JSONException e) {
@@ -254,12 +323,19 @@ public class ConfiguracionConexionMqtt {
             setUsuario(datos.getString(CONF_MQTT.USUARIO.getValorTextoJson()));
             setPassword(datos.getString(CONF_MQTT.PASSWORD.getValorTextoJson()));
             setTls(datos.getBoolean(CONF_MQTT.TLS.getValorTextoJson()));
+            setAutoConnect(datos.getBoolean(CONF_MQTT.AUTOMATIC_RECONNECT.getValorTextoJson()));
+            setCleanSession(datos.getBoolean(CONF_MQTT.CLEAN_SESSION.getValorTextoJson()));
+            setConnectionTimeout(datos.getInt(CONF_MQTT.CONNECTION_TIMEOUT.getValorTextoJson()));
+            setMqttVersion(datos.getInt(CONF_MQTT.MQTT_VERSION.getValorTextoJson()));
+            setHostnameVerification(datos.getBoolean(CONF_MQTT.HOSTNAME_VERIFICATION.getValorTextoJson()));
         } catch (JSONException e) {
             e.printStackTrace();
             return CONFIGURACION_CONEXION_MQTT.CONFIGURACION_MQTT_CORRUPTA;
         }
         return CONFIGURACION_CONEXION_MQTT.CONFIGURACION_MQTT_OK;
     }
+
+
 
 
 

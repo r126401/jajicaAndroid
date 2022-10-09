@@ -9,7 +9,12 @@ public enum CONF_MQTT {
     PUERTO("puerto"),
     USUARIO("usuario"),
     PASSWORD("password"),
-    TLS("tls");
+    TLS("tls"),
+    AUTOMATIC_RECONNECT("automaticReconnect"),
+    CLEAN_SESSION("cleanSession"),
+    CONNECTION_TIMEOUT("connectionTimeout"),
+    MQTT_VERSION("mqttVersion"),
+    HOSTNAME_VERIFICATION("httpsHostnameVerification");
 
     private String confMqtt;
 

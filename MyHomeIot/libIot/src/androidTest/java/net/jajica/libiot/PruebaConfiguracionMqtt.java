@@ -26,10 +26,7 @@ public class PruebaConfiguracionMqtt {
     public void textCargaConfiguracion() {
 
         CONFIGURACION_CONEXION_MQTT res;
-        assertEquals(CONFIGURACION_CONEXION_MQTT.CONFIGURACION_MQTT_INEXISTENTE, res = conf.cargarConfiguracion());
-        if (res != CONFIGURACION_CONEXION_MQTT.CONFIGURACION_MQTT_OK) {
-            assertEquals(CONFIGURACION_CONEXION_MQTT.CONFIGURACION_MQTT_OK, conf.escribirConfiguracionMqtt());
-        }
+        assertEquals(CONFIGURACION_CONEXION_MQTT.CONFIGURACION_MQTT_OK, res = conf.cargarConfiguracion());
 
 
     }
@@ -37,11 +34,16 @@ public class PruebaConfiguracionMqtt {
     @Test
     public void modificarParametros() {
 
-        assertEquals(CONFIGURACION_CONEXION_MQTT.CONFIGURACION_MQTT_OK, conf.setBrokerId("miBroker"));
-        assertEquals(CONFIGURACION_CONEXION_MQTT.CONFIGURACION_MQTT_OK, conf.setPuerto("5555"));
-        assertEquals(CONFIGURACION_CONEXION_MQTT.CONFIGURACION_MQTT_OK, conf.setUsuario("miUsuario"));
-        assertEquals(CONFIGURACION_CONEXION_MQTT.CONFIGURACION_MQTT_OK, conf.setPassword("miPassword"));
-        assertEquals(CONFIGURACION_CONEXION_MQTT.CONFIGURACION_MQTT_OK, conf.setTls(false));
+        assertEquals(CONFIGURACION_CONEXION_MQTT.CONFIGURACION_MQTT_OK, conf.setBrokerId("jajicaiot.ddns.net"));
+        assertEquals(CONFIGURACION_CONEXION_MQTT.CONFIGURACION_MQTT_OK, conf.setPuerto("8883"));
+        assertEquals(CONFIGURACION_CONEXION_MQTT.CONFIGURACION_MQTT_OK, conf.setUsuario(""));
+        assertEquals(CONFIGURACION_CONEXION_MQTT.CONFIGURACION_MQTT_OK, conf.setPassword(""));
+        assertEquals(CONFIGURACION_CONEXION_MQTT.CONFIGURACION_MQTT_OK, conf.setTls(true));
+        assertEquals(CONFIGURACION_CONEXION_MQTT.CONFIGURACION_MQTT_OK, conf.setAutoConnect(true));
+        assertEquals(CONFIGURACION_CONEXION_MQTT.CONFIGURACION_MQTT_OK, conf.setCleanSession(true));
+        assertEquals(CONFIGURACION_CONEXION_MQTT.CONFIGURACION_MQTT_OK, conf.setConnectionTimeout(30));
+        assertEquals(CONFIGURACION_CONEXION_MQTT.CONFIGURACION_MQTT_OK, conf.setMqttVersion(3));
+        assertEquals(CONFIGURACION_CONEXION_MQTT.CONFIGURACION_MQTT_OK, conf.setHostnameVerification(false));
 
     }
 
