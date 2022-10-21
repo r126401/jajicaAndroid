@@ -1,7 +1,6 @@
 package net.jajica.libiot;
 
-
-enum TEXTOS_DIALOGO_IOT {
+public enum TEXTOS_DIALOGO_IOT {
 
     COMANDO("comando"),
     CLAVE("token"),
@@ -31,7 +30,7 @@ enum TEXTOS_DIALOGO_IOT {
     RELE("rele"),
     OP_RELE("opRele"),
     ESTADO_CONEXION("estadoConexion"),
-    ESTADO_PROGRAMACION("programState"),
+    ESTADO_PROGRAMACION("programmerState"),
     ESTADO_DISPOSITIVO("deviceState"),
     SERVIDOR_OTA("otaServer"),
     PUERTO_OTA("otaPort"),
@@ -60,9 +59,6 @@ enum TEXTOS_DIALOGO_IOT {
     SENSOR_TEMPERATURA("sensorTemperatura");
 
 
-
-
-
     private String dialogo;
 
     TEXTOS_DIALOGO_IOT(String respuesta) {
@@ -77,114 +73,4 @@ enum TEXTOS_DIALOGO_IOT {
     }
 
 
-}
-enum TIPO_INFORME {
-    RESULTADO_COMANDO,
-    INFORME_ESPONTANEO
-}
-enum ESPONTANEO_IOT {
-
-    ARRANQUE_APLICACION(0),
-    ACTUACION_RELE_LOCAL(1),
-    ACTUACION_RELE_REMOTO(2),
-    UPGRADE_FIRMWARE_FOTA(3),
-    CAMBIO_DE_PROGRAMA(4),
-    COMANDO_APLICACION(5),
-    CAMBIO_TEMPERATURA(6),
-    CAMBIO_ESTADO(7),
-    RELE_TEMPORIZADO(8),
-    INFORME_ALARMA(9),
-    CAMBIO_UMBRAL_TEMPERATURA(10),
-    CAMBIO_ESTADO_APLICACION(11),
-    ERROR(12),
-
-    ESPONTANEO_DESCONOCIDO(-1);
-
-
-    private int idTipoInforme;
-
-    ESPONTANEO_IOT(int tipoInforme) {
-        this.idTipoInforme = tipoInforme;
-    }
-
-    public int getIdInforme() {
-        return this.idTipoInforme;
-    }
-    public ESPONTANEO_IOT fromId(int id) {
-
-
-        for (ESPONTANEO_IOT orden : values() ) {
-
-            if (orden.getIdInforme() == id) {
-
-                return orden;
-            }
-
-        }
-        return null;
-
-    }
-
-
-}
-enum COMANDO_IOT {
-    CONSULTAR_CONF_APP(0),
-    ACTUAR_RELE(50),
-    ESTADO(51),
-    CONSULTAR_PROGRAMACION(6),
-    NUEVA_PROGRAMACION(7),
-    ELIMINAR_PROGRAMACION(9),
-    MODIFICAR_PROGRAMACION(8),
-    MODIFICAR_APP(12),
-    RESET(10),
-    FACTORY_RESET(11),
-    MODIFY_CLOCK(15),
-    UPGRADE_FIRMWARE(26),
-    MODIFICAR_UMBRAL_TEMPERATURA(52),
-    SELECCIONAR_SENSOR_TEMPERATURA(53),
-    ESPONTANEO(-1),
-    VERSION_OTA(100),
-    ERROR_RESPUESTA(-100);
-
-    private int idComando;
-
-
-    COMANDO_IOT(int idComando) {
-        this.idComando = idComando;
-    }
-
-    public int getIdComando() {
-
-        return this.idComando;
-    }
-
-    public COMANDO_IOT fromId(int id) {
-
-
-        for (COMANDO_IOT orden : values() ) {
-
-            if (orden.getIdComando() == id) {
-
-                return orden;
-            }
-
-        }
-        return null;
-
-    }
-
-
-
-
-}
-enum OPERACION_JSON {
-
-    JSON_ERROR,
-    JSON_OK,
-    JSON_CORRUPTO
-}
-
-
-
-public class ApiJsonIot {
 }

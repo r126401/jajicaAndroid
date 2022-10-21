@@ -1,0 +1,63 @@
+package net.jajica.libiot;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
+import android.content.Context;
+import android.util.Log;
+
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.platform.app.InstrumentationRegistry;
+
+import org.json.JSONObject;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+@RunWith(AndroidJUnit4.class)
+public class TestApiJsonIot {
+
+    ConexionMqtt cnx;
+    Context appContext;
+
+    public void TextApiJson() {
+
+
+
+
+
+    }
+
+    @Test
+    public void TestGenerarComando() {
+
+        MQTT_STATE_CONNECTION estado;
+        appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        cnx = new ConexionMqtt(appContext);
+        estado = cnx.createConnetion(new ConexionMqtt.OnConexionMqtt() {
+            @Override
+            public void conexionEstablecida(boolean reconnect, String serverURI) {
+
+            }
+
+            @Override
+            public void conexionPerdida(Throwable cause) {
+
+            }
+        });
+        JSONObject cabecera = null;
+        String texto;
+        ApiDispositivoIot api;
+
+        if (estado == MQTT_STATE_CONNECTION.CONEXION_MQTT_CON_EXITO) {
+            api = new ApiDispositivoIot(cnx);
+            assertNotNull(texto = api.createSimpleCommand(COMANDO_IOT.ESTADO));
+            Log.i("texto", texto);
+
+
+        }
+
+
+
+
+    }
+}

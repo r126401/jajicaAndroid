@@ -32,9 +32,22 @@ public class TestConexionMqtt {
         conf = new ConfiguracionConexionMqtt(appContext);
         conf.setTls(true);
         conf.setPuerto("8883");
+        conf.setBrokerId("jajicaiot.ddns.net");
         cnx = new ConexionMqtt(appContext);
 
-        assertEquals(ESTADO_CONEXION_MQTT.CONEXION_MQTT_COMPLETA, cnx.connect());
+        assertEquals(MQTT_STATE_CONNECTION.CONEXION_MQTT_CON_EXITO, cnx.createConnetion(new ConexionMqtt.OnConexionMqtt() {
+            @Override
+            public void conexionEstablecida(boolean reconnect, String serverURI) {
+                cnx.setStateConnection(MQTT_STATE_CONNECTION.CONEXION_MQTT_COMPLETA);
+
+            }
+
+            @Override
+            public void conexionPerdida(Throwable cause) {
+                cnx.setStateConnection(MQTT_STATE_CONNECTION.CONEXION_MQTT_LOST);
+
+            }
+        }));
 
 
     }

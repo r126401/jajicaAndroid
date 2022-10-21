@@ -1,7 +1,6 @@
 package net.jajica.libiot;
 
 import android.content.Context;
-import android.util.Log;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -40,10 +39,10 @@ public class ExampleInstrumentedTest {
 
     public void pruebaInsertarDispositivo() {
 
-        DispositivoIot dispositivo;
+        IotDevice dispositivo;
         ESTADO_DISPOSITIVO a;
         OPERACION_CONFIGURACION_DISPOSITIVOS op;
-        dispositivo = new DispositivoIot();
+        dispositivo = new IotDevice();
         dispositivo.setNombreDispositivo("mmajGH");
         dispositivo.setIdDispositivo("mmddgGG");
         dispositivo.setTopicPublicacion("kkk");
@@ -72,8 +71,8 @@ public class ExampleInstrumentedTest {
     @Test
     public void crearDispositivo() {
 
-        DispositivoIot dispositivo;
-        dispositivo = new DispositivoIot();
+        IotDevice dispositivo;
+        dispositivo = new IotDevice();
         dispositivo.setNombreDispositivo("mmajGH");
         dispositivo.setIdDispositivo("mmddgGG");
         dispositivo.setTopicPublicacion("kkk");

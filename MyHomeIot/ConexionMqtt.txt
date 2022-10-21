@@ -1,0 +1,27 @@
+title Secuencia envio de comandos
+
+participant App
+participant ApiJsonIot
+participant ConexionMqtt
+participant dispositivo
+participant DispositivoIot
+
+== Fase de conexion ==
+
+App->ConexionMqtt: new ConexionMqtt(context)
+App->ConexionMqtt:createConnetion(listenerConexion)
+ConexionMqtt->App: ConexionCompleta
+App->DispositivoIot: new DispositivoIot(cnx, nombre, id)
+DispositivoIot->ConexionMqtt: subscribirTopic()
+DispositivoIot->ApiJsonIot:listener.OnMessageReceived
+App->DispositivoIot->setStatus()
+DispositivoIot->ApiJsonIot: enviarComandoStatus()
+
+
+
+ConexionMqtt->main: ConexionMtt.connect()
+main->
+
+
+
+

@@ -13,7 +13,7 @@ public class ConjuntoDispositivosIot {
 
     private String ficheroDispositivos = "/home/t126401/jajicaAndroid/libIot/out/artifacts/libIot_jar/datosDispositivos.conf";
     private JSONObject datosDispositivos;
-    private ArrayList<DispositivoIot> dispositivosIot;
+    private ArrayList<IotDevice> dispositivosIot;
     private Context context;
 
 
@@ -57,7 +57,7 @@ public class ConjuntoDispositivosIot {
      * Esta funcion devuelve la lista de dispositivos de la configuracion de dispositivos
      * @return Devuelve la lista de dispositivos actual
      */
-    public ArrayList<DispositivoIot> getDispositivosIot() {
+    public ArrayList<IotDevice> getDispositivosIot() {
         return dispositivosIot;
     }
 
@@ -127,7 +127,7 @@ public class ConjuntoDispositivosIot {
 
         JSONArray array;
         JSONObject item = null;
-        DispositivoIot dispositivo;
+        IotDevice dispositivo;
         int i;
         try {
             array = estructura.getJSONArray(TEXTOS_DIALOGO_IOT.DISPOSITIVOS.getValorTextoJson());
@@ -150,7 +150,7 @@ public class ConjuntoDispositivosIot {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            dispositivo = new DispositivoIot();
+            dispositivo = new IotDevice();
             if (dispositivo.json2DispositivoIot(item) == OPERACION_JSON.JSON_OK) {
                 if (this.dispositivosIot == null) {
                     dispositivosIot = new ArrayList<>();
@@ -171,7 +171,7 @@ public class ConjuntoDispositivosIot {
 
         int i;
 
-        DispositivoIot dispositivo;
+        IotDevice dispositivo;
 
         if (dispositivosIot != null) {
 
@@ -198,7 +198,7 @@ public class ConjuntoDispositivosIot {
     public int buscarDispositivoPorId(String valor) {
 
         int i;
-        DispositivoIot dispositivo;
+        IotDevice dispositivo;
 
         if (dispositivosIot != null) {
 
@@ -219,7 +219,7 @@ public class ConjuntoDispositivosIot {
      * @param dispositivo Es el dispositivo iot
      * @return true si se ha insertado con exito
      */
-    private OPERACION_CONFIGURACION_DISPOSITIVOS nuevoDispositivo(DispositivoIot dispositivo) {
+    private OPERACION_CONFIGURACION_DISPOSITIVOS nuevoDispositivo(IotDevice dispositivo) {
 
         OPERACION_CONFIGURACION_DISPOSITIVOS op;
         if ((op = anadirDispositivoAlArray(dispositivo)) != OPERACION_CONFIGURACION_DISPOSITIVOS.DISPOSITIVO_INSERTADO) {
@@ -232,7 +232,7 @@ public class ConjuntoDispositivosIot {
         return op;
     }
 
-    public OPERACION_CONFIGURACION_DISPOSITIVOS insertarDispositivo(DispositivoIot dispositivo) {
+    public OPERACION_CONFIGURACION_DISPOSITIVOS insertarDispositivo(IotDevice dispositivo) {
 
         OPERACION_CONFIGURACION_DISPOSITIVOS op;
         if (dispositivo == null) {
@@ -252,7 +252,7 @@ public class ConjuntoDispositivosIot {
      * Este metodo inserta en la estructura ArrayList un nuevo dispositivo
      * @param dispositivo es el dispositivo json
      */
-    private OPERACION_CONFIGURACION_DISPOSITIVOS anadirDispositivoAlArray(DispositivoIot dispositivo) {
+    private OPERACION_CONFIGURACION_DISPOSITIVOS anadirDispositivoAlArray(IotDevice dispositivo) {
 
         if (buscarDispositivoPorId(dispositivo.getIdDispositivo()) >= 0) {
             return OPERACION_CONFIGURACION_DISPOSITIVOS.DISPOSITIVO_EXISTENTE;
@@ -283,8 +283,8 @@ public class ConjuntoDispositivosIot {
      */
     public OPERACION_CONFIGURACION_DISPOSITIVOS insertarDispositivoDesdeJson(JSONObject dispositivoJson) {
 
-        DispositivoIot dispositivo;
-        dispositivo = new DispositivoIot();
+        IotDevice dispositivo;
+        dispositivo = new IotDevice();
         OPERACION_CONFIGURACION_DISPOSITIVOS op;
         // Se pasa introduce la parte json en el dispositivo
         if (dispositivo.json2DispositivoIot(dispositivoJson) != OPERACION_JSON.JSON_OK) {
@@ -343,10 +343,10 @@ public class ConjuntoDispositivosIot {
 
 
     /**
-     * Esta funcion actualiza la cadena json del objeto para hacerla consistente con los objetos DispositivoIot existentes
+     * Esta funcion actualiza la cadena json del objeto para hacerla consistente con los objetos IotDevice existentes
      * @param dispositivo Es el dispositivo que se va a actualizar en la estructura json
      */
-    private void actualizarDatosDispositivos(DispositivoIot dispositivo) {
+    private void actualizarDatosDispositivos(IotDevice dispositivo) {
 
         JSONArray array = null;
 
@@ -437,7 +437,7 @@ public class ConjuntoDispositivosIot {
 
         }
 
-        private OPERACION_CONFIGURACION_DISPOSITIVOS modificarDispositivo(int i, DispositivoIot dispositivo) {
+        private OPERACION_CONFIGURACION_DISPOSITIVOS modificarDispositivo(int i, IotDevice dispositivo) {
 
 
             JSONArray array;
@@ -463,7 +463,7 @@ public class ConjuntoDispositivosIot {
      * @param dispositivo Es el dispositivo a modificar
      * @return Se retorna el resultado de la operacion
      */
-        public OPERACION_CONFIGURACION_DISPOSITIVOS modificarDispositivoPorNombre(String nombreDispositivo, DispositivoIot dispositivo) {
+        public OPERACION_CONFIGURACION_DISPOSITIVOS modificarDispositivoPorNombre(String nombreDispositivo, IotDevice dispositivo) {
 
             int i;
             if ((i = buscarDispositivoPorNombre(nombreDispositivo)) >= 0) {
@@ -482,7 +482,7 @@ public class ConjuntoDispositivosIot {
      * @param dispositivo es el dispositivo que se va a modificar
      * @return se devuelve el resultado de la operacion
      */
-        public OPERACION_CONFIGURACION_DISPOSITIVOS modificarDispositivoporId(String idDispositivo, DispositivoIot dispositivo) {
+        public OPERACION_CONFIGURACION_DISPOSITIVOS modificarDispositivoporId(String idDispositivo, IotDevice dispositivo) {
 
             int i;
             if ((i = buscarDispositivoPorId(idDispositivo)) >= 0) {
