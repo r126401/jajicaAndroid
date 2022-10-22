@@ -2,13 +2,11 @@ package net.jajica.libiot;
 
 
 import android.content.Context;
-import android.os.CountDownTimer;
 import android.util.Log;
 
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
 import org.eclipse.paho.client.mqttv3.IMqttActionListener;
-import org.eclipse.paho.client.mqttv3.IMqttAsyncClient;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.IMqttToken;
 import org.eclipse.paho.client.mqttv3.MqttCallbackExtended;
@@ -27,88 +25,101 @@ import java.security.cert.CertificateException;
 import java.util.Timer;
 import java.util.TimerTask;
 
-
-public class ConexionMqtt implements Serializable {
+/**
+ * Esta clase implementa la logica de conexion mqtt con la aplicacion apoyandose en la libreria
+ * paho de eclipse.
+ * Para poder realizar una conexion, es necesario:
+ * 1.- Llamar al constructor pasandole el contexto de la aplicacion context.
+ * 2.- El constructor se apoya en la clase ConfigurationMqtt en la que se guardan todos los parametros
+ * para realizar la conexion.
+ * 3.- Se crea la conexion llamando al metodo createConnetion siendo necesario crear el listener para
+ * recibir los eventos de la comunicacion, excepto el de los mensajes que lleguen, los cuales se hará tratamiento especial
+ * 5.- Una vez que la conexion esta activa CONEXION_MQTT_ACTIVE, se pueden utilizar los metodos publishTopic y subscribeTopic
+ *
+ */
+public class MqttConnection implements Serializable {
 
     protected final String TAG = "conexionMqtt";
-    private MqttAndroidClient client;
-    private Context context;
-    private IMqttToken token;
-    private IMqttAsyncClient a;
-    private CountDownTimer timer;
-    private MqttConnectOptions options;
-    private ConfiguracionConexionMqtt cnx;
-    private String idClient;
-    private String stringConnection;
-    private MQTT_STATE_CONNECTION stateConnection;
-    private OnConexionMqtt listenerConexion;
-    private OnArrivedMessage listenerMessage;
-    private OnSubscriptionTopic listenerTopic;
-    private Boolean connectionCreated;
+    protected MqttAndroidClient client;
+    private final Context context;
+    protected IMqttToken token;
+    protected MqttConnectOptions options;
+    protected ConfigurationMqtt cnx;
+    protected String idClient;
+    protected String stringConnection;
+    protected MQTT_STATE_CONNECTION stateConnection;
+    protected OnMqttConnection onListenerConnection;
+    protected OnArrivedMessage onListenerArrivedMessaged;
+    protected OnSubscriptionTopic onListenerSubscribe;
 
-    public Boolean getConnectionCreated() {
-        return connectionCreated;
-    }
 
-    public void setConnectionCreated(Boolean connectionCreated) {
-        this.connectionCreated = connectionCreated;
-    }
-
-    public OnConexionMqtt getListenerConexion() {
-        return listenerConexion;
-    }
-
-    public void setListenerConexion(OnConexionMqtt listenerConexion) {
-        this.listenerConexion = listenerConexion;
-    }
-
-    public OnArrivedMessage getListenerMessage() {
-        return listenerMessage;
-    }
-
-    public void setListenerMessage(OnArrivedMessage listenerMessage) {
-        this.listenerMessage = listenerMessage;
-    }
-
-    public OnSubscriptionTopic getListenerTopic() {
-        return listenerTopic;
-    }
-
-    public void setListenerTopic(OnSubscriptionTopic listenerTopic) {
-        this.listenerTopic = listenerTopic;
+    /**
+     * Este método crea un listener para controlar los eventos de la conexion
+     * @param onListenerConnection es el listener en uso
+     */
+    public void setOnListenerConnection(OnMqttConnection onListenerConnection) {
+        this.onListenerConnection = onListenerConnection;
     }
 
     /**
-     * Interface para redefinicion de
+     * Este metodo crea un listener para recibir los eventos que llegan desde la conexion mqtt
+     * @param onListenerArrivedMessaged es el listener en uso
      */
-    public interface OnConexionMqtt {
+    public void setOnListenerArrivedMessaged(OnArrivedMessage onListenerArrivedMessaged) {
+        this.onListenerArrivedMessaged = onListenerArrivedMessaged;
+    }
 
-        void conexionEstablecida(boolean reconnect, String serverURI);
-        void conexionPerdida(Throwable cause);
+
+    /**
+     * Este metodo crea un listener para controlar el resultado final de la subscripcion
+     * @param onListenerSubscribe es el listener en uso
+     */
+    public void setOnListenerSubscribe(OnSubscriptionTopic onListenerSubscribe) {
+        this.onListenerSubscribe = onListenerSubscribe;
+    }
+
+    /**
+     * Interface utilizado para controlar los eventos de la conexion
+     */
+    public interface OnMqttConnection {
+
+        void connectionEstablished(boolean reconnect, String serverURI);
+        void connectionLost(Throwable cause);
 
     }
 
+    /**
+     * Se utiliza para controlar los eventos que llegan
+     */
     public interface OnArrivedMessage {
         void arrivedMessage(String topic, MqttMessage message);
     }
 
+    /**
+     * Se utiliza para controlar el resultado final de las subscripcion a un topic
+     */
     public interface OnSubscriptionTopic {
 
-        void conExito(IMqttToken iMqttToken);
-        void sinExito(IMqttToken iMqttToken, Throwable throwable);
+        void Unsuccessful(IMqttToken iMqttToken);
+        void Successful(IMqttToken iMqttToken, Throwable throwable);
 
     }
 
-
-
-
+    /**
+     * Este metodo devuelve el estado de la conexion
+     * @return un estado MQTT_STATE_CONNECTION
+     */
     public MQTT_STATE_CONNECTION getStateConnection() {
         return stateConnection;
     }
 
+    /**
+     * Este metodo actualiza el estado de la conexion para hacerlo coherente
+     * @param stateConnection
+     */
     public void setStateConnection(MQTT_STATE_CONNECTION stateConnection) {
         this.stateConnection = stateConnection;
-        Log.w(TAG, "Se ha cambiado el estado de conexion a " + getStateConnection().toString());
+        Log.i(TAG, "Se ha cambiado el estado de conexion a " + getStateConnection().toString());
     }
 
     /**
@@ -117,15 +128,14 @@ public class ConexionMqtt implements Serializable {
      * @param context Contexto de la aplcacion, y necesario para crear la conexion mqtt.
      *
      */
-    public ConexionMqtt(Context context) {
+    public MqttConnection(Context context) {
 
         client = null;
         this.context = context;
         token = null;
-        timer = null;
         cnx = null;
         stateConnection = MQTT_STATE_CONNECTION.CONEXION_MQTT_DESCONECTADA;
-        cnx = new ConfiguracionConexionMqtt(this.context);
+        cnx = new ConfigurationMqtt(this.context);
         options = new MqttConnectOptions();
         options.setAutomaticReconnect(cnx.getAutoConnect());
         options.setCleanSession(cnx.getCleanSession());
@@ -133,7 +143,6 @@ public class ConexionMqtt implements Serializable {
         options.setMqttVersion(cnx.getMqttVersion());
         options.setHttpsHostnameVerificationEnabled(cnx.getHostnameVerification());
         idClient = MqttClient.generateClientId();
-        setConnectionCreated(false);
         //idClient = UUID.randomUUID().toString();
         if (cnx.getTls()) {
             stringConnection = "ssl://" + cnx.getBrokerId() + ":" + cnx.getPuerto();
@@ -142,7 +151,14 @@ public class ConexionMqtt implements Serializable {
         }
     }
 
-    public MQTT_STATE_CONNECTION createConnetion(OnConexionMqtt listenerConexionMqtt) {
+    /**
+     * Este metodo crea la conexion Mqtt. Es necesario crear un listener para controlar el estado
+     * de dicha conexion.
+     * @param listenerConexionMqtt es el listener usado por la aplicacion para la conexion
+     * @return Devuelve el resultado de la conexion aunque es necesario esperar el evento connectComplete
+     * para asegurar que la conexion esta estabilizada y es el punto de inicio del dialogo
+     */
+    public MQTT_STATE_CONNECTION createConnetion(OnMqttConnection listenerConexionMqtt) {
 
 
         client = new MqttAndroidClient(context, stringConnection, idClient);
@@ -151,7 +167,7 @@ public class ConexionMqtt implements Serializable {
             public void connectComplete(boolean reconnect, String serverURI) {
                 setStateConnection(MQTT_STATE_CONNECTION.CONEXION_MQTT_ACTIVE);
                 //Informamos de la conexion establecida a la aplicacion
-                listenerConexionMqtt.conexionEstablecida(reconnect, serverURI);
+                listenerConexionMqtt.connectionEstablished(reconnect, serverURI);
 
             }
 
@@ -159,19 +175,19 @@ public class ConexionMqtt implements Serializable {
             public void connectionLost(Throwable cause) {
                 //Informamos cuando se pierde la conexion
                 setStateConnection(MQTT_STATE_CONNECTION.CONEXION_MQTT_LOST);
-                listenerConexionMqtt.conexionPerdida(cause);
+                listenerConexionMqtt.connectionLost(cause);
 
             }
 
             @Override
-            public void messageArrived(String topic, MqttMessage message) throws Exception {
+            public void messageArrived(String topic, MqttMessage message)  {
                 if (getStateConnection() != MQTT_STATE_CONNECTION.CONEXION_MQTT_ACTIVE) {
                     setStateConnection(MQTT_STATE_CONNECTION.CONEXION_MQTT_ACTIVE);
                 }
 
                 String datos = new String(message.getPayload());
                 Log.d(TAG, topic +" : " + datos);
-                listenerMessage.arrivedMessage(topic, message);
+                onListenerArrivedMessaged.arrivedMessage(topic, message);
 
             }
 
@@ -220,7 +236,7 @@ public class ConexionMqtt implements Serializable {
     }
 
 
-    private MQTT_STATE_CONNECTION connect() {
+    private void connect() {
 
 
         try {
@@ -240,20 +256,20 @@ public class ConexionMqtt implements Serializable {
         } catch (MqttException e) {
             e.printStackTrace();
             setStateConnection(MQTT_STATE_CONNECTION.CONEXION_MQTT_ERROR_CONNECT);
-            return MQTT_STATE_CONNECTION.CONEXION_MQTT_ERROR_CONNECT;
+            return;
         }
 
 
         setStateConnection(MQTT_STATE_CONNECTION.CONEXION_MQTT_CON_EXITO);
-        return MQTT_STATE_CONNECTION.CONEXION_MQTT_CON_EXITO;
     }
+
 
     /**
      * Publica un mensaje de texto a traves del topic suministrado
      * @param topic sobre el que enviar el mensaje
      * @param texto es el mensaje a enviar
      */
-    public DEVICE_STATE_CONNECTION publicarTopic(String topic, String texto) {
+    public DEVICE_STATE_CONNECTION publishTopic(String topic, String texto) {
 
         MqttMessage mensaje;
 
@@ -280,12 +296,12 @@ public class ConexionMqtt implements Serializable {
 
 
     /**
-     * Esta funcion suscribe a un dispoisitivo a un topic del broker
+     * Esta funcion subscribe a un dispoisitivo a un topic del broker
      * @param topic Es el topic por donde escuchara el dispositivo
      * @param listener Se dispara si finalmente no se puede suscribir el dispositivo
      * @return Restorna el resultado de la operacion
      */
-    public MQTT_STATE_CONNECTION subscribirTopic(String topic, OnSubscriptionTopic listener) {
+    public MQTT_STATE_CONNECTION subscribeTopic(String topic, OnSubscriptionTopic listener) {
 
         Log.w(TAG, "topic " + topic);
         if (stateConnection == MQTT_STATE_CONNECTION.CONEXION_MQTT_ACTIVE) {
@@ -294,13 +310,13 @@ public class ConexionMqtt implements Serializable {
                     @Override
                     public void onSuccess(IMqttToken iMqttToken) {
                         Log.w(TAG, "subscrito al topic " + topic);
-                        listener.conExito(iMqttToken);
+                        listener.Unsuccessful(iMqttToken);
                     }
 
                     @Override
                     public void onFailure(IMqttToken iMqttToken, Throwable throwable) {
                         Log.w(TAG, "subscrito sin exito al topic " + topic);
-                        listener.sinExito(iMqttToken, throwable);
+                        listener.Successful(iMqttToken, throwable);
                     }
                 });
             } catch (MqttException e) {
@@ -315,7 +331,7 @@ public class ConexionMqtt implements Serializable {
 
     }
 
-    public MQTT_STATE_CONNECTION retryConnection(long timeRetry, long notifyInterval) {
+    private MQTT_STATE_CONNECTION retryConnection(long timeRetry, long notifyInterval) {
 
         Timer timerConnection;
         connect();
@@ -340,43 +356,25 @@ public class ConexionMqtt implements Serializable {
 
     }
 
+    /**
+     * Este metodo cierra la conexion definitivamente
+     *
+     */
+    public void closeConnection() {
+        try {
+            client.disconnect();
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
+        client.close();
 
-
-    public MQTT_STATE_CONNECTION connectionRetry(long tiempoReintento, long intervaloNotificacion) {
-
-        CountDownTimer temporizador;
-        connect();
-        temporizador = new CountDownTimer(tiempoReintento, intervaloNotificacion) {
-            @Override
-            public void onTick(long l) {
-                if(getStateConnection() == MQTT_STATE_CONNECTION.CONEXION_MQTT_ACTIVE) {
-                    this.cancel();
-                    Log.i(TAG, "SE CANCELA EL TEMPORIZADOR");
-                } else {
-                    Log.i(TAG, "EL TIEMPO PASA");
-                }
-
-            }
-
-            @Override
-            public void onFinish() {
-                if(getStateConnection() != MQTT_STATE_CONNECTION.CONEXION_MQTT_ACTIVE) {
-                    Log.e(TAG, "NO SE CONSIGUE CONECTAR, SE REINTENTA");
-                    connect();
-                }
-
-            }
-        };
-
-        temporizador.start();
-
-        return getStateConnection();
-
+        setStateConnection(MQTT_STATE_CONNECTION.CONEXION_MQTT_DESCONECTADA);
     }
 
+    public Boolean isConnected() {
 
+        return client.isConnected();
 
-
-
+    }
 
 }

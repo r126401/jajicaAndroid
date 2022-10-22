@@ -52,7 +52,7 @@ enum ESTADO_PROGRAMA {
 
 }
 
-public class ProgramaDispositivoIot implements Serializable {
+public class IotDeviceProgram implements Serializable {
 
     protected String idProgramacion;
     protected TIPO_PROGRAMA tipoPrograma;
@@ -65,12 +65,12 @@ public class ProgramaDispositivoIot implements Serializable {
     protected int diaSemana;
     protected ESTADO_PROGRAMA estadoPrograma;
     protected int mascara;
-    protected TIPO_DISPOSITIVO_IOT tipoDispositivo;
+    protected IOT_DEVICE_TYPE tipoDispositivo;
     protected boolean[] diasActivos;
     protected boolean programaEnCurso;
     protected int duracion;
 
-    ProgramaDispositivoIot() {
+    IotDeviceProgram() {
 
         idProgramacion = null;
         tipoPrograma = TIPO_PROGRAMA.PROGRAMA_DESCONOCIDO;
@@ -83,7 +83,7 @@ public class ProgramaDispositivoIot implements Serializable {
         ano = 0;
         mes = 0;
         dia = 0;
-        tipoDispositivo = TIPO_DISPOSITIVO_IOT.DESCONOCIDO;
+        tipoDispositivo = IOT_DEVICE_TYPE.DESCONOCIDO;
         diasActivos = new boolean[7];
         programaEnCurso = false;
     }
@@ -179,11 +179,11 @@ public class ProgramaDispositivoIot implements Serializable {
     //-----------------------------------------------------------
 
 
-    public TIPO_DISPOSITIVO_IOT getTipoDispositivo() {
+    public IOT_DEVICE_TYPE getTipoDispositivo() {
         return tipoDispositivo;
     }
 
-    public void setTipoDispositivo(TIPO_DISPOSITIVO_IOT tipoDispositivo) {
+    public void setTipoDispositivo(IOT_DEVICE_TYPE tipoDispositivo) {
         this.tipoDispositivo = tipoDispositivo;
     }
 

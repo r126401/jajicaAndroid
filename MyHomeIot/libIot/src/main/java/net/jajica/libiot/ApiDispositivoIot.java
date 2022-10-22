@@ -21,7 +21,7 @@ import java.util.UUID;
 public class ApiDispositivoIot implements Serializable {
 
     private String commandKey;
-    private ConexionMqtt cnx;
+    private MqttConnection cnx;
     ArrayList<TimersApi> timersApi;
     onTimeoutApiJson listenerTimeoutApiJson;
     protected final String TAG="ApiDispositivoIot";
@@ -55,11 +55,11 @@ public class ApiDispositivoIot implements Serializable {
         this.commandKey = commandKey;
     }
 
-    public ConexionMqtt getCnx() {
+    public MqttConnection getCnx() {
         return cnx;
     }
 
-    public void setCnx(ConexionMqtt cnx) {
+    public void setCnx(MqttConnection cnx) {
         this.cnx = cnx;
     }
 
@@ -80,11 +80,11 @@ public class ApiDispositivoIot implements Serializable {
     }
 
 
-    public ApiDispositivoIot(ConexionMqtt cnx) {
+    public ApiDispositivoIot(MqttConnection cnx) {
 
         setCommandKey(UUID.randomUUID().toString());
 
-        cnx.setListenerMessage(new ConexionMqtt.OnArrivedMessage() {
+        cnx.setOnListenerArrivedMessaged(new MqttConnection.OnArrivedMessage() {
             @Override
             public void arrivedMessage(String topic, MqttMessage message) {
                 Log.i(TAG, "Llego un mensaje");
@@ -477,7 +477,7 @@ public class ApiDispositivoIot implements Serializable {
 
     private void procesarMensaje(String topic, MqttMessage message) {
 
-        TIPO_INFORME tipoInforme = null;
+        IOT_REPORT_TYPE tipoInforme = null;
         String mensaje;
         IotDevice dispositivo;
         mensaje = new String (message.getPayload());
@@ -485,17 +485,17 @@ public class ApiDispositivoIot implements Serializable {
         COMANDO_IOT comando;
         comando = getCommandId(mensaje);
         if (comando == COMANDO_IOT.ESPONTANEO) {
-            tipoInforme = TIPO_INFORME.INFORME_ESPONTANEO;
+            tipoInforme = IOT_REPORT_TYPE.SPONTANEOUS_REPORT;
         } else {
-            tipoInforme = TIPO_INFORME.RESULTADO_COMANDO;
+            tipoInforme = IOT_REPORT_TYPE.COMMAND_REPORT;
         }
 
         switch (tipoInforme) {
 
-            case RESULTADO_COMANDO:
+            case COMMAND_REPORT:
                 procesarComando(topic, message);
                 break;
-            case INFORME_ESPONTANEO:
+            case SPONTANEOUS_REPORT:
                 procesarEspontaneo(topic, message);
                 break;
         }
@@ -554,13 +554,13 @@ public class ApiDispositivoIot implements Serializable {
     }
 
 
-    public TIPO_DISPOSITIVO_IOT getDeviceType(String textoJson) {
+    public IOT_DEVICE_TYPE getDeviceType(String textoJson) {
 
         int tipo = -100;
         JSONObject objeto;
 
         tipo = getJsonInt(textoJson, TEXTOS_DIALOGO_IOT.TIPO_DISPOSITIVO.getValorTextoJson());
-        return TIPO_DISPOSITIVO_IOT.DESCONOCIDO.fromId(tipo);
+        return IOT_DEVICE_TYPE.DESCONOCIDO.fromId(tipo);
 
     }
 

@@ -40,14 +40,14 @@ public class ExampleInstrumentedTest {
     public void pruebaInsertarDispositivo() {
 
         IotDevice dispositivo;
-        ESTADO_DISPOSITIVO a;
+        IOT_DEVICE_STATE a;
         OPERACION_CONFIGURACION_DISPOSITIVOS op;
         dispositivo = new IotDevice();
-        dispositivo.setNombreDispositivo("mmajGH");
-        dispositivo.setIdDispositivo("mmddgGG");
-        dispositivo.setTopicPublicacion("kkk");
-        dispositivo.setTopicSubscripcion("pppp");
-        dispositivo.setTipoDispositivo(TIPO_DISPOSITIVO_IOT.DESCONOCIDO);
+        dispositivo.setDeviceName("mmajGH");
+        dispositivo.setDeviceId("mmddgGG");
+        dispositivo.setPublishTopic("kkk");
+        dispositivo.setSubscriptionTopic("pppp");
+        dispositivo.setDeviceType(IOT_DEVICE_TYPE.DESCONOCIDO);
         assertNotNull(dispositivo);
         //conf = new ConjuntoDispositivosIot(appContext);
         conf.cargarDispositivos();
@@ -73,11 +73,11 @@ public class ExampleInstrumentedTest {
 
         IotDevice dispositivo;
         dispositivo = new IotDevice();
-        dispositivo.setNombreDispositivo("mmajGH");
-        dispositivo.setIdDispositivo("mmddgGG");
-        dispositivo.setTopicPublicacion("kkk");
-        dispositivo.setTopicSubscripcion("pppp");
-        dispositivo.setTipoDispositivo(TIPO_DISPOSITIVO_IOT.DESCONOCIDO);
+        dispositivo.setDeviceName("mmajGH");
+        dispositivo.setDeviceId("mmddgGG");
+        dispositivo.setPublishTopic("kkk");
+        dispositivo.setSubscriptionTopic("pppp");
+        dispositivo.setDeviceType(IOT_DEVICE_TYPE.DESCONOCIDO);
         assertNotNull(dispositivo);
 
 

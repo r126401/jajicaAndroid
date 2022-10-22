@@ -2,7 +2,7 @@ package net.jajica.libiot;
 
 import java.io.Serializable;
 
-public enum ESTADO_DISPOSITIVO implements Serializable {
+public enum IOT_DEVICE_STATE implements Serializable {
     NORMAL_AUTO(0),
     NORMAL_AUTOMAN(1),
     NORMAL_MANUAL(2),
@@ -12,20 +12,20 @@ public enum ESTADO_DISPOSITIVO implements Serializable {
 
     private int estadoDispositivo;
 
-    ESTADO_DISPOSITIVO(int estado) {
+    IOT_DEVICE_STATE(int estado) {
         this.estadoDispositivo = estado;
     }
 
-    public int getEstadoDispositivo() {
+    public int getDeviceState() {
 
         return this.estadoDispositivo;
     }
 
-    public ESTADO_DISPOSITIVO fromId(int id) {
+    public IOT_DEVICE_STATE fromId(int id) {
 
-        for (ESTADO_DISPOSITIVO tipo : values()) {
+        for (IOT_DEVICE_STATE tipo : values()) {
 
-            if (tipo.getEstadoDispositivo() == id) return tipo;
+            if (tipo.getDeviceState() == id) return tipo;
         }
         return null;
     }

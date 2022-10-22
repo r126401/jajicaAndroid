@@ -3,33 +3,32 @@ package net.jajica.libiot;
 
 public class IotDeviceSwitch extends IotDevice {
 
-    private ESTADO_RELE estadoRele;
+    private IOT_SWITCH_RELAY Relay;
 
-    public ESTADO_RELE getEstadoRele() {
-        return estadoRele;
+    public IOT_SWITCH_RELAY getRelay() {
+        return Relay;
     }
 
-    public void setEstadoRele(ESTADO_RELE estadoRele) {
-        this.estadoRele = estadoRele;
+    public void setRelay(IOT_SWITCH_RELAY relay) {
+        this.Relay = relay;
     }
 
-    public IotDeviceSwitch(ConexionMqtt cnx) {
+    public IotDeviceSwitch(MqttConnection cnx) {
         super(cnx);
     }
 
-
-
-
-
     @Override
-    protected RESULT_CODE procesarStatus(String respuesta) {
+    protected RESULT_CODE processStatus(String respuesta) {
 
         int res;
         ApiDispositivoIot api;
         api = new ApiDispositivoIot();
-        ESTADO_RELE estado = ESTADO_RELE.INDETERMINADO;
+        IOT_SWITCH_RELAY estado = IOT_SWITCH_RELAY.UNKNOWN;
         res = api.getJsonInt(respuesta, TEXTOS_DIALOGO_IOT.ESTADO_RELE.getValorTextoJson());
-        setEstadoRele(estado.fromId(res));
-        return super.procesarStatus(respuesta);
+        setRelay(estado.fromId(res));
+        return super.processStatus(respuesta);
     }
+
+
+
 }

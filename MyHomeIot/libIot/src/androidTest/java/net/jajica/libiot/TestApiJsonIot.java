@@ -16,7 +16,7 @@ import org.junit.runner.RunWith;
 @RunWith(AndroidJUnit4.class)
 public class TestApiJsonIot {
 
-    ConexionMqtt cnx;
+    MqttConnection cnx;
     Context appContext;
 
     public void TextApiJson() {
@@ -32,15 +32,15 @@ public class TestApiJsonIot {
 
         MQTT_STATE_CONNECTION estado;
         appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        cnx = new ConexionMqtt(appContext);
-        estado = cnx.createConnetion(new ConexionMqtt.OnConexionMqtt() {
+        cnx = new MqttConnection(appContext);
+        estado = cnx.createConnetion(new MqttConnection.OnMqttConnection() {
             @Override
-            public void conexionEstablecida(boolean reconnect, String serverURI) {
+            public void connectionEstablished(boolean reconnect, String serverURI) {
 
             }
 
             @Override
-            public void conexionPerdida(Throwable cause) {
+            public void connectionLost(Throwable cause) {
 
             }
         });

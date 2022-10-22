@@ -151,7 +151,7 @@ public class ConjuntoDispositivosIot {
                 e.printStackTrace();
             }
             dispositivo = new IotDevice();
-            if (dispositivo.json2DispositivoIot(item) == OPERACION_JSON.JSON_OK) {
+            if (dispositivo.json2Device(item) == OPERACION_JSON.JSON_OK) {
                 if (this.dispositivosIot == null) {
                     dispositivosIot = new ArrayList<>();
                 }
@@ -177,7 +177,7 @@ public class ConjuntoDispositivosIot {
 
             for (i=0;i<dispositivosIot.size();i++) {
                 dispositivo = dispositivosIot.get(i);
-                if (dispositivo.nombreDispositivo.equals(valor)) {
+                if (dispositivo.deviceName.equals(valor)) {
                     //dispositivo encontrado
                     return i;
                 }
@@ -204,7 +204,7 @@ public class ConjuntoDispositivosIot {
 
             for (i=0;i<dispositivosIot.size();i++) {
                 dispositivo = dispositivosIot.get(i);
-                if (dispositivo.idDispositivo.equals(valor)) {
+                if (dispositivo.deviceId.equals(valor)) {
                     //dispositivo encontrado
                     return i;
                 }
@@ -241,7 +241,7 @@ public class ConjuntoDispositivosIot {
         if ((op = nuevoDispositivo(dispositivo)) != OPERACION_CONFIGURACION_DISPOSITIVOS.DISPOSITIVO_INSERTADO) {
             return op;
         }
-        dispositivo.dispositivo2Json();
+        dispositivo.device2Json();
         if (guardarDispositivos(datosDispositivos.toString()) != ESTADO_FICHEROS.FICHERO_OK) {
             return OPERACION_CONFIGURACION_DISPOSITIVOS.CONFIGURACION_CORRUPTA;
         }
@@ -254,11 +254,11 @@ public class ConjuntoDispositivosIot {
      */
     private OPERACION_CONFIGURACION_DISPOSITIVOS anadirDispositivoAlArray(IotDevice dispositivo) {
 
-        if (buscarDispositivoPorId(dispositivo.getIdDispositivo()) >= 0) {
+        if (buscarDispositivoPorId(dispositivo.getDeviceId()) >= 0) {
             return OPERACION_CONFIGURACION_DISPOSITIVOS.DISPOSITIVO_EXISTENTE;
         }
 
-        if(buscarDispositivoPorNombre(dispositivo.getNombreDispositivo()) >= 0) {
+        if(buscarDispositivoPorNombre(dispositivo.getDeviceName()) >= 0) {
             return OPERACION_CONFIGURACION_DISPOSITIVOS.DISPOSITIVO_EXISTENTE;
         }
 
@@ -287,7 +287,7 @@ public class ConjuntoDispositivosIot {
         dispositivo = new IotDevice();
         OPERACION_CONFIGURACION_DISPOSITIVOS op;
         // Se pasa introduce la parte json en el dispositivo
-        if (dispositivo.json2DispositivoIot(dispositivoJson) != OPERACION_JSON.JSON_OK) {
+        if (dispositivo.json2Device(dispositivoJson) != OPERACION_JSON.JSON_OK) {
             return OPERACION_CONFIGURACION_DISPOSITIVOS.CONFIGURACION_NO_JSON;
         }
 
@@ -449,7 +449,7 @@ public class ConjuntoDispositivosIot {
             }
             array.remove(i);
             dispositivosIot.remove(i);
-            array.put(dispositivo.dispositivo2Json());
+            array.put(dispositivo.device2Json());
             guardarDispositivos(datosDispositivos.toString());
             datosDispositivos.remove(TEXTOS_DIALOGO_IOT.DISPOSITIVOS.getValorTextoJson());
             cargarDispositivos();

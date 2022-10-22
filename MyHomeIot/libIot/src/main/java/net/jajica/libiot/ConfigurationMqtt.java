@@ -13,7 +13,7 @@ import org.json.JSONObject;
  * de conexion a utilizar
  */
 
-public class ConfiguracionConexionMqtt {
+public class ConfigurationMqtt {
 
     private final String FICHERO_CONFIGURACION_MQTT ="MyHomeIot.conf";
     /**
@@ -54,7 +54,7 @@ public class ConfiguracionConexionMqtt {
      */
 
 
-    private final String TAG = "ConfiguracionConexionMqtt";
+    private final String TAG = "ConfigurationMqtt";
 
 
     private Boolean autoConnect = true;
@@ -202,7 +202,7 @@ public class ConfiguracionConexionMqtt {
      * @param context Es el contexto de la aplicacion. Se establece el nombre por defecto del
      * fichero de configuracion
      */
-    public ConfiguracionConexionMqtt(Context context) {
+    public ConfigurationMqtt(Context context) {
 
         setFicheroConfiguracion(FICHERO_CONFIGURACION_MQTT);
         setDatosConfiguracion(null);
@@ -219,7 +219,7 @@ public class ConfiguracionConexionMqtt {
      * Constructor usado para entornos linux. En el caso de que se quiera usar para Android, se
      * deberia poner el contexto en la clase para que se lean y escriban correctamente las configuraciones.
      */
-    public ConfiguracionConexionMqtt() {
+    public ConfigurationMqtt() {
         setFicheroConfiguracion(FICHERO_CONFIGURACION_MQTT);
         setDatosConfiguracion(null);
         setContext(null);

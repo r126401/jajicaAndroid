@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import net.jajica.libiot.COMANDO_IOT;
-import net.jajica.libiot.ConexionMqtt;
+import net.jajica.libiot.MqttConnection;
 import net.jajica.libiot.IotDevice;
 import net.jajica.libiot.IotDeviceSwitch;
 import net.jajica.libiot.DEVICE_STATE_CONNECTION;
@@ -25,30 +25,30 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-        ConexionMqtt cnx;
-        cnx = new ConexionMqtt(getApplicationContext());
+        MqttConnection cnx;
+        cnx = new MqttConnection(getApplicationContext());
         MQTT_STATE_CONNECTION estado;
         Log.e("hh", "Comenzamos...");
-        estado = cnx.createConnetion(new ConexionMqtt.OnConexionMqtt() {
+        estado = cnx.createConnetion(new MqttConnection.OnMqttConnection() {
             @Override
-            public void conexionEstablecida(boolean reconnect, String serverURI) {
+            public void connectionEstablished(boolean reconnect, String serverURI) {
                 Log.e("hh", "establecida");
                 ejemplo(cnx);
-                cnx.subscribirTopic("pepe", new ConexionMqtt.OnSubscriptionTopic() {
+                cnx.subscribeTopic("pepe", new MqttConnection.OnSubscriptionTopic() {
                     @Override
-                    public void conExito(IMqttToken iMqttToken) {
+                    public void Unsuccessful(IMqttToken iMqttToken) {
                         Log.e("hh", "suscrito");
                     }
 
                     @Override
-                    public void sinExito(IMqttToken iMqttToken, Throwable throwable) {
+                    public void Successful(IMqttToken iMqttToken, Throwable throwable) {
                         Log.e("hh", "Error al suscribirse");
                     }
                 });
             }
 
             @Override
-            public void conexionPerdida(Throwable cause) {
+            public void connectionLost(Throwable cause) {
                 Log.i("hh", "hola");
             }
         });
@@ -59,16 +59,16 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void ejemplo(ConexionMqtt cnx) {
+    public void ejemplo(MqttConnection cnx) {
         IotDeviceSwitch disp;
         disp = new IotDeviceSwitch(cnx);
-        disp.setIdDispositivo("8CCE4EFC0915");
-        disp.setNombreDispositivo("Depuradora");
+        disp.setDeviceId("8CCE4EFC0915");
+        disp.setDeviceName("Depuradora");
         DEVICE_STATE_CONNECTION estadoConexion;
         estadoConexion = disp.subscribeDevice();
         disp.setOnReceivedStatus(new IotDevice.OnReceivedStatus() {
             @Override
-            public void receivedStatus(RESULT_CODE res) {
+            public void onReceivedStatus(RESULT_CODE res) {
                 Log.i(TAG, "El resultado ha sido " + disp.getCurrentOtaVersion());
             }
         });
@@ -81,8 +81,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        disp.setOnReceivedInfoDevice(new IotDevice.OnReceivedInfoDevice() {
+            @Override
+            public void onReceivedInfoDevice(RESULT_CODE resultCode) {
+                Log.i(TAG, " recibido infodevice");
+            }
+        });
 
-        disp.getStatusDeviceCommand(COMANDO_IOT.ESTADO);
+        disp.getStatusDeviceCommand();
+        disp.getInfoDeviceCommand();
+
+
     }
 
 

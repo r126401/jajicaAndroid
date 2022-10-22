@@ -2,7 +2,7 @@ package net.jajica.libiot;
 
 import java.io.Serializable;
 
-public enum TIPO_DISPOSITIVO_IOT implements Serializable {
+public enum IOT_DEVICE_TYPE implements Serializable {
     DESCONOCIDO(-1),
     INTERRUPTOR(0),
     TERMOMETRO(2),
@@ -11,7 +11,7 @@ public enum TIPO_DISPOSITIVO_IOT implements Serializable {
 
     private int tipo;
 
-    TIPO_DISPOSITIVO_IOT(int tipoDispositivo) {
+    IOT_DEVICE_TYPE(int tipoDispositivo) {
 
         this.tipo = tipoDispositivo;
     }
@@ -22,10 +22,10 @@ public enum TIPO_DISPOSITIVO_IOT implements Serializable {
     }
 
 
-    public TIPO_DISPOSITIVO_IOT fromId(int id) {
+    public IOT_DEVICE_TYPE fromId(int id) {
 
 
-        for (TIPO_DISPOSITIVO_IOT orden : values()) {
+        for (IOT_DEVICE_TYPE orden : values()) {
 
             if (orden.getValorTipoDispositivo() == id) {
 

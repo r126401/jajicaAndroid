@@ -15,7 +15,7 @@ public class ApiDispositivoSwitchIot extends ApiDispositivoIot{
         this.listenerMessagesReceived = listenerMessagesReceived;
     }
 
-    public ApiDispositivoSwitchIot(ConexionMqtt cnx) {
+    public ApiDispositivoSwitchIot(MqttConnection cnx) {
         super(cnx);
     }
 
