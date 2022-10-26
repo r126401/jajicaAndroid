@@ -245,6 +245,16 @@ public class IotDevice {
         this.onReceivedScheduleDevice = onReceivedScheduleDevice;
     }
 
+    protected OnReceivedDeleteDevice onReceivedDeleteDevice;
+
+    public interface OnReceivedDeleteDevice {
+        void onReceivedDeleteDevice(IOT_CODE_RESULT resultCode);
+    }
+
+    public void setOnReceivedDeleteDevice(OnReceivedDeleteDevice onReceivedDeleteDevice) {
+        this.onReceivedDeleteDevice = onReceivedDeleteDevice;
+    }
+
     public interface OnSwitchDevice {
         void receivedSwitchDevice(IotDevice device);
     }
@@ -830,21 +840,34 @@ public class IotDevice {
 
             case INFO_DEVICE:
                 res = processInfoDevice(mensaje);
-                onReceivedInfoDevice.onReceivedInfoDevice(IOT_CODE_RESULT.RESUT_CODE_OK);
+                if (onReceivedInfoDevice != null) {
+                    onReceivedInfoDevice.onReceivedInfoDevice(IOT_CODE_RESULT.RESUT_CODE_OK);
+                }
                 break;
             case SET_RELAY:
                 break;
             case STATUS_DEVICE:
                 res = processStatus(mensaje);
-                onReceivedStatus.onReceivedStatus(IOT_CODE_RESULT.RESUT_CODE_OK);
+                if (onReceivedStatus != null) {
+                    onReceivedStatus.onReceivedStatus(IOT_CODE_RESULT.RESUT_CODE_OK);
+                }
+
                 break;
             case GET_SCHEDULE:
                 res = processGetSchedule(mensaje);
-                onReceivedScheduleDevice.onReceivedScheduleDevice(IOT_CODE_RESULT.RESUT_CODE_OK);
+                if(onReceivedScheduleDevice != null) {
+                    onReceivedScheduleDevice.onReceivedScheduleDevice(IOT_CODE_RESULT.RESUT_CODE_OK);
+                }
+
                 break;
             case NEW_SCHEDULE:
                 break;
             case REMOVE_SCHEDULE:
+                res = processDeleteSchedule(mensaje);
+                if (onReceivedDeleteDevice != null) {
+                    onReceivedDeleteDevice.onReceivedDeleteDevice(res);
+                }
+
                 break;
             case MODIFY_SCHEDULE:
                 break;
@@ -1088,6 +1111,9 @@ public class IotDevice {
 
     protected IOT_CODE_RESULT processGetSchedule(String message) {
         Log.i(TAG, "Recibida programacion");
+        getDeviceStatus(message);
+        getScheduleState(message);
+        getCurrentSchedule(message);
         loadSchedules(message);
 
         return IOT_CODE_RESULT.RESUT_CODE_OK;
@@ -1163,5 +1189,94 @@ public class IotDevice {
 
 
     }
+
+    public DEVICE_STATE_CONNECTION deleteScheduleCommand(String ScheduleId) {
+
+
+        JSONObject parameters = new JSONObject();
+        try {
+            parameters.put(TEXTOS_DIALOGO_IOT.ID_PROGRAMA.getValorTextoJson(), ScheduleId);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return DEVICE_STATE_CONNECTION.DEVICE_ERROR_COMMUNICATION;
+        }
+
+
+
+
+        return commandwithParameters(IOT_COMMANDS.REMOVE_SCHEDULE, TEXTOS_DIALOGO_IOT.PROGRAMAS.getValorTextoJson(), parameters);
+    }
+        /*
+
+        {
+  "comando": {
+    "token": "39701fb9-da35-4f2a-9f90-c4842e958df5",
+    "date": "26/10/2022 23:32:30",
+    "dlgComando": 9,
+    "nombreComando": "ELIMINAR_PROGRAMACION"
+  },
+  "program": {
+    "programId": "000100007f"
+  }
+}
+        {
+	"idDevice":	"A020A6026046",
+	"device":	0,
+	"otaVersion":	"2206251749",
+	"date":	"26/10/2022 23:32:29",
+	"token":	"39701fb9-da35-4f2a-9f90-c4842e958df5",
+	"dlgComando":	9,
+	"deviceState":	0,
+	"programmerState":	1,
+	"programId":	"000100007f",
+	"currentProgramId":	"002100007f",
+	"dlgResultCode":	200
+}
+
+         */
+
+    public DEVICE_STATE_CONNECTION commandwithParameters(IOT_COMMANDS command, String labelParameter, JSONObject parameters) {
+
+        String textoComando;
+        ApiDispositivoIot api;
+        DEVICE_STATE_CONNECTION estado;
+        api = new ApiDispositivoIot();
+        JSONObject jsonCommand;
+        textoComando = api.createSimpleCommand(command);
+        try {
+            jsonCommand = new JSONObject(textoComando);
+            jsonCommand.put(labelParameter, parameters);
+            textoComando = jsonCommand.toString();
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return DEVICE_STATE_CONNECTION.DEVICE_ERROR_COMMUNICATION;
+        }
+            if ((estado = sendCommand(textoComando)) != DEVICE_STATE_CONNECTION.DEVICE_WAITING_RESPONSE) {
+            return estado;
+        }
+
+        return DEVICE_STATE_CONNECTION.DEVICE_WAITING_RESPONSE;
+    }
+
+    protected IOT_CODE_RESULT processDeleteSchedule(String message) {
+
+        IOT_CODE_RESULT result;
+        result = getCommandCodeResult(message);
+
+
+        return result;
+    }
+
+    protected IOT_CODE_RESULT getCommandCodeResult(String respuesta) {
+
+        ApiDispositivoIot api;
+        api = new ApiDispositivoIot();
+        int codResult;
+        codResult = api.getJsonInt(respuesta, TEXTOS_DIALOGO_IOT.CODIGO_RESPUESTA.getValorTextoJson());
+
+        return IOT_CODE_RESULT.RESULT_CODE_ERROR.fromId(codResult);
+    }
+
+
 
 }

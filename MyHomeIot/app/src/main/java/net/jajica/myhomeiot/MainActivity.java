@@ -108,8 +108,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        disp.setOnReceivedDeleteDevice(new IotDevice.OnReceivedDeleteDevice() {
+            @Override
+            public void onReceivedDeleteDevice(IOT_CODE_RESULT resultCode) {
+                Log.i(TAG, "Recibida respuesta a eliminar comando");
+            }
+        });
+
         disp.getStatusDeviceCommand();
         disp.getScheduleCommand();
+        disp.deleteScheduleCommand("002100007f");
+
 
 
         //disp2.getStatusDeviceCommand();

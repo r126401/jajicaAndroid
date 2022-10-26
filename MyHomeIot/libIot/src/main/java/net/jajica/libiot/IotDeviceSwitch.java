@@ -80,6 +80,11 @@ public class IotDeviceSwitch extends IotDevice {
 
     @Override
     protected IOT_CODE_RESULT processGetSchedule(String message) {
+
+
+        getDeviceStatus(message);
+        getScheduleState(message);
+        getCurrentSchedule(message);
         loadSchedules(message);
         //return super.processGetSchedule(message);
         return IOT_CODE_RESULT.RESUT_CODE_OK;
