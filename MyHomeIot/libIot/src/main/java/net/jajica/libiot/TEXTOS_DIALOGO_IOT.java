@@ -56,7 +56,9 @@ public enum TEXTOS_DIALOGO_IOT {
     CODIGO_OTA("otaCode"),
     TIPO_SENSOR("master"),
     ID_SENSOR("idsensor"),
-    SENSOR_TEMPERATURA("sensorTemperatura");
+    SENSOR_TEMPERATURA("sensorTemperatura"),
+    FREE_MEM("freeMem"),
+    UPTIME("uptime");
 
 
     private String dialogo;

@@ -30,28 +30,28 @@ public class ApiDispositivoSwitchIot extends ApiDispositivoIot{
     @Override
     protected void procesarComando(String topic, MqttMessage message) {
         super.procesarComando(topic, message);
-        COMANDO_IOT idComando;
+        IOT_COMMANDS idComando;
 
         String mensaje = new String(message.getPayload());
         idComando = getCommandId(mensaje);
 
         switch (idComando) {
 
-            case CONSULTAR_CONF_APP:
+            case INFO_DEVICE:
                 break;
-            case ACTUAR_RELE:
+            case SET_RELAY:
                 break;
-            case ESTADO:
+            case STATUS_DEVICE:
                 break;
-            case CONSULTAR_PROGRAMACION:
+            case GET_SCHEDULE:
                 break;
-            case NUEVA_PROGRAMACION:
+            case NEW_SCHEDULE:
                 break;
-            case ELIMINAR_PROGRAMACION:
+            case REMOVE_SCHEDULE:
                 break;
-            case MODIFICAR_PROGRAMACION:
+            case MODIFY_SCHEDULE:
                 break;
-            case MODIFICAR_APP:
+            case MODIFY_PARAMETER_DEVICE:
                 break;
             case RESET:
                 break;
@@ -63,7 +63,7 @@ public class ApiDispositivoSwitchIot extends ApiDispositivoIot{
                 break;
             case VERSION_OTA:
                 break;
-            case ERROR_RESPUESTA:
+            case ERROR_REPORT:
                 break;
             default:
                 break;

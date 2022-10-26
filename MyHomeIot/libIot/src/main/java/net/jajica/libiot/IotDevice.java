@@ -5,6 +5,7 @@ import android.util.Log;
 
 import org.eclipse.paho.client.mqttv3.IMqttToken;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -91,13 +92,13 @@ public class IotDevice {
      */
     protected String currentOtaVersion;
     /**
-     * indica la identidad del programa activo segun el formate de la clase IotDeviceProgram
+     * indica la identidad del programa activo segun el formate de la clase IotScheduleDevice
      */
-    protected String programaActivo;
+    protected String activeSchedule;
     /**
      * Es un array a la lista de Programas del dispositivo
      */
-    protected ArrayList<IotDeviceProgram> programs;
+    private ArrayList<IotScheduleDevice> schedules;
 
     protected int finUpgrade;
     /**
@@ -108,9 +109,45 @@ public class IotDevice {
     /**
      * Es el estado global de programacion del dispositivo
      */
-    protected SCHEDULE_STATE ScheduleState;
+    protected SCHEDULE_CONDITION ScheduleState;
 
     protected Timer timerCommand;
+    protected long freeMem;
+    protected Double uptime;
+
+
+    /**
+     * Obtiene la memoria libre del dispositivo
+     * @return Retorna la memoria libre
+     */
+    public long getFreeMem() {
+        return freeMem;
+    }
+
+    /**
+     * introduce la memoria libre leida desde el dispositivo
+     * @param freeMem
+     */
+    public void setFreeMem(long freeMem) {
+        this.freeMem = freeMem;
+    }
+
+    /**
+     * Obtiene el tiempo de funcionmiento del dispositivo
+     * @return Retorna el tiempo de funcionamiento
+     */
+    public Double getUptime() {
+        return uptime;
+    }
+
+    /**
+     * Introduce el tiempo de funcionamiento
+     * @param uptime Tiempo de funcionamiento del dispositivo
+     */
+    public void setUptime(Double uptime) {
+        this.uptime = uptime;
+    }
+
     /**
      * Interfaz que utiliza la aplicacion cuando falla la comunicacion con el dispositivo
      */
@@ -130,7 +167,7 @@ public class IotDevice {
      * Metodo que devuelve el estado global de programacion del dispositivo
      * @return Devuelve el estado global de programacion del dispositivo
      */
-    public SCHEDULE_STATE getScheduleState() {
+    public SCHEDULE_CONDITION getScheduleState() {
         return ScheduleState;
     }
 
@@ -138,7 +175,7 @@ public class IotDevice {
      * Pone el estado Global de programacion del dispositivo
      * @param scheduleState Es el estado que quire introducirse
      */
-    public void setScheduleState(SCHEDULE_STATE scheduleState) {
+    public void setScheduleState(SCHEDULE_CONDITION scheduleState) {
         ScheduleState = scheduleState;
     }
 
@@ -146,16 +183,16 @@ public class IotDevice {
      * Este metodo devuelve la lista de programas del dispositivo
      * @return Devuelve la lista de programas del dispositivo
      */
-    public ArrayList<IotDeviceProgram> getPrograms() {
-        return programs;
+    public ArrayList<IotScheduleDevice> getSchedules() {
+        return schedules;
     }
 
     /**
      * Asigna al dispositivo la lista de programas del dispositivo
-     * @param programs
+     * @param schedules
      */
-    public void setPrograms(ArrayList<IotDeviceProgram> programs) {
-        this.programs = programs;
+    public void setSchedules(ArrayList<IotScheduleDevice> schedules) {
+        this.schedules = schedules;
     }
 
     /**
@@ -185,20 +222,27 @@ public class IotDevice {
 
     public interface  OnReceivedStatus {
 
-        void onReceivedStatus(RESULT_CODE resultCode);
+        void onReceivedStatus(IOT_CODE_RESULT resultCode);
 
     }
 
-
-
-
     protected OnReceivedInfoDevice onReceivedInfoDevice;
     public interface OnReceivedInfoDevice {
-        void onReceivedInfoDevice(RESULT_CODE resultCode);
+        void onReceivedInfoDevice(IOT_CODE_RESULT resultCode);
     }
 
     public void setOnReceivedInfoDevice(OnReceivedInfoDevice onReceivedInfoDevice) {
         this.onReceivedInfoDevice = onReceivedInfoDevice;
+    }
+
+    protected OnReceivedScheduleDevice onReceivedScheduleDevice;
+    public interface OnReceivedScheduleDevice {
+        void onReceivedScheduleDevice(IOT_CODE_RESULT resultCode);
+
+    }
+
+    public void setOnReceivedScheduleDevice(OnReceivedScheduleDevice onReceivedScheduleDevice) {
+        this.onReceivedScheduleDevice = onReceivedScheduleDevice;
     }
 
     public interface OnSwitchDevice {
@@ -230,7 +274,7 @@ public class IotDevice {
     }
 
     public interface OnErrorAnswerDevice {
-        void receivedErrorAnswerDevice(RESULT_CODE result);
+        void receivedErrorAnswerDevice(IOT_CODE_RESULT result);
     }
 
     public OnReceivedStatus getOnReceivedStatus() {
@@ -419,16 +463,16 @@ public class IotDevice {
      * Obitiene la identidad del programa activo
      * @return Es el programa activo
      */
-    public String getProgramaActivo() {
-        return programaActivo;
+    public String getActiveSchedule() {
+        return activeSchedule;
     }
 
     /**
      * Asigna al dispositivo el programa activo
-     * @param programaActivo Es el programa activo
+     * @param activeSchedule Es el programa activo
      */
-    public void setProgramaActivo(String programaActivo) {
-        this.programaActivo = programaActivo;
+    public void setActiveSchedule(String activeSchedule) {
+        this.activeSchedule = activeSchedule;
     }
 
     public int getFinUpgrade() {
@@ -455,7 +499,7 @@ public class IotDevice {
         deviceState = IOT_DEVICE_STATE.INDETERMINADO;
         connectionState = DEVICE_STATE_CONNECTION.UNKNOWN;
         finUpgrade = 0;
-        programaActivo = null;
+        activeSchedule = null;
         dispositivoJson = new JSONObject();
 
     }
@@ -480,7 +524,7 @@ public class IotDevice {
         deviceState = IOT_DEVICE_STATE.INDETERMINADO;
         connectionState = DEVICE_STATE_CONNECTION.UNKNOWN;
         finUpgrade = 0;
-        programaActivo = null;
+        activeSchedule = null;
         dispositivoJson = new JSONObject();
 
     }
@@ -497,13 +541,34 @@ public class IotDevice {
         deviceState = IOT_DEVICE_STATE.INDETERMINADO;
         connectionState = DEVICE_STATE_CONNECTION.UNKNOWN;
         finUpgrade = 0;
-        programaActivo = null;
+        activeSchedule = null;
         dispositivoJson = new JSONObject();
         setCnx(cnx);
 
 
 
 
+
+    }
+
+    public DEVICE_STATE_CONNECTION recibirMensajes() {
+
+        if (getSubscriptionTopic() == null) {
+            return DEVICE_STATE_CONNECTION.DEVICE_ERROR_COMMUNICATION;
+        }
+        cnx.setOnListenerArrivedMessaged(getSubscriptionTopic(), new MqttConnection.OnArrivedMessage() {
+            @Override
+            public void arrivedMessage(String topic, MqttMessage message) {
+                if (topic.equals(getSubscriptionTopic())) {
+                    setConnectionState(DEVICE_STATE_CONNECTION.DEVICE_CONNECTED);
+                    procesarMensaje(topic, message);
+                } else {
+                    Log.w(TAG, "Este mensajes no es para mi " + topic + "<->" + subscriptionTopic);
+                }
+            }
+        });
+
+        return DEVICE_STATE_CONNECTION.DEVICE_CONNECTED;
 
     }
 
@@ -521,21 +586,9 @@ public class IotDevice {
         deviceState = IOT_DEVICE_STATE.INDETERMINADO;
         connectionState = DEVICE_STATE_CONNECTION.UNKNOWN;
         finUpgrade = 0;
-        programaActivo = null;
+        activeSchedule = null;
         dispositivoJson = new JSONObject();
         setCnx(cnx);
-        cnx.setOnListenerArrivedMessaged(new MqttConnection.OnArrivedMessage() {
-            @Override
-            public void arrivedMessage(String topic, MqttMessage message) {
-
-                if (topic.equals(getSubscriptionTopic())) {
-                    setConnectionState(DEVICE_STATE_CONNECTION.DEVICE_CONNECTED);
-                    procesarMensaje(topic, message);
-                } else {
-                    Log.w(TAG, "Este mensajes no es para mi " + topic + "<->" + getSubscriptionTopic());
-                }
-            }
-        });
 
 
 
@@ -675,10 +728,11 @@ public class IotDevice {
         if (cnx == null) {
             return DEVICE_STATE_CONNECTION.DEVICE_ERROR_SUBSCRIPTION;
         }
+
         cnx.subscribeTopic(this.subscriptionTopic, new MqttConnection.OnSubscriptionTopic() {
             @Override
             public void Unsuccessful(IMqttToken iMqttToken) {
-                Log.i(TAG, "Subscripcion completada");
+                Log.i(TAG, "Subscripcion completada al topic " + subscriptionTopic);
 
             }
 
@@ -687,6 +741,7 @@ public class IotDevice {
                 Log.i(TAG, "Error en la subscripcion");
             }
         });
+
 
 
         return DEVICE_STATE_CONNECTION.DEVICE_CONNECTED;
@@ -736,9 +791,9 @@ public class IotDevice {
         ApiDispositivoIot api;
         api = new ApiDispositivoIot();
 
-        COMANDO_IOT comando;
+        IOT_COMMANDS comando;
         comando = api.getCommandId(mensaje);
-        if (comando == COMANDO_IOT.ESPONTANEO) {
+        if (comando == IOT_COMMANDS.SPONTANEOUS) {
             tipoInforme = IOT_REPORT_TYPE.SPONTANEOUS_REPORT;
         } else {
             tipoInforme = IOT_REPORT_TYPE.COMMAND_REPORT;
@@ -764,34 +819,36 @@ public class IotDevice {
      */
 
     protected void procesarComando(String topic, MqttMessage message) {
-        COMANDO_IOT idComando;
+        IOT_COMMANDS idComando;
         ApiDispositivoIot api;
         api = new ApiDispositivoIot();
         String mensaje = new String(message.getPayload());
         idComando = api.getCommandId(mensaje);
-        RESULT_CODE res;
+        IOT_CODE_RESULT res;
 
         switch (idComando) {
 
-            case CONSULTAR_CONF_APP:
+            case INFO_DEVICE:
                 res = processInfoDevice(mensaje);
-                onReceivedInfoDevice.onReceivedInfoDevice(RESULT_CODE.RESUT_CODE_OK);
+                onReceivedInfoDevice.onReceivedInfoDevice(IOT_CODE_RESULT.RESUT_CODE_OK);
                 break;
-            case ACTUAR_RELE:
+            case SET_RELAY:
                 break;
-            case ESTADO:
+            case STATUS_DEVICE:
                 res = processStatus(mensaje);
-                onReceivedStatus.onReceivedStatus(RESULT_CODE.RESUT_CODE_OK);
+                onReceivedStatus.onReceivedStatus(IOT_CODE_RESULT.RESUT_CODE_OK);
                 break;
-            case CONSULTAR_PROGRAMACION:
+            case GET_SCHEDULE:
+                res = processGetSchedule(mensaje);
+                onReceivedScheduleDevice.onReceivedScheduleDevice(IOT_CODE_RESULT.RESUT_CODE_OK);
                 break;
-            case NUEVA_PROGRAMACION:
+            case NEW_SCHEDULE:
                 break;
-            case ELIMINAR_PROGRAMACION:
+            case REMOVE_SCHEDULE:
                 break;
-            case MODIFICAR_PROGRAMACION:
+            case MODIFY_SCHEDULE:
                 break;
-            case MODIFICAR_APP:
+            case MODIFY_PARAMETER_DEVICE:
                 break;
             case RESET:
                 break;
@@ -803,7 +860,7 @@ public class IotDevice {
                 break;
             case VERSION_OTA:
                 break;
-            case ERROR_RESPUESTA:
+            case ERROR_REPORT:
                 break;
             default:
                 break;
@@ -832,7 +889,7 @@ public class IotDevice {
      * @param respuesta Es el texto recibido desde el dispositivo
      * @return Se retorna el codigo de respuesta enviado por el dispositivo
      */
-    protected RESULT_CODE getCurrentOtaVersion(String respuesta) {
+    protected IOT_CODE_RESULT getCurrentOtaVersion(String respuesta) {
 
         ApiDispositivoIot api;
         api = new ApiDispositivoIot();
@@ -840,32 +897,32 @@ public class IotDevice {
         version = api.getJsonString(respuesta, TEXTOS_DIALOGO_IOT.VERSION_OTA.getValorTextoJson());
         if (version != null) {
             setCurrentOtaVersion(version);
-            return RESULT_CODE.RESUT_CODE_OK;
+            return IOT_CODE_RESULT.RESUT_CODE_OK;
         } else {
-            return RESULT_CODE.RESULT_CODE_ERROR;
+            return IOT_CODE_RESULT.RESULT_CODE_ERROR;
         }
 
     }
 
 
 
-    protected RESULT_CODE getScheduleState(String respuesta) {
+    protected IOT_CODE_RESULT getScheduleState(String respuesta) {
         ApiDispositivoIot api;
         api = new ApiDispositivoIot();
         int estado;
-        SCHEDULE_STATE schedule = SCHEDULE_STATE.INH_PROG;
+        SCHEDULE_CONDITION schedule = SCHEDULE_CONDITION.INH_PROG;
         estado = api.getJsonInt(respuesta, TEXTOS_DIALOGO_IOT.ESTADO_PROGRAMACION.getValorTextoJson());
         if (estado >= 0) {
             setScheduleState(schedule.fromId(estado));
-            return RESULT_CODE.RESUT_CODE_OK;
+            return IOT_CODE_RESULT.RESUT_CODE_OK;
         } else {
             Log.e(TAG, "Error al obtener el estado del dispositivo en el Status");
-            return RESULT_CODE.RESULT_CODE_ERROR;
+            return IOT_CODE_RESULT.RESULT_CODE_ERROR;
         }
 
     }
 
-    protected RESULT_CODE getDeviceType(String respuesta) {
+    protected IOT_CODE_RESULT getDeviceType(String respuesta) {
 
         ApiDispositivoIot api;
         api = new ApiDispositivoIot();
@@ -873,11 +930,11 @@ public class IotDevice {
         IOT_DEVICE_TYPE tipoDispositivo = IOT_DEVICE_TYPE.DESCONOCIDO;
         tipo = api.getJsonInt(respuesta, TEXTOS_DIALOGO_IOT.TIPO_DISPOSITIVO.getValorTextoJson());
         setDeviceType(tipoDispositivo.fromId(tipo));
-        return RESULT_CODE.RESUT_CODE_OK;
+        return IOT_CODE_RESULT.RESUT_CODE_OK;
     }
 
 
-    public DEVICE_STATE_CONNECTION simpleCommand(COMANDO_IOT command) {
+    public DEVICE_STATE_CONNECTION simpleCommand(IOT_COMMANDS command) {
 
         String textoComando;
         ApiDispositivoIot api;
@@ -893,7 +950,7 @@ public class IotDevice {
 
     public DEVICE_STATE_CONNECTION getStatusDeviceCommand() {
 
-        return simpleCommand(COMANDO_IOT.ESTADO);
+        return simpleCommand(IOT_COMMANDS.STATUS_DEVICE);
 
 
     }
@@ -917,7 +974,7 @@ public class IotDevice {
                 if (getConnectionState() != DEVICE_STATE_CONNECTION.DEVICE_CONNECTED) {
                     if (onErrorAnswerDevice != null) {
                         Log.i(TAG, "Enviamos timeout: " + getToken(textoComando));
-                        onErrorAnswerDevice.receivedErrorAnswerDevice(RESULT_CODE.RESULT_CODE_TIMEOUT);
+                        onErrorAnswerDevice.receivedErrorAnswerDevice(IOT_CODE_RESULT.RESULT_CODE_TIMEOUT);
                     }
                 }
             }
@@ -935,18 +992,19 @@ public class IotDevice {
 
     }
 
-    protected RESULT_CODE processStatus(String respuesta) {
+    protected IOT_CODE_RESULT processStatus(String respuesta) {
 
         getCurrentOtaVersion(respuesta);
         setConnectionState(DEVICE_STATE_CONNECTION.DEVICE_CONNECTED);
         getDeviceStatus(respuesta);
         getScheduleState(respuesta);
         getDeviceType(respuesta);
+        getCurrentSchedule(respuesta);
         device2Json();
-        return RESULT_CODE.RESUT_CODE_OK;
+        return IOT_CODE_RESULT.RESUT_CODE_OK;
     }
 
-    protected RESULT_CODE getDeviceStatus(String respuesta) {
+    protected IOT_CODE_RESULT getDeviceStatus(String respuesta) {
 
         ApiDispositivoIot api;
         api = new ApiDispositivoIot();
@@ -955,10 +1013,10 @@ public class IotDevice {
         estado = api.getJsonInt(respuesta, TEXTOS_DIALOGO_IOT.ESTADO_DISPOSITIVO.getValorTextoJson());
         if (estado > IOT_DEVICE_STATE.INDETERMINADO.getDeviceState()) {
             setDeviceState(estadoDispositivo.fromId(estado));
-            return RESULT_CODE.RESUT_CODE_OK;
+            return IOT_CODE_RESULT.RESUT_CODE_OK;
         } else {
             Log.e(TAG, "Error al obtener el estado del dispositivo en el Status");
-            return RESULT_CODE.RESULT_CODE_ERROR;
+            return IOT_CODE_RESULT.RESULT_CODE_ERROR;
         }
 
     }
@@ -966,15 +1024,144 @@ public class IotDevice {
 
     public DEVICE_STATE_CONNECTION getInfoDeviceCommand() {
 
-        return simpleCommand(COMANDO_IOT.CONSULTAR_CONF_APP);
+        return simpleCommand(IOT_COMMANDS.INFO_DEVICE);
 
     }
 
-    protected RESULT_CODE processInfoDevice(String message) {
+    protected IOT_CODE_RESULT processInfoDevice(String message) {
+
+        getCurrentOtaVersion(message);
+        setConnectionState(DEVICE_STATE_CONNECTION.DEVICE_CONNECTED);
+        getDeviceStatus(message);
+        getScheduleState(message);
+        getDeviceType(message);
+        getFreMem(message);
+        getUptime(message);
+        device2Json();
         Log.i(TAG, message);
-        return RESULT_CODE.RESUT_CODE_OK;
+        return IOT_CODE_RESULT.RESUT_CODE_OK;
+    }
+
+    protected IOT_CODE_RESULT getFreMem(String respuesta) {
+        ApiDispositivoIot api;
+        api = new ApiDispositivoIot();
+        int freeMem;
+        freeMem = api.getJsonInt(respuesta, TEXTOS_DIALOGO_IOT.FREE_MEM.getValorTextoJson());
+        if (freeMem >= 0) {
+            setFreeMem(freeMem);
+            return IOT_CODE_RESULT.RESUT_CODE_OK;
+        } else {
+            return IOT_CODE_RESULT.RESULT_CODE_ERROR;
+        }
+    }
+
+    protected IOT_CODE_RESULT getUptime(String respuesta) {
+        ApiDispositivoIot api;
+        api = new ApiDispositivoIot();
+        Double uptime;
+        uptime = api.getJsonDouble(respuesta, TEXTOS_DIALOGO_IOT.UPTIME.getValorTextoJson());
+        if (uptime >=0 ) {
+            setUptime(uptime);
+            return IOT_CODE_RESULT.RESUT_CODE_OK;
+        } else {
+            return IOT_CODE_RESULT.RESULT_CODE_ERROR;
+        }
+    }
+
+    protected IOT_CODE_RESULT getCurrentSchedule(String message) {
+
+        String field;
+        if ((field = getFieldString(message, TEXTOS_DIALOGO_IOT.PROGRAMA_ACTIVO)) == null) {
+
+            return IOT_CODE_RESULT.RESULT_CODE_ERROR;
+        } else {
+            setActiveSchedule(field);
+            return IOT_CODE_RESULT.RESUT_CODE_OK;
+        }
+
+
+    }
+    public DEVICE_STATE_CONNECTION getScheduleCommand() {
+
+        return simpleCommand(IOT_COMMANDS.GET_SCHEDULE);
+    }
+
+    protected IOT_CODE_RESULT processGetSchedule(String message) {
+        Log.i(TAG, "Recibida programacion");
+        loadSchedules(message);
+
+        return IOT_CODE_RESULT.RESUT_CODE_OK;
     }
 
 
+
+
+    private ArrayList<IotScheduleDevice> loadSchedules(String textoRecibido) {
+
+        JSONObject objeto, respuesta;
+        JSONObject objetoPrograma = null;
+        JSONArray arrayProgramas;
+        int i;
+        IotScheduleDevice programa;
+
+
+        try {
+            respuesta = new JSONObject(textoRecibido);
+            arrayProgramas = respuesta.getJSONArray(TEXTOS_DIALOGO_IOT.PROGRAMAS.getValorTextoJson());
+            for(i=0;i<arrayProgramas.length();i++) {
+                if (schedules == null) schedules = new ArrayList<IotScheduleDevice>();
+
+                objeto = arrayProgramas.getJSONObject(i);
+                programa = new IotScheduleDevice(objeto);
+                if (programa.getScheduleId().equals(getActiveSchedule())) {
+                    programa.setActiveSchedule(true);
+                }
+                addSchedule(programa);
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.e(getClass().toString(), "Error al obtener los programas del dispositivo");
+            return null;
+        }
+
+
+        return schedules;
+    }
+
+    protected boolean addSchedule(IotScheduleDevice programa) {
+
+        int i;
+        int tam;
+        if (schedules == null) {
+            schedules = new ArrayList<IotScheduleDevice>();
+            tam = 0;
+        } else {
+            tam = schedules.size();
+        }
+        for(i=0;i<tam;i++) {
+
+            if (schedules.get(i).getScheduleId().equals(programa.getScheduleId())) {
+                Log.i(getClass().toString(), "Programa repetido, no se inserta");
+                return  false;
+            }
+
+        }
+        schedules.add(programa);
+        return true;
+
+
+
+    }
+
+    protected String getFieldString(String message, TEXTOS_DIALOGO_IOT field) {
+        ApiDispositivoIot api;
+        String dat;
+        api = new ApiDispositivoIot();
+        dat = api.getJsonString(message, field.getValorTextoJson());
+        return dat;
+
+
+    }
 
 }

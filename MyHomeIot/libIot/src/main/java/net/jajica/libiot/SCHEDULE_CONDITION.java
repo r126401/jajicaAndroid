@@ -1,13 +1,13 @@
 package net.jajica.libiot;
 
-public enum SCHEDULE_STATE {
+public enum SCHEDULE_CONDITION {
     INVALID_PROG(0),
     VALID_PROG(1),
     INH_PROG(2);
 
     private int estado;
 
-    SCHEDULE_STATE(int estado) {
+    SCHEDULE_CONDITION(int estado) {
         this.estado = estado;
     }
 
@@ -16,9 +16,9 @@ public enum SCHEDULE_STATE {
         return this.estado;
     }
 
-    public SCHEDULE_STATE fromId(int id) {
+    public SCHEDULE_CONDITION fromId(int id) {
 
-        for (SCHEDULE_STATE tipo : values()) {
+        for (SCHEDULE_CONDITION tipo : values()) {
 
             if (tipo.getScheduleState() == id) return tipo;
         }

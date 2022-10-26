@@ -29,7 +29,7 @@ public class ApiDispositivoIot implements Serializable {
 
     public interface onTimeoutApiJson {
 
-        public void commandTimeOut(COMANDO_IOT command, String key, String idDevice);
+        public void commandTimeOut(IOT_COMMANDS command, String key, String idDevice);
 
     }
 
@@ -84,7 +84,7 @@ public class ApiDispositivoIot implements Serializable {
 
         setCommandKey(UUID.randomUUID().toString());
 
-        cnx.setOnListenerArrivedMessaged(new MqttConnection.OnArrivedMessage() {
+        cnx.setOnListenerArrivedMessaged("hola", new MqttConnection.OnArrivedMessage() {
             @Override
             public void arrivedMessage(String topic, MqttMessage message) {
                 Log.i(TAG, "Llego un mensaje");
@@ -137,7 +137,7 @@ public class ApiDispositivoIot implements Serializable {
      * @param nComando es la id del comando a enviar
      * @return se retorna el texto del comando para enviar.
      */
-    public String createSimpleCommand(COMANDO_IOT nComando) {
+    public String createSimpleCommand(IOT_COMMANDS nComando) {
 
         JSONObject comando;
         JSONObject intermedio;
@@ -370,7 +370,7 @@ public class ApiDispositivoIot implements Serializable {
     public DEVICE_STATE_CONNECTION enviarComando(IotDevice dispositivo, String comandoJson, onTimeoutApiJson listenerTimout) {
 
         TimersApi temporizador;
-        COMANDO_IOT idComando = COMANDO_IOT.ERROR_RESPUESTA;
+        IOT_COMMANDS idComando = IOT_COMMANDS.ERROR_RESPUESTA;
         DEVICE_STATE_CONNECTION estado;
         String clave;
         clave = getJsonString(comandoJson, TEXTOS_DIALOGO_IOT.CLAVE.getValorTextoJson());
@@ -379,12 +379,12 @@ public class ApiDispositivoIot implements Serializable {
         idComando = idComando.fromId(a);
         temporizador = new TimersApi(idComando, dispositivo.getIdDispositivo(), clave, new TimersApi.onTemporizacionComandos() {
             @Override
-            public void temporizacionVencida(COMANDO_IOT comando, String clave, String idDispositivo) {
+            public void temporizacionVencida(IOT_COMMANDS comando, String clave, String idDispositivo) {
 
             }
 
             @Override
-            public void informeIntermedio(COMANDO_IOT comando) {
+            public void informeIntermedio(IOT_COMMANDS comando) {
 
             }
         });
@@ -404,7 +404,7 @@ public class ApiDispositivoIot implements Serializable {
     public boolean enviarComando(IotDevice dispositivo, String comandoJson) {
 
         TimersApi temporizador;
-        COMANDO_IOT idComando = COMANDO_IOT.ERROR_RESPUESTA;
+        IOT_COMMANDS idComando = IOT_COMMANDS.ERROR_RESPUESTA;
         String clave;
         clave = getJsonString(comandoJson, TEXTOS_DIALOGO_IOT.CLAVE.getValorTextoJson());
 
@@ -416,7 +416,7 @@ public class ApiDispositivoIot implements Serializable {
         temporizador = new TimersApi(idComando, dispositivo.getIdDispositivo(), clave);
         temporizador.setOnTemporizacionComandos(new TimersApi.onTemporizacionComandos() {
             @Override
-            public void temporizacionVencida(COMANDO_IOT comando, String clave, String idDispositivo) {
+            public void temporizacionVencida(IOT_COMMANDS comando, String clave, String idDispositivo) {
                 if (listenerTimeoutApiJson != null) {
                     eliminarTemporizador(clave);
                     listenerTimeoutApiJson.commandTimeOut(comando, clave, idDispositivo);
@@ -425,7 +425,7 @@ public class ApiDispositivoIot implements Serializable {
             }
 
             @Override
-            public void informeIntermedio(COMANDO_IOT comando) {
+            public void informeIntermedio(IOT_COMMANDS comando) {
 
             }
         });
@@ -482,9 +482,9 @@ public class ApiDispositivoIot implements Serializable {
         IotDevice dispositivo;
         mensaje = new String (message.getPayload());
 
-        COMANDO_IOT comando;
+        IOT_COMMANDS comando;
         comando = getCommandId(mensaje);
-        if (comando == COMANDO_IOT.ESPONTANEO) {
+        if (comando == IOT_COMMANDS.SPONTANEOUS) {
             tipoInforme = IOT_REPORT_TYPE.SPONTANEOUS_REPORT;
         } else {
             tipoInforme = IOT_REPORT_TYPE.COMMAND_REPORT;
@@ -503,28 +503,28 @@ public class ApiDispositivoIot implements Serializable {
     }
 
     protected void procesarComando(String topic, MqttMessage message) {
-        COMANDO_IOT idComando;
+        IOT_COMMANDS idComando;
 
         String mensaje = new String(message.getPayload());
         idComando = getCommandId(mensaje);
 
         switch (idComando) {
 
-            case CONSULTAR_CONF_APP:
+            case INFO_DEVICE:
                 break;
-            case ACTUAR_RELE:
+            case SET_RELAY:
                 break;
-            case ESTADO:
+            case STATUS_DEVICE:
                 break;
-            case CONSULTAR_PROGRAMACION:
+            case GET_SCHEDULE:
                 break;
-            case NUEVA_PROGRAMACION:
+            case NEW_SCHEDULE:
                 break;
-            case ELIMINAR_PROGRAMACION:
+            case REMOVE_SCHEDULE:
                 break;
-            case MODIFICAR_PROGRAMACION:
+            case MODIFY_SCHEDULE:
                 break;
-            case MODIFICAR_APP:
+            case MODIFY_PARAMETER_DEVICE:
                 break;
             case RESET:
                 break;
@@ -536,7 +536,7 @@ public class ApiDispositivoIot implements Serializable {
                 break;
             case VERSION_OTA:
                 break;
-            case ERROR_RESPUESTA:
+            case ERROR_REPORT:
                 break;
             default:
                 break;
@@ -564,7 +564,7 @@ public class ApiDispositivoIot implements Serializable {
 
     }
 
-    public COMANDO_IOT getCommandId(String texto) {
+    public IOT_COMMANDS getCommandId(String texto) {
 
         int idComando = -100;
         JSONObject objetoJson = null;
@@ -579,10 +579,10 @@ public class ApiDispositivoIot implements Serializable {
             idComando = objetoJson.getInt(TEXTOS_DIALOGO_IOT.DLG_COMANDO.getValorTextoJson());
         } catch (JSONException e) {
             //e.printStackTrace();
-            return COMANDO_IOT.ESPONTANEO;
+            return IOT_COMMANDS.SPONTANEOUS;
         }
 
-        return COMANDO_IOT.ESPONTANEO.fromId(idComando);
+        return IOT_COMMANDS.SPONTANEOUS.fromId(idComando);
 
     }
 
@@ -599,7 +599,7 @@ public class ApiDispositivoIot implements Serializable {
         }, 30000);
     }
 
-    private String escribirComandoGenerico(COMANDO_IOT nComando) {
+    private String escribirComandoGenerico(IOT_COMMANDS nComando) {
 
         JSONObject comando;
         JSONObject intermedio;

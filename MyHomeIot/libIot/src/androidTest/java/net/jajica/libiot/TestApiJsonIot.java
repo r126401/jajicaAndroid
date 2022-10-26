@@ -50,7 +50,7 @@ public class TestApiJsonIot {
 
         if (estado == MQTT_STATE_CONNECTION.CONEXION_MQTT_CON_EXITO) {
             api = new ApiDispositivoIot(cnx);
-            assertNotNull(texto = api.createSimpleCommand(COMANDO_IOT.ESTADO));
+            assertNotNull(texto = api.createSimpleCommand(IOT_COMMANDS.STATUS_DEVICE));
             Log.i("texto", texto);
 
 

@@ -1,6 +1,6 @@
 package net.jajica.libiot;
 
-public enum RESULT_CODE {
+public enum IOT_CODE_RESULT {
     RESUT_CODE_OK(200),
     RESULT_CODE_NOK(400),
     RESULT_CODE_ERROR(500),
@@ -8,7 +8,7 @@ public enum RESULT_CODE {
 
     private int resultCode;
 
-    RESULT_CODE(int code) {
+    IOT_CODE_RESULT(int code) {
 
         this.resultCode = code;
     }
@@ -18,9 +18,9 @@ public enum RESULT_CODE {
         return this.resultCode;
     }
 
-    public RESULT_CODE fromId(int id) {
+    public IOT_CODE_RESULT fromId(int id) {
 
-        for (RESULT_CODE result : values()) {
+        for (IOT_CODE_RESULT result : values()) {
 
             if (result.getResultCode() == id) return result;
         }

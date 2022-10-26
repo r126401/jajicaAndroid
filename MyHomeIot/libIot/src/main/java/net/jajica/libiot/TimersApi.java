@@ -6,25 +6,25 @@ import android.os.CountDownTimer;
 class TimersApi {
 
     public CountDownTimer temporizador;
-    private COMANDO_IOT comando;
+    private IOT_COMMANDS comando;
     private int idTemporizador;
     private String clave;
     private String idDispositivo;
     private onTemporizacionComandos listener;
 
     public interface onTemporizacionComandos {
-        void temporizacionVencida(COMANDO_IOT comando, String clave, String idDispositivo);
-        void informeIntermedio(COMANDO_IOT comando);
+        void temporizacionVencida(IOT_COMMANDS comando, String clave, String idDispositivo);
+        void informeIntermedio(IOT_COMMANDS comando);
     }
 
-    TimersApi(COMANDO_IOT comando, String idDispositivo, String clave) {
+    TimersApi(IOT_COMMANDS comando, String idDispositivo, String clave) {
         this.comando = comando;
         this.idDispositivo = idDispositivo;
         this.clave = clave;
 
     }
 
-    TimersApi(COMANDO_IOT comando, String idDispositivo, String Clave, onTemporizacionComandos listenerTemporizacion) {
+    TimersApi(IOT_COMMANDS comando, String idDispositivo, String Clave, onTemporizacionComandos listenerTemporizacion) {
         this.comando = comando;
         this.idDispositivo = idDispositivo;
         this.clave = clave;
@@ -43,11 +43,11 @@ class TimersApi {
         return this.clave;
     }
 
-    public void setComando(COMANDO_IOT comando) {
+    public void setComando(IOT_COMMANDS comando) {
         this.comando = comando;
     }
 
-    public COMANDO_IOT getComando() {
+    public IOT_COMMANDS getComando() {
         return this.comando;
     }
 

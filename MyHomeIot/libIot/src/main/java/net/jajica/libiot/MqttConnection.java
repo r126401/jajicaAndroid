@@ -4,8 +4,9 @@ package net.jajica.libiot;
 import android.content.Context;
 import android.util.Log;
 
-
-import org.eclipse.paho.android.service.MqttAndroidClient;
+import info.mqtt.android.service.Ack;
+import info.mqtt.android.service.MqttAndroidClient;
+//import org.eclipse.paho.android.service.MqttAndroidClient;
 import org.eclipse.paho.client.mqttv3.IMqttActionListener;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.IMqttToken;
@@ -22,6 +23,7 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -39,7 +41,7 @@ import java.util.TimerTask;
  */
 public class MqttConnection implements Serializable {
 
-    protected final String TAG = "conexionMqtt";
+    protected final String TAG = "MqttConnection";
     protected MqttAndroidClient client;
     private final Context context;
     protected IMqttToken token;
@@ -51,24 +53,50 @@ public class MqttConnection implements Serializable {
     protected OnMqttConnection onListenerConnection;
     protected OnArrivedMessage onListenerArrivedMessaged;
     protected OnSubscriptionTopic onListenerSubscribe;
+    protected ArrivedMessage elemento;
+    protected ArrayList<ArrivedMessage> lista;
+
+
+
 
 
     /**
      * Este método crea un listener para controlar los eventos de la conexion
      * @param onListenerConnection es el listener en uso
      */
+
     public void setOnListenerConnection(OnMqttConnection onListenerConnection) {
         this.onListenerConnection = onListenerConnection;
     }
+
+
+
 
     /**
      * Este metodo crea un listener para recibir los eventos que llegan desde la conexion mqtt
      * @param onListenerArrivedMessaged es el listener en uso
      */
+    /*
     public void setOnListenerArrivedMessaged(OnArrivedMessage onListenerArrivedMessaged) {
         this.onListenerArrivedMessaged = onListenerArrivedMessaged;
     }
+*/
 
+    public void setOnListenerArrivedMessaged(String subscriptionTopic, OnArrivedMessage onListenerArrivedMessaged) {
+
+        ArrivedMessage elemento;
+        elemento = new ArrivedMessage();
+        elemento.listener = onListenerArrivedMessaged;
+        elemento.topic = subscriptionTopic;
+        if (lista == null) {
+            lista = new ArrayList<>();
+        }
+        lista.add(elemento);
+
+
+
+
+    }
 
     /**
      * Este metodo crea un listener para controlar el resultado final de la subscripcion
@@ -91,8 +119,11 @@ public class MqttConnection implements Serializable {
     /**
      * Se utiliza para controlar los eventos que llegan
      */
+
     public interface OnArrivedMessage {
+
         void arrivedMessage(String topic, MqttMessage message);
+
     }
 
     /**
@@ -161,7 +192,7 @@ public class MqttConnection implements Serializable {
     public MQTT_STATE_CONNECTION createConnetion(OnMqttConnection listenerConexionMqtt) {
 
 
-        client = new MqttAndroidClient(context, stringConnection, idClient);
+        client = new MqttAndroidClient(context, stringConnection, idClient, Ack.AUTO_ACK);
         client.setCallback(new MqttCallbackExtended() {
             @Override
             public void connectComplete(boolean reconnect, String serverURI) {
@@ -187,6 +218,9 @@ public class MqttConnection implements Serializable {
 
                 String datos = new String(message.getPayload());
                 Log.d(TAG, topic +" : " + datos);
+                //onListenerArrivedMessaged.arrivedMessage(topic, message);
+                int i = searchListenerArriveMessage(topic);
+                onListenerArrivedMessaged = lista.get(i).listener;
                 onListenerArrivedMessaged.arrivedMessage(topic, message);
 
             }
@@ -224,13 +258,6 @@ public class MqttConnection implements Serializable {
 
         //connectionRetry(20000, 1000);
         retryConnection(10000, 10000);
-
-
-
-
-
-
-
         setStateConnection(MQTT_STATE_CONNECTION.CONEXION_MQTT_CON_EXITO);
         return MQTT_STATE_CONNECTION.CONEXION_MQTT_CON_EXITO;
     }
@@ -239,25 +266,19 @@ public class MqttConnection implements Serializable {
     private void connect() {
 
 
-        try {
-            token = client.connect(options, context, new IMqttActionListener() {
-                @Override
-                public void onSuccess(IMqttToken asyncActionToken) {
-                    setStateConnection(MQTT_STATE_CONNECTION.CONEXION_MQTT_ACTIVE);
+        token = client.connect(options, context, new IMqttActionListener() {
+            @Override
+            public void onSuccess(IMqttToken asyncActionToken) {
+                setStateConnection(MQTT_STATE_CONNECTION.CONEXION_MQTT_ACTIVE);
 
-                }
+            }
 
-                @Override
-                public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
-                    setStateConnection(MQTT_STATE_CONNECTION.CONEXION_MQTT_FAIL);
+            @Override
+            public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
+                setStateConnection(MQTT_STATE_CONNECTION.CONEXION_MQTT_FAIL);
 
-                }
-            });
-        } catch (MqttException e) {
-            e.printStackTrace();
-            setStateConnection(MQTT_STATE_CONNECTION.CONEXION_MQTT_ERROR_CONNECT);
-            return;
-        }
+            }
+        });
 
 
         setStateConnection(MQTT_STATE_CONNECTION.CONEXION_MQTT_CON_EXITO);
@@ -279,13 +300,8 @@ public class MqttConnection implements Serializable {
         if (stateConnection == MQTT_STATE_CONNECTION.CONEXION_MQTT_ACTIVE) {
             mensaje = new MqttMessage();
             mensaje.setPayload(texto.getBytes());
-            try {
-                client.publish(topic, mensaje);
-                Log.w(TAG, topic + ": " + texto);
-            } catch (MqttException e) {
-                e.printStackTrace();
-                return DEVICE_STATE_CONNECTION.DEVICE_ERROR_COMMUNICATION;
-            }
+            client.publish(topic, mensaje);
+            Log.w(TAG, topic + ": " + texto);
 
         } else {
             Log.w(TAG, "no estoy conectado y no puedo publica");
@@ -305,28 +321,25 @@ public class MqttConnection implements Serializable {
 
         Log.w(TAG, "topic " + topic);
         if (stateConnection == MQTT_STATE_CONNECTION.CONEXION_MQTT_ACTIVE) {
-            try {
-                client.subscribe(topic, 0, context, new IMqttActionListener() {
-                    @Override
-                    public void onSuccess(IMqttToken iMqttToken) {
-                        Log.w(TAG, "subscrito al topic " + topic);
-                        listener.Unsuccessful(iMqttToken);
-                    }
+            client.subscribe(topic, 0, context, new IMqttActionListener() {
+                @Override
+                public void onSuccess(IMqttToken iMqttToken) {
+                    Log.w(TAG, "subscrito al topic " + topic);
+                    listener.Unsuccessful(iMqttToken);
+                }
 
-                    @Override
-                    public void onFailure(IMqttToken iMqttToken, Throwable throwable) {
-                        Log.w(TAG, "subscrito sin exito al topic " + topic);
-                        listener.Successful(iMqttToken, throwable);
-                    }
-                });
-            } catch (MqttException e) {
-                e.printStackTrace();
-            }
+                @Override
+                public void onFailure(IMqttToken iMqttToken, Throwable throwable) {
+                    Log.w(TAG, "subscrito sin exito al topic " + topic);
+                    listener.Successful(iMqttToken, throwable);
+                }
+            });
 
         } else {
             Log.w(TAG, "No estas conectado al broker");
             stateConnection = MQTT_STATE_CONNECTION.CONEXION_MQTT_ERROR_SUSCRIPCION_TOPIC;
         }
+
         return stateConnection;
 
     }
@@ -361,11 +374,7 @@ public class MqttConnection implements Serializable {
      *
      */
     public void closeConnection() {
-        try {
-            client.disconnect();
-        } catch (MqttException e) {
-            e.printStackTrace();
-        }
+        client.disconnect();
         client.close();
 
         setStateConnection(MQTT_STATE_CONNECTION.CONEXION_MQTT_DESCONECTADA);
@@ -376,5 +385,24 @@ public class MqttConnection implements Serializable {
         return client.isConnected();
 
     }
+
+    protected int searchListenerArriveMessage(String topic) {
+
+        int i;
+        if (lista == null) {
+            return -1;
+        }
+        for (i=0;i<lista.size();i++) {
+            if (topic.equals(lista.get(i).topic)) {
+                return i;
+            }
+
+        }
+
+        return -1;
+    }
+
+
+
 
 }
