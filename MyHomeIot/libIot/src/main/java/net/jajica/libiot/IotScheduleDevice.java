@@ -303,5 +303,40 @@ public class IotScheduleDevice implements Serializable {
         this.duration = duration;
     }
 
+    public JSONObject schedule2Json(IotScheduleDevice schedule) {
+
+        JSONObject objectSchedule;
+        objectSchedule = new JSONObject();
+        try {
+
+            objectSchedule.put(TEXTOS_DIALOGO_IOT.ID_PROGRAMA.getValorTextoJson(), schedule.getScheduleId());
+            objectSchedule.put(TEXTOS_DIALOGO_IOT.TIPO_PROGRAMA.getValorTextoJson(), schedule.getScheduleType().getTipoPrograma());
+            objectSchedule.put(TEXTOS_DIALOGO_IOT.HORA.getValorTextoJson(), schedule.getHour());
+            objectSchedule.put(TEXTOS_DIALOGO_IOT.MINUTO.getValorTextoJson(), schedule.getMinute());
+            objectSchedule.put(TEXTOS_DIALOGO_IOT.SEGUNDO.getValorTextoJson(), schedule.getSecond());
+            objectSchedule.put(TEXTOS_DIALOGO_IOT.STATE_SCHEDULE.getValorTextoJson(), schedule.getScheduleState());
+            objectSchedule.put(TEXTOS_DIALOGO_IOT.MASCARA_PROGRAMA.getValorTextoJson(), schedule.getMask());
+
+            objectSchedule.put(TEXTOS_DIALOGO_IOT.DURACION.getValorTextoJson(), schedule.getDuration());
+
+        } catch (JSONException e) {
+            return null;
+
+        }
+        return objectSchedule;
+
+    }
+
+    protected void setRawScheduleFromObject() {
+
+        String estado;
+        estado = String.valueOf(getScheduleState().getEstadoPrograma());
+
+        rawSchedule = getScheduleId() + estado;
+        setRawSchedule(rawSchedule);
+
+
+    }
+
 
 }

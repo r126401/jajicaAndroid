@@ -255,6 +255,15 @@ public class IotDevice {
         this.onReceivedDeleteDevice = onReceivedDeleteDevice;
     }
 
+    protected OnReceivedModifySchedule onReceivedModifySchedule;
+    public interface OnReceivedModifySchedule {
+        void onReceivedModifySchedule(IOT_CODE_RESULT resultCode);
+    }
+
+    public void setOnReceivedModifySchedule(OnReceivedModifySchedule onReceivedModifySchedule) {
+        this.onReceivedModifySchedule = onReceivedModifySchedule;
+    }
+
     public interface OnSwitchDevice {
         void receivedSwitchDevice(IotDevice device);
     }
@@ -870,6 +879,10 @@ public class IotDevice {
 
                 break;
             case MODIFY_SCHEDULE:
+                res = processModifySchedule(mensaje);
+                if (onReceivedModifySchedule != null) {
+                    onReceivedModifySchedule.onReceivedModifySchedule(res);
+                }
                 break;
             case MODIFY_PARAMETER_DEVICE:
                 break;
@@ -1277,6 +1290,74 @@ public class IotDevice {
         return IOT_CODE_RESULT.RESULT_CODE_ERROR.fromId(codResult);
     }
 
+
+    public DEVICE_STATE_CONNECTION modifyScheduleCommand(IotScheduleDevice schedule) {
+
+        JSONObject parameters;
+        DEVICE_STATE_CONNECTION state = null;
+        parameters = schedule.schedule2Json(schedule);
+        if (parameters != null) {
+            state = commandwithParameters(IOT_COMMANDS.MODIFY_SCHEDULE, TEXTOS_DIALOGO_IOT.PROGRAMAS.getValorTextoJson(), parameters);
+            return state;
+        }
+        return state;
+
+
+/*
+{"comando":{"token":"6dc100d0-bc8e-45a7-bcce-e64f4139cc0d","date":"27\/10\/2022 16:06:56","dlgComando":8,"nombreComando":"MODIFICAR_PROGRAMACION"},"program":{"programType":0,"hour":13,"minute":40,"second":0,"programState":1,"programMask":103,"programId":"001230007f","estadoRele":1,"durationProgram":15600}}
+
+
+ */
+
+
+    }
+
+    protected IOT_CODE_RESULT processModifySchedule(String message) {
+
+
+
+
+
+
+
+
+        return IOT_CODE_RESULT.RESUT_CODE_OK;
+    }
+
+    protected int searchSchedule(String schedule) {
+
+        int i;
+        if (getSchedules() == null) {
+            Log.w(TAG, "No hay schedules");
+            return -1;
+        }
+        for (i=0; i< getSchedules().size();i++) {
+            if (getSchedules().get(i).getScheduleId().equals(schedule)) {
+                return i;
+            }
+        }
+        Log.w(TAG, "schedule " + schedule + "no encontrado");
+        return -1;
+
+    }
+
+    protected String getScheduleId(String respuesta) {
+
+        ApiDispositivoIot api;
+        String scheduleId;
+        api = new ApiDispositivoIot();
+        return api.getJsonString(respuesta, TEXTOS_DIALOGO_IOT.ID_PROGRAMA.getValorTextoJson());
+
+    }
+
+    protected String getNewScheduleId(String respuesta) {
+
+        ApiDispositivoIot api;
+        String scheduleId;
+        api = new ApiDispositivoIot();
+        return api.getJsonString(respuesta, TEXTOS_DIALOGO_IOT.NUEVO_ID_PROGRAMA.getValorTextoJson());
+
+    }
 
 
 }

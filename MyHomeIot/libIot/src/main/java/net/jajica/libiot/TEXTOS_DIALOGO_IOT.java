@@ -31,6 +31,7 @@ public enum TEXTOS_DIALOGO_IOT {
     OP_RELE("opRele"),
     ESTADO_CONEXION("estadoConexion"),
     ESTADO_PROGRAMACION("programmerState"),
+    STATE_SCHEDULE("programState"),
     ESTADO_DISPOSITIVO("deviceState"),
     SERVIDOR_OTA("otaServer"),
     PUERTO_OTA("otaPort"),

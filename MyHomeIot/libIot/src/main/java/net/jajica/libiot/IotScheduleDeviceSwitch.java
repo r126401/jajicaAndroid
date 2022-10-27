@@ -4,12 +4,14 @@ import android.util.Log;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Formatter;
 
 public class IotScheduleDeviceSwitch extends IotScheduleDevice {
 
     private final String TAG = "IotScheduleDeviceSwitch";
     private IOT_SWITCH_RELAY relay;
+
 
     public IOT_SWITCH_RELAY getRelay() {
         return relay;
@@ -47,7 +49,6 @@ public class IotScheduleDeviceSwitch extends IotScheduleDevice {
         i= Integer.parseInt(getRawSchedule().substring(10,11));
         setRelay(estado.fromId(i));
     }
-
 
 
 

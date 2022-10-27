@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+import net.jajica.libiot.IotScheduleDeviceSwitch;
 import net.jajica.libiot.MqttConnection;
 import net.jajica.libiot.IotDevice;
 import net.jajica.libiot.IotDeviceSwitch;
@@ -76,6 +77,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onReceivedScheduleDevice(IOT_CODE_RESULT resultCode) {
                 Log.i(TAG, "recibida programacion de depuradora " +  disp2.getDeviceId());
+
+
+
+                disp.modifyScheduleCommand(disp.getSchedules().get(1));
             }
         });
 
@@ -105,6 +110,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onReceivedScheduleDevice(IOT_CODE_RESULT resultCode) {
                 Log.i(TAG, "Recibido programas de test: " + disp.getDispositivoJson());
+                IotScheduleDeviceSwitch sch;
+                sch = disp.getSchedulesSwitch().get(1);
+                sch.setHour(21);
+                sch.setMinute(49);
+                sch.setSecond(33);
+                disp.modifyScheduleCommand(sch);
             }
         });
 
@@ -117,7 +128,14 @@ public class MainActivity extends AppCompatActivity {
 
         disp.getStatusDeviceCommand();
         disp.getScheduleCommand();
-        disp.deleteScheduleCommand("002100007f");
+        //disp.deleteScheduleCommand("002100007f");
+        disp.setOnReceivedModifySchedule(new IotDevice.OnReceivedModifySchedule() {
+            @Override
+            public void onReceivedModifySchedule(IOT_CODE_RESULT resultCode) {
+                Log.i(TAG, "Recibida respuesta a modificar comando");
+            }
+        });
+
 
 
 
