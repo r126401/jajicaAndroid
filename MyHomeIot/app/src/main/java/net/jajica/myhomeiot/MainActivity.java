@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
                 IotScheduleDeviceSwitch sch;
                 sch = disp.getSchedulesSwitch().get(1);
                 sch.setHour(21);
-                sch.setMinute(49);
+                sch.setMinute(53);
                 sch.setSecond(33);
                 disp.modifyScheduleCommand(sch);
             }
@@ -132,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
         disp.setOnReceivedModifySchedule(new IotDevice.OnReceivedModifySchedule() {
             @Override
             public void onReceivedModifySchedule(IOT_CODE_RESULT resultCode) {
-                Log.i(TAG, "Recibida respuesta a modificar comando");
+                Log.i(TAG, "Recibida respuesta a modificar comando " + disp.setCurrentOtaVersionFromReport());
             }
         });
 

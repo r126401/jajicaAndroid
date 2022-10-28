@@ -50,6 +50,13 @@ public class IotScheduleDeviceSwitch extends IotScheduleDevice {
         setRelay(estado.fromId(i));
     }
 
+    protected void setRawScheduleIdFromModifyScheduleReport(String scheduleId) {
+
+        this.rawSchedule = scheduleId + "1";
+
+
+    }
+
 
 
 }

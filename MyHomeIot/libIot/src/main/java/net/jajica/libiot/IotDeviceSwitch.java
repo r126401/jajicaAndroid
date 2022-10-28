@@ -90,9 +90,9 @@ public class IotDeviceSwitch extends IotDevice {
     protected IOT_CODE_RESULT processGetSchedule(String message) {
 
 
-        getDeviceStatus(message);
-        getScheduleState(message);
-        getCurrentSchedule(message);
+        setDeviceStateFromReport(message);
+        setProgrammerStateFromReport(message);
+        setCurrentScheduleFromReport(message);
         loadSchedules(message);
         //return super.processGetSchedule(message);
         return IOT_CODE_RESULT.RESUT_CODE_OK;
@@ -126,7 +126,7 @@ public class IotDeviceSwitch extends IotDevice {
     protected IOT_CODE_RESULT processModifySchedule(String message) {
         IOT_CODE_RESULT res;
         IotScheduleDeviceSwitch schedule;
-        if ((res = getCommandCodeResult(message)) != IOT_CODE_RESULT.RESUT_CODE_OK) {
+        if ((res = getCommandCodeResultFromReport(message)) != IOT_CODE_RESULT.RESUT_CODE_OK) {
             Log.e(TAG, "error en la peticion de modificacion");
             return res;
         }
@@ -134,39 +134,43 @@ public class IotDeviceSwitch extends IotDevice {
         // Localizamos el schedule a modificar
 
         int i;
-        i = searchSchedule(getScheduleId(message));
+        i = searchSchedule(getScheduleIdFromReport(message));
         if (i < 0 ) {
             return IOT_CODE_RESULT.RESULT_CODE_NOK;
         }
         schedule = getSchedulesSwitch().get(i);
 
         // Ahora actualizamos los datos en la estructura
-        schedule.setScheduleId(getNewScheduleId(message));
 
-
-
-
+        schedule.setNewScheduleIdFromReport(message);
+        setRelayStateFromReport(message);
+        setDeviceStateFromReport(message);
+        setProgrammerStateFromReport(message);
+        schedule.setDurationFromReport(message);
+        schedule.setScheduleStateFromReport(message);
+        setCurrentScheduleFromReport(message);
         return IOT_CODE_RESULT.RESULT_CODE_ERROR;
 
-                /*
-        {
-	"idDevice":	"A020A6026046",
-	"device":	0,
-	"otaVersion":	"2206251749",
-	"date":	"27/10/2022 18:07:41",
-	"token":	"4714ea94-eff7-4483-aaa9-a7d1d7c6c415",
-	"dlgComando":	8,
-	"programId":	"001800007f",
-	"newProgramId":	"002145337f",
-	"deviceState":	4,
-	"programState":	1,
-	"estadoRele":	1,
-	"durationProgram":	8700,
-	"dlgResultCode":	200
-}
-
-         */
     }
+
+    protected IOT_CODE_RESULT setRelayStateFromReport(String message) {
+
+        ApiDispositivoIot api;
+        api = new ApiDispositivoIot();
+        int i;
+        i = api.getJsonInt(message, TEXTOS_DIALOGO_IOT.ESTADO_RELE.getValorTextoJson());
+        if (i < 0) {
+            return IOT_CODE_RESULT.RESULT_CODE_ERROR;
+        }
+        setRelay(IOT_SWITCH_RELAY.UNKNOWN.fromId(i));
+        return IOT_CODE_RESULT.RESUT_CODE_OK;
+
+    }
+
+
+
+
+
 
     @Override
     protected int searchSchedule(String schedule) {

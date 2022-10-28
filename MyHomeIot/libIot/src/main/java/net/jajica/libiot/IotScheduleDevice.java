@@ -1,6 +1,7 @@
 package net.jajica.libiot;
 
 import android.util.Log;
+import android.view.View;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -334,6 +335,50 @@ public class IotScheduleDevice implements Serializable {
 
         rawSchedule = getScheduleId() + estado;
         setRawSchedule(rawSchedule);
+
+
+    }
+
+    protected IOT_CODE_RESULT setDurationFromReport(String message) {
+
+        ApiDispositivoIot api;
+        api = new ApiDispositivoIot();
+        int i;
+        i = api.getJsonInt(message, TEXTOS_DIALOGO_IOT.DURACION.getValorTextoJson());
+
+        if (i < 0) {
+            return IOT_CODE_RESULT.RESULT_CODE_ERROR;
+        }
+        setDuration(i);
+        return IOT_CODE_RESULT.RESUT_CODE_OK;
+
+    }
+
+    protected IOT_CODE_RESULT setScheduleStateFromReport(String message) {
+
+        ApiDispositivoIot api;
+        api = new ApiDispositivoIot();
+        int i;
+        i = api.getJsonInt(message, TEXTOS_DIALOGO_IOT.STATE_SCHEDULE.getValorTextoJson());
+        if (i < 0)
+        return IOT_CODE_RESULT.RESULT_CODE_ERROR;
+        setScheduleState(STATE_SCHEDULE.PROGRAMA_DESCONOCIDO.fromId(i));
+
+        return IOT_CODE_RESULT.RESUT_CODE_OK;
+    }
+
+    protected IOT_CODE_RESULT setNewScheduleIdFromReport(String respuesta) {
+
+        ApiDispositivoIot api;
+        String scheduleId;
+        api = new ApiDispositivoIot();
+        scheduleId = api.getJsonString(respuesta, TEXTOS_DIALOGO_IOT.NUEVO_ID_PROGRAMA.getValorTextoJson());
+        if (scheduleId == null) {
+            return IOT_CODE_RESULT.RESULT_CODE_ERROR;
+        }
+        setScheduleId(scheduleId);
+        return IOT_CODE_RESULT.RESUT_CODE_OK;
+
 
 
     }

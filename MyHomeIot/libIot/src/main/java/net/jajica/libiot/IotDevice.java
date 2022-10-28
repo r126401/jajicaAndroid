@@ -109,7 +109,7 @@ public class IotDevice {
     /**
      * Es el estado global de programacion del dispositivo
      */
-    protected SCHEDULE_CONDITION ScheduleState;
+    protected SCHEDULE_CONDITION programmerState;
 
     protected Timer timerCommand;
     protected long freeMem;
@@ -136,7 +136,7 @@ public class IotDevice {
      * Obtiene el tiempo de funcionmiento del dispositivo
      * @return Retorna el tiempo de funcionamiento
      */
-    public Double getUptime() {
+    public Double setUpTimeFromReport() {
         return uptime;
     }
 
@@ -167,16 +167,16 @@ public class IotDevice {
      * Metodo que devuelve el estado global de programacion del dispositivo
      * @return Devuelve el estado global de programacion del dispositivo
      */
-    public SCHEDULE_CONDITION getScheduleState() {
-        return ScheduleState;
+    public SCHEDULE_CONDITION getProgrammerState() {
+        return programmerState;
     }
 
     /**
      * Pone el estado Global de programacion del dispositivo
-     * @param scheduleState Es el estado que quire introducirse
+     * @param programmerState Es el estado que quire introducirse
      */
-    public void setScheduleState(SCHEDULE_CONDITION scheduleState) {
-        ScheduleState = scheduleState;
+    public void setProgrammerState(SCHEDULE_CONDITION programmerState) {
+        this.programmerState = programmerState;
     }
 
     /**
@@ -199,7 +199,7 @@ public class IotDevice {
      * Obtiene la version actual del dispositivo
      * @return
      */
-    public String getCurrentOtaVersion() {
+    public String setCurrentOtaVersionFromReport() {
         return currentOtaVersion;
     }
 
@@ -360,7 +360,7 @@ public class IotDevice {
      * Este metodo devuelve el estado del dispositivo
      * @return
      */
-    public IOT_DEVICE_TYPE getDeviceType() {
+    public IOT_DEVICE_TYPE setDeviceTypeFromReport() {
         return deviceType;
     }
 
@@ -686,7 +686,7 @@ public class IotDevice {
             }
         }
         try {
-            dispositivoJson.put(TEXTOS_DIALOGO_IOT.TIPO_DISPOSITIVO.getValorTextoJson(), getDeviceType().getValorTipoDispositivo());
+            dispositivoJson.put(TEXTOS_DIALOGO_IOT.TIPO_DISPOSITIVO.getValorTextoJson(), setDeviceTypeFromReport().getValorTipoDispositivo());
         } catch (JSONException e) {
             e.printStackTrace();
             return null;
@@ -731,7 +731,7 @@ public class IotDevice {
         }
         this.setDeviceName(dispositivo.getDeviceName());
         this.setDeviceId(dispositivo.getDeviceId());
-        this.setDeviceType(dispositivo.getDeviceType());
+        this.setDeviceType(dispositivo.setDeviceTypeFromReport());
         this.setPublishTopic(dispositivo.getPublishTopic());
         this.setSubscriptionTopic(dispositivo.getSubscriptionTopic());
         return true;
@@ -925,7 +925,7 @@ public class IotDevice {
      * @param respuesta Es el texto recibido desde el dispositivo
      * @return Se retorna el codigo de respuesta enviado por el dispositivo
      */
-    protected IOT_CODE_RESULT getCurrentOtaVersion(String respuesta) {
+    protected IOT_CODE_RESULT setCurrentOtaVersionFromReport(String respuesta) {
 
         ApiDispositivoIot api;
         api = new ApiDispositivoIot();
@@ -942,14 +942,14 @@ public class IotDevice {
 
 
 
-    protected IOT_CODE_RESULT getScheduleState(String respuesta) {
+    protected IOT_CODE_RESULT setProgrammerStateFromReport(String respuesta) {
         ApiDispositivoIot api;
         api = new ApiDispositivoIot();
         int estado;
         SCHEDULE_CONDITION schedule = SCHEDULE_CONDITION.INH_PROG;
         estado = api.getJsonInt(respuesta, TEXTOS_DIALOGO_IOT.ESTADO_PROGRAMACION.getValorTextoJson());
         if (estado >= 0) {
-            setScheduleState(schedule.fromId(estado));
+            setProgrammerState(schedule.fromId(estado));
             return IOT_CODE_RESULT.RESUT_CODE_OK;
         } else {
             Log.e(TAG, "Error al obtener el estado del dispositivo en el Status");
@@ -958,7 +958,7 @@ public class IotDevice {
 
     }
 
-    protected IOT_CODE_RESULT getDeviceType(String respuesta) {
+    protected IOT_CODE_RESULT setDeviceTypeFromReport(String respuesta) {
 
         ApiDispositivoIot api;
         api = new ApiDispositivoIot();
@@ -1030,17 +1030,17 @@ public class IotDevice {
 
     protected IOT_CODE_RESULT processStatus(String respuesta) {
 
-        getCurrentOtaVersion(respuesta);
+        setCurrentOtaVersionFromReport(respuesta);
         setConnectionState(DEVICE_STATE_CONNECTION.DEVICE_CONNECTED);
-        getDeviceStatus(respuesta);
-        getScheduleState(respuesta);
-        getDeviceType(respuesta);
-        getCurrentSchedule(respuesta);
+        setDeviceStateFromReport(respuesta);
+        setProgrammerStateFromReport(respuesta);
+        setDeviceTypeFromReport(respuesta);
+        setCurrentScheduleFromReport(respuesta);
         device2Json();
         return IOT_CODE_RESULT.RESUT_CODE_OK;
     }
 
-    protected IOT_CODE_RESULT getDeviceStatus(String respuesta) {
+    protected IOT_CODE_RESULT setDeviceStateFromReport(String respuesta) {
 
         ApiDispositivoIot api;
         api = new ApiDispositivoIot();
@@ -1066,19 +1066,19 @@ public class IotDevice {
 
     protected IOT_CODE_RESULT processInfoDevice(String message) {
 
-        getCurrentOtaVersion(message);
+        setCurrentOtaVersionFromReport(message);
         setConnectionState(DEVICE_STATE_CONNECTION.DEVICE_CONNECTED);
-        getDeviceStatus(message);
-        getScheduleState(message);
-        getDeviceType(message);
-        getFreMem(message);
-        getUptime(message);
+        setDeviceStateFromReport(message);
+        setProgrammerStateFromReport(message);
+        setDeviceTypeFromReport(message);
+        setFreeMemFromReport(message);
+        setUpTimeFromReport(message);
         device2Json();
         Log.i(TAG, message);
         return IOT_CODE_RESULT.RESUT_CODE_OK;
     }
 
-    protected IOT_CODE_RESULT getFreMem(String respuesta) {
+    protected IOT_CODE_RESULT setFreeMemFromReport(String respuesta) {
         ApiDispositivoIot api;
         api = new ApiDispositivoIot();
         int freeMem;
@@ -1091,7 +1091,7 @@ public class IotDevice {
         }
     }
 
-    protected IOT_CODE_RESULT getUptime(String respuesta) {
+    protected IOT_CODE_RESULT setUpTimeFromReport(String respuesta) {
         ApiDispositivoIot api;
         api = new ApiDispositivoIot();
         Double uptime;
@@ -1104,10 +1104,10 @@ public class IotDevice {
         }
     }
 
-    protected IOT_CODE_RESULT getCurrentSchedule(String message) {
+    protected IOT_CODE_RESULT setCurrentScheduleFromReport(String message) {
 
         String field;
-        if ((field = getFieldString(message, TEXTOS_DIALOGO_IOT.PROGRAMA_ACTIVO)) == null) {
+        if ((field = setFieldStringFromReport(message, TEXTOS_DIALOGO_IOT.PROGRAMA_ACTIVO)) == null) {
 
             return IOT_CODE_RESULT.RESULT_CODE_ERROR;
         } else {
@@ -1124,9 +1124,9 @@ public class IotDevice {
 
     protected IOT_CODE_RESULT processGetSchedule(String message) {
         Log.i(TAG, "Recibida programacion");
-        getDeviceStatus(message);
-        getScheduleState(message);
-        getCurrentSchedule(message);
+        setDeviceStateFromReport(message);
+        setProgrammerStateFromReport(message);
+        setCurrentScheduleFromReport(message);
         loadSchedules(message);
 
         return IOT_CODE_RESULT.RESUT_CODE_OK;
@@ -1193,7 +1193,7 @@ public class IotDevice {
 
     }
 
-    protected String getFieldString(String message, TEXTOS_DIALOGO_IOT field) {
+    protected String setFieldStringFromReport(String message, TEXTOS_DIALOGO_IOT field) {
         ApiDispositivoIot api;
         String dat;
         api = new ApiDispositivoIot();
@@ -1274,13 +1274,13 @@ public class IotDevice {
     protected IOT_CODE_RESULT processDeleteSchedule(String message) {
 
         IOT_CODE_RESULT result;
-        result = getCommandCodeResult(message);
+        result = getCommandCodeResultFromReport(message);
 
 
         return result;
     }
 
-    protected IOT_CODE_RESULT getCommandCodeResult(String respuesta) {
+    protected IOT_CODE_RESULT getCommandCodeResultFromReport(String respuesta) {
 
         ApiDispositivoIot api;
         api = new ApiDispositivoIot();
@@ -1315,12 +1315,6 @@ public class IotDevice {
     protected IOT_CODE_RESULT processModifySchedule(String message) {
 
 
-
-
-
-
-
-
         return IOT_CODE_RESULT.RESUT_CODE_OK;
     }
 
@@ -1341,7 +1335,7 @@ public class IotDevice {
 
     }
 
-    protected String getScheduleId(String respuesta) {
+    protected String getScheduleIdFromReport(String respuesta) {
 
         ApiDispositivoIot api;
         String scheduleId;
@@ -1350,14 +1344,21 @@ public class IotDevice {
 
     }
 
-    protected String getNewScheduleId(String respuesta) {
 
+
+    protected int getFieldIntFromReport(String message, TEXTOS_DIALOGO_IOT field) {
         ApiDispositivoIot api;
-        String scheduleId;
+        int dat;
         api = new ApiDispositivoIot();
-        return api.getJsonString(respuesta, TEXTOS_DIALOGO_IOT.NUEVO_ID_PROGRAMA.getValorTextoJson());
+        dat = api.getJsonInt(message, field.getValorTextoJson());
+        return dat;
+
 
     }
+
+
+
+
 
 
 }
