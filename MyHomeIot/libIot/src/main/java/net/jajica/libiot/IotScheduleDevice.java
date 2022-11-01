@@ -157,6 +157,24 @@ public class IotScheduleDevice implements Serializable {
         }
     }
 
+    protected void setActiveDaysFromMask() {
+
+        int i;
+        double comparador;
+        int valor;
+
+        for(i=0;i<7;i++) {
+            comparador = Math.pow(2,i);
+            valor = this.mask & (int) comparador;
+            if (valor == comparador) {
+                this.activeDays[i] = true;
+            } else {
+                this.activeDays[i] = false;
+            }
+        }
+
+    }
+
     public void createScheduleIdFromObject() {
 
         String schedule;
@@ -270,6 +288,7 @@ public class IotScheduleDevice implements Serializable {
 
     public void setMask(int mask) {
         this.mask = mask;
+        setActiveDaysFromMask();
     }
 
     public IOT_DEVICE_TYPE getDeviceType() {
@@ -304,7 +323,7 @@ public class IotScheduleDevice implements Serializable {
         this.duration = duration;
     }
 
-    public JSONObject schedule2Json(IotScheduleDevice schedule) {
+    protected JSONObject schedule2Json(IotScheduleDevice schedule) {
 
         JSONObject objectSchedule;
         objectSchedule = new JSONObject();
@@ -315,9 +334,8 @@ public class IotScheduleDevice implements Serializable {
             objectSchedule.put(TEXTOS_DIALOGO_IOT.HORA.getValorTextoJson(), schedule.getHour());
             objectSchedule.put(TEXTOS_DIALOGO_IOT.MINUTO.getValorTextoJson(), schedule.getMinute());
             objectSchedule.put(TEXTOS_DIALOGO_IOT.SEGUNDO.getValorTextoJson(), schedule.getSecond());
-            objectSchedule.put(TEXTOS_DIALOGO_IOT.STATE_SCHEDULE.getValorTextoJson(), schedule.getScheduleState());
             objectSchedule.put(TEXTOS_DIALOGO_IOT.MASCARA_PROGRAMA.getValorTextoJson(), schedule.getMask());
-
+            objectSchedule.put(TEXTOS_DIALOGO_IOT.STATE_SCHEDULE.getValorTextoJson(), schedule.getScheduleState().getEstadoPrograma());
             objectSchedule.put(TEXTOS_DIALOGO_IOT.DURACION.getValorTextoJson(), schedule.getDuration());
 
         } catch (JSONException e) {

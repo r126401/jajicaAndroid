@@ -1294,7 +1294,7 @@ public class IotDevice {
     public DEVICE_STATE_CONNECTION modifyScheduleCommand(IotScheduleDevice schedule) {
 
         JSONObject parameters;
-        DEVICE_STATE_CONNECTION state = null;
+        DEVICE_STATE_CONNECTION state = DEVICE_STATE_CONNECTION.UNKNOWN;
         parameters = schedule.schedule2Json(schedule);
         if (parameters != null) {
             state = commandwithParameters(IOT_COMMANDS.MODIFY_SCHEDULE, TEXTOS_DIALOGO_IOT.PROGRAMAS.getValorTextoJson(), parameters);
@@ -1354,6 +1354,17 @@ public class IotDevice {
         return dat;
 
 
+    }
+
+    public DEVICE_STATE_CONNECTION newScheduleCommand(IotScheduleDevice schedule) {
+
+        JSONObject parameters;
+        DEVICE_STATE_CONNECTION state = DEVICE_STATE_CONNECTION.UNKNOWN;
+        parameters = schedule.schedule2Json(schedule);
+        if (parameters != null) {
+            state = commandwithParameters(IOT_COMMANDS.NEW_SCHEDULE, TEXTOS_DIALOGO_IOT.PROGRAMAS.getValorTextoJson(), parameters);
+        }
+        return state;
     }
 
 

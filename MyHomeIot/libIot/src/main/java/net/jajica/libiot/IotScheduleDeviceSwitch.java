@@ -2,6 +2,7 @@ package net.jajica.libiot;
 
 import android.util.Log;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ public class IotScheduleDeviceSwitch extends IotScheduleDevice {
         setStateSwitchFromScheduleId();
     }
 
-    IotScheduleDeviceSwitch() {
+    public IotScheduleDeviceSwitch() {
         super();
         setDeviceType(IOT_DEVICE_TYPE.INTERRUPTOR);
     }
@@ -58,5 +59,36 @@ public class IotScheduleDeviceSwitch extends IotScheduleDevice {
     }
 
 
+    @Override
+    public void createScheduleIdFromObject() {
+        super.createScheduleIdFromObject();
+        setRawScheduleFromObject();
+    }
 
+    public void setRawScheduleFromObject() {
+
+        String state;
+        String relay;
+        state = String.valueOf(getScheduleState().getEstadoPrograma());
+        relay = String.valueOf(getRelay().getEstadoRele());
+
+        rawSchedule = scheduleId + state + relay;
+
+    }
+
+    @Override
+    protected JSONObject schedule2Json(IotScheduleDevice schedule) {
+
+        JSONObject objectSchedule;
+
+        objectSchedule = super.schedule2Json(schedule);
+        try {
+            objectSchedule.put(TEXTOS_DIALOGO_IOT.ESTADO_RELE.getValorTextoJson(), getRelay().getEstadoRele());
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        return objectSchedule;
+    }
 }

@@ -188,4 +188,5 @@ public class IotDeviceSwitch extends IotDevice {
         return -1;
 
     }
+
 }

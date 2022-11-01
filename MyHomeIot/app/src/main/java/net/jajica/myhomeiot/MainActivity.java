@@ -5,12 +5,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+import net.jajica.libiot.IOT_CLASS_SCHEDULE;
+import net.jajica.libiot.IOT_SWITCH_RELAY;
 import net.jajica.libiot.IotScheduleDeviceSwitch;
 import net.jajica.libiot.MqttConnection;
 import net.jajica.libiot.IotDevice;
 import net.jajica.libiot.IotDeviceSwitch;
 import net.jajica.libiot.MQTT_STATE_CONNECTION;
 import net.jajica.libiot.IOT_CODE_RESULT;
+import net.jajica.libiot.STATE_SCHEDULE;
 
 //import org.eclipse.paho.client.mqttv3.IMqttToken;
 
@@ -33,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
             public void connectionEstablished(boolean reconnect, String serverURI) {
                 Log.e("hh", "establecida");
                 ejemplo(cnx);
+                createSchedule(cnx);
             }
 
             @Override
@@ -138,16 +142,41 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+    }
 
-        //disp2.getStatusDeviceCommand();
+    public void createSchedule(MqttConnection cnx) {
+
+        IotDeviceSwitch disp;
+        disp = new IotDeviceSwitch(cnx);
+        disp.setDeviceId("A020A6026046");
+        disp.setDeviceName("test");
+        disp.subscribeDevice();
+        disp.recibirMensajes();
+        disp.setOnErrorAnswerDevice(new IotDevice.OnErrorAnswerDevice() {
+            @Override
+            public void receivedErrorAnswerDevice(IOT_CODE_RESULT result) {
+
+            }
+        });
 
 
 
+        IotScheduleDeviceSwitch schedule;
+        schedule = new IotScheduleDeviceSwitch();
+        schedule.setScheduleType(IOT_CLASS_SCHEDULE.DIARY_SCHEDULE);
+        schedule.setHour(12);
+        schedule.setMinute(34);
+        schedule.setSecond(0);
+        schedule.setMask(127);
+        schedule.setRelay(IOT_SWITCH_RELAY.ON);
+        schedule.setScheduleState(STATE_SCHEDULE.PROGRAMA_ACTIVO);
+        schedule.createScheduleIdFromObject();
+        //schedule.setRawScheduleFromObject();
+        schedule.setDuration(3600);
+        disp.newScheduleCommand(schedule);
 
 
     }
-
-
 
 
 
