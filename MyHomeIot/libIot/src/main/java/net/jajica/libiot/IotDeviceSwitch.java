@@ -24,6 +24,10 @@ public class IotDeviceSwitch extends IotDevice {
     public IotDeviceSwitch(MqttConnection cnx) {
         super(cnx);
     }
+
+    public IotDeviceSwitch() {
+        super();
+    }
     
     private ArrayList<IotScheduleDeviceSwitch> schedules;
 
@@ -188,5 +192,7 @@ public class IotDeviceSwitch extends IotDevice {
         return -1;
 
     }
+
+
 
 }

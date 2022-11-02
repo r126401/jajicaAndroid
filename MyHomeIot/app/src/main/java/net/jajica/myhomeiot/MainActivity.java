@@ -28,6 +28,9 @@ public class MainActivity extends AppCompatActivity {
 
 
         MqttConnection cnx;
+        IotDeviceSwitch disp;
+        disp = new IotDeviceSwitch();
+
         cnx = new MqttConnection(this.getApplicationContext());
         MQTT_STATE_CONNECTION estado;
         Log.e("hh", "Comenzamos...");
@@ -35,8 +38,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void connectionEstablished(boolean reconnect, String serverURI) {
                 Log.e("hh", "establecida");
-                ejemplo(cnx);
-                createSchedule(cnx);
+                disp.setCnx(cnx);
+                disp.setDeviceId("A020A6026046");
+                disp.setDeviceName("test");
+                disp.subscribeDevice();
+                disp.recibirMensajes();
+                ejemplo(disp);
+
             }
 
             @Override
@@ -51,42 +59,8 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void ejemplo(MqttConnection cnx) {
-        IotDeviceSwitch disp, disp2;
-        disp2 = new IotDeviceSwitch(cnx);
-        disp2.setDeviceName("Depuradora");
-        disp2.setDeviceId("8CCE4EFC0915");
-        disp = new IotDeviceSwitch(cnx);
-        disp.setDeviceId("A020A6026046");
-        disp.setDeviceName("test");
-        disp.subscribeDevice();
-        disp2.subscribeDevice();
-        disp.recibirMensajes();
-        disp2.recibirMensajes();
+    public void ejemplo(IotDeviceSwitch disp) {
 
-        disp2.setOnReceivedStatus(new IotDevice.OnReceivedStatus() {
-            @Override
-            public void onReceivedStatus(IOT_CODE_RESULT resultCode) {
-
-                Log.i(TAG, "Recibido status de depuradora: " + disp2.getDispositivoJson());
-            }
-        });
-        disp2.setOnReceivedInfoDevice(new IotDevice.OnReceivedInfoDevice() {
-            @Override
-            public void onReceivedInfoDevice(IOT_CODE_RESULT resultCode) {
-                Log.i(TAG, "Recibido info de depuradora: " + disp2.getDispositivoJson());
-            }
-        });
-        disp2.setOnReceivedScheduleDevice(new IotDevice.OnReceivedScheduleDevice() {
-            @Override
-            public void onReceivedScheduleDevice(IOT_CODE_RESULT resultCode) {
-                Log.i(TAG, "recibida programacion de depuradora " +  disp2.getDeviceId());
-
-
-
-                disp.modifyScheduleCommand(disp.getSchedules().get(1));
-            }
-        });
 
         Log.i(TAG, "Fin");
 
@@ -94,12 +68,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onReceivedStatus(IOT_CODE_RESULT res) {
                 Log.i(TAG, "Recibido status de test: " + disp.getDispositivoJson());
+                createSchedule(disp);
             }
         });
         disp.setOnErrorAnswerDevice(new IotDevice.OnErrorAnswerDevice() {
             @Override
             public void receivedErrorAnswerDevice(IOT_CODE_RESULT result) {
                 Log.e(TAG, "Error timeout de test: " + result);
+
             }
         });
 
@@ -107,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onReceivedInfoDevice(IOT_CODE_RESULT resultCode) {
                 Log.i(TAG, "Recibido info de test: " + disp.getDispositivoJson());
+
             }
         });
 
@@ -137,6 +114,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onReceivedModifySchedule(IOT_CODE_RESULT resultCode) {
                 Log.i(TAG, "Recibida respuesta a modificar comando " + disp.setCurrentOtaVersionFromReport());
+
             }
         });
 
@@ -144,10 +122,10 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void createSchedule(MqttConnection cnx) {
+    public void createSchedule(IotDeviceSwitch disp) {
 
-        IotDeviceSwitch disp;
-        disp = new IotDeviceSwitch(cnx);
+        //IotDeviceSwitch disp;
+        //disp = new IotDeviceSwitch(cnx);
         disp.setDeviceId("A020A6026046");
         disp.setDeviceName("test");
         disp.subscribeDevice();
@@ -158,8 +136,12 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
-
+        disp.setOnReceivedNewSchedule(new IotDevice.OnReceivedNewSchedule() {
+            @Override
+            public void onReceivedNewSchedule(IOT_CODE_RESULT resultCode) {
+                Log.i(TAG, "recibida respuesta de new schedule: " +  disp.getDeviceId());
+            }
+        });
 
         IotScheduleDeviceSwitch schedule;
         schedule = new IotScheduleDeviceSwitch();
@@ -174,8 +156,6 @@ public class MainActivity extends AppCompatActivity {
         //schedule.setRawScheduleFromObject();
         schedule.setDuration(3600);
         disp.newScheduleCommand(schedule);
-
-
     }
 
 

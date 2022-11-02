@@ -2,6 +2,7 @@ package net.jajica.libiot;
 
 
 import android.util.Log;
+import android.view.View;
 
 import org.eclipse.paho.client.mqttv3.IMqttToken;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
@@ -262,6 +263,14 @@ public class IotDevice {
 
     public void setOnReceivedModifySchedule(OnReceivedModifySchedule onReceivedModifySchedule) {
         this.onReceivedModifySchedule = onReceivedModifySchedule;
+    }
+    protected OnReceivedNewSchedule onReceivedNewSchedule;
+    public interface OnReceivedNewSchedule {
+        void onReceivedNewSchedule(IOT_CODE_RESULT resultCode);
+    }
+
+    public void setOnReceivedNewSchedule(OnReceivedNewSchedule onReceivedNewSchedule) {
+        this.onReceivedNewSchedule = onReceivedNewSchedule;
     }
 
     public interface OnSwitchDevice {
@@ -870,6 +879,11 @@ public class IotDevice {
 
                 break;
             case NEW_SCHEDULE:
+                res = processNewSchedule(mensaje);
+                if (onReceivedNewSchedule != null) {
+                    onReceivedNewSchedule.onReceivedNewSchedule(res);
+                }
+
                 break;
             case REMOVE_SCHEDULE:
                 res = processDeleteSchedule(mensaje);
@@ -1367,6 +1381,20 @@ public class IotDevice {
         return state;
     }
 
+    protected IOT_CODE_RESULT processNewSchedule(String message) {
+
+        IOT_CODE_RESULT res;
+        IotScheduleDeviceSwitch schedule;
+        if ((res = getCommandCodeResultFromReport(message)) != IOT_CODE_RESULT.RESUT_CODE_OK) {
+            Log.e(TAG, "error en la peticion de newSchedule");
+            return res;
+        }
+
+        setProgrammerStateFromReport(message);
+        setDeviceStateFromReport(message);
+
+        return IOT_CODE_RESULT.RESUT_CODE_OK;
+    }
 
 
 
