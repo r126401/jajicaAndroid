@@ -2,7 +2,7 @@ package net.jajica.libiot;
 
 
 import android.util.Log;
-import android.view.View;
+
 
 import org.eclipse.paho.client.mqttv3.IMqttToken;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
@@ -22,6 +22,11 @@ import java.util.TimerTask;
 
 public class IotDevice {
 
+
+
+    /**
+     * Tag utilizado para las trazas
+     */
     protected final String TAG = "IotDevice";
 
     /**
@@ -149,20 +154,7 @@ public class IotDevice {
         this.uptime = uptime;
     }
 
-    /**
-     * Interfaz que utiliza la aplicacion cuando falla la comunicacion con el dispositivo
-     */
-    protected OnErrorAnswerDevice onErrorAnswerDevice;
 
-
-    /**
-     * metodo para crear un listener OnErrorAnswerDevice
-     * @param onErrorAnswerDevice Es el listener para error en la respuesta
-     */
-
-    public void setOnErrorAnswerDevice(OnErrorAnswerDevice onErrorAnswerDevice) {
-        this.onErrorAnswerDevice = onErrorAnswerDevice;
-    }
 
     /**
      * Metodo que devuelve el estado global de programacion del dispositivo
@@ -189,8 +181,8 @@ public class IotDevice {
     }
 
     /**
-     * Asigna al dispositivo la lista de programas del dispositivo
-     * @param schedules
+     * Asigna al dispositivo la lista de programas.
+     * @param schedules Es la lista de programas
      */
     public void setSchedules(ArrayList<IotScheduleDevice> schedules) {
         this.schedules = schedules;
@@ -273,37 +265,73 @@ public class IotDevice {
         this.onReceivedNewSchedule = onReceivedNewSchedule;
     }
 
-    public interface OnSwitchDevice {
-        void receivedSwitchDevice(IotDevice device);
+    protected OnReceivedModifyParametersDevice onReceivedModifyParametersDevice;
+    public interface OnReceivedModifyParametersDevice {
+        void onReceivedMofifyParametersDevice(IOT_CODE_RESULT resultCode);
     }
 
-    public interface OnResetDevice {
-        void receivedResetDevice(IotDevice device);
+    public void setOnReceivedModifyParametersDevice(OnReceivedModifyParametersDevice onReceivedModifyParametersDevice) {
+        this.onReceivedModifyParametersDevice = onReceivedModifyParametersDevice;
     }
 
-    public interface OnFactoryResetDevice {
-        void receivedFactoryResetDevice(IotDevice device);
+    protected OnReceivedResetDevice onReceivedResetDevice;
+    public interface OnReceivedResetDevice {
+        void onReceivedResetDevice(IOT_CODE_RESULT resultCode);
     }
 
-    public interface OnModifyParameterDevice {
-        void receivedModifyParameterDevice(IotDevice device);
+    public void setOnReceivedResetDevice(OnReceivedResetDevice onReceivedResetDevice) {
+        this.onReceivedResetDevice = onReceivedResetDevice;
     }
 
-    public interface OnModifyClockDevice {
-        void receivedModifyClockDevice(IotDevice device);
+    protected OnReceivedFactoryResetDevice onReceivedFactoryResetDevice;
+    public interface OnReceivedFactoryResetDevice {
+        void onReceivedFactoryResetDevice(IOT_CODE_RESULT resultCode);
     }
 
-    public interface OnUpgradeFirmwareDevice {
-        void receivedUpgradeFirmwareDevice(IotDevice device);
+    public void setOnReceivedFactoryResetDevice(OnReceivedFactoryResetDevice onReceivedFactoryResetDevice) {
+        this.onReceivedFactoryResetDevice = onReceivedFactoryResetDevice;
+    }
+    protected OnReceivedModifyClockDevice onReceivedModifyClockDevice;
+    public interface OnReceivedModifyClockDevice {
+        void onReceivedModifyClockDevice(IOT_CODE_RESULT resultCode);
     }
 
-    public interface OnOtaVersionAvailableDevice {
-        void receivedOtaVersionAvailableDevice(IotDevice device);
+    public void setOnReceivedModifyClockDevice(OnReceivedModifyClockDevice onReceivedModifyClockDevice) {
+        this.onReceivedModifyClockDevice = onReceivedModifyClockDevice;
     }
 
-    public interface OnErrorAnswerDevice {
-        void receivedErrorAnswerDevice(IOT_CODE_RESULT result);
+    protected OnReceivedUpgradeFirmwareDevice onReceivedUpgradeFirmwareDevice;
+    public interface OnReceivedUpgradeFirmwareDevice {
+        void onReceivedUpgradeFirmwareDevice(IOT_CODE_RESULT codeResult);
     }
+
+    public void setOnReceivedUpgradeFirmwareDevice(OnReceivedUpgradeFirmwareDevice onReceivedUpgradeFirmwareDevice) {
+        this.onReceivedUpgradeFirmwareDevice = onReceivedUpgradeFirmwareDevice;
+    }
+
+    protected OnReceivedOtaVersionAvailableDevice onReceivedOtaVersionAvailableDevice;
+    public interface OnReceivedOtaVersionAvailableDevice {
+        void onReceivedOtaVersionAvailableDevice(IOT_CODE_RESULT resultCode);
+    }
+
+    public void setOnOtaVersionAvailableDevice(OnReceivedOtaVersionAvailableDevice onReceivedOtaVersionAvailableDevice) {
+        this.onReceivedOtaVersionAvailableDevice = onReceivedOtaVersionAvailableDevice;
+    }
+
+    /**
+     * Interfaz que utiliza la aplicacion cuando falla la comunicacion con el dispositivo
+     */
+    protected OnReceivedTimeoutCommand onReceivedTimeoutCommand;
+    public interface OnReceivedTimeoutCommand {
+        void onReceivedTimeoutCommand(IOT_CODE_RESULT result);
+    }
+
+    public void setOnReceivedTimeoutCommand(OnReceivedTimeoutCommand onReceivedTimeoutCommand) {
+        this.onReceivedTimeoutCommand = onReceivedTimeoutCommand;
+    }
+
+
+
 
     public OnReceivedStatus getOnReceivedStatus() {
         return onReceivedStatus;
@@ -311,6 +339,15 @@ public class IotDevice {
 
     public void setOnReceivedStatus(OnReceivedStatus onReceivedStatus) {
         this.onReceivedStatus = onReceivedStatus;
+    }
+
+    protected OnReceivedErrorReportDevice onReceivedErrorReportDevice;
+    public interface OnReceivedErrorReportDevice {
+        void onReceivedErrorReportDevice(IOT_CODE_RESULT resultCode);
+    }
+
+    public void setOnErrorReportDevice(OnReceivedErrorReportDevice onReceivedErrorReportDevice) {
+        this.onReceivedErrorReportDevice = onReceivedErrorReportDevice;
     }
 
     /**
@@ -554,6 +591,7 @@ public class IotDevice {
         finUpgrade = 0;
         activeSchedule = null;
         dispositivoJson = new JSONObject();
+        schedules = null;
 
     }
 
@@ -572,6 +610,7 @@ public class IotDevice {
         activeSchedule = null;
         dispositivoJson = new JSONObject();
         setCnx(cnx);
+        schedules = null;
 
 
 
@@ -617,6 +656,7 @@ public class IotDevice {
         activeSchedule = null;
         dispositivoJson = new JSONObject();
         setCnx(cnx);
+        schedules = null;
 
 
 
@@ -830,10 +870,10 @@ public class IotDevice {
         switch (tipoInforme) {
 
             case COMMAND_REPORT:
-                procesarComando(topic, message);
+                processCommand(topic, message);
                 break;
             case SPONTANEOUS_REPORT:
-                procesarEspontaneo(topic, message);
+                processSpontaneous(topic, message);
                 break;
         }
 
@@ -846,7 +886,7 @@ public class IotDevice {
      * @param message Es el contenido del mensaje
      */
 
-    protected void procesarComando(String topic, MqttMessage message) {
+    protected void processCommand(String topic, MqttMessage message) {
         IOT_COMMANDS idComando;
         ApiDispositivoIot api;
         api = new ApiDispositivoIot();
@@ -899,18 +939,46 @@ public class IotDevice {
                 }
                 break;
             case MODIFY_PARAMETER_DEVICE:
+                res = processModifyParametersDevice(mensaje);
+                if (onReceivedModifyParametersDevice != null) {
+                    onReceivedModifyParametersDevice.onReceivedMofifyParametersDevice(res);
+                }
                 break;
             case RESET:
+                res = processReset(mensaje);
+                if (onReceivedResetDevice != null) {
+                    onReceivedResetDevice.onReceivedResetDevice(res);
+                }
                 break;
             case FACTORY_RESET:
+                res = processFactoryReset(mensaje);
+                if (onReceivedFactoryResetDevice != null) {
+                    onReceivedFactoryResetDevice.onReceivedFactoryResetDevice(res);
+                }
                 break;
             case MODIFY_CLOCK:
+                res = processModifyClock(mensaje);
+                if (onReceivedModifyClockDevice != null) {
+                    onReceivedModifyClockDevice.onReceivedModifyClockDevice(res);
+                }
                 break;
             case UPGRADE_FIRMWARE:
+                res = processUpgradeFirmware(mensaje);
+                if (onReceivedUpgradeFirmwareDevice != null) {
+                    onReceivedUpgradeFirmwareDevice.onReceivedUpgradeFirmwareDevice(res);
+                }
                 break;
             case VERSION_OTA:
+                res = processOtaVersionAvailable(mensaje);
+                if (onReceivedOtaVersionAvailableDevice != null) {
+                    onReceivedOtaVersionAvailableDevice.onReceivedOtaVersionAvailableDevice(res);
+                }
                 break;
             case ERROR_REPORT:
+                res = processErrorCommand(mensaje);
+                if (onReceivedErrorReportDevice != null) {
+                    onReceivedErrorReportDevice.onReceivedErrorReportDevice(res);
+                }
                 break;
             default:
                 break;
@@ -923,16 +991,11 @@ public class IotDevice {
      * @param topic Es el topic de subscripcion
      * @param message Es el contenido del mensaje espontaneo
      */
-    protected void procesarEspontaneo(String topic, MqttMessage message) {
+    protected void processSpontaneous(String topic, MqttMessage message) {
         IotDevice dispositivo = null;
 
 
     }
-
-
-
-
-
 
     /**
      * Metodo para obtener la version OTA del dispositivo
@@ -1022,9 +1085,9 @@ public class IotDevice {
             @Override
             public void run() {
                 if (getConnectionState() != DEVICE_STATE_CONNECTION.DEVICE_CONNECTED) {
-                    if (onErrorAnswerDevice != null) {
+                    if (onReceivedTimeoutCommand != null) {
                         Log.i(TAG, "Enviamos timeout: " + getToken(textoComando));
-                        onErrorAnswerDevice.receivedErrorAnswerDevice(IOT_CODE_RESULT.RESULT_CODE_TIMEOUT);
+                        onReceivedTimeoutCommand.onReceivedTimeoutCommand(IOT_CODE_RESULT.RESULT_CODE_TIMEOUT);
                     }
                 }
             }
@@ -1396,6 +1459,40 @@ public class IotDevice {
         return IOT_CODE_RESULT.RESUT_CODE_OK;
     }
 
+    protected IOT_CODE_RESULT processModifyParametersDevice(String message) {
+
+        return IOT_CODE_RESULT.RESUT_CODE_OK;
+    }
+
+    protected IOT_CODE_RESULT processReset(String message) {
+
+        return IOT_CODE_RESULT.RESUT_CODE_OK;
+    }
+
+    protected IOT_CODE_RESULT processFactoryReset(String message) {
+
+        return IOT_CODE_RESULT.RESUT_CODE_OK;
+    }
+
+    protected IOT_CODE_RESULT processModifyClock(String message) {
+
+        return IOT_CODE_RESULT.RESUT_CODE_OK;
+    }
+
+    protected IOT_CODE_RESULT processUpgradeFirmware(String message) {
+
+        return IOT_CODE_RESULT.RESUT_CODE_OK;
+    }
+
+    protected IOT_CODE_RESULT processOtaVersionAvailable(String message) {
+
+        return IOT_CODE_RESULT.RESUT_CODE_OK;
+    }
+
+    protected IOT_CODE_RESULT processErrorCommand(String message) {
+
+        return IOT_CODE_RESULT.RESULT_CODE_NOK;
+    }
 
 
 

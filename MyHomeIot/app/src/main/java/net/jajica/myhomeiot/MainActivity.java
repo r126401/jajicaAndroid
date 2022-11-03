@@ -2,6 +2,7 @@ package net.jajica.myhomeiot;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -21,10 +22,67 @@ import net.jajica.libiot.STATE_SCHEDULE;
 public class MainActivity extends AppCompatActivity {
 
     private final String TAG = "MainActivity";
+
+    public void TextActuarRele() {
+        MQTT_STATE_CONNECTION estado;
+        Context appContext;
+        MqttConnection cnx;
+        appContext = getApplicationContext();
+        cnx = new MqttConnection(appContext);
+        IotDeviceSwitch disp;
+        disp = new IotDeviceSwitch();
+
+        disp.setOnReceivedTimeoutCommand(new IotDevice.OnReceivedTimeoutCommand() {
+            @Override
+            public void onReceivedTimeoutCommand(IOT_CODE_RESULT result) {
+
+            }
+        });
+
+        disp.setOnReceivedSetRelay(new IotDeviceSwitch.OnReceivedSetRelay() {
+            @Override
+            public void onReceivedSetRelay(IOT_CODE_RESULT codeResult) {
+                Log.i("test", "recibido setRelay" + disp.getRelay());
+            }
+        });
+        estado = cnx.createConnection(new MqttConnection.OnMqttConnection() {
+            @Override
+            public void connectionEstablished(boolean reconnect, String serverURI) {
+                disp.setCnx(cnx);
+                disp.setDeviceId("A020A6026046");
+                disp.setDeviceName("test");
+                disp.subscribeDevice();
+                disp.recibirMensajes();
+                disp.setRelayCommand(IOT_SWITCH_RELAY.OFF);
+            }
+
+            @Override
+            public void connectionLost(Throwable cause) {
+
+            }
+        });
+
+
+
+
+
+
+
+
+
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        TextActuarRele();
+
+        /*
+
 
 
         MqttConnection cnx;
@@ -34,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
         cnx = new MqttConnection(this.getApplicationContext());
         MQTT_STATE_CONNECTION estado;
         Log.e("hh", "Comenzamos...");
-        estado = cnx.createConnetion(new MqttConnection.OnMqttConnection() {
+        estado = cnx.createConnection(new MqttConnection.OnMqttConnection() {
             @Override
             public void connectionEstablished(boolean reconnect, String serverURI) {
                 Log.e("hh", "establecida");
@@ -71,9 +129,9 @@ public class MainActivity extends AppCompatActivity {
                 createSchedule(disp);
             }
         });
-        disp.setOnErrorAnswerDevice(new IotDevice.OnErrorAnswerDevice() {
+        disp.setOnReceivedTimeoutCommand(new IotDevice.OnReceivedTimeoutCommand() {
             @Override
-            public void receivedErrorAnswerDevice(IOT_CODE_RESULT result) {
+            public void onReceivedTimeoutCommand(IOT_CODE_RESULT result) {
                 Log.e(TAG, "Error timeout de test: " + result);
 
             }
@@ -94,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
                 IotScheduleDeviceSwitch sch;
                 sch = disp.getSchedulesSwitch().get(1);
                 sch.setHour(21);
-                sch.setMinute(53);
+                sch.setMinute(23);
                 sch.setSecond(33);
                 disp.modifyScheduleCommand(sch);
             }
@@ -108,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         disp.getStatusDeviceCommand();
-        disp.getScheduleCommand();
+        //disp.getScheduleCommand();
         //disp.deleteScheduleCommand("002100007f");
         disp.setOnReceivedModifySchedule(new IotDevice.OnReceivedModifySchedule() {
             @Override
@@ -117,10 +175,16 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+        */
+
 
 
 
     }
+
+
+
+
 
     public void createSchedule(IotDeviceSwitch disp) {
 
@@ -130,24 +194,11 @@ public class MainActivity extends AppCompatActivity {
         disp.setDeviceName("test");
         disp.subscribeDevice();
         disp.recibirMensajes();
-        disp.setOnErrorAnswerDevice(new IotDevice.OnErrorAnswerDevice() {
-            @Override
-            public void receivedErrorAnswerDevice(IOT_CODE_RESULT result) {
-
-            }
-        });
-        disp.setOnReceivedNewSchedule(new IotDevice.OnReceivedNewSchedule() {
-            @Override
-            public void onReceivedNewSchedule(IOT_CODE_RESULT resultCode) {
-                Log.i(TAG, "recibida respuesta de new schedule: " +  disp.getDeviceId());
-            }
-        });
-
         IotScheduleDeviceSwitch schedule;
         schedule = new IotScheduleDeviceSwitch();
         schedule.setScheduleType(IOT_CLASS_SCHEDULE.DIARY_SCHEDULE);
-        schedule.setHour(12);
-        schedule.setMinute(34);
+        schedule.setHour(9);
+        schedule.setMinute(3);
         schedule.setSecond(0);
         schedule.setMask(127);
         schedule.setRelay(IOT_SWITCH_RELAY.ON);
@@ -155,6 +206,24 @@ public class MainActivity extends AppCompatActivity {
         schedule.createScheduleIdFromObject();
         //schedule.setRawScheduleFromObject();
         schedule.setDuration(3600);
+        disp.setOnReceivedTimeoutCommand(new IotDevice.OnReceivedTimeoutCommand() {
+            @Override
+            public void onReceivedTimeoutCommand(IOT_CODE_RESULT result) {
+
+            }
+        });
+        disp.setOnReceivedNewSchedule(new IotDevice.OnReceivedNewSchedule() {
+            @Override
+            public void onReceivedNewSchedule(IOT_CODE_RESULT resultCode) {
+                Log.i(TAG, "recibida respuesta de new schedule: " +  disp.getDeviceId());
+                if (resultCode == IOT_CODE_RESULT.RESUT_CODE_OK) {
+                    disp.setNewSchedule(schedule);
+
+                }
+            }
+        });
+
+
         disp.newScheduleCommand(schedule);
     }
 

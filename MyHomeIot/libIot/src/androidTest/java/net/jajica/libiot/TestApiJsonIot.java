@@ -19,13 +19,13 @@ public class TestApiJsonIot {
     MqttConnection cnx;
     Context appContext;
 
-    public void TextApiJson() {
-
+    public void prepararEntorno() {
 
 
 
 
     }
+
 
     @Test
     public void TestGenerarComando() {
@@ -33,7 +33,7 @@ public class TestApiJsonIot {
         MQTT_STATE_CONNECTION estado;
         appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
         cnx = new MqttConnection(appContext);
-        estado = cnx.createConnetion(new MqttConnection.OnMqttConnection() {
+        estado = cnx.createConnection(new MqttConnection.OnMqttConnection() {
             @Override
             public void connectionEstablished(boolean reconnect, String serverURI) {
 
@@ -55,6 +55,47 @@ public class TestApiJsonIot {
 
 
         }
+
+    }
+
+    @Test
+    public void TextActuarRele() {
+        MQTT_STATE_CONNECTION estado;
+        appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        cnx = new MqttConnection(appContext);
+        estado = cnx.createConnection(new MqttConnection.OnMqttConnection() {
+            @Override
+            public void connectionEstablished(boolean reconnect, String serverURI) {
+
+            }
+
+            @Override
+            public void connectionLost(Throwable cause) {
+
+            }
+        });
+
+        IotDeviceSwitch disp;
+        disp = new IotDeviceSwitch(cnx);
+        disp.setDeviceId("A020A6026046");
+        disp.setDeviceName("test");
+        disp.subscribeDevice();
+        disp.recibirMensajes();
+        disp.setOnReceivedTimeoutCommand(new IotDevice.OnReceivedTimeoutCommand() {
+            @Override
+            public void onReceivedTimeoutCommand(IOT_CODE_RESULT result) {
+
+            }
+        });
+
+        disp.setOnReceivedSetRelay(new IotDeviceSwitch.OnReceivedSetRelay() {
+            @Override
+            public void onReceivedSetRelay(IOT_CODE_RESULT codeResult) {
+                Log.i("test", "recibido setRelay" + disp.getRelay());
+            }
+        });
+        disp.setRelayCommand(IOT_SWITCH_RELAY.ON);
+
 
 
 

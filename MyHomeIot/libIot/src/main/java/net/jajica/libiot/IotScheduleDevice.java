@@ -1,5 +1,6 @@
 package net.jajica.libiot;
 
+import android.annotation.SuppressLint;
 import android.util.Log;
 import android.view.View;
 
@@ -372,6 +373,7 @@ public class IotScheduleDevice implements Serializable {
 
     }
 
+    @SuppressLint("SuspiciousIndentation")
     protected IOT_CODE_RESULT setScheduleStateFromReport(String message) {
 
         ApiDispositivoIot api;

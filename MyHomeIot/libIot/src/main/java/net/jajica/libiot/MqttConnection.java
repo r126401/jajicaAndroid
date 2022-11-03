@@ -13,7 +13,6 @@ import org.eclipse.paho.client.mqttv3.IMqttToken;
 import org.eclipse.paho.client.mqttv3.MqttCallbackExtended;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
-import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 import java.io.IOException;
@@ -189,7 +188,7 @@ public class MqttConnection implements Serializable {
      * @return Devuelve el resultado de la conexion aunque es necesario esperar el evento connectComplete
      * para asegurar que la conexion esta estabilizada y es el punto de inicio del dialogo
      */
-    public MQTT_STATE_CONNECTION createConnetion(OnMqttConnection listenerConexionMqtt) {
+    public MQTT_STATE_CONNECTION createConnection(OnMqttConnection listenerConexionMqtt) {
 
 
         client = new MqttAndroidClient(context, stringConnection, idClient, Ack.AUTO_ACK);

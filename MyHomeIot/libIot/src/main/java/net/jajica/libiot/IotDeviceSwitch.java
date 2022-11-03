@@ -3,6 +3,7 @@ package net.jajica.libiot;
 
 import android.util.Log;
 
+import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,6 +35,16 @@ public class IotDeviceSwitch extends IotDevice {
     public ArrayList<IotScheduleDeviceSwitch> getSchedulesSwitch() {
         return schedules;
     }
+
+    protected OnReceivedSetRelay onReceivedSetRelay;
+    public interface OnReceivedSetRelay {
+        void onReceivedSetRelay(IOT_CODE_RESULT codeResult);
+    }
+
+    public void setOnReceivedSetRelay(OnReceivedSetRelay onReceivedSetRelay) {
+        this.onReceivedSetRelay = onReceivedSetRelay;
+    }
+
 
     public void setSchedulesSwitch(ArrayList<IotScheduleDeviceSwitch> schedules) {
         this.schedules = schedules;
@@ -192,6 +203,84 @@ public class IotDeviceSwitch extends IotDevice {
         return -1;
 
     }
+
+    public void setNewSchedule(IotScheduleDeviceSwitch schedule) {
+
+        this.addSchedule(schedule);
+
+    }
+
+
+    @Override
+    protected void processCommand(String topic, MqttMessage message) {
+
+        IOT_COMMANDS idComando;
+        ApiDispositivoIot api;
+        api = new ApiDispositivoIot();
+        String mensaje = new String(message.getPayload());
+        idComando = api.getCommandId(mensaje);
+        IOT_CODE_RESULT res;
+
+        switch (idComando) {
+            case SET_RELAY:
+                res = processSetRelayCommand(mensaje);
+                if (onReceivedSetRelay != null) {
+                    onReceivedSetRelay.onReceivedSetRelay(res);
+                }
+                break;
+        }
+
+
+        super.processCommand(topic, message);
+
+    }
+
+    public DEVICE_STATE_CONNECTION setRelayCommand(IOT_SWITCH_RELAY action) {
+
+        JSONObject parameters;
+        parameters = new JSONObject();
+        DEVICE_STATE_CONNECTION state = DEVICE_STATE_CONNECTION.UNKNOWN;
+        try {
+            parameters.put(TEXTOS_DIALOGO_IOT.OP_RELE.getValorTextoJson(), action.getEstadoRele());
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return DEVICE_STATE_CONNECTION.DEVICE_ERROR_COMMUNICATION;
+        }
+
+        return commandwithParameters(IOT_COMMANDS.SET_RELAY, TEXTOS_DIALOGO_IOT.RELE.getValorTextoJson(), parameters);
+    }
+
+
+    protected IOT_CODE_RESULT setStateRelayFromReport(String message) {
+
+        ApiDispositivoIot api;
+        int i;
+        api = new ApiDispositivoIot();
+        i = api.getJsonInt(message, TEXTOS_DIALOGO_IOT.ESTADO_RELE.getValorTextoJson());
+        if (i<0) {
+            return IOT_CODE_RESULT.RESULT_CODE_NOK;
+        }
+        setRelay(IOT_SWITCH_RELAY.ON.fromId(i));
+
+        return IOT_CODE_RESULT.RESUT_CODE_OK;
+
+    }
+
+    protected IOT_CODE_RESULT processSetRelayCommand(String message) {
+
+        IOT_CODE_RESULT res;
+
+        if ((res = getCommandCodeResultFromReport(message)) != IOT_CODE_RESULT.RESUT_CODE_OK) {
+            return res;
+        }
+        setDeviceStateFromReport(message);
+        setProgrammerStateFromReport(message);
+        setStateRelayFromReport(message);
+
+        return IOT_CODE_RESULT.RESUT_CODE_OK;
+
+    }
+
 
 
 

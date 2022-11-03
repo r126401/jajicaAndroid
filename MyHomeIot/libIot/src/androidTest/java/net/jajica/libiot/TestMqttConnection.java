@@ -34,7 +34,7 @@ public class TestMqttConnection {
 
         MQTT_STATE_CONNECTION state;
 
-        assertEquals(MQTT_STATE_CONNECTION.CONEXION_MQTT_CON_EXITO, cnx.createConnetion(new MqttConnection.OnMqttConnection() {
+        assertEquals(MQTT_STATE_CONNECTION.CONEXION_MQTT_CON_EXITO, cnx.createConnection(new MqttConnection.OnMqttConnection() {
             @Override
             public void connectionEstablished(boolean reconnect, String serverURI) {
                 Log.i(TAG, "Conexion estableciada");
