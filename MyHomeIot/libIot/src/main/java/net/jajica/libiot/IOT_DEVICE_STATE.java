@@ -8,6 +8,11 @@ public enum IOT_DEVICE_STATE implements Serializable {
     NORMAL_MANUAL(2),
     NORMAL_ARRANCANDO(3),
     NORMAL_SIN_PROGRAMACION(4),
+    UPGRADE_IN_PROGRESS(5),
+    NORMAL_SYNCHRONIZING(6),
+    WAITING_END_START(7),
+    START_BEFORE_FACTORY(8),
+    NORMAL_END_ACTIVE_SCHEDULE(9),
     INDETERMINADO(-1);
 
     private int estadoDispositivo;

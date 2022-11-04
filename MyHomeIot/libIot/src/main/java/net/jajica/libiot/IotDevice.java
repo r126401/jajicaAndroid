@@ -24,11 +24,13 @@ public class IotDevice {
 
 
 
+
     /**
      * Tag utilizado para las trazas
      */
     protected final String TAG = "IotDevice";
 
+    protected IotAlarmDevice alarms;
     /**
      * Nombre del dispositivo
      */
@@ -121,6 +123,13 @@ public class IotDevice {
     protected long freeMem;
     protected Double uptime;
 
+    public IotAlarmDevice getAlarms() {
+        return alarms;
+    }
+
+    public void setAlarms(IotAlarmDevice alarms) {
+        this.alarms = alarms;
+    }
 
     /**
      * Obtiene la memoria libre del dispositivo
@@ -350,6 +359,46 @@ public class IotDevice {
         this.onReceivedErrorReportDevice = onReceivedErrorReportDevice;
     }
 
+    /*****************************************************************************************/
+    /*****************Interface spontaneous***************************************************/
+
+    protected OnReceivedSpontaneousStartDevice onReceivedSpontaneousStartDevice;
+    public interface OnReceivedSpontaneousStartDevice {
+        void onReceivedSpontaneousStartDevice(IOT_CODE_RESULT resultCode);
+    }
+
+    public void setOnReceivedSpontaneousStartDevice(OnReceivedSpontaneousStartDevice onReceivedSpontaneousStartDevice) {
+        this.onReceivedSpontaneousStartDevice = onReceivedSpontaneousStartDevice;
+    }
+
+    protected OnReceivedSpontaneousStartSchedule onReceivedSpontaneousStartSchedule;
+    public interface OnReceivedSpontaneousStartSchedule {
+        void onReceivesSpontaneousStartSchedule(IOT_CODE_RESULT resultCode);
+    }
+
+    public void setReceivedSpontaneousStartSchedule(OnReceivedSpontaneousStartSchedule onReceivedSpontaneousStartSchedule) {
+        this.onReceivedSpontaneousStartSchedule = onReceivedSpontaneousStartSchedule;
+    }
+
+    protected OnReceivedSpontaneousEndSchedule onReceivedSpontaneousEndSchedule;
+    public interface OnReceivedSpontaneousEndSchedule {
+        void onReceivesSpontaneousStartSchedule(IOT_CODE_RESULT resultCode);
+    }
+
+    public void setReceivedSpontaneousEndSchedule(OnReceivedSpontaneousEndSchedule onReceivedSpontaneousEndSchedule) {
+        this.onReceivedSpontaneousEndSchedule = onReceivedSpontaneousEndSchedule;
+    }
+
+    protected OnReceivedAlarmReportDevice onReceivedAlarmReportDevice;
+    public interface OnReceivedAlarmReportDevice {
+        void onReceivedAlarmReportDevice(IOT_TYPE_ALARM_DEVICE alarmType);
+    }
+
+    public void setOnReceivedAlarmReportDevice(OnReceivedAlarmReportDevice onReceivedAlarmReportDevice) {
+        this.onReceivedAlarmReportDevice = onReceivedAlarmReportDevice;
+    }
+
+
     /**
      *Este metodo diguelve la estructura del dispositivo en formato json
      * @return Devuelve la estructura json del dispositivo
@@ -566,6 +615,7 @@ public class IotDevice {
         finUpgrade = 0;
         activeSchedule = null;
         dispositivoJson = new JSONObject();
+        alarms = new IotAlarmDevice();
 
     }
 
@@ -592,6 +642,7 @@ public class IotDevice {
         activeSchedule = null;
         dispositivoJson = new JSONObject();
         schedules = null;
+        alarms = new IotAlarmDevice();
 
     }
 
@@ -611,6 +662,7 @@ public class IotDevice {
         dispositivoJson = new JSONObject();
         setCnx(cnx);
         schedules = null;
+        alarms = new IotAlarmDevice();
 
 
 
@@ -902,8 +954,6 @@ public class IotDevice {
                     onReceivedInfoDevice.onReceivedInfoDevice(IOT_CODE_RESULT.RESUT_CODE_OK);
                 }
                 break;
-            case SET_RELAY:
-                break;
             case STATUS_DEVICE:
                 res = processStatus(mensaje);
                 if (onReceivedStatus != null) {
@@ -993,7 +1043,50 @@ public class IotDevice {
      */
     protected void processSpontaneous(String topic, MqttMessage message) {
         IotDevice dispositivo = null;
-
+        IOT_SPONTANEOUS_TYPE typeInform;
+        String mensaje = new String(message.getPayload());
+        typeInform = getSpontaneousType(mensaje);
+        IOT_CODE_RESULT result;
+        switch (typeInform) {
+            case START_DEVICE:
+                result = processStartDevice(mensaje);
+                if (onReceivedSpontaneousStartDevice != null) {
+                    onReceivedSpontaneousStartDevice.onReceivedSpontaneousStartDevice(result);
+                }
+                break;
+            case UPGRADE_FIRMWARE_FOTA:
+                break;
+            case START_SCHEDULE:
+                result = processStartSchedule(mensaje);
+                if (onReceivedSpontaneousStartSchedule != null) {
+                    onReceivedSpontaneousStartSchedule.onReceivesSpontaneousStartSchedule(result);
+                }
+                break;
+            case COMANDO_APLICACION:
+                break;
+            case CAMBIO_ESTADO:
+                break;
+            case END_SCHEDULE:
+                result = processEndSchedule(mensaje);
+                if (onReceivedSpontaneousEndSchedule != null) {
+                    onReceivedSpontaneousEndSchedule.onReceivesSpontaneousStartSchedule(result);
+                }
+                break;
+            case INFORME_ALARMA:
+                IOT_TYPE_ALARM_DEVICE alarm = processAlarmReport(mensaje);
+                if (onReceivedAlarmReportDevice != null) {
+                    onReceivedAlarmReportDevice.onReceivedAlarmReportDevice(alarm);
+                }
+                break;
+            case CAMBIO_UMBRAL_TEMPERATURA:
+                break;
+            case CAMBIO_ESTADO_APLICACION:
+                break;
+            case ERROR:
+                break;
+            case ESPONTANEO_DESCONOCIDO:
+                break;
+        }
 
     }
 
@@ -1433,6 +1526,18 @@ public class IotDevice {
 
     }
 
+    protected String getFieldStringFromReport(String message, TEXTOS_DIALOGO_IOT field) {
+
+        ApiDispositivoIot api;
+        String stream;
+        api = new ApiDispositivoIot();
+        stream = api.getJsonString(message, field.getValorTextoJson());
+        return stream;
+    }
+
+
+
+
     public DEVICE_STATE_CONNECTION newScheduleCommand(IotScheduleDevice schedule) {
 
         JSONObject parameters;
@@ -1493,6 +1598,92 @@ public class IotDevice {
 
         return IOT_CODE_RESULT.RESULT_CODE_NOK;
     }
+
+    protected IOT_SPONTANEOUS_TYPE getSpontaneousType(String texto) {
+
+        int tipoInforme;
+        ApiDispositivoIot api;
+        api = new ApiDispositivoIot();
+        IOT_SPONTANEOUS_TYPE tipoEspontaneo = IOT_SPONTANEOUS_TYPE.ESPONTANEO_DESCONOCIDO;
+        tipoInforme = api.getJsonInt(texto, TEXTOS_DIALOGO_IOT.TIPO_INFORME_ESPONTANEO.getValorTextoJson());
+
+        tipoEspontaneo = tipoEspontaneo.fromId(tipoInforme);
+
+        return tipoEspontaneo;
+    }
+
+    protected IOT_CODE_RESULT processStartDevice(String message) {
+
+
+        return processCommonParameters(message);
+    }
+
+    protected IOT_CODE_RESULT processStartSchedule(String message) {
+
+        return processCommonParameters(message);
+    }
+
+    protected IOT_CODE_RESULT processEndSchedule(String message) {
+
+        return processCommonParameters(message);
+    }
+
+    protected IOT_TYPE_ALARM_DEVICE processAlarmReport(String message) {
+
+        IOT_TYPE_ALARM_DEVICE alarmType;
+        setDeviceStateFromReport(message);
+        setProgrammerStateFromReport(message);
+        setCurrentScheduleFromReport(message);
+        return alarmType = identifyTypeAlarm(message);
+    }
+
+    protected IOT_CODE_RESULT processCommonParameters(String message) {
+        IOT_CODE_RESULT result;
+        if ((result = getCommandCodeResultFromReport(message)) != IOT_CODE_RESULT.RESUT_CODE_OK) {
+            return result;
+        }
+
+        setDeviceStateFromReport(message);
+        setProgrammerStateFromReport(message);
+        setCurrentScheduleFromReport(message);
+        return result;
+
+    }
+
+    protected IOT_TYPE_ALARM_DEVICE identifyTypeAlarm(String message) {
+
+        IOT_ALARM_VALUE alarm = IOT_ALARM_VALUE.ALARM_UNKNOWN;
+        int i;
+        i = getFieldIntFromReport(message, TEXTOS_DIALOGO_IOT.WIFI_ALARM);
+        if (i >= 0) {
+            alarms.setWifiAlarm(alarm.fromId(i));
+            Log.i(TAG, "detectada alarma " + TEXTOS_DIALOGO_IOT.WIFI_ALARM.getValorTextoJson() + "=" + String.valueOf(i));
+            return IOT_TYPE_ALARM_DEVICE.WIFI_ALARM;
+        }
+
+        i = getFieldIntFromReport(message, TEXTOS_DIALOGO_IOT.MQTT_ALARM);
+        if (i >= 0) {
+            alarms.setMqttAlarm(alarm.fromId(i));
+            Log.i(TAG, "detectada alarma " + TEXTOS_DIALOGO_IOT.MQTT_ALARM.getValorTextoJson() + "=" + String.valueOf(i));
+            return IOT_TYPE_ALARM_DEVICE.MQTT_ALARM;
+        }
+        i = getFieldIntFromReport(message, TEXTOS_DIALOGO_IOT.NTP_ALARM);
+        if (i >= 0) {
+            alarms.setNtpAlarm(alarm.fromId(i));
+            Log.i(TAG, "detectada alarma " + TEXTOS_DIALOGO_IOT.NTP_ALARM.getValorTextoJson() + "=" + String.valueOf(i));
+            return IOT_TYPE_ALARM_DEVICE.NTP_ALARM;
+        }
+        i = getFieldIntFromReport(message, TEXTOS_DIALOGO_IOT.NVS_ALARM);
+        if (i >= 0) {
+            alarms.setNvsAlarm(alarm.fromId(i));
+            Log.i(TAG, "detectada alarma " + TEXTOS_DIALOGO_IOT.NVS_ALARM.getValorTextoJson() + "=" + String.valueOf(i));
+            return IOT_TYPE_ALARM_DEVICE.NVS_ALARM;
+        }
+        return IOT_TYPE_ALARM_DEVICE.UNKNOWN_ALARM;
+
+    }
+
+
 
 
 

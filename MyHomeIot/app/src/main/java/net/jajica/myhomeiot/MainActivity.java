@@ -45,6 +45,21 @@ public class MainActivity extends AppCompatActivity {
                 Log.i("test", "recibido setRelay" + disp.getRelay());
             }
         });
+        disp.setOnReceivedSpontaneousStartDevice(new IotDevice.OnReceivedSpontaneousStartDevice() {
+            @Override
+            public void onReceivedSpontaneousStartDevice(IOT_CODE_RESULT resultCode) {
+                Log.i("test", "recibido StartDevice" + disp.getRelay());
+            }
+        });
+
+        disp.setOnReceivedSpontaneousActionRelay(new IotDeviceSwitch.OnReceivedSpontaneousActionRelay() {
+            @Override
+            public void onReceivedSpontaneousActionRelay(IOT_CODE_RESULT resultCode) {
+                Log.i("test", "recibido actionRelay" + disp.getRelay());
+            }
+        });
+
+
         estado = cnx.createConnection(new MqttConnection.OnMqttConnection() {
             @Override
             public void connectionEstablished(boolean reconnect, String serverURI) {

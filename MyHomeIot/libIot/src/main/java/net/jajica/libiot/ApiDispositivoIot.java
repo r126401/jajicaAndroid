@@ -191,7 +191,7 @@ public class ApiDispositivoIot implements Serializable {
             dato = objetoJson.getString(parametro);
         } catch (JSONException e) {
 
-            e.printStackTrace();
+            //e.printStackTrace();
             return null;
         }
         return dato;

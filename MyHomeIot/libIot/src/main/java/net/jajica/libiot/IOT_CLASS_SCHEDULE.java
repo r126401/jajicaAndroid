@@ -27,3 +27,4 @@ public enum IOT_CLASS_SCHEDULE {
     }
 
 }
+

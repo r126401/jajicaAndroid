@@ -59,7 +59,11 @@ public enum TEXTOS_DIALOGO_IOT {
     ID_SENSOR("idsensor"),
     SENSOR_TEMPERATURA("sensorTemperatura"),
     FREE_MEM("freeMem"),
-    UPTIME("uptime");
+    UPTIME("uptime"),
+    WIFI_ALARM("alarmaWifi"),
+    MQTT_ALARM("alarmaMqtt"),
+    NTP_ALARM("alarmaNtp"),
+    NVS_ALARM("alarmaNvs");
 
 
     private String dialogo;

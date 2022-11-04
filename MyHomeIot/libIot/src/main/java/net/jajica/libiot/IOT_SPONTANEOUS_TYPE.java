@@ -1,16 +1,16 @@
 package net.jajica.libiot;
 
-public enum ESPONTANEO_IOT {
+public enum IOT_SPONTANEOUS_TYPE {
 
-    ARRANQUE_APLICACION(0),
+    START_DEVICE(0),
     ACTUACION_RELE_LOCAL(1),
     ACTUACION_RELE_REMOTO(2),
     UPGRADE_FIRMWARE_FOTA(3),
-    CAMBIO_DE_PROGRAMA(4),
+    START_SCHEDULE(4),
     COMANDO_APLICACION(5),
     CAMBIO_TEMPERATURA(6),
     CAMBIO_ESTADO(7),
-    RELE_TEMPORIZADO(8),
+    END_SCHEDULE(8),
     INFORME_ALARMA(9),
     CAMBIO_UMBRAL_TEMPERATURA(10),
     CAMBIO_ESTADO_APLICACION(11),
@@ -21,7 +21,7 @@ public enum ESPONTANEO_IOT {
 
     private int idTipoInforme;
 
-    ESPONTANEO_IOT(int tipoInforme) {
+    IOT_SPONTANEOUS_TYPE(int tipoInforme) {
         this.idTipoInforme = tipoInforme;
     }
 
@@ -29,10 +29,10 @@ public enum ESPONTANEO_IOT {
         return this.idTipoInforme;
     }
 
-    public ESPONTANEO_IOT fromId(int id) {
+    public IOT_SPONTANEOUS_TYPE fromId(int id) {
 
 
-        for (ESPONTANEO_IOT orden : values()) {
+        for (IOT_SPONTANEOUS_TYPE orden : values()) {
 
             if (orden.getIdInforme() == id) {
 

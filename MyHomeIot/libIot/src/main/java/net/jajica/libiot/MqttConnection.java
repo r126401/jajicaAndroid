@@ -353,6 +353,7 @@ public class MqttConnection implements Serializable {
             public void run() {
                 if (getStateConnection() == MQTT_STATE_CONNECTION.CONEXION_MQTT_ACTIVE) {
                    this.cancel();
+                   timerConnection.purge();
                    Log.i(TAG, "SE CANCELA EL TEMPORIZADOR...");
                 } else {
                     Log.e(TAG, "Se reintenta conexion");

@@ -50,6 +50,15 @@ public class IotDeviceSwitch extends IotDevice {
         this.schedules = schedules;
     }
 
+    protected OnReceivedSpontaneousActionRelay onReceivedSpontaneousActionRelay;
+    public interface OnReceivedSpontaneousActionRelay {
+        void onReceivedSpontaneousActionRelay(IOT_CODE_RESULT resultCode);
+    }
+
+    public void setOnReceivedSpontaneousActionRelay(OnReceivedSpontaneousActionRelay onReceivedSpontaneousActionRelay) {
+        this.onReceivedSpontaneousActionRelay = onReceivedSpontaneousActionRelay;
+    }
+
     @Override
     protected IOT_CODE_RESULT processStatus(String respuesta) {
 
@@ -158,7 +167,7 @@ public class IotDeviceSwitch extends IotDevice {
         // Ahora actualizamos los datos en la estructura
 
         schedule.setNewScheduleIdFromReport(message);
-        setRelayStateFromReport(message);
+        setStateRelayFromReport(message);
         setDeviceStateFromReport(message);
         setProgrammerStateFromReport(message);
         schedule.setDurationFromReport(message);
@@ -168,6 +177,7 @@ public class IotDeviceSwitch extends IotDevice {
 
     }
 
+    /*
     protected IOT_CODE_RESULT setRelayStateFromReport(String message) {
 
         ApiDispositivoIot api;
@@ -182,7 +192,7 @@ public class IotDeviceSwitch extends IotDevice {
 
     }
 
-
+*/
 
 
 
@@ -270,16 +280,97 @@ public class IotDeviceSwitch extends IotDevice {
 
         IOT_CODE_RESULT res;
 
-        if ((res = getCommandCodeResultFromReport(message)) != IOT_CODE_RESULT.RESUT_CODE_OK) {
+        if ((res = processCommonParameters(message)) != IOT_CODE_RESULT.RESUT_CODE_OK) {
             return res;
         }
-        setDeviceStateFromReport(message);
-        setProgrammerStateFromReport(message);
         setStateRelayFromReport(message);
 
         return IOT_CODE_RESULT.RESUT_CODE_OK;
 
     }
+
+    @Override
+    protected IOT_CODE_RESULT processStartDevice(String message) {
+
+        setStateRelayFromReport(message);
+        return super.processStartDevice(message);
+
+    }
+
+    @Override
+    protected IOT_CODE_RESULT processStartSchedule(String message) {
+        setStateRelayFromReport(message);
+        return super.processStartSchedule(message);
+    }
+
+    @Override
+    protected IOT_CODE_RESULT processEndSchedule(String message) {
+        setStateRelayFromReport(message);
+        return super.processStartSchedule(message);
+    }
+
+    @Override
+    protected IOT_TYPE_ALARM_DEVICE processAlarmReport(String message) {
+        setStateRelayFromReport(message);
+        return super.processAlarmReport(message);
+    }
+
+    @Override
+    protected void processSpontaneous(String topic, MqttMessage message) {
+        super.processSpontaneous(topic, message);
+        IotDevice dispositivo = null;
+        IOT_SPONTANEOUS_TYPE typeInform;
+        String mensaje = new String(message.getPayload());
+        typeInform = getSpontaneousType(mensaje);
+        IOT_CODE_RESULT result;
+        switch (typeInform) {
+
+            case START_DEVICE:
+                processStartDevice(mensaje);
+                break;
+            case ACTUACION_RELE_LOCAL:
+                result = processSpontaneousActionRelay(mensaje);
+                if (onReceivedSpontaneousActionRelay != null) {
+                    onReceivedSpontaneousActionRelay.onReceivedSpontaneousActionRelay(result);
+                }
+
+                break;
+            case ACTUACION_RELE_REMOTO:
+                break;
+            case UPGRADE_FIRMWARE_FOTA:
+                break;
+            case START_SCHEDULE:
+                break;
+            case COMANDO_APLICACION:
+                break;
+            case CAMBIO_TEMPERATURA:
+                break;
+            case CAMBIO_ESTADO:
+                break;
+            case END_SCHEDULE:
+                break;
+            case INFORME_ALARMA:
+                break;
+            case CAMBIO_UMBRAL_TEMPERATURA:
+                break;
+            case CAMBIO_ESTADO_APLICACION:
+                break;
+            case ERROR:
+                break;
+            case ESPONTANEO_DESCONOCIDO:
+                break;
+        }
+
+
+    }
+
+    protected IOT_CODE_RESULT processSpontaneousActionRelay(String message) {
+
+        super.processCommonParameters(message);
+        setStateRelayFromReport(message);
+        return IOT_CODE_RESULT.RESUT_CODE_OK;
+    }
+
 
 
 

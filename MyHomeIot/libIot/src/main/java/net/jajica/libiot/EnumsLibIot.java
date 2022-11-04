@@ -2,8 +2,6 @@ package jajica;
 
 import java.io.Serializable;
 
-
-
 enum ESTADO_RELE implements Serializable{
     OFF(0),
     ON(1),
