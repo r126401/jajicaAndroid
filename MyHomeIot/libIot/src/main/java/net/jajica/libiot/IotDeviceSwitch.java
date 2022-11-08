@@ -8,11 +8,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class IotDeviceSwitch extends IotDevice {
+public class IotDeviceSwitch extends IotDevice implements Serializable {
 
-    private IOT_SWITCH_RELAY Relay;
+
+    protected IOT_SWITCH_RELAY Relay;
 
     public IOT_SWITCH_RELAY getRelay() {
         return Relay;
@@ -22,12 +24,17 @@ public class IotDeviceSwitch extends IotDevice {
         this.Relay = relay;
     }
 
-    public IotDeviceSwitch(MqttConnection cnx) {
+    public IotDeviceSwitch(IotMqttConnection cnx) {
         super(cnx);
+        setPublishOtaTopic("OtaIotOnOff");
+        setSubscribeOtaTopic("newVersionOtaIotOnOff");
+
     }
 
     public IotDeviceSwitch() {
         super();
+        setPublishOtaTopic("OtaIotOnOff");
+        setSubscribeOtaTopic("newVersionOtaIotOnOff");
     }
     
     private ArrayList<IotScheduleDeviceSwitch> schedules;
@@ -60,15 +67,15 @@ public class IotDeviceSwitch extends IotDevice {
     }
 
     @Override
-    protected IOT_CODE_RESULT processStatus(String respuesta) {
+    protected IOT_CODE_RESULT processStatusFromReport(String respuesta) {
 
         int res;
-        ApiDispositivoIot api;
-        api = new ApiDispositivoIot();
+        IotTools api;
+        api = new IotTools();
         IOT_SWITCH_RELAY estado = IOT_SWITCH_RELAY.UNKNOWN;
-        res = api.getJsonInt(respuesta, TEXTOS_DIALOGO_IOT.ESTADO_RELE.getValorTextoJson());
+        res = api.getJsonInt(respuesta, IOT_LABELS_JSON.STATE_RELAY.getValorTextoJson());
         setRelay(estado.fromId(res));
-        return super.processStatus(respuesta);
+        return super.processStatusFromReport(respuesta);
     }
 
     
@@ -83,7 +90,7 @@ public class IotDeviceSwitch extends IotDevice {
 
         try {
             respuesta = new JSONObject(textoRecibido);
-            arrayProgramas = respuesta.getJSONArray(TEXTOS_DIALOGO_IOT.PROGRAMAS.getValorTextoJson());
+            arrayProgramas = respuesta.getJSONArray(IOT_LABELS_JSON.SCHEDULE.getValorTextoJson());
             for(i=0;i<arrayProgramas.length();i++) {
                 if (schedules == null) schedules = new ArrayList<IotScheduleDeviceSwitch>();
 
@@ -104,14 +111,14 @@ public class IotDeviceSwitch extends IotDevice {
 
         return schedules;
     }
-
+/*
     @Override
-    public DEVICE_STATE_CONNECTION recibirMensajes() {
-        return super.recibirMensajes();
+    public IOT_DEVICE_STATE_CONNECTION RegisterListenerMqttConnection() {
+        return super.RegisterListenerMqttConnection();
     }
-
+*/
     @Override
-    protected IOT_CODE_RESULT processGetSchedule(String message) {
+    protected IOT_CODE_RESULT processGetScheduleFromReport(String message) {
 
 
         setDeviceStateFromReport(message);
@@ -180,10 +187,10 @@ public class IotDeviceSwitch extends IotDevice {
     /*
     protected IOT_CODE_RESULT setRelayStateFromReport(String message) {
 
-        ApiDispositivoIot api;
-        api = new ApiDispositivoIot();
+        IotTools api;
+        api = new IotTools();
         int i;
-        i = api.getJsonInt(message, TEXTOS_DIALOGO_IOT.ESTADO_RELE.getValorTextoJson());
+        i = api.getJsonInt(message, IOT_LABELS_JSON.ESTADO_RELE.getValorTextoJson());
         if (i < 0) {
             return IOT_CODE_RESULT.RESULT_CODE_ERROR;
         }
@@ -225,8 +232,8 @@ public class IotDeviceSwitch extends IotDevice {
     protected void processCommand(String topic, MqttMessage message) {
 
         IOT_COMMANDS idComando;
-        ApiDispositivoIot api;
-        api = new ApiDispositivoIot();
+        IotTools api;
+        api = new IotTools();
         String mensaje = new String(message.getPayload());
         idComando = api.getCommandId(mensaje);
         IOT_CODE_RESULT res;
@@ -245,28 +252,28 @@ public class IotDeviceSwitch extends IotDevice {
 
     }
 
-    public DEVICE_STATE_CONNECTION setRelayCommand(IOT_SWITCH_RELAY action) {
+    public IOT_DEVICE_STATE_CONNECTION setRelayCommand(IOT_SWITCH_RELAY action) {
 
         JSONObject parameters;
         parameters = new JSONObject();
-        DEVICE_STATE_CONNECTION state = DEVICE_STATE_CONNECTION.UNKNOWN;
+        IOT_DEVICE_STATE_CONNECTION state = IOT_DEVICE_STATE_CONNECTION.UNKNOWN;
         try {
-            parameters.put(TEXTOS_DIALOGO_IOT.OP_RELE.getValorTextoJson(), action.getEstadoRele());
+            parameters.put(IOT_LABELS_JSON.ACTION_RELAY.getValorTextoJson(), action.getEstadoRele());
         } catch (JSONException e) {
             e.printStackTrace();
-            return DEVICE_STATE_CONNECTION.DEVICE_ERROR_COMMUNICATION;
+            return IOT_DEVICE_STATE_CONNECTION.DEVICE_ERROR_COMMUNICATION;
         }
 
-        return commandwithParameters(IOT_COMMANDS.SET_RELAY, TEXTOS_DIALOGO_IOT.RELE.getValorTextoJson(), parameters);
+        return commandwithParameters(IOT_COMMANDS.SET_RELAY, IOT_LABELS_JSON.RELAY.getValorTextoJson(), parameters);
     }
 
 
     protected IOT_CODE_RESULT setStateRelayFromReport(String message) {
 
-        ApiDispositivoIot api;
+        IotTools api;
         int i;
-        api = new ApiDispositivoIot();
-        i = api.getJsonInt(message, TEXTOS_DIALOGO_IOT.ESTADO_RELE.getValorTextoJson());
+        api = new IotTools();
+        i = api.getJsonInt(message, IOT_LABELS_JSON.STATE_RELAY.getValorTextoJson());
         if (i<0) {
             return IOT_CODE_RESULT.RESULT_CODE_NOK;
         }
@@ -284,6 +291,8 @@ public class IotDeviceSwitch extends IotDevice {
             return res;
         }
         setStateRelayFromReport(message);
+        setCurrentOtaVersionFromReport(message);
+        setDeviceTypeFromReport(message);
 
         return IOT_CODE_RESULT.RESUT_CODE_OK;
 
@@ -333,9 +342,6 @@ public class IotDeviceSwitch extends IotDevice {
                 if (onReceivedSpontaneousActionRelay != null) {
                     onReceivedSpontaneousActionRelay.onReceivedSpontaneousActionRelay(result);
                 }
-
-                break;
-            case ACTUACION_RELE_REMOTO:
                 break;
             case UPGRADE_FIRMWARE_FOTA:
                 break;
@@ -370,9 +376,6 @@ public class IotDeviceSwitch extends IotDevice {
         setStateRelayFromReport(message);
         return IOT_CODE_RESULT.RESUT_CODE_OK;
     }
-
-
-
 
 
 }

@@ -14,11 +14,11 @@ import org.junit.runner.RunWith;
 public class PruebaConfiguracionMqtt {
 
     Context appContext;
-    ConfigurationMqtt conf;
+    IotMqttConfiguration conf;
 
     public PruebaConfiguracionMqtt() {
         appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        conf = new ConfigurationMqtt(appContext);
+        conf = new IotMqttConfiguration(appContext);
 
     }
 

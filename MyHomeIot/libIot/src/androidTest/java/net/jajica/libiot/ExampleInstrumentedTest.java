@@ -18,14 +18,14 @@ import static org.junit.Assert.*;
 @RunWith(AndroidJUnit4.class)
 public class ExampleInstrumentedTest {
 
-    ConjuntoDispositivosIot conf;
+    IotSetDevices conf;
     Context appContext;
 
     public ExampleInstrumentedTest() {
 
 
         appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        conf = new ConjuntoDispositivosIot(appContext);
+        conf = new IotSetDevices(appContext);
     }
 
     @Test
@@ -41,38 +41,38 @@ public class ExampleInstrumentedTest {
 
         IotDevice dispositivo;
         IOT_DEVICE_STATE a;
-        OPERACION_CONFIGURACION_DISPOSITIVOS op;
-        dispositivo = new IotDevice();
+        IOT_OPERATION_CONFIGURATION_DEVICES op;
+        dispositivo = new IotDeviceUnknown();
         dispositivo.setDeviceName("mmajGH");
         dispositivo.setDeviceId("mmddgGG");
         dispositivo.setPublishTopic("kkk");
         dispositivo.setSubscriptionTopic("pppp");
         dispositivo.setDeviceType(IOT_DEVICE_TYPE.DESCONOCIDO);
         assertNotNull(dispositivo);
-        //conf = new ConjuntoDispositivosIot(appContext);
+        //conf = new IotSetDevices(appContext);
         conf.cargarDispositivos();
-        assertEquals( OPERACION_CONFIGURACION_DISPOSITIVOS.DISPOSITIVO_INSERTADO, op = conf.insertarDispositivo(dispositivo));
-        assertEquals( OPERACION_CONFIGURACION_DISPOSITIVOS.DISPOSITIVO_EXISTENTE, op = conf.insertarDispositivo(dispositivo));
-        assertEquals( OPERACION_CONFIGURACION_DISPOSITIVOS.DISPOSITIVO_NULO, op = conf.insertarDispositivo(null));
+        assertEquals( IOT_OPERATION_CONFIGURATION_DEVICES.DISPOSITIVO_INSERTADO, op = conf.insertarDispositivo(dispositivo));
+        assertEquals( IOT_OPERATION_CONFIGURATION_DEVICES.DISPOSITIVO_EXISTENTE, op = conf.insertarDispositivo(dispositivo));
+        assertEquals( IOT_OPERATION_CONFIGURATION_DEVICES.DISPOSITIVO_NULO, op = conf.insertarDispositivo(null));
 
     }
 
     @Test
     public void cargaConfiguracion() {
 
-        ConjuntoDispositivosIot conf = null;
+        IotSetDevices conf = null;
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        conf = new ConjuntoDispositivosIot(appContext);
-        assertEquals(OPERACION_CONFIGURACION_DISPOSITIVOS.NINGUN_DISPOSITIVO, conf.cargarDispositivos());
+        conf = new IotSetDevices(appContext);
+        assertEquals(IOT_OPERATION_CONFIGURATION_DEVICES.NINGUN_DISPOSITIVO, conf.cargarDispositivos());
         pruebaInsertarDispositivo();
-        assertEquals(OPERACION_CONFIGURACION_DISPOSITIVOS.CONFIGURACION_OK, conf.cargarDispositivos());
+        assertEquals(IOT_OPERATION_CONFIGURATION_DEVICES.CONFIGURACION_OK, conf.cargarDispositivos());
     }
 
     @Test
     public void crearDispositivo() {
 
         IotDevice dispositivo;
-        dispositivo = new IotDevice();
+        dispositivo = new IotDeviceUnknown();
         dispositivo.setDeviceName("mmajGH");
         dispositivo.setDeviceId("mmddgGG");
         dispositivo.setPublishTopic("kkk");

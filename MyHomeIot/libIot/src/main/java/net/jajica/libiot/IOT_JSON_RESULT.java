@@ -1,6 +1,6 @@
 package net.jajica.libiot;
 
-public enum OPERACION_JSON {
+public enum IOT_JSON_RESULT {
 
     JSON_ERROR,
     JSON_OK,

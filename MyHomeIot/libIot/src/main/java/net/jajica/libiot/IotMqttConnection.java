@@ -31,24 +31,24 @@ import java.util.TimerTask;
  * paho de eclipse.
  * Para poder realizar una conexion, es necesario:
  * 1.- Llamar al constructor pasandole el contexto de la aplicacion context.
- * 2.- El constructor se apoya en la clase ConfigurationMqtt en la que se guardan todos los parametros
+ * 2.- El constructor se apoya en la clase IotMqttConfiguration en la que se guardan todos los parametros
  * para realizar la conexion.
  * 3.- Se crea la conexion llamando al metodo createConnetion siendo necesario crear el listener para
  * recibir los eventos de la comunicacion, excepto el de los mensajes que lleguen, los cuales se hará tratamiento especial
  * 5.- Una vez que la conexion esta activa CONEXION_MQTT_ACTIVE, se pueden utilizar los metodos publishTopic y subscribeTopic
  *
  */
-public class MqttConnection implements Serializable {
+public class IotMqttConnection implements Serializable {
 
-    protected final String TAG = "MqttConnection";
+    protected final String TAG = "IotMqttConnection";
     protected MqttAndroidClient client;
     private final Context context;
     protected IMqttToken token;
     protected MqttConnectOptions options;
-    protected ConfigurationMqtt cnx;
+    protected IotMqttConfiguration cnx;
     protected String idClient;
     protected String stringConnection;
-    protected MQTT_STATE_CONNECTION stateConnection;
+    protected IOT_MQTT_STATUS_CONNECTION stateConnection;
     protected OnMqttConnection onListenerConnection;
     protected OnArrivedMessage onListenerArrivedMessaged;
     protected OnSubscriptionTopic onListenerSubscribe;
@@ -81,16 +81,21 @@ public class MqttConnection implements Serializable {
     }
 */
 
-    public void setOnListenerArrivedMessaged(String subscriptionTopic, OnArrivedMessage onListenerArrivedMessaged) {
+    public ArrivedMessage setOnListenerArrivedMessaged(String subscriptionTopic, OnArrivedMessage onListenerArrivedMessaged) {
 
         ArrivedMessage elemento;
         elemento = new ArrivedMessage();
         elemento.listener = onListenerArrivedMessaged;
-        elemento.topic = subscriptionTopic;
+        if (elemento.listTopics == null) {
+            elemento.listTopics = new ArrayList<String>();
+        }
+        elemento.listTopics.add(subscriptionTopic);
+        //elemento.listTopics = subscriptionTopic;
         if (lista == null) {
             lista = new ArrayList<>();
         }
         lista.add(elemento);
+        return elemento;
 
 
 
@@ -131,15 +136,15 @@ public class MqttConnection implements Serializable {
     public interface OnSubscriptionTopic {
 
         void Unsuccessful(IMqttToken iMqttToken);
-        void Successful(IMqttToken iMqttToken, Throwable throwable);
+        void Successful(IMqttToken iMqttToken);
 
     }
 
     /**
      * Este metodo devuelve el estado de la conexion
-     * @return un estado MQTT_STATE_CONNECTION
+     * @return un estado IOT_MQTT_STATUS_CONNECTION
      */
-    public MQTT_STATE_CONNECTION getStateConnection() {
+    public IOT_MQTT_STATUS_CONNECTION getStateConnection() {
         return stateConnection;
     }
 
@@ -147,7 +152,7 @@ public class MqttConnection implements Serializable {
      * Este metodo actualiza el estado de la conexion para hacerlo coherente
      * @param stateConnection
      */
-    public void setStateConnection(MQTT_STATE_CONNECTION stateConnection) {
+    public void setStateConnection(IOT_MQTT_STATUS_CONNECTION stateConnection) {
         this.stateConnection = stateConnection;
         Log.i(TAG, "Se ha cambiado el estado de conexion a " + getStateConnection().toString());
     }
@@ -158,14 +163,14 @@ public class MqttConnection implements Serializable {
      * @param context Contexto de la aplcacion, y necesario para crear la conexion mqtt.
      *
      */
-    public MqttConnection(Context context) {
+    public IotMqttConnection(Context context) {
 
         client = null;
         this.context = context;
         token = null;
         cnx = null;
-        stateConnection = MQTT_STATE_CONNECTION.CONEXION_MQTT_DESCONECTADA;
-        cnx = new ConfigurationMqtt(this.context);
+        stateConnection = IOT_MQTT_STATUS_CONNECTION.CONEXION_MQTT_DESCONECTADA;
+        cnx = new IotMqttConfiguration(this.context);
         options = new MqttConnectOptions();
         options.setAutomaticReconnect(cnx.getAutoConnect());
         options.setCleanSession(cnx.getCleanSession());
@@ -188,14 +193,14 @@ public class MqttConnection implements Serializable {
      * @return Devuelve el resultado de la conexion aunque es necesario esperar el evento connectComplete
      * para asegurar que la conexion esta estabilizada y es el punto de inicio del dialogo
      */
-    public MQTT_STATE_CONNECTION createConnection(OnMqttConnection listenerConexionMqtt) {
+    public IOT_MQTT_STATUS_CONNECTION createConnection(OnMqttConnection listenerConexionMqtt) {
 
 
         client = new MqttAndroidClient(context, stringConnection, idClient, Ack.AUTO_ACK);
         client.setCallback(new MqttCallbackExtended() {
             @Override
             public void connectComplete(boolean reconnect, String serverURI) {
-                setStateConnection(MQTT_STATE_CONNECTION.CONEXION_MQTT_ACTIVE);
+                setStateConnection(IOT_MQTT_STATUS_CONNECTION.CONEXION_MQTT_ACTIVE);
                 //Informamos de la conexion establecida a la aplicacion
                 listenerConexionMqtt.connectionEstablished(reconnect, serverURI);
 
@@ -204,15 +209,15 @@ public class MqttConnection implements Serializable {
             @Override
             public void connectionLost(Throwable cause) {
                 //Informamos cuando se pierde la conexion
-                setStateConnection(MQTT_STATE_CONNECTION.CONEXION_MQTT_LOST);
+                setStateConnection(IOT_MQTT_STATUS_CONNECTION.CONEXION_MQTT_LOST);
                 listenerConexionMqtt.connectionLost(cause);
 
             }
 
             @Override
             public void messageArrived(String topic, MqttMessage message)  {
-                if (getStateConnection() != MQTT_STATE_CONNECTION.CONEXION_MQTT_ACTIVE) {
-                    setStateConnection(MQTT_STATE_CONNECTION.CONEXION_MQTT_ACTIVE);
+                if (getStateConnection() != IOT_MQTT_STATUS_CONNECTION.CONEXION_MQTT_ACTIVE) {
+                    setStateConnection(IOT_MQTT_STATUS_CONNECTION.CONEXION_MQTT_ACTIVE);
                 }
 
                 String datos = new String(message.getPayload());
@@ -226,7 +231,7 @@ public class MqttConnection implements Serializable {
 
             @Override
             public void deliveryComplete(IMqttDeliveryToken token) {
-                setStateConnection(MQTT_STATE_CONNECTION.CONEXION_MQTT_ACTIVE);
+                setStateConnection(IOT_MQTT_STATUS_CONNECTION.CONEXION_MQTT_ACTIVE);
 
             }
         });
@@ -239,26 +244,26 @@ public class MqttConnection implements Serializable {
                 e.printStackTrace();
             } catch (NoSuchAlgorithmException e) {
                 e.printStackTrace();
-                return MQTT_STATE_CONNECTION.CONEXION_MQTT_ERROR_ALGORITMO_CERTIIFICADO;
+                return IOT_MQTT_STATUS_CONNECTION.CONEXION_MQTT_ERROR_ALGORITMO_CERTIIFICADO;
             } catch (IOException e) {
                 e.printStackTrace();
-                return MQTT_STATE_CONNECTION.CONEXION_MQTT_ERROR_IO;
+                return IOT_MQTT_STATUS_CONNECTION.CONEXION_MQTT_ERROR_IO;
             } catch (KeyManagementException e) {
                 e.printStackTrace();
-                return MQTT_STATE_CONNECTION.CONEXION_MQTT_ERROR_KEY_MANAGEMENT;
+                return IOT_MQTT_STATUS_CONNECTION.CONEXION_MQTT_ERROR_KEY_MANAGEMENT;
             } catch (CertificateException e) {
                 e.printStackTrace();
-                return MQTT_STATE_CONNECTION.CONEXION_MQTT_ERROR_CERTIFICATE;
+                return IOT_MQTT_STATUS_CONNECTION.CONEXION_MQTT_ERROR_CERTIFICATE;
             } catch (UnrecoverableKeyException e) {
                 e.printStackTrace();
-                return MQTT_STATE_CONNECTION.CONEXION_MQTT_ERROR_IRRECUPERABLE;
+                return IOT_MQTT_STATUS_CONNECTION.CONEXION_MQTT_ERROR_IRRECUPERABLE;
             }
         }
 
         //connectionRetry(20000, 1000);
         retryConnection(10000, 10000);
-        setStateConnection(MQTT_STATE_CONNECTION.CONEXION_MQTT_CON_EXITO);
-        return MQTT_STATE_CONNECTION.CONEXION_MQTT_CON_EXITO;
+        setStateConnection(IOT_MQTT_STATUS_CONNECTION.CONEXION_MQTT_CON_EXITO);
+        return IOT_MQTT_STATUS_CONNECTION.CONEXION_MQTT_CON_EXITO;
     }
 
 
@@ -268,19 +273,19 @@ public class MqttConnection implements Serializable {
         token = client.connect(options, context, new IMqttActionListener() {
             @Override
             public void onSuccess(IMqttToken asyncActionToken) {
-                setStateConnection(MQTT_STATE_CONNECTION.CONEXION_MQTT_ACTIVE);
+                setStateConnection(IOT_MQTT_STATUS_CONNECTION.CONEXION_MQTT_ACTIVE);
 
             }
 
             @Override
             public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
-                setStateConnection(MQTT_STATE_CONNECTION.CONEXION_MQTT_FAIL);
+                setStateConnection(IOT_MQTT_STATUS_CONNECTION.CONEXION_MQTT_FAIL);
 
             }
         });
 
 
-        setStateConnection(MQTT_STATE_CONNECTION.CONEXION_MQTT_CON_EXITO);
+        setStateConnection(IOT_MQTT_STATUS_CONNECTION.CONEXION_MQTT_CON_EXITO);
     }
 
 
@@ -289,14 +294,14 @@ public class MqttConnection implements Serializable {
      * @param topic sobre el que enviar el mensaje
      * @param texto es el mensaje a enviar
      */
-    public DEVICE_STATE_CONNECTION publishTopic(String topic, String texto) {
+    public IOT_DEVICE_STATE_CONNECTION publishTopic(String topic, String texto) {
 
         MqttMessage mensaje;
 
         if (client == null) {
             Log.e(TAG, "el cliente mqtt es nulo");
         }
-        if (stateConnection == MQTT_STATE_CONNECTION.CONEXION_MQTT_ACTIVE) {
+        if (stateConnection == IOT_MQTT_STATUS_CONNECTION.CONEXION_MQTT_ACTIVE) {
             mensaje = new MqttMessage();
             mensaje.setPayload(texto.getBytes());
             client.publish(topic, mensaje);
@@ -304,9 +309,9 @@ public class MqttConnection implements Serializable {
 
         } else {
             Log.w(TAG, "no estoy conectado y no puedo publica");
-            return DEVICE_STATE_CONNECTION.DEVICE_ERROR_COMMUNICATION;
+            return IOT_DEVICE_STATE_CONNECTION.DEVICE_ERROR_COMMUNICATION;
         }
-        return DEVICE_STATE_CONNECTION.DEVICE_WAITING_RESPONSE;
+        return IOT_DEVICE_STATE_CONNECTION.DEVICE_WAITING_RESPONSE;
     }
 
 
@@ -316,34 +321,35 @@ public class MqttConnection implements Serializable {
      * @param listener Se dispara si finalmente no se puede suscribir el dispositivo
      * @return Restorna el resultado de la operacion
      */
-    public MQTT_STATE_CONNECTION subscribeTopic(String topic, OnSubscriptionTopic listener) {
+    public IOT_MQTT_STATUS_CONNECTION subscribeTopic(String topic, OnSubscriptionTopic listener) {
 
         Log.w(TAG, "topic " + topic);
-        if (stateConnection == MQTT_STATE_CONNECTION.CONEXION_MQTT_ACTIVE) {
+        if (stateConnection == IOT_MQTT_STATUS_CONNECTION.CONEXION_MQTT_ACTIVE) {
             client.subscribe(topic, 0, context, new IMqttActionListener() {
                 @Override
                 public void onSuccess(IMqttToken iMqttToken) {
                     Log.w(TAG, "subscrito al topic " + topic);
-                    listener.Unsuccessful(iMqttToken);
+
+                    listener.Successful(iMqttToken);
                 }
 
                 @Override
                 public void onFailure(IMqttToken iMqttToken, Throwable throwable) {
                     Log.w(TAG, "subscrito sin exito al topic " + topic);
-                    listener.Successful(iMqttToken, throwable);
+                    listener.Unsuccessful(iMqttToken);
                 }
             });
 
         } else {
             Log.w(TAG, "No estas conectado al broker");
-            stateConnection = MQTT_STATE_CONNECTION.CONEXION_MQTT_ERROR_SUSCRIPCION_TOPIC;
+            stateConnection = IOT_MQTT_STATUS_CONNECTION.CONEXION_MQTT_ERROR_SUSCRIPCION_TOPIC;
         }
 
         return stateConnection;
 
     }
 
-    private MQTT_STATE_CONNECTION retryConnection(long timeRetry, long notifyInterval) {
+    private IOT_MQTT_STATUS_CONNECTION retryConnection(long timeRetry, long notifyInterval) {
 
         Timer timerConnection;
         connect();
@@ -351,7 +357,7 @@ public class MqttConnection implements Serializable {
         timerConnection.schedule(new TimerTask() {
             @Override
             public void run() {
-                if (getStateConnection() == MQTT_STATE_CONNECTION.CONEXION_MQTT_ACTIVE) {
+                if (getStateConnection() == IOT_MQTT_STATUS_CONNECTION.CONEXION_MQTT_ACTIVE) {
                    this.cancel();
                    timerConnection.purge();
                    Log.i(TAG, "SE CANCELA EL TEMPORIZADOR...");
@@ -377,7 +383,7 @@ public class MqttConnection implements Serializable {
         client.disconnect();
         client.close();
 
-        setStateConnection(MQTT_STATE_CONNECTION.CONEXION_MQTT_DESCONECTADA);
+        setStateConnection(IOT_MQTT_STATUS_CONNECTION.CONEXION_MQTT_DESCONECTADA);
     }
 
     public Boolean isConnected() {
@@ -389,15 +395,32 @@ public class MqttConnection implements Serializable {
     protected int searchListenerArriveMessage(String topic) {
 
         int i;
+        int j;
+        /*
         if (lista == null) {
             return -1;
         }
         for (i=0;i<lista.size();i++) {
-            if (topic.equals(lista.get(i).topic)) {
+            if (topic.equals(lista.get(i).listTopics)) {
                 return i;
             }
 
         }
+
+         */
+        for(i=0; i < lista.size(); i++) {
+
+            if (lista.get(i).listTopics != null) {
+                for(j=0;j<lista.get(i).listTopics.size(); j++) {
+                    if (topic.equals(lista.get(i).listTopics.get(j))) {
+                        return i;
+                    }
+                }
+            }
+        }
+
+
+
 
         return -1;
     }

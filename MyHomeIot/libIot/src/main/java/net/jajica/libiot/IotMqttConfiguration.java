@@ -6,6 +6,7 @@ import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 
 
 /**
@@ -13,7 +14,7 @@ import org.json.JSONObject;
  * de conexion a utilizar
  */
 
-public class ConfigurationMqtt {
+public class IotMqttConfiguration implements Serializable {
 
     private final String FICHERO_CONFIGURACION_MQTT ="MyHomeIot.conf";
     /**
@@ -54,7 +55,7 @@ public class ConfigurationMqtt {
      */
 
 
-    private final String TAG = "ConfigurationMqtt";
+    private final String TAG = "IotMqttConfiguration";
 
 
     private Boolean autoConnect = true;
@@ -202,7 +203,7 @@ public class ConfigurationMqtt {
      * @param context Es el contexto de la aplicacion. Se establece el nombre por defecto del
      * fichero de configuracion
      */
-    public ConfigurationMqtt(Context context) {
+    public IotMqttConfiguration(Context context) {
 
         setFicheroConfiguracion(FICHERO_CONFIGURACION_MQTT);
         setDatosConfiguracion(null);
@@ -219,7 +220,7 @@ public class ConfigurationMqtt {
      * Constructor usado para entornos linux. En el caso de que se quiera usar para Android, se
      * deberia poner el contexto en la clase para que se lean y escriban correctamente las configuraciones.
      */
-    public ConfigurationMqtt() {
+    public IotMqttConfiguration() {
         setFicheroConfiguracion(FICHERO_CONFIGURACION_MQTT);
         setDatosConfiguracion(null);
         setContext(null);

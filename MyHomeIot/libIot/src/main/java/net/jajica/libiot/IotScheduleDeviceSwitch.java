@@ -5,9 +5,6 @@ import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.Formatter;
-
 public class IotScheduleDeviceSwitch extends IotScheduleDevice {
 
     private final String TAG = "IotScheduleDeviceSwitch";
@@ -25,7 +22,7 @@ public class IotScheduleDeviceSwitch extends IotScheduleDevice {
     IotScheduleDeviceSwitch(JSONObject schedule) {
         super(schedule);
         setDeviceType(IOT_DEVICE_TYPE.INTERRUPTOR);
-        setScheduleState(STATE_SCHEDULE.PROGRAMA_INACTIVO);
+        setScheduleState(IOT_STATE_SCHEDULE.PROGRAMA_INACTIVO);
         setStateSwitchFromScheduleId();
     }
 
@@ -83,7 +80,7 @@ public class IotScheduleDeviceSwitch extends IotScheduleDevice {
 
         objectSchedule = super.schedule2Json(schedule);
         try {
-            objectSchedule.put(TEXTOS_DIALOGO_IOT.ESTADO_RELE.getValorTextoJson(), getRelay().getEstadoRele());
+            objectSchedule.put(IOT_LABELS_JSON.STATE_RELAY.getValorTextoJson(), getRelay().getEstadoRele());
         } catch (JSONException e) {
             e.printStackTrace();
             return null;

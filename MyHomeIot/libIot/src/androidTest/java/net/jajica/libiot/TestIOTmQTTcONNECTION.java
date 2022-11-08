@@ -1,7 +1,7 @@
 package net.jajica.libiot;
 
 
-import static net.jajica.libiot.DEVICE_STATE_CONNECTION.DEVICE_WAITING_RESPONSE;
+import static net.jajica.libiot.IOT_DEVICE_STATE_CONNECTION.DEVICE_WAITING_RESPONSE;
 import static org.junit.Assert.assertEquals;
 
 import android.content.Context;
@@ -15,16 +15,16 @@ import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4.class)
 
-public class TestMqttConnection {
+public class TestIOTmQTTcONNECTION {
 
     Context appContext;
-    MqttConnection cnx;
-    final String TAG = "TestMqttConnection";
+    IotMqttConnection cnx;
+    final String TAG = "TestIOTmQTTcONNECTION";
 
-    public TestMqttConnection() {
+    public TestIOTmQTTcONNECTION() {
 
         appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        cnx = new MqttConnection(appContext);
+        cnx = new IotMqttConnection(appContext);
 
 
     }
@@ -32,9 +32,9 @@ public class TestMqttConnection {
     @Test
     public void conectarMqtt() {
 
-        MQTT_STATE_CONNECTION state;
+        IOT_MQTT_STATUS_CONNECTION state;
 
-        assertEquals(MQTT_STATE_CONNECTION.CONEXION_MQTT_CON_EXITO, cnx.createConnection(new MqttConnection.OnMqttConnection() {
+        assertEquals(IOT_MQTT_STATUS_CONNECTION.CONEXION_MQTT_CON_EXITO, cnx.createConnection(new IotMqttConnection.OnMqttConnection() {
             @Override
             public void connectionEstablished(boolean reconnect, String serverURI) {
                 Log.i(TAG, "Conexion estableciada");

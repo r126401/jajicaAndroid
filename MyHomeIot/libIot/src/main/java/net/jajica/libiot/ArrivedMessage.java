@@ -1,7 +1,9 @@
 package net.jajica.libiot;
 
+import java.util.ArrayList;
+
 public class ArrivedMessage {
 
-    public String topic;
-    MqttConnection.OnArrivedMessage listener;
+    public ArrayList<String> listTopics;
+    IotMqttConnection.OnArrivedMessage listener;
 }

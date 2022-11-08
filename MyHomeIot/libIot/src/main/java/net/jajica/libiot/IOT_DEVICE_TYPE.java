@@ -39,3 +39,4 @@ public enum IOT_DEVICE_TYPE implements Serializable {
 
 
 }
+

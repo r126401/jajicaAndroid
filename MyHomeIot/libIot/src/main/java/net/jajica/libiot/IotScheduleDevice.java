@@ -2,7 +2,6 @@ package net.jajica.libiot;
 
 import android.annotation.SuppressLint;
 import android.util.Log;
-import android.view.View;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,7 +22,7 @@ public class IotScheduleDevice implements Serializable {
     protected int minute;
     protected int second;
     protected int weekDay;
-    protected STATE_SCHEDULE scheduleState;
+    protected IOT_STATE_SCHEDULE scheduleState;
     protected int mask;
     protected IOT_DEVICE_TYPE deviceType;
     protected boolean [] activeDays;
@@ -38,7 +37,7 @@ public class IotScheduleDevice implements Serializable {
         minute = 0;
         second = 0;
         weekDay = 0;
-        setScheduleState(STATE_SCHEDULE.PROGRAMA_INACTIVO);
+        setScheduleState(IOT_STATE_SCHEDULE.PROGRAMA_INACTIVO);
         mask = 0;
         year = 0;
         month = 0;
@@ -61,8 +60,8 @@ public class IotScheduleDevice implements Serializable {
     IotScheduleDevice(JSONObject schedule) {
 
         try {
-            setRawSchedule(schedule.getString(TEXTOS_DIALOGO_IOT.ID_PROGRAMA.getValorTextoJson()));
-            setDuration(schedule.getInt(TEXTOS_DIALOGO_IOT.DURACION.getValorTextoJson()));
+            setRawSchedule(schedule.getString(IOT_LABELS_JSON.SCHEDULE_ID.getValorTextoJson()));
+            setDuration(schedule.getInt(IOT_LABELS_JSON.DURATION.getValorTextoJson()));
         } catch (JSONException e) {
             e.printStackTrace();
             return;
@@ -109,15 +108,15 @@ public class IotScheduleDevice implements Serializable {
             return;
         }
         int i;
-        STATE_SCHEDULE estado = STATE_SCHEDULE.PROGRAMA_DESCONOCIDO;
+        IOT_STATE_SCHEDULE estado = IOT_STATE_SCHEDULE.PROGRAMA_DESCONOCIDO;
         i= Integer.parseInt(getRawSchedule().substring(10,11));
         setScheduleState(estado.fromId(i));
     }
 
-    protected STATE_SCHEDULE setParametersDiarySchedule() {
+    protected IOT_STATE_SCHEDULE setParametersDiarySchedule() {
         if(getRawSchedule() == null) {
             Log.e(TAG, "Error: No hay scheduleId");
-            return STATE_SCHEDULE.PROGRAMA_INVALIDO;
+            return IOT_STATE_SCHEDULE.PROGRAMA_INVALIDO;
         }
         if (getScheduleType() != IOT_CLASS_SCHEDULE.DIARY_SCHEDULE) {
             Log.e(TAG, "Error: El tipo de programa no es diario");
@@ -130,7 +129,7 @@ public class IotScheduleDevice implements Serializable {
 
 
 
-        return STATE_SCHEDULE.PROGRAMA_VALIDO;
+        return IOT_STATE_SCHEDULE.PROGRAMA_VALIDO;
 
     }
 
@@ -275,11 +274,11 @@ public class IotScheduleDevice implements Serializable {
         this.weekDay = weekDay;
     }
 
-    public STATE_SCHEDULE getScheduleState() {
+    public IOT_STATE_SCHEDULE getScheduleState() {
         return scheduleState;
     }
 
-    public void setScheduleState(STATE_SCHEDULE scheduleState) {
+    public void setScheduleState(IOT_STATE_SCHEDULE scheduleState) {
         this.scheduleState = scheduleState;
     }
 
@@ -330,14 +329,14 @@ public class IotScheduleDevice implements Serializable {
         objectSchedule = new JSONObject();
         try {
 
-            objectSchedule.put(TEXTOS_DIALOGO_IOT.ID_PROGRAMA.getValorTextoJson(), schedule.getScheduleId());
-            objectSchedule.put(TEXTOS_DIALOGO_IOT.TIPO_PROGRAMA.getValorTextoJson(), schedule.getScheduleType().getTipoPrograma());
-            objectSchedule.put(TEXTOS_DIALOGO_IOT.HORA.getValorTextoJson(), schedule.getHour());
-            objectSchedule.put(TEXTOS_DIALOGO_IOT.MINUTO.getValorTextoJson(), schedule.getMinute());
-            objectSchedule.put(TEXTOS_DIALOGO_IOT.SEGUNDO.getValorTextoJson(), schedule.getSecond());
-            objectSchedule.put(TEXTOS_DIALOGO_IOT.MASCARA_PROGRAMA.getValorTextoJson(), schedule.getMask());
-            objectSchedule.put(TEXTOS_DIALOGO_IOT.STATE_SCHEDULE.getValorTextoJson(), schedule.getScheduleState().getEstadoPrograma());
-            objectSchedule.put(TEXTOS_DIALOGO_IOT.DURACION.getValorTextoJson(), schedule.getDuration());
+            objectSchedule.put(IOT_LABELS_JSON.SCHEDULE_ID.getValorTextoJson(), schedule.getScheduleId());
+            objectSchedule.put(IOT_LABELS_JSON.TYPE_SCHEDULE.getValorTextoJson(), schedule.getScheduleType().getTipoPrograma());
+            objectSchedule.put(IOT_LABELS_JSON.HOUR.getValorTextoJson(), schedule.getHour());
+            objectSchedule.put(IOT_LABELS_JSON.MINUTE.getValorTextoJson(), schedule.getMinute());
+            objectSchedule.put(IOT_LABELS_JSON.SECOND.getValorTextoJson(), schedule.getSecond());
+            objectSchedule.put(IOT_LABELS_JSON.MASK_SCHEDULE.getValorTextoJson(), schedule.getMask());
+            objectSchedule.put(IOT_LABELS_JSON.STATUS_SCHEDULE.getValorTextoJson(), schedule.getScheduleState().getEstadoPrograma());
+            objectSchedule.put(IOT_LABELS_JSON.DURATION.getValorTextoJson(), schedule.getDuration());
 
         } catch (JSONException e) {
             return null;
@@ -360,10 +359,10 @@ public class IotScheduleDevice implements Serializable {
 
     protected IOT_CODE_RESULT setDurationFromReport(String message) {
 
-        ApiDispositivoIot api;
-        api = new ApiDispositivoIot();
+        IotTools api;
+        api = new IotTools();
         int i;
-        i = api.getJsonInt(message, TEXTOS_DIALOGO_IOT.DURACION.getValorTextoJson());
+        i = api.getJsonInt(message, IOT_LABELS_JSON.DURATION.getValorTextoJson());
 
         if (i < 0) {
             return IOT_CODE_RESULT.RESULT_CODE_ERROR;
@@ -376,23 +375,23 @@ public class IotScheduleDevice implements Serializable {
     @SuppressLint("SuspiciousIndentation")
     protected IOT_CODE_RESULT setScheduleStateFromReport(String message) {
 
-        ApiDispositivoIot api;
-        api = new ApiDispositivoIot();
+        IotTools api;
+        api = new IotTools();
         int i;
-        i = api.getJsonInt(message, TEXTOS_DIALOGO_IOT.STATE_SCHEDULE.getValorTextoJson());
+        i = api.getJsonInt(message, IOT_LABELS_JSON.STATUS_SCHEDULE.getValorTextoJson());
         if (i < 0)
         return IOT_CODE_RESULT.RESULT_CODE_ERROR;
-        setScheduleState(STATE_SCHEDULE.PROGRAMA_DESCONOCIDO.fromId(i));
+        setScheduleState(IOT_STATE_SCHEDULE.PROGRAMA_DESCONOCIDO.fromId(i));
 
         return IOT_CODE_RESULT.RESUT_CODE_OK;
     }
 
     protected IOT_CODE_RESULT setNewScheduleIdFromReport(String respuesta) {
 
-        ApiDispositivoIot api;
+        IotTools api;
         String scheduleId;
-        api = new ApiDispositivoIot();
-        scheduleId = api.getJsonString(respuesta, TEXTOS_DIALOGO_IOT.NUEVO_ID_PROGRAMA.getValorTextoJson());
+        api = new IotTools();
+        scheduleId = api.getJsonString(respuesta, IOT_LABELS_JSON.NEW_SCHEDULE_ID.getValorTextoJson());
         if (scheduleId == null) {
             return IOT_CODE_RESULT.RESULT_CODE_ERROR;
         }

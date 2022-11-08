@@ -16,7 +16,7 @@ import org.junit.runner.RunWith;
 @RunWith(AndroidJUnit4.class)
 public class TestApiJsonIot {
 
-    MqttConnection cnx;
+    IotMqttConnection cnx;
     Context appContext;
 
     public void prepararEntorno() {
@@ -30,10 +30,10 @@ public class TestApiJsonIot {
     @Test
     public void TestGenerarComando() {
 
-        MQTT_STATE_CONNECTION estado;
+        IOT_MQTT_STATUS_CONNECTION estado;
         appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        cnx = new MqttConnection(appContext);
-        estado = cnx.createConnection(new MqttConnection.OnMqttConnection() {
+        cnx = new IotMqttConnection(appContext);
+        estado = cnx.createConnection(new IotMqttConnection.OnMqttConnection() {
             @Override
             public void connectionEstablished(boolean reconnect, String serverURI) {
 
@@ -46,10 +46,10 @@ public class TestApiJsonIot {
         });
         JSONObject cabecera = null;
         String texto;
-        ApiDispositivoIot api;
+        IotTools api;
 
-        if (estado == MQTT_STATE_CONNECTION.CONEXION_MQTT_CON_EXITO) {
-            api = new ApiDispositivoIot(cnx);
+        if (estado == IOT_MQTT_STATUS_CONNECTION.CONEXION_MQTT_CON_EXITO) {
+            api = new IotTools();
             assertNotNull(texto = api.createSimpleCommand(IOT_COMMANDS.STATUS_DEVICE));
             Log.i("texto", texto);
 
@@ -60,30 +60,17 @@ public class TestApiJsonIot {
 
     @Test
     public void TextActuarRele() {
-        MQTT_STATE_CONNECTION estado;
+        IOT_MQTT_STATUS_CONNECTION estado;
+        Context appContext;
+        IotMqttConnection cnx;
         appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        cnx = new MqttConnection(appContext);
-        estado = cnx.createConnection(new MqttConnection.OnMqttConnection() {
-            @Override
-            public void connectionEstablished(boolean reconnect, String serverURI) {
-
-            }
-
-            @Override
-            public void connectionLost(Throwable cause) {
-
-            }
-        });
-
+        cnx = new IotMqttConnection(appContext);
         IotDeviceSwitch disp;
-        disp = new IotDeviceSwitch(cnx);
-        disp.setDeviceId("A020A6026046");
-        disp.setDeviceName("test");
-        disp.subscribeDevice();
-        disp.recibirMensajes();
+        disp = new IotDeviceSwitch();
+
         disp.setOnReceivedTimeoutCommand(new IotDevice.OnReceivedTimeoutCommand() {
             @Override
-            public void onReceivedTimeoutCommand(IOT_CODE_RESULT result) {
+            public void onReceivedTimeoutCommand(String token) {
 
             }
         });
@@ -94,11 +81,56 @@ public class TestApiJsonIot {
                 Log.i("test", "recibido setRelay" + disp.getRelay());
             }
         });
-        disp.setRelayCommand(IOT_SWITCH_RELAY.ON);
+        disp.setOnReceivedSpontaneousStartDevice(new IotDevice.OnReceivedSpontaneousStartDevice() {
+            @Override
+            public void onReceivedSpontaneousStartDevice(IOT_CODE_RESULT resultCode) {
+                Log.i("test", "recibido StartDevice" + disp.getRelay());
+            }
+        });
+
+        disp.setOnReceivedSpontaneousActionRelay(new IotDeviceSwitch.OnReceivedSpontaneousActionRelay() {
+            @Override
+            public void onReceivedSpontaneousActionRelay(IOT_CODE_RESULT resultCode) {
+                Log.i("test", "recibido actionRelay" + disp.getRelay());
+            }
+        });
+
+
+        estado = cnx.createConnection(new IotMqttConnection.OnMqttConnection() {
+            @Override
+            public void connectionEstablished(boolean reconnect, String serverURI) {
+                disp.setCnx(cnx);
+                disp.setDeviceId("A020A6026046");
+                disp.setDeviceName("test");
+                disp.subscribeDevice();
+                //disp.RegisterListenerMqttConnection();
+                disp.setRelayCommand(IOT_SWITCH_RELAY.OFF);
+
+            }
+
+            @Override
+            public void connectionLost(Throwable cause) {
+
+            }
+        });
+
+        disp.setOnReceivedTimeoutCommand(new IotDevice.OnReceivedTimeoutCommand() {
+            @Override
+            public void onReceivedTimeoutCommand(String token) {
+                Log.e("test", "Temporizado comando con clave: " + token);
+            }
+        });
+
+
+
+
+
+
 
 
 
 
 
     }
+
 }

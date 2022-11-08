@@ -1,6 +1,6 @@
 package net.jajica.libiot;
 
-public enum STATE_SCHEDULE {
+public enum IOT_STATE_SCHEDULE {
     PROGRAMA_DESCONOCIDO(-1),
     PROGRAMA_INACTIVO(0),
     PROGRAMA_ACTIVO(1),
@@ -9,7 +9,7 @@ public enum STATE_SCHEDULE {
 
     private int estadoPrograma;
 
-    STATE_SCHEDULE(int estadoPrograma) {
+    IOT_STATE_SCHEDULE(int estadoPrograma) {
         this.estadoPrograma = estadoPrograma;
     }
 
@@ -17,9 +17,9 @@ public enum STATE_SCHEDULE {
         return this.estadoPrograma;
     }
 
-    public STATE_SCHEDULE fromId(int id) {
+    public IOT_STATE_SCHEDULE fromId(int id) {
 
-        for (STATE_SCHEDULE orden : values()) {
+        for (IOT_STATE_SCHEDULE orden : values()) {
             if (orden.getEstadoPrograma() == id) {
                 return orden;
             }

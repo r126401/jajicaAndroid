@@ -10,7 +10,7 @@ package net.jajica.libiot;
  * llamado datosDispositivos.conf
  */
 
-public enum OPERACION_CONFIGURACION_DISPOSITIVOS {
+public enum IOT_OPERATION_CONFIGURATION_DEVICES {
 
     DISPOSITIVO_INSERTADO,
     DISPOSITIVO_MODIFICADO,

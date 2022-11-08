@@ -2,7 +2,7 @@ package net.jajica.libiot;
 
 import java.io.Serializable;
 
-public enum DEVICE_STATE_CONNECTION implements Serializable {
+public enum IOT_DEVICE_STATE_CONNECTION implements Serializable {
     UNKNOWN,
     DEVICE_CONNECTED,
     DEVICE_DISCONNECTED,
