@@ -1595,7 +1595,7 @@ public abstract class IotDevice implements Serializable {
 
     }
 
-    
+
     protected IOT_CODE_RESULT processModifySchedule(String message) {
 
 
