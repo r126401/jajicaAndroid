@@ -7,7 +7,9 @@ public enum IOT_TYPE_ALARM_DEVICE implements Serializable {
     WIFI_ALARM(0),
     MQTT_ALARM(1),
     NTP_ALARM(2),
-    NVS_ALARM(3);
+    NVS_ALARM(3),
+    SENSOR_ALARM(4),
+    REMOTE_SENSOR_ALARM(5);
 
     private int alarma;
 

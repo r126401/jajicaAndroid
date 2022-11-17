@@ -1,0 +1,7 @@
+    {
+      "nombreDispositivo": "pepe",
+      "idDevice": "556632554a",
+      "device": -1,
+      "topicPublicacion": "/sub_556632554a",
+      "topicSubscripcion": "/pub_556632554a"
+    }

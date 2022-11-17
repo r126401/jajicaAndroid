@@ -3,11 +3,11 @@ package net.jajica.libiot;
 import java.io.Serializable;
 
 public enum IOT_DEVICE_TYPE implements Serializable {
-    DESCONOCIDO(-1),
-    INTERRUPTOR(0),
-    TERMOMETRO(2),
-    CRONOTERMOSTATO(1),
-    SERVIDOR_OTA(100);
+    UNKNOWN(-1),
+    SWITCH(0),
+    THERMOMETER(1),
+    CHRONOTHERMOSTAT(2),
+    OTA_SERVER(100);
 
     private int tipo;
 

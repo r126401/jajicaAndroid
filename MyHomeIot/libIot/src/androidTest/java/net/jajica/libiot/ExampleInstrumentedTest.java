@@ -47,7 +47,7 @@ public class ExampleInstrumentedTest {
         dispositivo.setDeviceId("mmddgGG");
         dispositivo.setPublishTopic("kkk");
         dispositivo.setSubscriptionTopic("pppp");
-        dispositivo.setDeviceType(IOT_DEVICE_TYPE.DESCONOCIDO);
+        dispositivo.setDeviceType(IOT_DEVICE_TYPE.UNKNOWN);
         assertNotNull(dispositivo);
         //conf = new IotSetDevices(appContext);
         conf.cargarDispositivos();
@@ -77,7 +77,7 @@ public class ExampleInstrumentedTest {
         dispositivo.setDeviceId("mmddgGG");
         dispositivo.setPublishTopic("kkk");
         dispositivo.setSubscriptionTopic("pppp");
-        dispositivo.setDeviceType(IOT_DEVICE_TYPE.DESCONOCIDO);
+        dispositivo.setDeviceType(IOT_DEVICE_TYPE.UNKNOWN);
         assertNotNull(dispositivo);
 
 

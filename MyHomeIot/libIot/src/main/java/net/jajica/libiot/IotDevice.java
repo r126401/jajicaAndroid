@@ -416,6 +416,9 @@ public abstract class IotDevice implements Serializable {
         this.onReceivedAlarmReportDevice = onReceivedAlarmReportDevice;
     }
 
+    public IOT_DEVICE_TYPE getDeviceType() {
+        return deviceType;
+    }
 
     /**
      *Este metodo diguelve la estructura del dispositivo en formato json
@@ -623,7 +626,6 @@ public abstract class IotDevice implements Serializable {
 
         deviceName = null;
         deviceId = null;
-        deviceType = IOT_DEVICE_TYPE.DESCONOCIDO;
         versionOtaAvailable = null;
         subscriptionTopic = null;
         publishTopic = null;
@@ -634,6 +636,7 @@ public abstract class IotDevice implements Serializable {
         activeSchedule = null;
         dispositivoJson = new JSONObject();
         alarms = new IotAlarmDevice();
+        setDeviceType(IOT_DEVICE_TYPE.UNKNOWN);
 
     }
 
@@ -1178,7 +1181,7 @@ public abstract class IotDevice implements Serializable {
         IotTools api;
         api = new IotTools();
         int tipo;
-        IOT_DEVICE_TYPE tipoDispositivo = IOT_DEVICE_TYPE.DESCONOCIDO;
+        IOT_DEVICE_TYPE tipoDispositivo = IOT_DEVICE_TYPE.UNKNOWN;
         tipo = api.getJsonInt(respuesta, IOT_LABELS_JSON.DEVICE_TYPE.getValorTextoJson());
         setDeviceType(tipoDispositivo.fromId(tipo));
         return IOT_CODE_RESULT.RESUT_CODE_OK;
@@ -1640,6 +1643,17 @@ public abstract class IotDevice implements Serializable {
 
     }
 
+    protected double getFieldDoubleFromReport(String message, IOT_LABELS_JSON field) {
+
+        IotTools api;
+        double dat;
+        api = new IotTools();
+        dat = api.getJsonDouble(message, field.getValorTextoJson());
+        return dat;
+
+
+    }
+
     protected String getFieldStringFromReport(String message, IOT_LABELS_JSON field) {
 
         IotTools api;
@@ -1648,6 +1662,8 @@ public abstract class IotDevice implements Serializable {
         stream = api.getJsonString(message, field.getValorTextoJson());
         return stream;
     }
+
+
 
 
 
@@ -1828,7 +1844,7 @@ public abstract class IotDevice implements Serializable {
         parameter = new JSONObject();
 
         try {
-            parameter.put(IOT_LABELS_JSON.OTA_VERSION_TYPE.getValorTextoJson(), IOT_DEVICE_NAME.INTERRUPTOR.toString());
+            parameter.put(IOT_LABELS_JSON.OTA_VERSION_TYPE.getValorTextoJson(), getDeviceType().toString());
             command.put(IOT_LABELS_JSON.DLG_UPGDRADE_FIRMWARE.getValorTextoJson(), parameter);
         } catch (JSONException e) {
             e.printStackTrace();

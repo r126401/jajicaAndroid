@@ -64,6 +64,8 @@ public enum IOT_LABELS_JSON {
     MQTT_ALARM("alarmaMqtt"),
     NTP_ALARM("alarmaNtp"),
     NVS_ALARM("alarmaNvs"),
+    SENSOR_ALARM("alarmaSensor"),
+    REMOTE_SENSOR_ALARM("alarmaSensorRemoto"),
     OTA_VERSION_TYPE("otaVersiontype");
 
 

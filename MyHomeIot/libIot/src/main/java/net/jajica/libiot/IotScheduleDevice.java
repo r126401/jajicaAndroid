@@ -42,7 +42,7 @@ public class IotScheduleDevice implements Serializable {
         year = 0;
         month = 0;
         day = 0;
-        deviceType = IOT_DEVICE_TYPE.DESCONOCIDO;
+        deviceType = IOT_DEVICE_TYPE.UNKNOWN;
         activeDays = new boolean[7];
         activeSchedule = false;
     }
@@ -70,7 +70,7 @@ public class IotScheduleDevice implements Serializable {
         setParametersDiarySchedule();
         activeDays = new boolean[7];
         setMaskDiarySchedule();
-        setDeviceType(IOT_DEVICE_TYPE.DESCONOCIDO);
+        setDeviceType(IOT_DEVICE_TYPE.UNKNOWN);
         setStateScheduleFromScheduleId();
         createScheduleIdFromObject();
         setActiveSchedule(false);

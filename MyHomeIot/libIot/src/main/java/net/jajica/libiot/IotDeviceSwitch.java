@@ -327,7 +327,6 @@ public class IotDeviceSwitch extends IotDevice implements Serializable {
     @Override
     protected void processSpontaneous(String topic, MqttMessage message) {
         super.processSpontaneous(topic, message);
-        IotDevice dispositivo = null;
         IOT_SPONTANEOUS_TYPE typeInform;
         String mensaje = new String(message.getPayload());
         typeInform = getSpontaneousType(mensaje);
@@ -349,15 +348,9 @@ public class IotDeviceSwitch extends IotDevice implements Serializable {
                 break;
             case COMANDO_APLICACION:
                 break;
-            case CAMBIO_TEMPERATURA:
-                break;
-            case CAMBIO_ESTADO:
-                break;
             case END_SCHEDULE:
                 break;
             case INFORME_ALARMA:
-                break;
-            case CAMBIO_UMBRAL_TEMPERATURA:
                 break;
             case CAMBIO_ESTADO_APLICACION:
                 break;
@@ -376,6 +369,8 @@ public class IotDeviceSwitch extends IotDevice implements Serializable {
         setStateRelayFromReport(message);
         return IOT_CODE_RESULT.RESUT_CODE_OK;
     }
+
+
 
 
 }

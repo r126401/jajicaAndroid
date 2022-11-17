@@ -9,6 +9,7 @@ import android.util.Log;
 import net.jajica.libiot.IOT_CLASS_SCHEDULE;
 import net.jajica.libiot.IOT_MQTT_STATUS_CONNECTION;
 import net.jajica.libiot.IOT_SWITCH_RELAY;
+import net.jajica.libiot.IotDeviceThermometer;
 import net.jajica.libiot.IotMqttConnection;
 import net.jajica.libiot.IotScheduleDeviceSwitch;
 import net.jajica.libiot.IotDevice;
@@ -120,6 +121,67 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void testTermometro() {
+
+        IotMqttConnection cnx;
+        cnx = new IotMqttConnection(getApplicationContext());
+        IotDeviceThermometer termometro;
+        termometro = new IotDeviceThermometer();
+        cnx.createConnection(new IotMqttConnection.OnMqttConnection() {
+            @Override
+            public void connectionEstablished(boolean reconnect, String serverURI) {
+                Log.i(TAG, "conexion establecida");
+                termometro.setCnx(cnx);
+                termometro.setDeviceId("4C75250214E6");
+                termometro.setDeviceName("termometro");
+                termometro.subscribeDevice();
+                termometro.subscribeOtaServer();
+                termometro.getStatusDeviceCommand();
+                termometro.getOtaVersionAvailableCommand();
+
+
+
+            }
+
+            @Override
+            public void connectionLost(Throwable cause) {
+                Log.e(TAG, "conexion perdida");
+            }
+        });
+
+        termometro.setOnReceivedStatus(new IotDevice.OnReceivedStatus() {
+            @Override
+            public void onReceivedStatus(IOT_CODE_RESULT resultCode) {
+                Log.i(TAG, "Recibido status del termometro" +  termometro.getDeviceId());
+            }
+        });
+
+        termometro.setOnReceivedSpontaneousStartDevice(new IotDevice.OnReceivedSpontaneousStartDevice() {
+            @Override
+            public void onReceivedSpontaneousStartDevice(IOT_CODE_RESULT resultCode) {
+                Log.i(TAG, "recibido Arranque del termometro" + termometro.getDeviceId());
+            }
+        });
+
+        termometro.setOnReceivedChangeTemperature(new IotDeviceThermometer.OnReceivedChangeTemperature() {
+            @Override
+            public void onReceivedChangeTemperature() {
+                Log.i(TAG, "Recibido cambio de temperatura " + termometro.getTemperature());
+            }
+        });
+
+        termometro.setOnOtaVersionAvailableDevice(new IotDevice.OnReceivedOtaVersionAvailableDevice() {
+            @Override
+            public void onReceivedOtaVersionAvailableDevice(IOT_CODE_RESULT resultCode) {
+                Log.i(TAG, "Recibida version Ota disponible " + termometro.getDeviceId());
+            }
+        });
+
+
+
+
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,7 +189,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-        TextActuarRele();
+        //TextActuarRele();
+        testTermometro();
 
         /*
 
