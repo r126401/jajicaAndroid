@@ -21,19 +21,19 @@ public class IotScheduleDeviceSwitch extends IotScheduleDevice {
 
     IotScheduleDeviceSwitch(JSONObject schedule) {
         super(schedule);
-        setDeviceType(IOT_DEVICE_TYPE.SWITCH);
+        setDeviceType(IOT_DEVICE_TYPE.INTERRUPTOR);
         setScheduleState(IOT_STATE_SCHEDULE.PROGRAMA_INACTIVO);
         setStateSwitchFromScheduleId();
     }
 
     public IotScheduleDeviceSwitch() {
         super();
-        setDeviceType(IOT_DEVICE_TYPE.SWITCH);
+        setDeviceType(IOT_DEVICE_TYPE.INTERRUPTOR);
     }
 
     IotScheduleDeviceSwitch(String ScheduleId) {
         super(ScheduleId);
-        setDeviceType(IOT_DEVICE_TYPE.SWITCH);
+        setDeviceType(IOT_DEVICE_TYPE.INTERRUPTOR);
     }
 
     protected void setStateSwitchFromScheduleId() {

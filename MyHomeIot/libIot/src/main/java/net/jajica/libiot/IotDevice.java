@@ -27,6 +27,15 @@ public abstract class IotDevice implements Serializable {
 
     protected String publishOtaTopic;
     protected String subscribeOtaTopic;
+    protected int endUpgradeFlag;
+
+    public int getEndUpgradeFlag() {
+        return endUpgradeFlag;
+    }
+
+    public void setEndUpgradeFlag(int endUpgradeFlag) {
+        this.endUpgradeFlag = endUpgradeFlag;
+    }
 
     protected ArrivedMessage listenerArrivedMessages;
 
@@ -899,6 +908,7 @@ public abstract class IotDevice implements Serializable {
     public IOT_DEVICE_STATE_CONNECTION subscribeDevice(String topicDevice) {
 
         if (cnx == null) {
+            Log.e(TAG, "La conexion es nula para el topic " + topicDevice);
             return IOT_DEVICE_STATE_CONNECTION.DEVICE_ERROR_SUBSCRIPTION;
         }
         if (listenerArrivedMessages == null) {
@@ -1756,6 +1766,7 @@ public abstract class IotDevice implements Serializable {
     protected IOT_CODE_RESULT processStartDevice(String message) {
 
 
+
         return processCommonParameters(message);
     }
 
@@ -1779,20 +1790,22 @@ public abstract class IotDevice implements Serializable {
     }
 
     protected IOT_CODE_RESULT processCommonParameters(String message) {
+        /*
         IOT_CODE_RESULT result;
         if ((result = getCommandCodeResultFromReport(message)) != IOT_CODE_RESULT.RESUT_CODE_OK) {
             return result;
         }
-
+*/
         setCurrentOtaVersionFromReport(message);
         setConnectionState(IOT_DEVICE_STATE_CONNECTION.DEVICE_CONNECTED);
         setDeviceStateFromReport(message);
         setProgrammerStateFromReport(message);
         setDeviceTypeFromReport(message);
         setCurrentScheduleFromReport(message);
+        setEndUpgradeFlagFromReport(message);
         device2Json();
 
-        return result;
+        return IOT_CODE_RESULT.RESUT_CODE_OK;
 
     }
 
@@ -1856,9 +1869,29 @@ public abstract class IotDevice implements Serializable {
 
     }
 
+    protected IOT_DEVICE_STATE_CONNECTION setParametersDevicesCommand() {
 
 
 
+        return IOT_DEVICE_STATE_CONNECTION.DEVICE_CONNECTED;
 
+    }
+
+    protected IOT_CODE_RESULT setEndUpgradeFlagFromReport(String message) {
+
+        IotTools api;
+        api = new IotTools();
+        int endUpgrade;
+        endUpgrade = api.getJsonInt(message, IOT_LABELS_JSON.END_UPGRADE.getValorTextoJson());
+        if (endUpgrade < 0) {
+            Log.w(TAG, "No aparece fin upgrade en el arranque");
+            return IOT_CODE_RESULT.RESULT_CODE_ERROR;
+        }
+
+        setEndUpgradeFlag(endUpgrade);
+
+        return IOT_CODE_RESULT.RESUT_CODE_OK;
+
+    }
 
 }

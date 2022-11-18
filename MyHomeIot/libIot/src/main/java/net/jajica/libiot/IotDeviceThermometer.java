@@ -3,6 +3,7 @@ package net.jajica.libiot;
 import android.util.Log;
 
 import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.json.JSONObject;
 
 import java.io.Serializable;
 
@@ -93,13 +94,13 @@ public class IotDeviceThermometer extends IotDevice implements Serializable {
 
     }
 
-OnReceivedChangeTemperature onReceivedChangeTemperature;
-public interface OnReceivedChangeTemperature {
-        void onReceivedChangeTemperature();
-}
+    OnReceivedSpontaneousChangeTemperature onReceivedSpontaneousChangeTemperature;
+    public interface OnReceivedSpontaneousChangeTemperature {
+        void onReceivedSpontaneousChangeTemperature();
+    }
 
-    public void setOnReceivedChangeTemperature(OnReceivedChangeTemperature onReceivedChangeTemperature) {
-        this.onReceivedChangeTemperature = onReceivedChangeTemperature;
+    public void setOnReceivedSpontaneousChangeTemperature(OnReceivedSpontaneousChangeTemperature onReceivedSpontaneousChangeTemperature) {
+        this.onReceivedSpontaneousChangeTemperature = onReceivedSpontaneousChangeTemperature;
     }
 
     @Override
@@ -119,6 +120,12 @@ public interface OnReceivedChangeTemperature {
                     onReceivedStatus.onReceivedStatus(res);
                 }
                 break;
+
+            case MODIFY_PARAMETER_DEVICE:
+                res = processModifyParametersDevice(mensaje);
+                if (onReceivedModifyParametersDevice != null) {
+                    onReceivedModifyParametersDevice.onReceivedMofifyParametersDevice(res);
+                }
         }
 
     }
@@ -132,19 +139,14 @@ public interface OnReceivedChangeTemperature {
         typeInform = getSpontaneousType(mensaje);
         IOT_CODE_RESULT result;
         switch (typeInform) {
-
-            case START_DEVICE:
-                processStartDevice(mensaje);
-                break;
-
             case UPGRADE_FIRMWARE_FOTA:
                 break;
             case COMANDO_APLICACION:
                 break;
             case CAMBIO_TEMPERATURA:
-                processSpontaneousChangeTemperature();
-                if (onReceivedChangeTemperature != null) {
-                    onReceivedChangeTemperature.onReceivedChangeTemperature();
+                processSpontaneousChangeTemperature(mensaje);
+                if (onReceivedSpontaneousChangeTemperature != null) {
+                    onReceivedSpontaneousChangeTemperature.onReceivedSpontaneousChangeTemperature();
                 }
                 break;
 
@@ -165,8 +167,12 @@ public interface OnReceivedChangeTemperature {
      * Metodo para actualizar el objeto desde el informe de cambio de temperatura
      * @return
      */
-    protected IOT_CODE_RESULT processSpontaneousChangeTemperature() {
+    protected IOT_CODE_RESULT processSpontaneousChangeTemperature(String message) {
 
+        processCommonParameters(message);
+        setTemperatureFromReport(message);
+        setHumidityFromReport(message);
+        processCommonParameters(message);
     return IOT_CODE_RESULT.RESUT_CODE_OK;
     }
 
@@ -222,13 +228,13 @@ public interface OnReceivedChangeTemperature {
     protected IOT_CODE_RESULT setHumidityFromReport(String message) {
 
         double dat;
-        dat = getFieldDoubleFromReport(message, IOT_LABELS_JSON.TEMPERATURE);
+        dat = getFieldDoubleFromReport(message, IOT_LABELS_JSON.HUMIDITY);
         if (dat <= -1000) {
-            Log.e(TAG, "No se encuentra el valor de temperatura");
+            Log.e(TAG, "No se encuentra el valor de Humedad");
             return IOT_CODE_RESULT.RESULT_CODE_ERROR;
         }
 
-        setTemperature(dat);
+        setHumidity(dat);
         return IOT_CODE_RESULT.RESUT_CODE_OK;
 
     }
@@ -295,6 +301,47 @@ public interface OnReceivedChangeTemperature {
         return IOT_CODE_RESULT.RESUT_CODE_OK;
     }
 
+    @Override
+    protected IOT_CODE_RESULT processModifyParametersDevice(String message) {
 
+        IOT_CODE_RESULT code;
 
+        if ((code =getCommandCodeResultFromReport(message)) != IOT_CODE_RESULT.RESUT_CODE_OK) {
+
+            setMarginTemperatureFromReport(message);
+            setReadIntervalFromReport(message);
+            setRetryIntervalFromReport(message);
+            setReadRetry(message);
+            setCalibrateValueFromReport(message);
+        }
+        return code;
+    }
+
+    public IOT_DEVICE_STATE_CONNECTION commandSetParametersDevice(JSONObject parameters) {
+
+        JSONObject parameter;
+        IOT_DEVICE_STATE_CONNECTION state;
+        parameter = new JSONObject();
+        if (parameters != null) {
+            state = commandwithParameters(IOT_COMMANDS.MODIFY_PARAMETER_DEVICE, IOT_LABELS_JSON.CONFIGURE_APP.getValorTextoJson(), parameters);
+            if (state != IOT_DEVICE_STATE_CONNECTION.DEVICE_WAITING_RESPONSE) {
+                return state;
+            } else {
+                return IOT_DEVICE_STATE_CONNECTION.DEVICE_WAITING_RESPONSE;
+            }
+
+        } else {
+            return IOT_DEVICE_STATE_CONNECTION.DEVICE_ERROR_COMMUNICATION;
+        }
+
+    }
+
+    @Override
+    protected IOT_CODE_RESULT processStartDevice(String message) {
+
+        setTemperatureFromReport(message);
+        setHumidityFromReport(message);
+
+        return super.processStartDevice(message);
+    }
 }

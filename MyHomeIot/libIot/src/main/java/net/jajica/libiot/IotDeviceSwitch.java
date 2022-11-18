@@ -184,26 +184,6 @@ public class IotDeviceSwitch extends IotDevice implements Serializable {
 
     }
 
-    /*
-    protected IOT_CODE_RESULT setRelayStateFromReport(String message) {
-
-        IotTools api;
-        api = new IotTools();
-        int i;
-        i = api.getJsonInt(message, IOT_LABELS_JSON.ESTADO_RELE.getValorTextoJson());
-        if (i < 0) {
-            return IOT_CODE_RESULT.RESULT_CODE_ERROR;
-        }
-        setRelay(IOT_SWITCH_RELAY.UNKNOWN.fromId(i));
-        return IOT_CODE_RESULT.RESUT_CODE_OK;
-
-    }
-
-*/
-
-
-
-
     @Override
     protected int searchSchedule(String schedule) {
         int i;
