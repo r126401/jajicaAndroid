@@ -40,6 +40,32 @@ public abstract class IotDevice implements Serializable {
     protected ArrivedMessage listenerArrivedMessages;
 
     /**
+     * Es el lugar o casa donde se encuentra el dispositivo
+     */
+    protected String site;
+    /**
+     * El el luegad dentro de la estancia
+     */
+    protected String room;
+
+
+    public String getSite() {
+        return site;
+    }
+
+    public void setSite(String site) {
+        this.site = site;
+    }
+
+    public String getRoom() {
+        return room;
+    }
+
+    public void setRoom(String room) {
+        this.room = room;
+    }
+
+    /**
      * Tag utilizado para las trazas
      */
     protected final String TAG = getClass().toString();
@@ -839,6 +865,25 @@ public abstract class IotDevice implements Serializable {
             e.printStackTrace();
             return null;
         }
+
+        if (site != null) {
+            try {
+                dispositivoJson.put(IOT_LABELS_JSON.SITE.getValorTextoJson(), getSite() );
+            } catch (JSONException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        if (room != null) {
+            try {
+                dispositivoJson.put(IOT_LABELS_JSON.ROOM.getValorTextoJson(), getRoom() );
+            } catch (JSONException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
 
         return dispositivoJson;
 

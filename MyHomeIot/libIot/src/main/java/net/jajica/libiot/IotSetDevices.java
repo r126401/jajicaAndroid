@@ -74,7 +74,7 @@ public class IotSetDevices {
      * Este metodo se utiliza para cargar la configuracion de dispositivos en la aplicacion.
      * @return Se retorna el resultado de la peticion.
      */
-    public IOT_OPERATION_CONFIGURATION_DEVICES cargarDispositivos()  {
+    public IOT_OPERATION_CONFIGURATION_DEVICES loadIotDevices()  {
 
         //leer fichero
         Ficheros configuracion;
@@ -89,24 +89,24 @@ public class IotSetDevices {
         }
 
         if (estadoOperacion != ESTADO_FICHEROS.FICHERO_OK) {
-            return IOT_OPERATION_CONFIGURATION_DEVICES.NINGUN_DISPOSITIVO;
+            return IOT_OPERATION_CONFIGURATION_DEVICES.DEVICE_NONE;
         }
         texto = configuracion.getTextoFichero();
         //chequear consistencia del fichero
         JSONObject objeto;
         if (texto == null) {
-            return IOT_OPERATION_CONFIGURATION_DEVICES.CONFIGURACION_CORRUPTA;
+            return IOT_OPERATION_CONFIGURATION_DEVICES.CORRUPTED_CONFIGURATION;
         }
         try {
             objeto = new JSONObject(texto);
         } catch(JSONException e) {
-            return IOT_OPERATION_CONFIGURATION_DEVICES.CONFIGURACION_NO_JSON;
+            return IOT_OPERATION_CONFIGURATION_DEVICES.NO_JSON_CONFIGURATION;
         }
 
 
         //Cargar la configuracion en le estructura de dispositivos
         res = cargarEstructura(objeto);
-        if (res != IOT_OPERATION_CONFIGURATION_DEVICES.CONFIGURACION_OK) {
+        if (res != IOT_OPERATION_CONFIGURATION_DEVICES.OK_CONFIGURATION) {
 
             return res;
         }
@@ -114,7 +114,7 @@ public class IotSetDevices {
         datosDispositivos = objeto;
 
 
-        return IOT_OPERATION_CONFIGURATION_DEVICES.CONFIGURACION_OK;
+        return IOT_OPERATION_CONFIGURATION_DEVICES.OK_CONFIGURATION;
     }
 
 
@@ -132,7 +132,7 @@ public class IotSetDevices {
         try {
             array = estructura.getJSONArray(IOT_LABELS_JSON.DEVICES.getValorTextoJson());
         } catch (JSONException e) {
-            return IOT_OPERATION_CONFIGURATION_DEVICES.NINGUN_DISPOSITIVO;
+            return IOT_OPERATION_CONFIGURATION_DEVICES.DEVICE_NONE;
         }
 
         if (datosDispositivos != null) {
@@ -159,7 +159,7 @@ public class IotSetDevices {
             }
 
         }
-        return IOT_OPERATION_CONFIGURATION_DEVICES.CONFIGURACION_OK;
+        return IOT_OPERATION_CONFIGURATION_DEVICES.OK_CONFIGURATION;
     }
 
     /**
@@ -222,7 +222,7 @@ public class IotSetDevices {
     private IOT_OPERATION_CONFIGURATION_DEVICES nuevoDispositivo(IotDevice dispositivo) {
 
         IOT_OPERATION_CONFIGURATION_DEVICES op;
-        if ((op = anadirDispositivoAlArray(dispositivo)) != IOT_OPERATION_CONFIGURATION_DEVICES.DISPOSITIVO_INSERTADO) {
+        if ((op = anadirDispositivoAlArray(dispositivo)) != IOT_OPERATION_CONFIGURATION_DEVICES.DEVICE_INSERTED) {
             return op;
 
         }
@@ -232,20 +232,20 @@ public class IotSetDevices {
         return op;
     }
 
-    public IOT_OPERATION_CONFIGURATION_DEVICES insertarDispositivo(IotDevice dispositivo) {
+    public IOT_OPERATION_CONFIGURATION_DEVICES insertIotDevice(IotDevice dispositivo) {
 
         IOT_OPERATION_CONFIGURATION_DEVICES op;
         if (dispositivo == null) {
-            return IOT_OPERATION_CONFIGURATION_DEVICES.DISPOSITIVO_NULO;
+            return IOT_OPERATION_CONFIGURATION_DEVICES.DEVICE_NULL;
         }
-        if ((op = nuevoDispositivo(dispositivo)) != IOT_OPERATION_CONFIGURATION_DEVICES.DISPOSITIVO_INSERTADO) {
+        if ((op = nuevoDispositivo(dispositivo)) != IOT_OPERATION_CONFIGURATION_DEVICES.DEVICE_INSERTED) {
             return op;
         }
         dispositivo.device2Json();
         if (guardarDispositivos(datosDispositivos.toString()) != ESTADO_FICHEROS.FICHERO_OK) {
-            return IOT_OPERATION_CONFIGURATION_DEVICES.CONFIGURACION_CORRUPTA;
+            return IOT_OPERATION_CONFIGURATION_DEVICES.CORRUPTED_CONFIGURATION;
         }
-        return IOT_OPERATION_CONFIGURATION_DEVICES.DISPOSITIVO_INSERTADO;
+        return IOT_OPERATION_CONFIGURATION_DEVICES.DEVICE_INSERTED;
     }
 
     /**
@@ -255,15 +255,15 @@ public class IotSetDevices {
     private IOT_OPERATION_CONFIGURATION_DEVICES anadirDispositivoAlArray(IotDevice dispositivo) {
 
         if (buscarDispositivoPorId(dispositivo.getDeviceId()) >= 0) {
-            return IOT_OPERATION_CONFIGURATION_DEVICES.DISPOSITIVO_EXISTENTE;
+            return IOT_OPERATION_CONFIGURATION_DEVICES.DEVICE_EXITS;
         }
 
         if(buscarDispositivoPorNombre(dispositivo.getDeviceName()) >= 0) {
-            return IOT_OPERATION_CONFIGURATION_DEVICES.DISPOSITIVO_EXISTENTE;
+            return IOT_OPERATION_CONFIGURATION_DEVICES.DEVICE_EXITS;
         }
 
         if (!dispositivo.isDeviceValid()) {
-            return IOT_OPERATION_CONFIGURATION_DEVICES.CONFIGURACION_CORRUPTA;
+            return IOT_OPERATION_CONFIGURATION_DEVICES.CORRUPTED_CONFIGURATION;
         }
 
         if (dispositivosIot == null) {
@@ -271,7 +271,7 @@ public class IotSetDevices {
 
         }
         dispositivosIot.add(dispositivo);
-        return IOT_OPERATION_CONFIGURATION_DEVICES.DISPOSITIVO_INSERTADO;
+        return IOT_OPERATION_CONFIGURATION_DEVICES.DEVICE_INSERTED;
 
     }
 
@@ -288,22 +288,22 @@ public class IotSetDevices {
         IOT_OPERATION_CONFIGURATION_DEVICES op;
         // Se pasa introduce la parte json en el dispositivo
         if (dispositivo.json2Device(dispositivoJson) != IOT_JSON_RESULT.JSON_OK) {
-            return IOT_OPERATION_CONFIGURATION_DEVICES.CONFIGURACION_NO_JSON;
+            return IOT_OPERATION_CONFIGURATION_DEVICES.NO_JSON_CONFIGURATION;
         }
 
 
         // Insertamos el dispositivo en la estructura
-        if ((op = nuevoDispositivo(dispositivo)) != IOT_OPERATION_CONFIGURATION_DEVICES.DISPOSITIVO_INSERTADO) {
+        if ((op = nuevoDispositivo(dispositivo)) != IOT_OPERATION_CONFIGURATION_DEVICES.DEVICE_INSERTED) {
             return op;
         }
         if (guardarDispositivos(datosDispositivos.toString()) != ESTADO_FICHEROS.FICHERO_OK) {
-            return IOT_OPERATION_CONFIGURATION_DEVICES.CONFIGURACION_CORRUPTA;
+            return IOT_OPERATION_CONFIGURATION_DEVICES.CORRUPTED_CONFIGURATION;
         }
 
 
 
 
-        return IOT_OPERATION_CONFIGURATION_DEVICES.DISPOSITIVO_INSERTADO;
+        return IOT_OPERATION_CONFIGURATION_DEVICES.DEVICE_INSERTED;
     }
 
 
@@ -319,7 +319,7 @@ public class IotSetDevices {
         try {
             objeto = new JSONObject(texto);
         } catch(JSONException e) {
-            return IOT_OPERATION_CONFIGURATION_DEVICES.CONFIGURACION_NO_JSON;
+            return IOT_OPERATION_CONFIGURATION_DEVICES.NO_JSON_CONFIGURATION;
         }
 
         return insertarDispositivoDesdeJson(objeto);
@@ -400,9 +400,9 @@ public class IotSetDevices {
         int i;
         if ((i = buscarDispositivoPorId(idDispositivo)) >= 0) {
             eliminar(i);
-            return IOT_OPERATION_CONFIGURATION_DEVICES.DISPOSITIVO_ELIMINADO;
+            return IOT_OPERATION_CONFIGURATION_DEVICES.DEVICE_REMOVED;
         }
-        return IOT_OPERATION_CONFIGURATION_DEVICES.DISPOSITIVO_NO_ENCONTRADO;
+        return IOT_OPERATION_CONFIGURATION_DEVICES.DEVICE_NOT_FOUND;
     }
 
     /**
@@ -415,9 +415,9 @@ public class IotSetDevices {
         int i;
         if ((i = buscarDispositivoPorNombre(nombreDispositivo)) >= 0) {
             eliminar(i);
-            return IOT_OPERATION_CONFIGURATION_DEVICES.DISPOSITIVO_ELIMINADO;
+            return IOT_OPERATION_CONFIGURATION_DEVICES.DEVICE_REMOVED;
         }
-        return IOT_OPERATION_CONFIGURATION_DEVICES.DISPOSITIVO_NO_ENCONTRADO;
+        return IOT_OPERATION_CONFIGURATION_DEVICES.DEVICE_NOT_FOUND;
     }
 
     private void eliminar(int i) {
@@ -433,7 +433,7 @@ public class IotSetDevices {
         dispositivosIot.remove(i);
         guardarDispositivos(datosDispositivos.toString());
         datosDispositivos.remove(IOT_LABELS_JSON.DEVICES.getValorTextoJson());
-        cargarDispositivos();
+        loadIotDevices();
 
         }
 
@@ -445,16 +445,16 @@ public class IotSetDevices {
                 array = datosDispositivos.getJSONArray(IOT_LABELS_JSON.DEVICES.getValorTextoJson());
             } catch (JSONException e) {
                 e.printStackTrace();
-                return IOT_OPERATION_CONFIGURATION_DEVICES.CONFIGURACION_CORRUPTA;
+                return IOT_OPERATION_CONFIGURATION_DEVICES.CORRUPTED_CONFIGURATION;
             }
             array.remove(i);
             dispositivosIot.remove(i);
             array.put(dispositivo.device2Json());
             guardarDispositivos(datosDispositivos.toString());
             datosDispositivos.remove(IOT_LABELS_JSON.DEVICES.getValorTextoJson());
-            cargarDispositivos();
+            loadIotDevices();
 
-            return IOT_OPERATION_CONFIGURATION_DEVICES.DISPOSITIVO_MODIFICADO;
+            return IOT_OPERATION_CONFIGURATION_DEVICES.DEVICE_MODIFIED;
         }
 
     /**
@@ -468,9 +468,9 @@ public class IotSetDevices {
             int i;
             if ((i = buscarDispositivoPorNombre(nombreDispositivo)) >= 0) {
                 modificarDispositivo(i, dispositivo);
-                return IOT_OPERATION_CONFIGURATION_DEVICES.DISPOSITIVO_MODIFICADO;
+                return IOT_OPERATION_CONFIGURATION_DEVICES.DEVICE_MODIFIED;
             }
-            return IOT_OPERATION_CONFIGURATION_DEVICES.DISPOSITIVO_NO_ENCONTRADO;
+            return IOT_OPERATION_CONFIGURATION_DEVICES.DEVICE_NOT_FOUND;
 
 
         }
@@ -487,9 +487,9 @@ public class IotSetDevices {
             int i;
             if ((i = buscarDispositivoPorId(idDispositivo)) >= 0) {
                 modificarDispositivo(i, dispositivo);
-                return IOT_OPERATION_CONFIGURATION_DEVICES.DISPOSITIVO_MODIFICADO;
+                return IOT_OPERATION_CONFIGURATION_DEVICES.DEVICE_MODIFIED;
             }
-            return IOT_OPERATION_CONFIGURATION_DEVICES.DISPOSITIVO_NO_ENCONTRADO;
+            return IOT_OPERATION_CONFIGURATION_DEVICES.DEVICE_NOT_FOUND;
 
 
         }

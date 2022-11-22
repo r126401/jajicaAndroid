@@ -66,7 +66,9 @@ public enum IOT_LABELS_JSON {
     NVS_ALARM("alarmaNvs"),
     SENSOR_ALARM("alarmaSensor"),
     REMOTE_SENSOR_ALARM("alarmaSensorRemoto"),
-    OTA_VERSION_TYPE("otaVersiontype");
+    OTA_VERSION_TYPE("otaVersiontype"),
+    SITE("site"),
+    ROOM("room");
 
 
     private String dialogo;

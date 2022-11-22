@@ -7,11 +7,14 @@ import android.os.Bundle;
 import android.util.Log;
 
 import net.jajica.libiot.IOT_CLASS_SCHEDULE;
+import net.jajica.libiot.IOT_DEVICE_TYPE;
 import net.jajica.libiot.IOT_LABELS_JSON;
 import net.jajica.libiot.IOT_MQTT_STATUS_CONNECTION;
+import net.jajica.libiot.IOT_OPERATION_CONFIGURATION_DEVICES;
 import net.jajica.libiot.IOT_SWITCH_RELAY;
 import net.jajica.libiot.IotDeviceThermometer;
 import net.jajica.libiot.IotDeviceThermostat;
+import net.jajica.libiot.IotDeviceUnknown;
 import net.jajica.libiot.IotMqttConnection;
 import net.jajica.libiot.IotScheduleDeviceSwitch;
 import net.jajica.libiot.IotDevice;
@@ -24,6 +27,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
+import net.jajica.libiot.IotSetDevices;
 import net.jajica.myhomeiot.databinding.ActivityMainBinding;
 
 //import org.eclipse.paho.client.mqttv3.IMqttToken;
@@ -32,6 +36,8 @@ import net.jajica.myhomeiot.databinding.ActivityMainBinding;
 public class MainActivity extends AppCompatActivity {
 
     private final String TAG = "MainActivity";
+    private IotSetDevices configuration;
+
 
 
     public void TextActuarRele() {
@@ -371,6 +377,9 @@ public class MainActivity extends AppCompatActivity {
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        loadConfiguration();
+        newDevice();
+        Log.i(TAG, "HOLA");
         //setContentView(R.layout.activity_main);
 
 
@@ -525,6 +534,32 @@ public class MainActivity extends AppCompatActivity {
         disp.commandNewScheduleDevice(schedule);
     }
 
+    private IOT_OPERATION_CONFIGURATION_DEVICES loadConfiguration() {
+
+        IOT_OPERATION_CONFIGURATION_DEVICES op;
+        configuration = new IotSetDevices(getApplicationContext());
+        if ((op = configuration.loadIotDevices()) != IOT_OPERATION_CONFIGURATION_DEVICES.OK_CONFIGURATION) {
+            return op;
+        }
+        return IOT_OPERATION_CONFIGURATION_DEVICES.OK_CONFIGURATION;
+    }
+
+    private IOT_OPERATION_CONFIGURATION_DEVICES newDevice() {
+
+        IOT_OPERATION_CONFIGURATION_DEVICES op;
+        IotDevice device;
+        device = new IotDeviceUnknown();
+        device.setDeviceId("A020A6026046");
+        device.setDeviceName("esp8266Switch");
+        device.setRoom("Casa");
+        device.setSite("despacho");
+        device.setDeviceType(IOT_DEVICE_TYPE.UNKNOWN);
+        device.setPublishTopic("sub_A020A6026046");
+        device.setSubscriptionTopic("pub_A020A6026046");
+        op =configuration.insertIotDevice(device);
+        return op;
+    }
+    
 
 
 
