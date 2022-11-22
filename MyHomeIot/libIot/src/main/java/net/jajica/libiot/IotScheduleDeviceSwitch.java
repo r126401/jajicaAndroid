@@ -67,7 +67,7 @@ public class IotScheduleDeviceSwitch extends IotScheduleDevice {
         String state;
         String relay;
         state = String.valueOf(getScheduleState().getEstadoPrograma());
-        relay = String.valueOf(getRelay().getEstadoRele());
+        relay = "1";
 
         rawSchedule = scheduleId + state + relay;
 

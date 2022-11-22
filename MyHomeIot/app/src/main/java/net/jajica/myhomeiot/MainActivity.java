@@ -18,9 +18,13 @@ import net.jajica.libiot.IotDevice;
 import net.jajica.libiot.IotDeviceSwitch;
 import net.jajica.libiot.IOT_CODE_RESULT;
 import net.jajica.libiot.IOT_STATE_SCHEDULE;
+import net.jajica.libiot.IotScheduleDeviceThermostat;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+
+import net.jajica.myhomeiot.databinding.ActivityMainBinding;
 
 //import org.eclipse.paho.client.mqttv3.IMqttToken;
 
@@ -28,6 +32,7 @@ import org.json.JSONObject;
 public class MainActivity extends AppCompatActivity {
 
     private final String TAG = "MainActivity";
+
 
     public void TextActuarRele() {
         IOT_MQTT_STATUS_CONNECTION estado;
@@ -141,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
                 termometro.setDeviceName("termometro");
                 termometro.subscribeDevice();
                 termometro.subscribeOtaServer();
-                termometro.getStatusDeviceCommand();
+                termometro.commandGetStatusDevice();
                 termometro.getOtaVersionAvailableCommand();
                 JSONObject objeto;
                 objeto = new JSONObject();
@@ -214,7 +219,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void testTemostato() {
+    public void testTermostato() {
 
         IotMqttConnection cnx;
         cnx = new IotMqttConnection(getApplicationContext());
@@ -238,11 +243,102 @@ public class MainActivity extends AppCompatActivity {
                 termostato.setOnReceivedSpontaneousChangeTemperature(new IotDeviceThermostat.OnReceivedSpontaneousChangeTemperature() {
                     @Override
                     public void onReceivedSpontaneousChangeTemperature() {
+
                         Log.i(TAG, "Recibido cambio de temperatura" + termostato.getTemperature());
                     }
                 });
+                termostato.setOnReceivedSpontaneousEndSchedule(new IotDevice.OnReceivedSpontaneousEndSchedule() {
+                    @Override
+                    public void onReceivesSpontaneousStartSchedule(IOT_CODE_RESULT resultCode) {
+                        Log.i(TAG, "Comienza el schedule " + termostato.getTemperature());
+                    }
+                });
+
+                termostato.setOnReceivedSpontaneousEndSchedule(new IotDevice.OnReceivedSpontaneousEndSchedule() {
+                    @Override
+                    public void onReceivesSpontaneousStartSchedule(IOT_CODE_RESULT resultCode) {
+                        Log.i(TAG, "Fin del programa" + termostato.getTemperature());
+
+                    }
+                });
+
+                termostato.setOnReceivedStatus(new IotDevice.OnReceivedStatus() {
+                    @Override
+                    public void onReceivedStatus(IOT_CODE_RESULT resultCode) {
+                        Log.i(TAG, "Recibido Status" + termostato.getTemperature());
+                    }
+                });
+
+                termostato.setOnReceivedScheduleDevice(new IotDevice.OnReceivedScheduleDevice() {
+                    @Override
+                    public void onReceivedScheduleDevice(IOT_CODE_RESULT resultCode) {
+                        Log.i(TAG, "Recibido schedule" + termostato.getTemperature());
+                        IotScheduleDeviceThermostat schedule;
+                        schedule = new IotScheduleDeviceThermostat();
+                        schedule.setScheduleType(IOT_CLASS_SCHEDULE.DIARY_SCHEDULE);
+                        schedule.setHour(23);
+                        schedule.setMinute(50);
+                        schedule.setSecond(0);
+                        schedule.setMask(127);
+                        schedule.setRelay(IOT_SWITCH_RELAY.ON);
+                        schedule.setScheduleState(IOT_STATE_SCHEDULE.PROGRAMA_ACTIVO);
+                        schedule.createScheduleIdFromObject();
+                        schedule.setThresholdTemperature(28.5);
+                        //schedule.setRawScheduleFromObject();
+                        schedule.setDuration(3620);
+
+                        termostato.commandNewScheduleDevice(schedule);
+                    }
+                });
+
+                termostato.setOnReceivedNewSchedule(new IotDevice.OnReceivedNewSchedule() {
+                    @Override
+                    public void onReceivedNewSchedule(IOT_CODE_RESULT resultCode) {
+                        Log.i(TAG, "se Ha recibido respuesta de la creacion " + termostato.getTemperature() +  "-" + resultCode);
+                        IotScheduleDeviceThermostat sch;
+                        sch = termostato.getSchedulesThermostat().get(1);
+                        sch.setHour(21);
+                        sch.setMinute(23);
+                        sch.setSecond(33);
+                        termostato.commandModifyScheduleDevice(sch);
+                    }
+                });
+
+                termostato.setOnReceivedModifySchedule(new IotDevice.OnReceivedModifySchedule() {
+                    @Override
+                    public void onReceivedModifySchedule(IOT_CODE_RESULT resultCode) {
+                        Log.i(TAG, "Recibido con codigo " + termostato.getTemperature() + resultCode.toString());
+                        IotScheduleDeviceThermostat sch;
+                        sch = termostato.getSchedulesThermostat().get(1);
+                        termostato.commandDeleteScheduleDevice(sch.getScheduleId());
+
+                    }
+                });
+
+                termostato.setOnReceivedDeleteDevice(new IotDevice.OnReceivedDeleteScheduleDevice() {
+                    @Override
+                    public void onReceivedDeleteScheduleDevice(IOT_CODE_RESULT resultCode) {
+                        Log.i(TAG, "Borrado el dispositivo " + termostato.getDeviceId() + "con codigo" +  resultCode);
+                        termostato.commandSetThresholdTemperarture(32.5);
+                    }
+                });
+
+                termostato.setOnReceivedSetThresholdTemperature(new IotDeviceThermostat.OnReceivedSetThresholdTemperature() {
+                    @Override
+                    public void onReceivedSetThresholdTemperature(IOT_CODE_RESULT resultCode) {
+                        Log.i(TAG, "Recibido nuevo umbral " + termostato.getThresholdTemperature());
+                    }
+                });
+
+
+
                 termostato.subscribeDevice();
                 termostato.subscribeOtaServer();
+                termostato.commandGetStatusDevice();
+                termostato.commandGetScheduleDevice();
+
+
+
 
             }
 
@@ -265,13 +361,23 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        ActivityMainBinding binding;
+
+
+
+
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        //setContentView(R.layout.activity_main);
+
 
 
         //TextActuarRele();
         //testTermometro();
-        testTemostato();
+        //testTermostato();
 
         /*
 
@@ -416,7 +522,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        disp.newScheduleCommand(schedule);
+        disp.commandNewScheduleDevice(schedule);
     }
 
 

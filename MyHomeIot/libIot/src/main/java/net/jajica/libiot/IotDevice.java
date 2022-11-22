@@ -42,7 +42,7 @@ public abstract class IotDevice implements Serializable {
     /**
      * Tag utilizado para las trazas
      */
-    protected final String TAG = "IotDevice";
+    protected final String TAG = getClass().toString();
 
     /**
      * Es la estructura de alarmas en la que el dispositivo reporta el estado.
@@ -222,7 +222,7 @@ public abstract class IotDevice implements Serializable {
      * Este metodo devuelve la lista de programas del dispositivo
      * @return Devuelve la lista de programas del dispositivo
      */
-    public ArrayList<IotScheduleDevice> getSchedules() {
+    private ArrayList<IotScheduleDevice> getSchedules() {
         return schedules;
     }
 
@@ -274,14 +274,14 @@ public abstract class IotDevice implements Serializable {
         this.onReceivedScheduleDevice = onReceivedScheduleDevice;
     }
 
-    protected OnReceivedDeleteDevice onReceivedDeleteDevice;
+    protected OnReceivedDeleteScheduleDevice onReceivedDeleteScheduleDevice;
 
-    public interface OnReceivedDeleteDevice {
-        void onReceivedDeleteDevice(IOT_CODE_RESULT resultCode);
+    public interface OnReceivedDeleteScheduleDevice {
+        void onReceivedDeleteScheduleDevice(IOT_CODE_RESULT resultCode);
     }
 
-    public void setOnReceivedDeleteDevice(OnReceivedDeleteDevice onReceivedDeleteDevice) {
-        this.onReceivedDeleteDevice = onReceivedDeleteDevice;
+    public void setOnReceivedDeleteDevice(OnReceivedDeleteScheduleDevice onReceivedDeleteScheduleDevice) {
+        this.onReceivedDeleteScheduleDevice = onReceivedDeleteScheduleDevice;
     }
 
     protected OnReceivedModifySchedule onReceivedModifySchedule;
@@ -403,16 +403,26 @@ public abstract class IotDevice implements Serializable {
         void onReceivesSpontaneousStartSchedule(IOT_CODE_RESULT resultCode);
     }
 
-    public void setReceivedSpontaneousStartSchedule(OnReceivedSpontaneousStartSchedule onReceivedSpontaneousStartSchedule) {
-        this.onReceivedSpontaneousStartSchedule = onReceivedSpontaneousStartSchedule;
-    }
 
     protected OnReceivedSpontaneousEndSchedule onReceivedSpontaneousEndSchedule;
     public interface OnReceivedSpontaneousEndSchedule {
         void onReceivesSpontaneousStartSchedule(IOT_CODE_RESULT resultCode);
     }
 
-    public void setReceivedSpontaneousEndSchedule(OnReceivedSpontaneousEndSchedule onReceivedSpontaneousEndSchedule) {
+
+    public void setOnReceivedOtaVersionAvailableDevice(OnReceivedOtaVersionAvailableDevice onReceivedOtaVersionAvailableDevice) {
+        this.onReceivedOtaVersionAvailableDevice = onReceivedOtaVersionAvailableDevice;
+    }
+
+    public void setOnReceivedErrorReportDevice(OnReceivedErrorReportDevice onReceivedErrorReportDevice) {
+        this.onReceivedErrorReportDevice = onReceivedErrorReportDevice;
+    }
+
+    public void setOnReceivedSpontaneousStartSchedule(OnReceivedSpontaneousStartSchedule onReceivedSpontaneousStartSchedule) {
+        this.onReceivedSpontaneousStartSchedule = onReceivedSpontaneousStartSchedule;
+    }
+
+    public void setOnReceivedSpontaneousEndSchedule(OnReceivedSpontaneousEndSchedule onReceivedSpontaneousEndSchedule) {
         this.onReceivedSpontaneousEndSchedule = onReceivedSpontaneousEndSchedule;
     }
 
@@ -1023,8 +1033,8 @@ public abstract class IotDevice implements Serializable {
                 break;
             case REMOVE_SCHEDULE:
                 res = processDeleteScheduleFromReport(mensaje);
-                if (onReceivedDeleteDevice != null) {
-                    onReceivedDeleteDevice.onReceivedDeleteDevice(res);
+                if (onReceivedDeleteScheduleDevice != null) {
+                    onReceivedDeleteScheduleDevice.onReceivedDeleteScheduleDevice(res);
                 }
 
                 break;
@@ -1242,7 +1252,7 @@ public abstract class IotDevice implements Serializable {
      * metodo para invocar el comando status al dispositivo
      * @return Se devuelve el estado de la conexion del dispositivo despues de lanzar la peticion.
      */
-    public IOT_DEVICE_STATE_CONNECTION getStatusDeviceCommand() {
+    public IOT_DEVICE_STATE_CONNECTION commandGetStatusDevice() {
 
         return simpleCommand(IOT_COMMANDS.STATUS_DEVICE);
 
@@ -1410,7 +1420,7 @@ public abstract class IotDevice implements Serializable {
 
 
     }
-    public IOT_DEVICE_STATE_CONNECTION getScheduleCommand() {
+    public IOT_DEVICE_STATE_CONNECTION commandGetScheduleDevice() {
 
         return simpleCommand(IOT_COMMANDS.GET_SCHEDULE);
     }
@@ -1474,7 +1484,7 @@ public abstract class IotDevice implements Serializable {
      * @param programa es el schedule a añadir
      * @return true si lo ha añadido. False en caso contrario
      */
-    protected boolean addSchedule(IotScheduleDevice programa) {
+    private boolean addSchedule(IotScheduleDevice programa) {
 
         int i;
         int tam;
@@ -1505,7 +1515,7 @@ public abstract class IotDevice implements Serializable {
      * @param ScheduleId Es el idSchedule a borrar
      * @return Se retorna el estado de conexion del dispositivo despues de lanzar la peticion
      */
-    public IOT_DEVICE_STATE_CONNECTION deleteScheduleCommand(String ScheduleId) {
+    public IOT_DEVICE_STATE_CONNECTION commandDeleteScheduleDevice(String ScheduleId) {
 
 
         JSONObject parameters = new JSONObject();
@@ -1587,7 +1597,7 @@ public abstract class IotDevice implements Serializable {
      * @param schedule Es un objeto Schedule que contiene los parametros a modificar
      * @return Se retorna el estado de conexion del dispositivo despues de lanzar la peticion
      */
-    public IOT_DEVICE_STATE_CONNECTION modifyScheduleCommand(IotScheduleDevice schedule) {
+    public IOT_DEVICE_STATE_CONNECTION commandModifyScheduleDevice(IotScheduleDevice schedule) {
 
         JSONObject parameters;
         IOT_DEVICE_STATE_CONNECTION state = IOT_DEVICE_STATE_CONNECTION.UNKNOWN;
@@ -1678,7 +1688,7 @@ public abstract class IotDevice implements Serializable {
 
 
 
-    public IOT_DEVICE_STATE_CONNECTION newScheduleCommand(IotScheduleDevice schedule) {
+    public IOT_DEVICE_STATE_CONNECTION commandNewScheduleDevice(IotScheduleDevice schedule) {
 
         JSONObject parameters;
         IOT_DEVICE_STATE_CONNECTION state = IOT_DEVICE_STATE_CONNECTION.UNKNOWN;
@@ -1692,7 +1702,6 @@ public abstract class IotDevice implements Serializable {
     protected IOT_CODE_RESULT processNewSchedule(String message) {
 
         IOT_CODE_RESULT res;
-        IotScheduleDeviceSwitch schedule;
         if ((res = getCommandCodeResultFromReport(message)) != IOT_CODE_RESULT.RESUT_CODE_OK) {
             Log.e(TAG, "error en la peticion de newSchedule");
             return res;

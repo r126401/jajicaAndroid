@@ -120,15 +120,12 @@ public class IotDeviceSwitch extends IotDevice implements Serializable {
     @Override
     protected IOT_CODE_RESULT processGetScheduleFromReport(String message) {
 
-
-        setDeviceStateFromReport(message);
-        setProgrammerStateFromReport(message);
-        setCurrentScheduleFromReport(message);
+        processCommonParameters(message);
         loadSchedules(message);
         //return super.processGetSchedule(message);
         return IOT_CODE_RESULT.RESUT_CODE_OK;
     }
-    protected boolean addSchedule(IotScheduleDeviceSwitch programa) {
+    private boolean addSchedule(IotScheduleDeviceSwitch programa) {
 
         int i;
         int tam;
@@ -180,7 +177,7 @@ public class IotDeviceSwitch extends IotDevice implements Serializable {
         schedule.setDurationFromReport(message);
         schedule.setScheduleStateFromReport(message);
         setCurrentScheduleFromReport(message);
-        return IOT_CODE_RESULT.RESULT_CODE_ERROR;
+        return IOT_CODE_RESULT.RESUT_CODE_OK;
 
     }
 
