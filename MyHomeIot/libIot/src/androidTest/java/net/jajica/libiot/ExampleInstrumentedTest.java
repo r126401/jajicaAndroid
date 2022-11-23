@@ -18,14 +18,14 @@ import static org.junit.Assert.*;
 @RunWith(AndroidJUnit4.class)
 public class ExampleInstrumentedTest {
 
-    IotConfigurationDevices conf;
+    IotDeviceConfiguration conf;
     Context appContext;
 
     public ExampleInstrumentedTest() {
 
 
         appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        conf = new IotConfigurationDevices(appContext);
+        conf = new IotDeviceConfiguration(appContext);
     }
 
     @Test
@@ -60,9 +60,9 @@ public class ExampleInstrumentedTest {
     @Test
     public void cargaConfiguracion() {
 
-        IotConfigurationDevices conf = null;
+        IotDeviceConfiguration conf = null;
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        conf = new IotConfigurationDevices(appContext);
+        conf = new IotDeviceConfiguration(appContext);
         assertEquals(IOT_OPERATION_CONFIGURATION_DEVICES.DEVICE_NONE, conf.loadIotDevices());
         pruebaInsertarDispositivo();
         assertEquals(IOT_OPERATION_CONFIGURATION_DEVICES.OK_CONFIGURATION, conf.loadIotDevices());

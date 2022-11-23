@@ -9,7 +9,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 
-public class IotConfigurationDevices {
+public class IotDeviceConfiguration {
 
     private String ficheroDispositivos = "/home/t126401/jajicaAndroid/libIot/out/artifacts/libIot_jar/datosDispositivos.conf";
     private JSONObject datosDispositivos;
@@ -25,7 +25,7 @@ public class IotConfigurationDevices {
         this.context = context;
     }
 
-    public IotConfigurationDevices(){
+    public IotDeviceConfiguration(){
 
         setFicheroDispositivos("datosDispositivos.conf");
         setContext(null);
@@ -34,13 +34,13 @@ public class IotConfigurationDevices {
 
     }
 
-    public IotConfigurationDevices(String nombreFichero) {
+    public IotDeviceConfiguration(String nombreFichero) {
 
         setFicheroDispositivos(nombreFichero);
         setContext(null);
     }
 
-    public IotConfigurationDevices(Context context) {
+    public IotDeviceConfiguration(Context context) {
         setFicheroDispositivos("datosDispositivos.conf");
         setContext(context);
     }
@@ -493,5 +493,7 @@ public class IotConfigurationDevices {
 
 
         }
+
+
 
 }

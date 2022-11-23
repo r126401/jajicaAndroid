@@ -52,11 +52,13 @@ public class PruebaConfiguracionMqtt {
     public void cargarUsers() {
         appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
         IotUsersDevices users;
+        IOT_OPERATION_CONFIGURATION_DEVICES result;
         users = new IotUsersDevices(appContext);
-        users.loadConfiguration();
 
-        users.json2Object();
-        users.setJsonObject(null);
+       result = users.loadConfiguration();
+
+
+
         users.object2json();
         Log.i("jhh", "hjhkj");
 
@@ -174,7 +176,7 @@ public class PruebaConfiguracionMqtt {
 
 
         IotUsersDevices users;
-        users = new IotUsersDevices();
+        users = new IotUsersDevices(appContext);
         users.setUser("Manolo");
         users.setDni("08038287V");
         users.setPassword("pepeillo");

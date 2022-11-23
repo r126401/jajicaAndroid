@@ -117,6 +117,19 @@ public class IotRoomsDevices {
         return -1;
     }
 
+    public IOT_DEVICE_USERS_RESULT modifyDeviceForRoom(IotDevice device, int nDevice) {
+
+
+        if (!deviceList.get(nDevice).getDeviceId().equals(device.getDeviceId())) {
+            return IOT_DEVICE_USERS_RESULT.DEVICE_NOT_EXITS;
+
+        }
+        deviceList.remove(nDevice);
+        deviceList.add(device);
+
+        return IOT_DEVICE_USERS_RESULT.RESULT_OK;
+    }
+
     protected IOT_JSON_RESULT json2Object(JSONObject object) {
 
         JSONObject jsonDevice;
@@ -183,6 +196,8 @@ public class IotRoomsDevices {
         return type.fromId(i);
 
     }
+
+
 
 
 }

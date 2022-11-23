@@ -27,7 +27,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
-import net.jajica.libiot.IotConfigurationDevices;
+import net.jajica.libiot.IotDeviceConfiguration;
 import net.jajica.myhomeiot.databinding.ActivityMainBinding;
 
 //import org.eclipse.paho.client.mqttv3.IMqttToken;
@@ -36,7 +36,7 @@ import net.jajica.myhomeiot.databinding.ActivityMainBinding;
 public class MainActivity extends AppCompatActivity {
 
     private final String TAG = "MainActivity";
-    private IotConfigurationDevices configuration;
+    private IotDeviceConfiguration configuration;
 
 
 
@@ -537,7 +537,7 @@ public class MainActivity extends AppCompatActivity {
     private IOT_OPERATION_CONFIGURATION_DEVICES loadConfiguration() {
 
         IOT_OPERATION_CONFIGURATION_DEVICES op;
-        configuration = new IotConfigurationDevices(getApplicationContext());
+        configuration = new IotDeviceConfiguration(getApplicationContext());
         if ((op = configuration.loadIotDevices()) != IOT_OPERATION_CONFIGURATION_DEVICES.OK_CONFIGURATION) {
             return op;
         }
@@ -551,8 +551,7 @@ public class MainActivity extends AppCompatActivity {
         device = new IotDeviceUnknown();
         device.setDeviceId("A020A6026046");
         device.setDeviceName("esp8266Switch");
-        device.setRoom("Casa");
-        device.setSite("despacho");
+
         device.setDeviceType(IOT_DEVICE_TYPE.UNKNOWN);
         device.setPublishTopic("sub_A020A6026046");
         device.setSubscriptionTopic("pub_A020A6026046");
