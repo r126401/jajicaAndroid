@@ -28,6 +28,7 @@ public class IotDeviceSwitch extends IotDevice implements Serializable {
         super(cnx);
         setPublishOtaTopic("OtaIotOnOff");
         setSubscribeOtaTopic("newVersionOtaIotOnOff");
+        setDeviceType(IOT_DEVICE_TYPE.INTERRUPTOR);
 
     }
 
@@ -35,6 +36,7 @@ public class IotDeviceSwitch extends IotDevice implements Serializable {
         super();
         setPublishOtaTopic("OtaIotOnOff");
         setSubscribeOtaTopic("newVersionOtaIotOnOff");
+        setDeviceType(IOT_DEVICE_TYPE.INTERRUPTOR);
     }
     
     private ArrayList<IotScheduleDeviceSwitch> schedules;

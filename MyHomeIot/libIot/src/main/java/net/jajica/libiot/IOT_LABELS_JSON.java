@@ -68,7 +68,24 @@ public enum IOT_LABELS_JSON {
     REMOTE_SENSOR_ALARM("alarmaSensorRemoto"),
     OTA_VERSION_TYPE("otaVersiontype"),
     SITE("site"),
-    ROOM("room");
+    ROOM("room"),
+    NAME_SITE("nameSite"),
+    ID_SITE("idSite"),
+    DNI("dni"),
+    USER("user"),
+    ID_USER("idUser"),
+    PASSWORD("password"),
+    MAIL("mail"),
+    TELEPHONE("Telephone"),
+    STREET("street"),
+    STREET_NUMBER("streetNumber"),
+    PO_BOX("poBox"),
+    CITY("city"),
+    COUNTRY("country"),
+    LONGITUDE("longitude"),
+    LATITUDE("latitude"),
+    NAME_ROOM("nameRoom"),
+    ID_ROOM("idRoom");
 
 
     private String dialogo;

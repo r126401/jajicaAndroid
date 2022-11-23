@@ -157,6 +157,8 @@ public abstract class IotDevice implements Serializable {
      */
     protected JSONObject dispositivoJson;
 
+
+
     /**
      * Es el estado global de programacion del dispositivo
      */
@@ -792,7 +794,7 @@ public abstract class IotDevice implements Serializable {
      * @param dispositivoJson es la estructura json
      * @return Se devuelve el resultado de la operacion
      */
-    public IOT_JSON_RESULT json2Device(JSONObject dispositivoJson) {
+    public IOT_JSON_RESULT json2Object(JSONObject dispositivoJson) {
 
         int tipo;
         try {
@@ -819,7 +821,7 @@ public abstract class IotDevice implements Serializable {
      * de la aplicacion.
      * @return Se retorna el objeto json creado
      */
-    public JSONObject device2Json() {
+    public JSONObject object2Json() {
 
 
 
@@ -1406,7 +1408,7 @@ public abstract class IotDevice implements Serializable {
         setDeviceTypeFromReport(message);
         setFreeMemFromReport(message);
         setUpTimeFromReport(message);
-        device2Json();
+        object2Json();
         Log.i(TAG, message);
         return IOT_CODE_RESULT.RESUT_CODE_OK;
     }
@@ -1857,7 +1859,7 @@ public abstract class IotDevice implements Serializable {
         setDeviceTypeFromReport(message);
         setCurrentScheduleFromReport(message);
         setEndUpgradeFlagFromReport(message);
-        device2Json();
+        object2Json();
 
         return IOT_CODE_RESULT.RESUT_CODE_OK;
 

@@ -9,7 +9,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 
-public class IotSetDevices {
+public class IotConfigurationDevices {
 
     private String ficheroDispositivos = "/home/t126401/jajicaAndroid/libIot/out/artifacts/libIot_jar/datosDispositivos.conf";
     private JSONObject datosDispositivos;
@@ -25,7 +25,7 @@ public class IotSetDevices {
         this.context = context;
     }
 
-    public IotSetDevices(){
+    public IotConfigurationDevices(){
 
         setFicheroDispositivos("datosDispositivos.conf");
         setContext(null);
@@ -34,13 +34,13 @@ public class IotSetDevices {
 
     }
 
-    public IotSetDevices(String nombreFichero) {
+    public IotConfigurationDevices(String nombreFichero) {
 
         setFicheroDispositivos(nombreFichero);
         setContext(null);
     }
 
-    public IotSetDevices(Context context) {
+    public IotConfigurationDevices(Context context) {
         setFicheroDispositivos("datosDispositivos.conf");
         setContext(context);
     }
@@ -72,7 +72,7 @@ public class IotSetDevices {
 
     /**
      * Este metodo se utiliza para cargar la configuracion de dispositivos en la aplicacion.
-     * @return Se retorna el resultado de la peticion.
+     * @return Se retorna el resultado de la peticion en formato json.
      */
     public IOT_OPERATION_CONFIGURATION_DEVICES loadIotDevices()  {
 
@@ -151,7 +151,7 @@ public class IotSetDevices {
                 e.printStackTrace();
             }
             dispositivo = new IotDeviceUnknown();
-            if (dispositivo.json2Device(item) == IOT_JSON_RESULT.JSON_OK) {
+            if (dispositivo.json2Object(item) == IOT_JSON_RESULT.JSON_OK) {
                 if (this.dispositivosIot == null) {
                     dispositivosIot = new ArrayList<>();
                 }
@@ -241,7 +241,7 @@ public class IotSetDevices {
         if ((op = nuevoDispositivo(dispositivo)) != IOT_OPERATION_CONFIGURATION_DEVICES.DEVICE_INSERTED) {
             return op;
         }
-        dispositivo.device2Json();
+        dispositivo.object2Json();
         if (guardarDispositivos(datosDispositivos.toString()) != ESTADO_FICHEROS.FICHERO_OK) {
             return IOT_OPERATION_CONFIGURATION_DEVICES.CORRUPTED_CONFIGURATION;
         }
@@ -287,7 +287,7 @@ public class IotSetDevices {
         dispositivo = new IotDeviceUnknown();
         IOT_OPERATION_CONFIGURATION_DEVICES op;
         // Se pasa introduce la parte json en el dispositivo
-        if (dispositivo.json2Device(dispositivoJson) != IOT_JSON_RESULT.JSON_OK) {
+        if (dispositivo.json2Object(dispositivoJson) != IOT_JSON_RESULT.JSON_OK) {
             return IOT_OPERATION_CONFIGURATION_DEVICES.NO_JSON_CONFIGURATION;
         }
 
@@ -449,7 +449,7 @@ public class IotSetDevices {
             }
             array.remove(i);
             dispositivosIot.remove(i);
-            array.put(dispositivo.device2Json());
+            array.put(dispositivo.object2Json());
             guardarDispositivos(datosDispositivos.toString());
             datosDispositivos.remove(IOT_LABELS_JSON.DEVICES.getValorTextoJson());
             loadIotDevices();

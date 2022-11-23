@@ -27,7 +27,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
-import net.jajica.libiot.IotSetDevices;
+import net.jajica.libiot.IotConfigurationDevices;
 import net.jajica.myhomeiot.databinding.ActivityMainBinding;
 
 //import org.eclipse.paho.client.mqttv3.IMqttToken;
@@ -36,7 +36,7 @@ import net.jajica.myhomeiot.databinding.ActivityMainBinding;
 public class MainActivity extends AppCompatActivity {
 
     private final String TAG = "MainActivity";
-    private IotSetDevices configuration;
+    private IotConfigurationDevices configuration;
 
 
 
@@ -537,7 +537,7 @@ public class MainActivity extends AppCompatActivity {
     private IOT_OPERATION_CONFIGURATION_DEVICES loadConfiguration() {
 
         IOT_OPERATION_CONFIGURATION_DEVICES op;
-        configuration = new IotSetDevices(getApplicationContext());
+        configuration = new IotConfigurationDevices(getApplicationContext());
         if ((op = configuration.loadIotDevices()) != IOT_OPERATION_CONFIGURATION_DEVICES.OK_CONFIGURATION) {
             return op;
         }
