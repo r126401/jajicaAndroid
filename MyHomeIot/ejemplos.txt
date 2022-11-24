@@ -1,0 +1,563 @@
+    public void testUsers() {
+
+        Context appContext = getApplicationContext();
+        IotDeviceSwitch device1;
+        device1 = new IotDeviceSwitch();
+        device1.setDeviceId("id1");
+        device1.setDeviceName("name1");
+        device1.object2Json();
+
+        IotDeviceThermometer device2;
+        device2 = new IotDeviceThermometer();
+        device2.setDeviceId("id2");
+        device2.setDeviceName("name2");
+        device2.object2Json();
+
+        IotDeviceThermometer device3;
+        device3 = new IotDeviceThermometer();
+        device3.setDeviceId("id3");
+        device3.setDeviceName("name3");
+        device3.object2Json();
+
+        IotDeviceThermostat device4;
+        device4 = new IotDeviceThermostat();
+        device4.setDeviceId("id4");
+        device4.setDeviceName("name4");
+        device4.object2Json();
+
+
+        IotDeviceThermostat device5;
+        device5 = new IotDeviceThermostat();
+        device5.setDeviceId("id5");
+        device5.setDeviceName("name5");
+        device5.object2Json();
+
+        IotDeviceThermometer device6;
+        device6 = new IotDeviceThermometer();
+        device6.setDeviceId("id6");
+        device6.setDeviceName("name6");
+        device6.object2Json();
+
+        IotDeviceThermostat device7;
+        device7 = new IotDeviceThermostat();
+        device7.setDeviceId("id7");
+        device7.setDeviceName("name7");
+        device7.object2Json();
+
+        IotDeviceSwitch device8;
+        device8 = new IotDeviceSwitch();
+        device8.setDeviceId("id8");
+        device8.setDeviceName("name8");
+        device8.object2Json();
+
+
+
+        IotRoomsDevices room1;
+        room1 = new IotRoomsDevices();
+        room1.setIdRoom(1);
+        room1.setNameRoom("Salon");
+        room1.insertDeviceForRoom(device1);
+        room1.insertDeviceForRoom(device2);
+        room1.object2json();
+        IotRoomsDevices room2;
+        room2 = new IotRoomsDevices();
+        room2.setIdRoom(2);
+        room2.setNameRoom("Patio");
+        room2.insertDeviceForRoom(device3);
+        room2.insertDeviceForRoom(device4);
+        room2.object2json();
+        IotRoomsDevices room3;
+        room3 = new IotRoomsDevices();
+        room3.setIdRoom(3);
+        room3.setNameRoom("Trastero");
+        room3.insertDeviceForRoom(device5);
+        room3.insertDeviceForRoom(device6);
+        room3.object2json();
+        IotRoomsDevices room4;
+        room4 = new IotRoomsDevices();
+        room4.setIdRoom(4);
+        room4.setNameRoom("Dormitorio1");
+        room4.insertDeviceForRoom(device7);
+        room4.insertDeviceForRoom(device8);
+        room4.object2json();
+
+
+
+
+        IotSitesDevices site;
+        site = new IotSitesDevices("Navalcarnero");
+        site.setCity("Navalcarnero");
+        site.setCountry("España");
+        site.setStreet("Avenida De Los Cinco Siglos");
+        site.setStreetNumber(46);
+        site.setLongitude(45);
+        site.setLatitude(43);
+        site.object2json();
+
+        IotSitesDevices site2;
+        site2 = new IotSitesDevices("Alcorcon");
+        site2.setCity("Alcorcon");
+        site2.setCountry("España");
+        site2.setStreet("Polvoranca");
+        site2.setStreetNumber(40);
+        site2.setLongitude(-23.00043);
+        site2.setLatitude(43.4334);
+        site2.object2json();
+
+
+        IotUsersDevices users;
+        users = new IotUsersDevices(appContext);
+        users.setUser("Manolo");
+        users.setDni("08038287V");
+        users.setPassword("pepeillo");
+        users.setMail("r126401@gmail.com");
+        users.setTelephone("618097200");
+        users.insertSiteForUser(site);
+
+        //Añadimos los sites
+        users.insertSiteForUser(site);
+        users.insertSiteForUser(site2);
+
+        //Añadimos las rooms
+        site.insertRoomForSite(room1);
+        site.insertRoomForSite(room2);
+        site2.insertRoomForSite(room3);
+        site2.insertRoomForSite(room4);
+        users.object2json();
+        users.saveConfiguration(appContext);
+        Log.i("hh", "jj");
+
+
+    }
+
+
+    public void TextActuarRele() {
+        IOT_MQTT_STATUS_CONNECTION estado;
+        Context appContext;
+        IotMqttConnection cnx;
+        appContext = getApplicationContext();
+        cnx = new IotMqttConnection(appContext);
+        IotDeviceSwitch disp;
+        disp = new IotDeviceSwitch();
+
+        disp.setOnReceivedTimeoutCommand(new IotDevice.OnReceivedTimeoutCommand() {
+            @Override
+            public void onReceivedTimeoutCommand(String token) {
+
+            }
+        });
+
+        disp.setOnReceivedSetRelay(new IotDeviceSwitch.OnReceivedSetRelay() {
+            @Override
+            public void onReceivedSetRelay(IOT_CODE_RESULT codeResult) {
+                Log.i("test", "recibido setRelay" + disp.getRelay());
+            }
+        });
+        disp.setOnReceivedSpontaneousStartDevice(new IotDevice.OnReceivedSpontaneousStartDevice() {
+            @Override
+            public void onReceivedSpontaneousStartDevice(IOT_CODE_RESULT resultCode) {
+                Log.i("test", "recibido StartDevice" + disp.getRelay());
+            }
+        });
+
+        disp.setOnReceivedSpontaneousActionRelay(new IotDeviceSwitch.OnReceivedSpontaneousActionRelay() {
+            @Override
+            public void onReceivedSpontaneousActionRelay(IOT_CODE_RESULT resultCode) {
+                Log.i("test", "recibido actionRelay" + disp.getRelay());
+            }
+        });
+
+
+        estado = cnx.createConnection(new IotMqttConnection.OnMqttConnection() {
+            @Override
+            public void connectionEstablished(boolean reconnect, String serverURI) {
+                disp.setCnx(cnx);
+                disp.setDeviceId("A020A6026046");
+                disp.setDeviceName("test");
+                disp.subscribeDevice();
+                //disp.RegisterListenerMqttConnection();
+                disp.subscribeOtaServer();
+                disp.setRelayCommand(IOT_SWITCH_RELAY.ON);
+
+            }
+
+            @Override
+            public void connectionLost(Throwable cause) {
+
+            }
+        });
+
+        disp.setOnReceivedTimeoutCommand(new IotDevice.OnReceivedTimeoutCommand() {
+            @Override
+            public void onReceivedTimeoutCommand(String token) {
+                Log.e(TAG, "Temporizado comando con clave: " + token);
+            }
+        });
+
+        disp.setOnReceivedStatus(new IotDevice.OnReceivedStatus() {
+            @Override
+            public void onReceivedStatus(IOT_CODE_RESULT resultCode) {
+                Log.i(TAG, "Se ha recibido un estatus " +  disp.getDeviceId());
+
+            }
+        });
+        disp.setOnReceivedSetRelay(new IotDeviceSwitch.OnReceivedSetRelay() {
+            @Override
+            public void onReceivedSetRelay(IOT_CODE_RESULT codeResult) {
+                Log.i(TAG, "Se ha recibido un set relay " +  disp.getDeviceId());
+                disp.getOtaVersionAvailableCommand();
+            }
+        });
+
+        disp.setOnOtaVersionAvailableDevice(new IotDevice.OnReceivedOtaVersionAvailableDevice() {
+            @Override
+            public void onReceivedOtaVersionAvailableDevice(IOT_CODE_RESULT resultCode) {
+                Log.i(TAG, "Se ha recibido un set relay " +  disp.getDeviceId());
+            }
+        });
+
+
+
+
+
+
+
+
+
+
+
+    }
+
+    public void testTermometro() {
+
+        IotMqttConnection cnx;
+        cnx = new IotMqttConnection(getApplicationContext());
+        IotDeviceThermometer termometro;
+        termometro = new IotDeviceThermometer();
+        cnx.createConnection(new IotMqttConnection.OnMqttConnection() {
+            @Override
+            public void connectionEstablished(boolean reconnect, String serverURI) {
+                Log.i(TAG, "conexion establecida");
+                termometro.setCnx(cnx);
+                termometro.setDeviceId("4C75250214E6");
+                termometro.setDeviceName("termometro");
+                termometro.subscribeDevice();
+                termometro.subscribeOtaServer();
+                termometro.commandGetStatusDevice();
+                termometro.getOtaVersionAvailableCommand();
+                JSONObject objeto;
+                objeto = new JSONObject();
+                try {
+                    objeto.put(IOT_LABELS_JSON.READ_INTERVAL.getValorTextoJson(), 30);
+                    objeto.put(IOT_LABELS_JSON.MARGIN_TEMPERATURE.getValorTextoJson(), 0.5);
+                    objeto.put(IOT_LABELS_JSON.READ_NUMBER_RETRY.getValorTextoJson(), 3);
+                    objeto.put(IOT_LABELS_JSON.RETRY_INTERVAL.getValorTextoJson(), 30);
+                    objeto.put(IOT_LABELS_JSON.CALIBRATE_VALUE.getValorTextoJson(), -3.5);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                termometro.commandSetParametersDevice(objeto);
+
+
+
+            }
+
+            @Override
+            public void connectionLost(Throwable cause) {
+                Log.e(TAG, "conexion perdida");
+            }
+        });
+
+        termometro.setOnReceivedStatus(new IotDevice.OnReceivedStatus() {
+            @Override
+            public void onReceivedStatus(IOT_CODE_RESULT resultCode) {
+                Log.i(TAG, "Recibido status del termometro" +  termometro.getDeviceId());
+            }
+        });
+
+        termometro.setOnReceivedSpontaneousStartDevice(new IotDevice.OnReceivedSpontaneousStartDevice() {
+            @Override
+            public void onReceivedSpontaneousStartDevice(IOT_CODE_RESULT resultCode) {
+                Log.i(TAG, "recibido Arranque del termometro" + termometro.getDeviceId());
+            }
+        });
+
+        termometro.setOnReceivedSpontaneousChangeTemperature(new IotDeviceThermometer.OnReceivedSpontaneousChangeTemperature() {
+            @Override
+            public void onReceivedSpontaneousChangeTemperature() {
+
+            }
+        });
+
+        termometro.setOnOtaVersionAvailableDevice(new IotDevice.OnReceivedOtaVersionAvailableDevice() {
+            @Override
+            public void onReceivedOtaVersionAvailableDevice(IOT_CODE_RESULT resultCode) {
+                Log.i(TAG, "Recibida version Ota disponible " + termometro.getDeviceId());
+            }
+        });
+
+        termometro.setOnReceivedModifyParametersDevice(new IotDevice.OnReceivedModifyParametersDevice() {
+            @Override
+            public void onReceivedMofifyParametersDevice(IOT_CODE_RESULT resultCode) {
+                Log.i(TAG, "Recibido modificacion de parametros" + termometro.getDeviceId());
+            }
+        });
+
+        termometro.setOnReceivedSpontaneousStartDevice(new IotDevice.OnReceivedSpontaneousStartDevice() {
+            @Override
+            public void onReceivedSpontaneousStartDevice(IOT_CODE_RESULT resultCode) {
+                Log.i(TAG, "se ha iniciado el dispositivo" + termometro.getDeviceId());
+            }
+        });
+
+
+
+
+    }
+
+
+    public void testTermostato() {
+
+        IotMqttConnection cnx;
+        cnx = new IotMqttConnection(getApplicationContext());
+        IotDeviceThermostat termostato;
+        termostato = new IotDeviceThermostat();
+        cnx.createConnection(new IotMqttConnection.OnMqttConnection() {
+            @Override
+            public void connectionEstablished(boolean reconnect, String serverURI) {
+                Log.i(TAG, "conexion establecida");
+                termostato.setCnx(cnx);
+                termostato.setDeviceId("943CC64E4928");
+                termostato.setDeviceName("cronotermostato");
+
+                termostato.setOnReceivedSpontaneousStartDevice(new IotDevice.OnReceivedSpontaneousStartDevice() {
+                    @Override
+                    public void onReceivedSpontaneousStartDevice(IOT_CODE_RESULT resultCode) {
+                        Log.i(TAG, "comienzo de aplicacion " + termostato.getDeviceId());
+                    }
+                });
+
+                termostato.setOnReceivedSpontaneousChangeTemperature(new IotDeviceThermostat.OnReceivedSpontaneousChangeTemperature() {
+                    @Override
+                    public void onReceivedSpontaneousChangeTemperature() {
+
+                        Log.i(TAG, "Recibido cambio de temperatura" + termostato.getTemperature());
+                    }
+                });
+                termostato.setOnReceivedSpontaneousEndSchedule(new IotDevice.OnReceivedSpontaneousEndSchedule() {
+                    @Override
+                    public void onReceivesSpontaneousStartSchedule(IOT_CODE_RESULT resultCode) {
+                        Log.i(TAG, "Comienza el schedule " + termostato.getTemperature());
+                    }
+                });
+
+                termostato.setOnReceivedSpontaneousEndSchedule(new IotDevice.OnReceivedSpontaneousEndSchedule() {
+                    @Override
+                    public void onReceivesSpontaneousStartSchedule(IOT_CODE_RESULT resultCode) {
+                        Log.i(TAG, "Fin del programa" + termostato.getTemperature());
+
+                    }
+                });
+
+                termostato.setOnReceivedStatus(new IotDevice.OnReceivedStatus() {
+                    @Override
+                    public void onReceivedStatus(IOT_CODE_RESULT resultCode) {
+                        Log.i(TAG, "Recibido Status" + termostato.getTemperature());
+                    }
+                });
+
+                termostato.setOnReceivedScheduleDevice(new IotDevice.OnReceivedScheduleDevice() {
+                    @Override
+                    public void onReceivedScheduleDevice(IOT_CODE_RESULT resultCode) {
+                        Log.i(TAG, "Recibido schedule" + termostato.getTemperature());
+                        IotScheduleDeviceThermostat schedule;
+                        schedule = new IotScheduleDeviceThermostat();
+                        schedule.setScheduleType(IOT_CLASS_SCHEDULE.DIARY_SCHEDULE);
+                        schedule.setHour(23);
+                        schedule.setMinute(50);
+                        schedule.setSecond(0);
+                        schedule.setMask(127);
+                        schedule.setRelay(IOT_SWITCH_RELAY.ON);
+                        schedule.setScheduleState(IOT_STATE_SCHEDULE.PROGRAMA_ACTIVO);
+                        schedule.createScheduleIdFromObject();
+                        schedule.setThresholdTemperature(28.5);
+                        //schedule.setRawScheduleFromObject();
+                        schedule.setDuration(3620);
+
+                        termostato.commandNewScheduleDevice(schedule);
+                    }
+                });
+
+                termostato.setOnReceivedNewSchedule(new IotDevice.OnReceivedNewSchedule() {
+                    @Override
+                    public void onReceivedNewSchedule(IOT_CODE_RESULT resultCode) {
+                        Log.i(TAG, "se Ha recibido respuesta de la creacion " + termostato.getTemperature() +  "-" + resultCode);
+                        IotScheduleDeviceThermostat sch;
+                        sch = termostato.getSchedulesThermostat().get(1);
+                        sch.setHour(21);
+                        sch.setMinute(23);
+                        sch.setSecond(33);
+                        termostato.commandModifyScheduleDevice(sch);
+                    }
+                });
+
+                termostato.setOnReceivedModifySchedule(new IotDevice.OnReceivedModifySchedule() {
+                    @Override
+                    public void onReceivedModifySchedule(IOT_CODE_RESULT resultCode) {
+                        Log.i(TAG, "Recibido con codigo " + termostato.getTemperature() + resultCode.toString());
+                        IotScheduleDeviceThermostat sch;
+                        sch = termostato.getSchedulesThermostat().get(1);
+                        termostato.commandDeleteScheduleDevice(sch.getScheduleId());
+
+                    }
+                });
+
+                termostato.setOnReceivedDeleteDevice(new IotDevice.OnReceivedDeleteScheduleDevice() {
+                    @Override
+                    public void onReceivedDeleteScheduleDevice(IOT_CODE_RESULT resultCode) {
+                        Log.i(TAG, "Borrado el dispositivo " + termostato.getDeviceId() + "con codigo" +  resultCode);
+                        termostato.commandSetThresholdTemperarture(32.5);
+                    }
+                });
+
+                termostato.setOnReceivedSetThresholdTemperature(new IotDeviceThermostat.OnReceivedSetThresholdTemperature() {
+                    @Override
+                    public void onReceivedSetThresholdTemperature(IOT_CODE_RESULT resultCode) {
+                        Log.i(TAG, "Recibido nuevo umbral " + termostato.getThresholdTemperature());
+                    }
+                });
+
+
+
+                termostato.subscribeDevice();
+                termostato.subscribeOtaServer();
+                termostato.commandGetStatusDevice();
+                termostato.commandGetScheduleDevice();
+
+
+
+
+            }
+
+
+            @Override
+            public void connectionLost(Throwable cause) {
+
+            }
+        });
+
+
+
+       //setContentView(R.layout.activity_main);
+
+
+
+        //TextActuarRele();
+        //testTermometro();
+        //testTermostato();
+
+        /*
+
+
+
+        IotMqttConnection cnx;
+        IotDeviceSwitch disp;
+        disp = new IotDeviceSwitch();
+
+        cnx = new IotMqttConnection(this.getApplicationContext());
+        IOT_MQTT_STATUS_CONNECTION estado;
+        Log.e("hh", "Comenzamos...");
+        estado = cnx.createConnection(new IotMqttConnection.OnMqttConnection() {
+            @Override
+            public void connectionEstablished(boolean reconnect, String serverURI) {
+                Log.e("hh", "establecida");
+                disp.setCnx(cnx);
+                disp.setDeviceId("A020A6026046");
+                disp.setDeviceName("test");
+                disp.subscribeDevice();
+                disp.recibirMensajes();
+                ejemplo(disp);
+
+            }
+
+            @Override
+            public void connectionLost(Throwable cause) {
+                Log.i("hh", "hola");
+            }
+        });
+        Log.i("hh", "hola");
+
+
+
+
+    }
+
+    public void ejemplo(IotDeviceSwitch disp) {
+
+
+        Log.i(TAG, "Fin");
+
+        disp.setOnReceivedStatus(new IotDevice.OnReceivedStatus() {
+            @Override
+            public void onReceivedStatus(IOT_CODE_RESULT res) {
+                Log.i(TAG, "Recibido status de test: " + disp.getDispositivoJson());
+                createSchedule(disp);
+            }
+        });
+        disp.setOnReceivedTimeoutCommand(new IotDevice.OnReceivedTimeoutCommand() {
+            @Override
+            public void onReceivedTimeoutCommand(IOT_CODE_RESULT result) {
+                Log.e(TAG, "Error timeout de test: " + result);
+
+            }
+        });
+
+        disp.setOnReceivedInfoDevice(new IotDevice.OnReceivedInfoDevice() {
+            @Override
+            public void onReceivedInfoDevice(IOT_CODE_RESULT resultCode) {
+                Log.i(TAG, "Recibido info de test: " + disp.getDispositivoJson());
+
+            }
+        });
+
+        disp.setOnReceivedScheduleDevice(new IotDevice.OnReceivedScheduleDevice() {
+            @Override
+            public void onReceivedScheduleDevice(IOT_CODE_RESULT resultCode) {
+                Log.i(TAG, "Recibido programas de test: " + disp.getDispositivoJson());
+                IotScheduleDeviceSwitch sch;
+                sch = disp.getSchedulesSwitch().get(1);
+                sch.setHour(21);
+                sch.setMinute(23);
+                sch.setSecond(33);
+                disp.modifyScheduleCommand(sch);
+            }
+        });
+
+        disp.setOnReceivedDeleteDevice(new IotDevice.OnReceivedDeleteDevice() {
+            @Override
+            public void onReceivedDeleteDevice(IOT_CODE_RESULT resultCode) {
+                Log.i(TAG, "Recibida respuesta a eliminar comando");
+            }
+        });
+
+        disp.getStatusDeviceCommand();
+        //disp.getScheduleCommand();
+        //disp.deleteScheduleCommand("002100007f");
+        disp.setOnReceivedModifySchedule(new IotDevice.OnReceivedModifySchedule() {
+            @Override
+            public void onReceivedModifySchedule(IOT_CODE_RESULT resultCode) {
+                Log.i(TAG, "Recibida respuesta a modificar comando " + disp.setCurrentOtaVersionFromReport());
+
+            }
+        });
+        */
+
+
+
+
+
+
+
+
+
+    }

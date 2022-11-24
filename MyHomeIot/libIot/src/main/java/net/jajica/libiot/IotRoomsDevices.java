@@ -49,7 +49,7 @@ public class IotRoomsDevices {
 
     }
 
-    protected IOT_DEVICE_USERS_RESULT object2json() {
+    public IOT_DEVICE_USERS_RESULT object2json() {
 
         JSONObject deviceJson;
         JSONArray jsonArray = null;

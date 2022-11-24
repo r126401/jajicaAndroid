@@ -100,7 +100,7 @@ public class IotDeviceConfiguration {
         try {
             objeto = new JSONObject(texto);
         } catch(JSONException e) {
-            return IOT_OPERATION_CONFIGURATION_DEVICES.NO_JSON_CONFIGURATION;
+            return IOT_OPERATION_CONFIGURATION_DEVICES.NO_CONFIGURATION;
         }
 
 
@@ -288,7 +288,7 @@ public class IotDeviceConfiguration {
         IOT_OPERATION_CONFIGURATION_DEVICES op;
         // Se pasa introduce la parte json en el dispositivo
         if (dispositivo.json2Object(dispositivoJson) != IOT_JSON_RESULT.JSON_OK) {
-            return IOT_OPERATION_CONFIGURATION_DEVICES.NO_JSON_CONFIGURATION;
+            return IOT_OPERATION_CONFIGURATION_DEVICES.NO_CONFIGURATION;
         }
 
 
@@ -319,7 +319,7 @@ public class IotDeviceConfiguration {
         try {
             objeto = new JSONObject(texto);
         } catch(JSONException e) {
-            return IOT_OPERATION_CONFIGURATION_DEVICES.NO_JSON_CONFIGURATION;
+            return IOT_OPERATION_CONFIGURATION_DEVICES.NO_CONFIGURATION;
         }
 
         return insertarDispositivoDesdeJson(objeto);

@@ -171,7 +171,7 @@ public class Ficheros {
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-            return ESTADO_FICHEROS.ERROR_LEER_FICHERO;
+            return ESTADO_FICHEROS.FICHERO_NO_EXISTE;
 
             //escribirMensaje("No hay configuracion activa");
         } catch (IOException e) {

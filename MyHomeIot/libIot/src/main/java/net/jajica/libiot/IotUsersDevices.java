@@ -104,7 +104,7 @@ public class IotUsersDevices {
     }
 
 
-    protected IOT_DEVICE_USERS_RESULT object2json() {
+    public IOT_DEVICE_USERS_RESULT object2json() {
 
         int i;
         JSONObject siteJson;
@@ -228,7 +228,7 @@ public class IotUsersDevices {
 
 
 
-    protected IOT_OPERATION_CONFIGURATION_DEVICES saveConfiguration(Context context) {
+    public IOT_OPERATION_CONFIGURATION_DEVICES saveConfiguration(Context context) {
 
         Ficheros file;
         ESTADO_FICHEROS estado;
@@ -242,14 +242,14 @@ public class IotUsersDevices {
 
     }
 
-    protected IOT_OPERATION_CONFIGURATION_DEVICES loadConfiguration() {
+    public IOT_OPERATION_CONFIGURATION_DEVICES loadConfiguration() {
         Ficheros file;
         file = new Ficheros();
         IOT_JSON_RESULT result;
         String texto;
         ESTADO_FICHEROS estado;
         if ((estado = file.leerFichero(context, getConfigurationFile())) != ESTADO_FICHEROS.FICHERO_OK) {
-            return IOT_OPERATION_CONFIGURATION_DEVICES.CORRUPTED_CONFIGURATION;
+            return IOT_OPERATION_CONFIGURATION_DEVICES.NO_CONFIGURATION;
         }
         try {
             jsonObject = new JSONObject(file.getTextoFichero());

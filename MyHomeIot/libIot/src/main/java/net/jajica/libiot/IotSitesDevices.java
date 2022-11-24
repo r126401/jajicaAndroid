@@ -110,7 +110,7 @@ public class IotSitesDevices {
 
     }
 
-    protected IOT_DEVICE_USERS_RESULT object2json() {
+    public IOT_DEVICE_USERS_RESULT object2json() {
 
         JSONArray array = null;
         JSONObject roomJson;

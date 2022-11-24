@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="160sp"
+    android:layout_height="160sp"
+    tools:ignore="MissingDefaultResource">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="30sp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/themometer"
+            app:layout_constraintBottom_toBottomOf="@+id/appCompatTextView2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/appCompatTextView2"
+            app:layout_constraintVertical_bias="0.0">
+
+        </ImageView>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/appCompatTextView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="times"
+            android:text="21.5 ºC"
+            android:textSize="30dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/imageView2"
+            app:layout_constraintTop_toBottomOf="@+id/appCompatImageView2">
+
+        </androidx.appcompat.widget.AppCompatTextView>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/appCompatTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:fontFamily="times"
+            android:text="20.5 ºC"
+            android:textSize="20dp"
+            app:layout_constraintBottom_toTopOf="@+id/appCompatTextView3"
+            app:layout_constraintEnd_toEndOf="@+id/appCompatTextView2"
+            app:layout_constraintStart_toStartOf="@+id/appCompatTextView2"
+            app:layout_constraintTop_toBottomOf="@+id/appCompatTextView2">
+
+        </androidx.appcompat.widget.AppCompatTextView>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/appCompatTextView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Termostato"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/appCompatTextView"
+            app:layout_constraintStart_toStartOf="@+id/imageThermometer">
+
+        </androidx.appcompat.widget.AppCompatTextView>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imageRemove2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:src="@drawable/remove"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </androidx.appcompat.widget.AppCompatImageView>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/appCompatImageView3"
+            android:layout_width="30sp"
+            android:layout_height="30sp"
+            android:paddingRight="5sp"
+            android:src="@drawable/ic_connect_nok"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/imageRemove2">
+
+        </androidx.appcompat.widget.AppCompatImageView>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/appCompatImageView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/heating"
+            app:layout_constraintEnd_toStartOf="@+id/appCompatImageView3"
+            app:layout_constraintStart_toEndOf="@+id/imageRemove2"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </androidx.appcompat.widget.AppCompatImageView>
+
+        <ImageView
+            android:id="@+id/imageThermometer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/threshold_termperature"
+            app:layout_constraintBottom_toBottomOf="@+id/appCompatTextView"
+            app:layout_constraintEnd_toStartOf="@+id/appCompatTextView"
+            app:layout_constraintTop_toTopOf="@+id/appCompatTextView">
+
+        </ImageView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

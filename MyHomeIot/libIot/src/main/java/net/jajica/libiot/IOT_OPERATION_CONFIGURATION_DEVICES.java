@@ -23,6 +23,6 @@ public enum IOT_OPERATION_CONFIGURATION_DEVICES {
     DEVICE_NONE, // No hay ningún dispositivo en la configuración
     CORRUPTED_CONFIGURATION, // El fichero de configuración es inválido
     OK_CONFIGURATION,
-    NO_JSON_CONFIGURATION,
+    NO_CONFIGURATION,
     DEVICE_ERROR;
 }
