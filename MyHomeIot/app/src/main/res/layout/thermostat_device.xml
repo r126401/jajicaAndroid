@@ -14,58 +14,58 @@
 
 
         <ImageView
-            android:id="@+id/imageView2"
+            android:id="@+id/imageThermostat"
             android:layout_width="30sp"
             android:layout_height="wrap_content"
             android:src="@drawable/themometer"
-            app:layout_constraintBottom_toBottomOf="@+id/appCompatTextView2"
+            app:layout_constraintBottom_toBottomOf="@+id/textTemperatureThermostat"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/appCompatTextView2"
+            app:layout_constraintTop_toTopOf="@+id/textTemperatureThermostat"
             app:layout_constraintVertical_bias="0.0">
 
         </ImageView>
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/appCompatTextView2"
+            android:id="@+id/textTemperatureThermostat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="times"
             android:text="21.5 ºC"
             android:textSize="30dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/imageView2"
-            app:layout_constraintTop_toBottomOf="@+id/appCompatImageView2">
+            app:layout_constraintStart_toEndOf="@+id/imageThermostat"
+            app:layout_constraintTop_toBottomOf="@+id/imageHeating">
 
         </androidx.appcompat.widget.AppCompatTextView>
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/appCompatTextView"
+            android:id="@+id/textThresholdThermostat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
             android:fontFamily="times"
             android:text="20.5 ºC"
             android:textSize="20dp"
-            app:layout_constraintBottom_toTopOf="@+id/appCompatTextView3"
-            app:layout_constraintEnd_toEndOf="@+id/appCompatTextView2"
-            app:layout_constraintStart_toStartOf="@+id/appCompatTextView2"
-            app:layout_constraintTop_toBottomOf="@+id/appCompatTextView2">
+            app:layout_constraintBottom_toTopOf="@+id/textDeviceThermostat"
+            app:layout_constraintEnd_toEndOf="@+id/textTemperatureThermostat"
+            app:layout_constraintStart_toStartOf="@+id/textTemperatureThermostat"
+            app:layout_constraintTop_toBottomOf="@+id/textTemperatureThermostat">
 
         </androidx.appcompat.widget.AppCompatTextView>
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/appCompatTextView3"
+            android:id="@+id/textDeviceThermostat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Termostato"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/appCompatTextView"
-            app:layout_constraintStart_toStartOf="@+id/imageThermometer">
+            app:layout_constraintEnd_toEndOf="@+id/textThresholdThermostat"
+            app:layout_constraintStart_toStartOf="@+id/imageSwitch">
 
         </androidx.appcompat.widget.AppCompatTextView>
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/imageRemove2"
+            android:id="@+id/imageRemoveDeviceThermostat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
@@ -76,35 +76,35 @@
         </androidx.appcompat.widget.AppCompatImageView>
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/appCompatImageView3"
+            android:id="@+id/imageConnectedDeviceThermostat"
             android:layout_width="30sp"
             android:layout_height="30sp"
             android:paddingRight="5sp"
             android:src="@drawable/ic_connect_nok"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/imageRemove2">
+            app:layout_constraintTop_toTopOf="@+id/imageRemoveDeviceThermostat">
 
         </androidx.appcompat.widget.AppCompatImageView>
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/appCompatImageView2"
+            android:id="@+id/imageHeating"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/heating"
-            app:layout_constraintEnd_toStartOf="@+id/appCompatImageView3"
-            app:layout_constraintStart_toEndOf="@+id/imageRemove2"
+            app:layout_constraintEnd_toStartOf="@+id/imageConnectedDeviceThermostat"
+            app:layout_constraintStart_toEndOf="@+id/imageRemoveDeviceThermostat"
             app:layout_constraintTop_toTopOf="parent">
 
         </androidx.appcompat.widget.AppCompatImageView>
 
         <ImageView
-            android:id="@+id/imageThermometer"
+            android:id="@+id/imageSwitch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/threshold_termperature"
-            app:layout_constraintBottom_toBottomOf="@+id/appCompatTextView"
-            app:layout_constraintEnd_toStartOf="@+id/appCompatTextView"
-            app:layout_constraintTop_toTopOf="@+id/appCompatTextView">
+            app:layout_constraintBottom_toBottomOf="@+id/textThresholdThermostat"
+            app:layout_constraintEnd_toStartOf="@+id/textThresholdThermostat"
+            app:layout_constraintTop_toTopOf="@+id/textThresholdThermostat">
 
         </ImageView>
 

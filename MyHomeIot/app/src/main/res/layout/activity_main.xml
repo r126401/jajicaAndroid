@@ -9,22 +9,44 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent">
 
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textCasa"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#ffffff">
+
+        </androidx.appcompat.widget.AppCompatTextView>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:src="@drawable/fondo">
+
+        </androidx.appcompat.widget.AppCompatImageView>
+
+
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_height="?attr/actionBarSize"
             android:layout_width="match_parent"
             app:layout_scrollFlags="scroll|enterAlways">
 
+
+
         </androidx.appcompat.widget.Toolbar>
+
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabs"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
             app:tabMode="scrollable">
 
         </com.google.android.material.tabs.TabLayout>
+
+
+
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
@@ -48,6 +70,14 @@
         android:background="@color/black"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
         />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationMenu"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:layout_anchor="@+id/nested"
+        app:layout_anchorGravity="bottom|center"
+        android:background="@color/black"/>
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -11,7 +11,7 @@
         android:orientation="vertical">
 
         <ImageView
-            android:id="@+id/imageThermometer"
+            android:id="@+id/imageSwitch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_switch_on"
@@ -30,7 +30,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageThermometer">
+            app:layout_constraintTop_toBottomOf="@+id/imageSwitch">
 
         </androidx.appcompat.widget.AppCompatTextView>
 
@@ -38,23 +38,22 @@
             android:id="@+id/imageDeleteDevice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="5sp"
-            android:paddingTop="5sp"
             android:src="@drawable/remove"
-            app:layout_constraintBottom_toTopOf="@+id/imageThermometer"
+            app:layout_constraintBottom_toTopOf="@+id/imageSwitch"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
         </androidx.appcompat.widget.AppCompatImageView>
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/imageConnectedDevice"
+            android:id="@+id/imageConnectedDeviceThermostat"
             android:layout_width="30sp"
             android:layout_height="30sp"
+            android:paddingRight="5sp"
             android:src="@drawable/ic_connect_nok"
-            app:layout_constraintBottom_toTopOf="@+id/imageThermometer"
+            app:layout_constraintBottom_toTopOf="@+id/imageSwitch"
             app:layout_constraintEnd_toEndOf="parent"
-            android:paddingRight="5sp">
+            app:layout_constraintTop_toTopOf="parent">
 
         </androidx.appcompat.widget.AppCompatImageView>
 

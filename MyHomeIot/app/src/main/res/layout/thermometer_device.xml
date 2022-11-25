@@ -12,7 +12,7 @@
         android:orientation="vertical">
 
         <ImageView
-            android:id="@+id/imageThermometer"
+            android:id="@+id/imageSwitch"
             android:layout_width="30sp"
             android:layout_height="wrap_content"
             android:src="@drawable/themometer"
@@ -23,13 +23,13 @@
         </ImageView>
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/textTemperature"
+            android:id="@+id/textTemperatureThermostat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="21.5 ºC"
             android:textSize="40dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/imageThermometer"
+            app:layout_constraintStart_toEndOf="@+id/imageSwitch"
             app:layout_constraintTop_toTopOf="parent"
             android:fontFamily="times">
 
@@ -43,29 +43,29 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageThermometer">
+            app:layout_constraintTop_toBottomOf="@+id/imageSwitch">
 
         </androidx.appcompat.widget.AppCompatTextView>
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/imageRemove2"
+            android:id="@+id/imageRemoveDeviceThermostat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/remove"
-            app:layout_constraintBottom_toTopOf="@+id/imageThermometer"
+            app:layout_constraintBottom_toTopOf="@+id/imageSwitch"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
         </androidx.appcompat.widget.AppCompatImageView>
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/imageConnectedDevice"
+            android:id="@+id/imageConnectedDeviceThermostat"
             android:layout_width="30sp"
             android:layout_height="30sp"
             android:paddingRight="5sp"
             android:src="@drawable/ic_connect_nok"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/imageRemove2">
+            app:layout_constraintTop_toTopOf="@+id/imageRemoveDeviceThermostat">
 
         </androidx.appcompat.widget.AppCompatImageView>
 

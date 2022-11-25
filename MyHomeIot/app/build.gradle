@@ -60,6 +60,7 @@ dependencies {
     //ver https://www.appsloveworld.com/kotlin/100/22/android-paho-mqtt-crashes-android-12-targeting-s-version-31-and-above-requir
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.github.hannesa2:paho.mqtt.android:3.3.5'
+    implementation 'in.srain.cube:grid-view-with-header-footer:1.0.12'
 
 
 
