@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.GridView;
 
 import net.jajica.libiot.IotDevice;
 
@@ -49,10 +50,12 @@ public class FragmentDevices extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_devices, container, false);
 
-        GridViewWithHeaderAndFooter grid = (GridViewWithHeaderAndFooter)
+        GridView grid = (GridView)
                 rootView.findViewById(R.id.gridview);
 
         grid.setAdapter(new DevicesAdapter(getActivity(), idLayout, devices));
+        int a = grid.getWidth();
+        int b = grid.getHeight();
 
 
 

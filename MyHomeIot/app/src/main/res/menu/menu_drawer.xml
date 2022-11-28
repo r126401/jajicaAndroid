@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/item_user_profile"
+            android:checked="true"
+            android:icon="@drawable/ic_user_profile"
+            android:title="@string/user_profile" />
+        <item
+            android:id="@+id/item_connection"
+            android:icon="@drawable/ic_connection"
+            android:title="@string/connection" />
+        <item
+            android:id="@+id/item_home_admin"
+            android:icon="@drawable/ic_home_admin"
+            android:title="@string/admin_home" />
+        <item
+            android:id="@+id/item_notifications"
+            android:icon="@drawable/ic_notifications"
+            android:title="@string/notifications" />
+    </group>
+
+</menu>

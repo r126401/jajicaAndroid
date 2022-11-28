@@ -3,9 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="160sp"
-    android:layout_height="160sp"
-    tools:ignore="MissingDefaultResource">
+    android:layout_width="match_parent"
+    android:layout_height="170dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -60,7 +59,7 @@
             android:text="Termostato"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/textThresholdThermostat"
-            app:layout_constraintStart_toStartOf="@+id/imageSwitch">
+            app:layout_constraintStart_toStartOf="@+id/imageThermometer">
 
         </androidx.appcompat.widget.AppCompatTextView>
 
@@ -98,7 +97,7 @@
         </androidx.appcompat.widget.AppCompatImageView>
 
         <ImageView
-            android:id="@+id/imageSwitch"
+            android:id="@+id/imageThermometer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/threshold_termperature"

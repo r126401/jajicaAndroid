@@ -45,7 +45,7 @@ public class IotMqttConnection implements Serializable {
     private final Context context;
     protected IMqttToken token;
     protected MqttConnectOptions options;
-    protected IotMqttConfiguration cnx;
+    protected IotMqttConfiguration iotMqttConfiguration;
     protected String idClient;
     protected String stringConnection;
     protected IOT_MQTT_STATUS_CONNECTION stateConnection;
@@ -55,9 +55,9 @@ public class IotMqttConnection implements Serializable {
     protected ArrivedMessage elemento;
     protected ArrayList<ArrivedMessage> lista;
 
-
-
-
+    public IotMqttConfiguration getIotMqttConfiguration() {
+        return iotMqttConfiguration;
+    }
 
     /**
      * Este método crea un listener para controlar los eventos de la conexion
@@ -168,21 +168,21 @@ public class IotMqttConnection implements Serializable {
         client = null;
         this.context = context;
         token = null;
-        cnx = null;
+        iotMqttConfiguration = null;
         stateConnection = IOT_MQTT_STATUS_CONNECTION.CONEXION_MQTT_DESCONECTADA;
-        cnx = new IotMqttConfiguration(this.context);
+        iotMqttConfiguration = new IotMqttConfiguration(this.context);
         options = new MqttConnectOptions();
-        options.setAutomaticReconnect(cnx.getAutoConnect());
-        options.setCleanSession(cnx.getCleanSession());
-        options.setConnectionTimeout(cnx.getConnectionTimeout());
-        options.setMqttVersion(cnx.getMqttVersion());
-        options.setHttpsHostnameVerificationEnabled(cnx.getHostnameVerification());
+        options.setAutomaticReconnect(iotMqttConfiguration.getAutoConnect());
+        options.setCleanSession(iotMqttConfiguration.getCleanSession());
+        options.setConnectionTimeout(iotMqttConfiguration.getConnectionTimeout());
+        options.setMqttVersion(iotMqttConfiguration.getMqttVersion());
+        options.setHttpsHostnameVerificationEnabled(iotMqttConfiguration.getHostnameVerification());
         idClient = MqttClient.generateClientId();
         //idClient = UUID.randomUUID().toString();
-        if (cnx.getTls()) {
-            stringConnection = "ssl://" + cnx.getBrokerId() + ":" + cnx.getPuerto();
+        if (iotMqttConfiguration.getTls()) {
+            stringConnection = "ssl://" + iotMqttConfiguration.getBrokerId() + ":" + iotMqttConfiguration.getPuerto();
         } else {
-            stringConnection = "tcp://" + cnx.getBrokerId() + ":" + cnx.getPuerto();
+            stringConnection = "tcp://" + iotMqttConfiguration.getBrokerId() + ":" + iotMqttConfiguration.getPuerto();
         }
     }
 
@@ -235,7 +235,7 @@ public class IotMqttConnection implements Serializable {
 
             }
         });
-        if (cnx.getTls()) {
+        if (iotMqttConfiguration.getTls()) {
             SocketFactory.SocketFactoryOptions socketFactoryOptions = new SocketFactory.SocketFactoryOptions();
             socketFactoryOptions.withCaInputStream(context.getResources().openRawResource(R.raw.certificado));
             try {

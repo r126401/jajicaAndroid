@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">MyHomeIot</string>
+    <string name="user_profile">Perfil de usuario</string>
+    <string name="connection">Conexion</string>
+    <string name="admin_home">Administrar ubicaciones</string>
+    <string name="notifications">Notificaciones</string>
+    <string name="mqttServer">conectando...</string>
 </resources>

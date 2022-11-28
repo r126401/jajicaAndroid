@@ -107,7 +107,8 @@ public class DevicesAdapter extends BaseAdapter {
         }
         device = (IotDeviceSwitch) deviceList.get(position);
         switchDeviceBinding.textdevice.setText(device.getDeviceName());
-        switchDeviceBinding.imageSwitch.setImageResource(R.drawable.ic_switch_off);
+        switchDeviceBinding.imageThermometer.setImageResource(R.drawable.ic_switch_off);
+
 
 
 
