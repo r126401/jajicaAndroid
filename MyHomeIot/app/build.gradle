@@ -62,6 +62,10 @@ dependencies {
     implementation 'com.github.hannesa2:paho.mqtt.android:3.3.5'
     implementation 'in.srain.cube:grid-view-with-header-footer:1.0.12'
 
+    //Implentation espressif libraries
+    implementation 'com.github.EspressifApp:lib-esptouch-android:1.0.0'
+    implementation 'com.github.EspressifApp:lib-esptouch-v2-android:2.2.1'
+
 
 
 

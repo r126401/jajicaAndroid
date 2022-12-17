@@ -7,6 +7,7 @@
     android:fitsSystemWindows="true">
 
 <androidx.coordinatorlayout.widget.CoordinatorLayout
+
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
 
@@ -20,47 +21,29 @@
         android:layout_width="match_parent"
         android:animateLayoutChanges="true">
 
-
-
-
-
-
-
-
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_height="?attr/actionBarSize"
             android:layout_width="match_parent"
             app:layout_scrollFlags="scroll|enterAlways"
             android:background="?attr/colorPrimary"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" >
-
-
-
+>
         </androidx.appcompat.widget.Toolbar>
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="120dp"
-            android:src="@drawable/fondo"
-            android:layout_gravity="right">
-        </ImageView>
-        <androidx.appcompat.widget.AppCompatButton
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/textCasa"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#ffffff"
-            android:drawableLeft="@drawable/ic_home_admin"
-            >
+            android:drawableLeft="@drawable/ic_home_admin">
 
-        </androidx.appcompat.widget.AppCompatButton>
+        </androidx.appcompat.widget.AppCompatTextView>
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabs"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:tabMode="scrollable"
 
-            app:tabMode="scrollable">
+            style="@style/tablayout">
 
         </com.google.android.material.tabs.TabLayout>
 
@@ -93,7 +76,8 @@
         android:layout_height="50dp"
         app:layout_anchor="@+id/nested"
         app:layout_anchorGravity="bottom|center"
-        android:background="@color/black"/>
+        android:background="@color/colorPrimary"
+        app:menu="@menu/connections_devices_menu"/>
 
 
 

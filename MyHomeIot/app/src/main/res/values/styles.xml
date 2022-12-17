@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+<style name="botones" parent="Widget.AppCompat.Button">
+
+    <item name="android:background">@color/colorPrimary</item>
+    <item name="borderWidth">0dp</item>
+    <item name="elevation">0dp</item>
+
+</style>
+
+<style name="tablayout" parent="Widget.Material3.TabLayout">
+
+    <item name="android:textColor">@color/coloronprimary</item>
+    <item name="colorOnPrimary">@color/coloronprimary</item>
+    <item name="tabSelectedTextColor">@color/secondarycolor</item>
+    <item name="tabTextColor">@color/coloronprimary</item>
+    <item name="tabBackground">@color/colorPrimary</item>
+
+</style>
 
 
 </resources>
