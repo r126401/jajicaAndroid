@@ -4,12 +4,11 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
+    android:fitsSystemWindows="true"
+    android:theme="@style/Theme.MyHomeIot">
 
 <androidx.coordinatorlayout.widget.CoordinatorLayout
 
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
 
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -19,33 +18,65 @@
         android:id="@+id/appbar"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:animateLayoutChanges="true">
+        android:animateLayoutChanges="true"
+        android:background="?attr/colorPrimaryContainer">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_height="?attr/actionBarSize"
             android:layout_width="match_parent"
             app:layout_scrollFlags="scroll|enterAlways"
-            android:background="?attr/colorPrimary"
->
+            android:background="?attr/colorPrimaryContainer">
         </androidx.appcompat.widget.Toolbar>
+
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/textCasa"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/ic_home_admin">
+            android:drawableLeft="@drawable/ic_home_admin" />
 
-        </androidx.appcompat.widget.AppCompatTextView>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabs"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:tabMode="scrollable"
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabs"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tabMode="scrollable"
+                app:layout_constraintStart_toStartOf="parent">
 
-            style="@style/tablayout">
+            </com.google.android.material.tabs.TabLayout>
 
-        </com.google.android.material.tabs.TabLayout>
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/buttonViewGrid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_grid_view_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/buttonAdminRoom"
+                app:layout_constraintTop_toTopOf="parent">
+
+            </androidx.appcompat.widget.AppCompatImageButton>
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/buttonAdminRoom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_settings"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+            </androidx.appcompat.widget.AppCompatImageButton>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
 
 
 
@@ -55,6 +86,7 @@
         android:id="@+id/nested"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:contentDescription="@string/installDevice"
 
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 

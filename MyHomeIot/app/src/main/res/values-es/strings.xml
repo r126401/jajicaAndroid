@@ -12,27 +12,30 @@
     <string name="settings">Configuracion</string>
 
 
-    <string name="esptouch_message_permission">APP require Location permission to get Wi-Fi information. \nClick to request permission</string>
-    <string name="esptouch_message_location">Please turn on GPS to get Wi-Fi information.</string>
-    <string name="esptouch_message_wifi_connection">Please connect Wi-Fi first.</string>
-    <string name="esptouch_message_wifi_frequency">Current Wi-Fi connection is 5G, but the device just support 2.4G.</string>
+    <string name="esptouch_message_permission">La app requiere permisos de localizacion para poder detectar las redes wifi. \nClick para obtener el permiso</string>
+    <string name="esptouch_message_location">Por favor, activa la ubicacion gps para poder localizar la red wifi.</string>
+    <string name="esptouch_message_wifi_connection">Por favor, conecta el dispositivo a una red wifi</string>
+    <string name="esptouch_message_wifi_frequency">La red wifi actual es 5G. Por favor, conecta el dispositivo a una red 2.4Ghz.</string>
 
     <string name="esptouch1_title">EspTouch</string>
     <string name="esptouch1_about_version">EspTouch Version: %s</string>
     <string name="esptouch1_ssid_title">SSID: </string>
     <string name="esptouch1_bssid_title">BSSID: </string>
-    <string name="esptouch1_password_title">Password: </string>
-    <string name="esptouch1_device_count_title">Device count: </string>
+    <string name="esptouch1_password_title">Contraseña: </string>
+    <string name="esptouch1_device_count_title">nº Dispositivos: </string>
     <string name="esptouch1_package_broadcast">Broadcast</string>
     <string name="esptouch1_package_multicast">Multicast</string>
     <string name="esptouch1_confirm">Configurar...</string>
-    <string name="esptouch1_wifi_5g_message">Device don\'t support 5G Wi-Fi, please make sure the currently connected Wi-Fi is 2.4G, or you can try multicast</string>
-    <string name="esptouch1_location_permission_title">⚠️Warning</string>
+    <string name="esptouch1_wifi_5g_message">El dispositivo no soporte wifi 5G. Por favor, conecta el movil a una wifi de 2.4Ghz o intenta configurarlo en modo multicast</string>
+    <string name="esptouch1_location_permission_title">⚠Aviso</string>
     <string name="esptouch1_location_permission_message">On Android M or higher version, App can\'t get Wi-Fi connection information if you forbid Location permission.</string>
-    <string name="esptouch1_configuring_message">Esptouch is configuring, please wait for a moment…</string>
-    <string name="esptouch1_configure_wifi_change_message">Wi-Fi disconnected or changed</string>
+    <string name="esptouch1_configuring_message">Esptouch esta configurando. Espera un momento</string>
+    <string name="esptouch1_configure_wifi_change_message">Wifi desconectado</string>
     <string name="esptouch1_configure_result_failed">EspTouch failed</string>
     <string name="esptouch1_configure_result_failed_port">Create EspTouch task failed, the EspTouch port could be used by other thread</string>
     <string name="esptouch1_configure_result_success">Con exito!</string>
     <string name="esptouch1_configure_result_success_item">BSSID = %1$s, IP = %2$s</string>
+    <string name="esptouch1_send_data_to_device">Enviando datos al dispositivo</string>
+    <string name="menu_item_about">Acerca de</string>
+    <string name="about_app_version">App Version: %s</string>
 </resources>

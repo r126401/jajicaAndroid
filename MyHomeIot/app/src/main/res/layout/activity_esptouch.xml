@@ -8,10 +8,10 @@
 
 
 <androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/content"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="wrap_content"
+    android:visibility="visible">
 
     <androidx.appcompat.widget.AppCompatCheckedTextView
         android:id="@+id/apSsidLabel"
@@ -151,6 +151,7 @@
     </androidx.appcompat.widget.AppCompatButton>
 
     <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/appCompatTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="dddddd"
@@ -160,14 +161,20 @@
         app:layout_constraintTop_toBottomOf="@+id/confirmBtn"
         app:layout_constraintVertical_bias="0.167" />
 
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/progressView"
+        android:id="@+id/progessExecuting"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@+id/content">
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/testResult"
@@ -197,7 +204,5 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-</androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

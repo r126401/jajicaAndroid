@@ -9,15 +9,7 @@
 
 </style>
 
-<style name="tablayout" parent="Widget.Material3.TabLayout">
 
-    <item name="android:textColor">@color/coloronprimary</item>
-    <item name="colorOnPrimary">@color/coloronprimary</item>
-    <item name="tabSelectedTextColor">@color/secondarycolor</item>
-    <item name="tabTextColor">@color/coloronprimary</item>
-    <item name="tabBackground">@color/colorPrimary</item>
-
-</style>
 
 
 </resources>

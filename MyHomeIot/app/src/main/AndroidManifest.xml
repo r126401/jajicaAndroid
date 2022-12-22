@@ -23,7 +23,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyHomeIot"
-        tools:targetApi="32">
+        tools:targetApi="32"
+        android:name=".EspTouchApp">
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -34,6 +35,10 @@
             </intent-filter>
 
         </activity>
+        <activity
+            android:name=".EspTouchActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
 
         <!--service android:name="org.eclipse.paho.android.service.MqttService" /-->
     </application>

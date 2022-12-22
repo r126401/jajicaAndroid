@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/itemConfigurarBroker"
+        android:id="@+id/itemSettings"
         android:checked="false"
         android:icon="@drawable/ic_settings"
         android:title="@string/settings"/>
     <item
-        android:id="@+id/itemInstalarDispositivo"
+        android:id="@+id/itemInstallDevice"
         android:checked="false"
         android:icon="@drawable/ic_install"
         android:title="@string/installDevice"/>
 
     <item
-        android:id="@+id/itemNuevoDispositivo"
+        android:id="@+id/itemNewDevice"
         android:checked="false"
         android:icon="@drawable/ic_add_device"
         android:title="@string/addDevice"/>

@@ -1,4 +1,4 @@
-package com.example.controliot;
+package net.jajica.myhomeiot;
 
 import android.app.Application;
 import android.content.BroadcastReceiver;
@@ -64,7 +64,6 @@ public class EspTouchApp extends Application {
     }
 
     public static EspTouchApp getInstance() {
-
         return app;
     }
 

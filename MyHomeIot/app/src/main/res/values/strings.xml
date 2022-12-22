@@ -33,5 +33,8 @@
     <string name="esptouch1_configure_result_failed_port">Create EspTouch task failed, the EspTouch port could be used by other thread</string>
     <string name="esptouch1_configure_result_success">Con exito!</string>
     <string name="esptouch1_configure_result_success_item">BSSID = %1$s, IP = %2$s</string>
+    <string name="esptouch1_send_data_to_device">Send data to device</string>
+    <string name="menu_item_about">About App</string>
+    <string name="about_app_version">App Version: %s</string>
 
 </resources>

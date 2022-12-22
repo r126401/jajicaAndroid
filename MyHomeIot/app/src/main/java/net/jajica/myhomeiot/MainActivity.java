@@ -1,5 +1,9 @@
 package net.jajica.myhomeiot;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -7,12 +11,15 @@ import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
@@ -32,7 +39,7 @@ import java.util.ArrayList;
 //import org.eclipse.paho.client.mqttv3.IMqttToken;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener{
 
     private final String TAG = "MainActivity";
     private IotUsersDevices configuration;
@@ -74,6 +81,8 @@ public class MainActivity extends AppCompatActivity {
     private APPLICATION_STATUS initApplication() {
 
         IOT_OPERATION_CONFIGURATION_DEVICES result;
+
+        mbinding.bottomNavigationMenu.setOnItemSelectedListener(this);
 
         if (mbinding.navView!= null) {
             prepararDrawer(mbinding.navView);
@@ -297,5 +306,47 @@ public class MainActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+    private void lanzarActivityInstalarDispositivo() {
 
+        Intent instalarDispositivo = new Intent(MainActivity.this, EspTouchActivity.class);
+        //startActivity(instalarDispositivo);
+        lanzadorActivityInstalarDispositivo.launch(instalarDispositivo);
+    }
+
+
+    ActivityResultLauncher<Intent> lanzadorActivityInstalarDispositivo = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+
+                    if (result.getResultCode() == RESULT_OK) {
+                        String dato = result.getData().getDataString();
+                        Log.i(getLocalClassName(), "Recibimos datos " + dato);
+
+                    } else {
+                        Log.w(getLocalClassName(), "Error al instalar el dispositivo");
+                    }
+
+                }
+            }
+    );
+
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+        switch (item.getItemId()) {
+
+            case R.id.itemSettings:
+                break;
+            case R.id.itemInstallDevice:
+                lanzarActivityInstalarDispositivo();
+                break;
+            case R.id.itemNewDevice:
+                break;
+
+        }
+        return false;
+    }
 }
