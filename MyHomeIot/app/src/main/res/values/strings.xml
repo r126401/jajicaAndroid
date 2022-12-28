@@ -9,6 +9,13 @@
     <string name="addDevice">Add device</string>
     <string name="installDevice">Install device</string>
     <string name="settings">Settings</string>
+    <string name="settingsUser">User</string>
+    <string name="settingsPassword">Password</string>
+    <string name="settingsDni">Dni</string>
+    <string name="settingsMail">Mail</string>
+    <string name="settingsTelephone">Telephone</string>
+    <string name="settingsSave">Save</string>
+
 
     <string name="esptouch_message_permission">APP require Location permission to get Wi-Fi information. \nClick to request permission</string>
     <string name="esptouch_message_location">Please turn on GPS to get Wi-Fi information.</string>
@@ -34,7 +41,9 @@
     <string name="esptouch1_configure_result_success">Con exito!</string>
     <string name="esptouch1_configure_result_success_item">BSSID = %1$s, IP = %2$s</string>
     <string name="esptouch1_send_data_to_device">Send data to device</string>
-    <string name="menu_item_about">About App</string>
     <string name="about_app_version">App Version: %s</string>
+    <string name="menu_item_about">About...</string>
+
+
 
 </resources>

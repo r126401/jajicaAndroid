@@ -67,32 +67,35 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="23d00115-d3af-48c2-a0e5-936070caa06f" name="Default Changelist" comment="se hace el ubgrade de gradel a 7.1.0">
-      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/java/net/jajica/myhomeiot/EspTouchActivity.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/java/net/jajica/myhomeiot/EspTouchActivityAbs.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/java/net/jajica/myhomeiot/EspTouchApp.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/drawable/baseline_info_black_24.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/drawable/ic_info_outline_white_24dp.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/7.2/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.2/fileHashes/fileHashes.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/7.2/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.2/fileHashes/fileHashes.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/checksums/checksums.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/checksums/md5-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/checksums/md5-checksums.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/checksums/sha1-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/checksums/sha1-checksums.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_ycuwq_widgets_datepicker_1_0_1_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_ycuwq_widgets_datepicker_1_0_1_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/debug/ic_edit-playstore.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/debug/res/values/ic_edit_background.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/ic_edit-playstore.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/java/net/jajica/myhomeiot/SettingsActivity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/drawable-anydpi/ic_action_edit.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/drawable-hdpi/ic_action_edit.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/drawable-mdpi/ic_action_edit.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/drawable-xhdpi/ic_action_edit.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/drawable-xxhdpi/ic_action_edit.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/layout/activity_settings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/mipmap-hdpi/ic_edit.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/mipmap-hdpi/ic_edit_round.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/mipmap-mdpi/ic_edit.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/mipmap-mdpi/ic_edit_round.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/mipmap-xhdpi/ic_edit.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/mipmap-xhdpi/ic_edit_round.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/mipmap-xxhdpi/ic_edit.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/mipmap-xxhdpi/ic_edit_round.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/mipmap-xxxhdpi/ic_edit.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/mipmap-xxxhdpi/ic_edit_round.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/values/ic_edit_background.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/IotControl.iml" beforeDir="false" afterPath="$PROJECT_DIR$/IotControl.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MyHomeIot/.idea/deploymentTargetDropDown.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../MyHomeIot/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/AndroidManifest.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../MyHomeIot/app/src/main/java/net/jajica/myhomeiot/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/java/net/jajica/myhomeiot/MainActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/layout/activity_esptouch.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/layout/activity_esptouch.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/layout/activity_main.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/layout/activity_main.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/menu/connections_devices_menu.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/menu/connections_devices_menu.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/drawable/ic_user_profile.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/drawable/ic_user_profile.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/values-es/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/values-es/strings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/values-night/themes.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/values-night/themes.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/values/colors.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/values/colors.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/values/strings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/values/styles.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/values/styles.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/values/themes.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/values/themes.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MyHomeIot/libIot/src/main/java/net/jajica/libiot/IotSitesDevices.java" beforeDir="false" afterPath="$PROJECT_DIR$/../MyHomeIot/libIot/src/main/java/net/jajica/libiot/IotSitesDevices.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

@@ -10,6 +10,12 @@
     <string name="addDevice">Nuevo dispositivo</string>
     <string name="installDevice">Instalar dispositivo</string>
     <string name="settings">Configuracion</string>
+    <string name="settingsUser">Usuario</string>
+    <string name="settingsPassword">Contraseña</string>
+    <string name="settingsDni">Dni</string>
+    <string name="settingsMail">Correo</string>
+    <string name="settingsTelephone">Telefono</string>
+    <string name="settingsSave">Guardar</string>
 
 
     <string name="esptouch_message_permission">La app requiere permisos de localizacion para poder detectar las redes wifi. \nClick para obtener el permiso</string>
@@ -36,6 +42,6 @@
     <string name="esptouch1_configure_result_success">Con exito!</string>
     <string name="esptouch1_configure_result_success_item">BSSID = %1$s, IP = %2$s</string>
     <string name="esptouch1_send_data_to_device">Enviando datos al dispositivo</string>
-    <string name="menu_item_about">Acerca de</string>
     <string name="about_app_version">App Version: %s</string>
+    <string name="menu_item_about">About...</string>
 </resources>

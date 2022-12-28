@@ -107,8 +107,20 @@ public class IotSitesDevices {
     }
 
     public IotSitesDevices() {
+        setRoomList(null);
+        setSiteName(null);
+        setStreetNumber(-1);
+        setPoBox(-1);
+        setCity(null);
+        setCountry(null);
+        setLongitude(-1);
+        setLatitude(-1);
+        setJsonObject(null);
+
+
 
     }
+
 
     public IOT_DEVICE_USERS_RESULT object2json() {
 

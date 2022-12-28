@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SettingsActivity"
+    android:padding="16dp"
+    android:background="?colorPrimaryContainer"
+    >
+    <TextView
+        android:layout_marginTop="50dp"
+        android:id="@+id/textSettings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/user_profile"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:textColor="?colorOnPrimaryContainer"/>
+
+    <GridLayout
+        android:id="@+id/gridLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:columnCount="3"
+        android:rowCount="4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/textSettings"
+        app:layout_constraintTop_toBottomOf="@+id/textSettings">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_user_profile">
+
+        </androidx.appcompat.widget.AppCompatImageView>
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editUser"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:maxLength="15"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:hint="@string/settingsUser"
+            android:textColor="?colorOnPrimaryContainer">
+
+        </com.google.android.material.textfield.TextInputEditText>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imageEdituser"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:src="@drawable/ic_action_edit">
+
+        </androidx.appcompat.widget.AppCompatImageView>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_user_profile">
+
+        </androidx.appcompat.widget.AppCompatImageView>
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:inputType="textPassword"
+            android:maxLength="15"
+            android:hint="@string/settingsPassword"
+            android:textColor="?colorOnPrimaryContainer">
+
+        </com.google.android.material.textfield.TextInputEditText>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imageEditPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:src="@drawable/ic_action_edit">
+
+        </androidx.appcompat.widget.AppCompatImageView>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_user_profile">
+
+        </androidx.appcompat.widget.AppCompatImageView>
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editDni"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:maxLength="9"
+            android:maxLines="1"
+            android:hint="@string/settingsDni"
+            android:textColor="?colorOnPrimaryContainer">
+
+        </com.google.android.material.textfield.TextInputEditText>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imageEditDni"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:src="@drawable/ic_action_edit">
+
+        </androidx.appcompat.widget.AppCompatImageView>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_user_profile">
+
+        </androidx.appcompat.widget.AppCompatImageView>
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editMail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:inputType="textEmailAddress"
+            android:maxLines="2"
+            android:hint="@string/settingsMail">
+
+        </com.google.android.material.textfield.TextInputEditText>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imageEditMail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:src="@drawable/ic_action_edit"
+            android:textColor="?colorOnPrimaryContainer">
+        </androidx.appcompat.widget.AppCompatImageView>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_user_profile">
+
+        </androidx.appcompat.widget.AppCompatImageView>
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editTelephone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:inputType="text"
+            android:maxLines="15"
+            android:hint="@string/settingsTelephone">
+
+        </com.google.android.material.textfield.TextInputEditText>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imageEditTelephone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:src="@drawable/ic_action_edit"
+            android:textColor="?colorOnPrimaryContainer">
+        </androidx.appcompat.widget.AppCompatImageView>
+    </GridLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/buttonSettingSave"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/settingsSave"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:background="?colorSecondaryContainer"
+        android:textColor="?colorOnPrimaryContainer">
+
+    </androidx.appcompat.widget.AppCompatButton>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

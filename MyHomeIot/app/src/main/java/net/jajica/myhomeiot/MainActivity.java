@@ -24,6 +24,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
+import net.jajica.libiot.IOT_LABELS_JSON;
 import net.jajica.libiot.IOT_MQTT_STATUS_CONNECTION;
 import net.jajica.libiot.IOT_OPERATION_CONFIGURATION_DEVICES;
 import net.jajica.libiot.IotMqttConnection;
@@ -31,15 +32,17 @@ import net.jajica.libiot.IotRoomsDevices;
 import net.jajica.libiot.IotDevice;
 
 
+import net.jajica.libiot.IotSitesDevices;
 import net.jajica.libiot.IotUsersDevices;
 import net.jajica.myhomeiot.databinding.ActivityMainBinding;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 //import org.eclipse.paho.client.mqttv3.IMqttToken;
 
 
-public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener{
+public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener, Serializable {
 
     private final String TAG = "MainActivity";
     private IotUsersDevices configuration;
@@ -314,7 +317,9 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     }
 
 
-    ActivityResultLauncher<Intent> lanzadorActivityInstalarDispositivo = registerForActivityResult(
+
+
+    ActivityResultLauncher<Intent>lanzadorActivityInstalarDispositivo = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {
                 @Override
@@ -339,6 +344,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         switch (item.getItemId()) {
 
             case R.id.itemSettings:
+                lanzarActivitySettings();
                 break;
             case R.id.itemInstallDevice:
                 lanzarActivityInstalarDispositivo();
@@ -349,4 +355,40 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         }
         return false;
     }
+
+    private void createNewHome(IotSitesDevices site) {
+
+
+
+    }
+
+
+
+
+    ActivityResultLauncher<Intent> lanzadorActivitySettings = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+
+                    if (result.getResultCode() == RESULT_OK) {
+                        String dato = result.getData().getDataString();
+                        Log.i(getLocalClassName(), "Recibimos datos " + dato);
+
+                    } else {
+                        Log.w(getLocalClassName(), "Error al instalar el dispositivo");
+                    }
+
+                }
+            }
+    );
+
+    private void lanzarActivitySettings() {
+
+        Intent lanzadorActivitysettings = new Intent(MainActivity.this, SettingsActivity.class);
+        lanzadorActivitysettings.putExtra(IOT_LABELS_JSON.CONFIGURE_APP.getValorTextoJson(), configuration.getJsonObject().toString());
+        lanzadorActivitySettings.launch(lanzadorActivitysettings);
+    }
+
+
 }
