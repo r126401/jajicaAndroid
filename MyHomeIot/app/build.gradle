@@ -66,6 +66,9 @@ dependencies {
     implementation 'com.github.EspressifApp:lib-esptouch-android:1.0.0'
     implementation 'com.github.EspressifApp:lib-esptouch-v2-android:2.2.1'
 
+    //Implementation to scan qr-code
+    implementation 'com.journeyapps:zxing-android-embedded:4.3.0'
+
 
 
 

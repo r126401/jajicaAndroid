@@ -25,7 +25,6 @@ public class IotUsersDevices {
     protected String configurationFile;
 
     public JSONObject getJsonObject() {
-        object2json();
         return jsonObject;
     }
 

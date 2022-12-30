@@ -18,7 +18,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
@@ -35,6 +34,9 @@ import net.jajica.libiot.IotDevice;
 import net.jajica.libiot.IotSitesDevices;
 import net.jajica.libiot.IotUsersDevices;
 import net.jajica.myhomeiot.databinding.ActivityMainBinding;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -350,6 +352,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                 lanzarActivityInstalarDispositivo();
                 break;
             case R.id.itemNewDevice:
+                launchActivityNewDevice();
                 break;
 
         }
@@ -372,8 +375,9 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                 public void onActivityResult(ActivityResult result) {
 
                     if (result.getResultCode() == RESULT_OK) {
-                        String dato = result.getData().getDataString();
-                        Log.i(getLocalClassName(), "Recibimos datos " + dato);
+                        String data = result.getData().getDataString();
+                        Log.i(getLocalClassName(), "Recibimos datos " + data);
+                        insertSettingsIntoConfiguration(data);
 
                     } else {
                         Log.w(getLocalClassName(), "Error al instalar el dispositivo");
@@ -385,10 +389,59 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 
     private void lanzarActivitySettings() {
 
+        JSONObject data;
         Intent lanzadorActivitysettings = new Intent(MainActivity.this, SettingsActivity.class);
-        lanzadorActivitysettings.putExtra(IOT_LABELS_JSON.CONFIGURE_APP.getValorTextoJson(), configuration.getJsonObject().toString());
+        data = configuration.getJsonObject();
+        if (data != null) {
+            lanzadorActivitysettings.putExtra(IOT_LABELS_JSON.CONFIGURE_APP.getValorTextoJson(), configuration.getJsonObject().toString());
+        } else {
+            lanzadorActivitysettings.putExtra(IOT_LABELS_JSON.CONFIGURE_APP.getValorTextoJson(), "null");
+
+        }
         lanzadorActivitySettings.launch(lanzadorActivitysettings);
     }
 
+    private void insertSettingsIntoConfiguration(String data) {
+
+        JSONObject jsonObject;
+
+        try {
+            jsonObject = new JSONObject(data);
+            configuration.setUser(jsonObject.getString(IOT_LABELS_JSON.USER.getValorTextoJson()));
+            configuration.setPassword(jsonObject.getString(IOT_LABELS_JSON.PASSWORD.getValorTextoJson()));
+            configuration.setMail(jsonObject.getString(IOT_LABELS_JSON.MAIL.getValorTextoJson()));
+            configuration.setDni(jsonObject.optString(IOT_LABELS_JSON.DNI.getValorTextoJson()));
+            configuration.setTelephone(jsonObject.optString(IOT_LABELS_JSON.TELEPHONE.getValorTextoJson()));
+            configuration.object2json();
+            configuration.saveConfiguration(getApplicationContext());
+        } catch (JSONException e) {
+
+        }
+    }
+
+    ActivityResultLauncher<Intent> launcherActivityNewDevice = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+
+                    if (result.getResultCode() == RESULT_OK) {
+                        String data = result.getData().getDataString();
+                        Log.i(getLocalClassName(), "Recibimos datos " + data);
+                        insertSettingsIntoConfiguration(data);
+
+                    } else {
+                        Log.w(getLocalClassName(), "Error al instalar el dispositivo");
+                    }
+
+                }
+            }
+    );
+
+    private void launchActivityNewDevice() {
+
+        Intent launcherActivity = new Intent(MainActivity.this, AddDeviceActivity.class);
+        launcherActivityNewDevice.launch(launcherActivity);
+    }
 
 }

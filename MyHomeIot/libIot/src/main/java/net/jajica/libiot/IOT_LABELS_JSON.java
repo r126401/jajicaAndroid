@@ -85,7 +85,8 @@ public enum IOT_LABELS_JSON {
     LONGITUDE("longitude"),
     LATITUDE("latitude"),
     NAME_ROOM("nameRoom"),
-    ID_ROOM("idRoom");
+    ID_ROOM("idRoom"),
+    NEW_DEVICE("newDevice");
 
 
     private String dialogo;

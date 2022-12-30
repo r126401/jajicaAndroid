@@ -6,7 +6,7 @@
     <string name="admin_home">Administrar ubicaciones</string>
     <string name="notifications">Notificaciones</string>
     <string name="mqttServer">conectando...</string>
-    <string name="nameDevice">Nombre dispositivo</string>
+    <string name="nameDevice">Nombre dispositivo (20 caracteres)</string>
     <string name="addDevice">Nuevo dispositivo</string>
     <string name="installDevice">Instalar dispositivo</string>
     <string name="settings">Configuracion</string>
@@ -16,6 +16,12 @@
     <string name="settingsMail">Correo</string>
     <string name="settingsTelephone">Telefono</string>
     <string name="settingsSave">Guardar</string>
+    <string name="settingsNewAccount">Por favor, crea una cuenta nueva para poder acceder</string>
+    <string name="settingsInvalidPassword">contraseña invalida</string>
+    <string name="settingsInvalidDni">Dni invalido</string>
+    <string name="settingsInvalidMail">Mail invalido</string>
+    <string name="settingsInvalidTelephone">Telefono invalido</string>
+    <string name="settingsInvalidUser">usuario invalido</string>
 
 
     <string name="esptouch_message_permission">La app requiere permisos de localizacion para poder detectar las redes wifi. \nClick para obtener el permiso</string>
@@ -44,4 +50,10 @@
     <string name="esptouch1_send_data_to_device">Enviando datos al dispositivo</string>
     <string name="about_app_version">App Version: %s</string>
     <string name="menu_item_about">About...</string>
+    <string name="add_device_id_device">Nuevo id dispositivo (9 caracteres)</string>
+    <string name="action_save">Guardar</string>
+    <string name="action_scan">Escanear</string>
+    <string name="inst_add_device">Escanea el qr-code del dispositivo o añadelo manualmente</string>
+    <string name="correct_scan">Escaneo correcto</string>
+    <string name="incorrect_scan">El escaneo no corresponde a ningun dispositivo</string>
 </resources>

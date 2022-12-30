@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddDeviceActivity"
+    android:padding="16dp"
+    android:background="?colorPrimaryContainer">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_marginTop="20dp"
+        android:id="@+id/appCompatTextView3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/addDevice"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </androidx.appcompat.widget.AppCompatTextView>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/appCompatTextView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/inst_add_device"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appCompatTextView3">
+
+    </androidx.appcompat.widget.AppCompatTextView>
+
+
+    <GridLayout
+        android:id="@+id/grid1"
+        android:layout_marginTop="25dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:columnCount="3"
+        android:rowCount="3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appCompatTextView2">
+
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_action_name">
+
+        </androidx.appcompat.widget.AppCompatImageView>
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editTextDeviceName"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/nameDevice"
+            android:maxLength="20"
+            android:maxLines="1">
+
+        </com.google.android.material.textfield.TextInputEditText>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imageDeviceNameError"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_action_error"
+            android:visibility="invisible">
+
+        </androidx.appcompat.widget.AppCompatImageView>
+
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_action_device"
+            android:layout_gravity="center">
+
+        </androidx.appcompat.widget.AppCompatImageView>
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editTextDeviceId"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/add_device_id_device"
+            android:maxLines="1"
+            android:maxLength="12">
+
+        </com.google.android.material.textfield.TextInputEditText>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imageDeviceIdError"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_action_error"
+            android:layout_gravity="center"
+            android:visibility="invisible">
+
+        </androidx.appcompat.widget.AppCompatImageView>
+    </GridLayout>
+
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/buttonSaveDevice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="52dp"
+        android:drawableStart="@drawable/ic_action_save"
+        android:text="@string/action_save"
+        app:layout_constraintBottom_toBottomOf="@+id/buttonScanDevice"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/buttonScanDevice"
+        app:layout_constraintVertical_bias="0.0">
+
+    </androidx.appcompat.widget.AppCompatButton>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/buttonScanDevice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="52dp"
+        android:layout_marginTop="48dp"
+        android:drawableStart="@drawable/ic_action_qr"
+        android:text="@string/action_scan"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/grid1">
+
+    </androidx.appcompat.widget.AppCompatButton>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textResult"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonScanDevice"
+        android:layout_marginTop="30dp">
+
+    </androidx.appcompat.widget.AppCompatTextView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
