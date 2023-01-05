@@ -13,11 +13,21 @@ public class IotSitesDevices {
     protected int streetNumber;
     protected int poBox;
     protected String city;
+    protected String province;
     protected String country;
     protected double longitude;
     protected double latitude;
     protected ArrayList<IotRoomsDevices> roomList;
     protected JSONObject jsonObject;
+
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
 
     public JSONObject getJsonObject() {
         return jsonObject;
@@ -113,6 +123,7 @@ public class IotSitesDevices {
         setPoBox(-1);
         setCity(null);
         setCountry(null);
+        setProvince(null);
         setLongitude(-1);
         setLatitude(-1);
         setJsonObject(null);
@@ -135,6 +146,7 @@ public class IotSitesDevices {
             jsonObject.put(IOT_LABELS_JSON.STREET_NUMBER.getValorTextoJson(), streetNumber);
             jsonObject.put(IOT_LABELS_JSON.PO_BOX.getValorTextoJson(), poBox);
             jsonObject.put(IOT_LABELS_JSON.CITY.getValorTextoJson(), city);
+            jsonObject.put(IOT_LABELS_JSON.PROVINCE.getValorTextoJson(), province);
             jsonObject.put(IOT_LABELS_JSON.COUNTRY.getValorTextoJson(),country);
             jsonObject.put(IOT_LABELS_JSON.LATITUDE.getValorTextoJson(), latitude);
             jsonObject.put(IOT_LABELS_JSON.LONGITUDE.getValorTextoJson(), longitude);
@@ -214,6 +226,7 @@ public class IotSitesDevices {
             setStreet(object.optString(IOT_LABELS_JSON.STREET.getValorTextoJson()));
             setStreetNumber(object.optInt(IOT_LABELS_JSON.STREET_NUMBER.getValorTextoJson()));
             setCity(object.optString(IOT_LABELS_JSON.CITY.getValorTextoJson()));
+            setProvince(object.optString(IOT_LABELS_JSON.PROVINCE.getValorTextoJson()));
             setCountry(object.optString(IOT_LABELS_JSON.COUNTRY.getValorTextoJson()));
             setPoBox(object.optInt(IOT_LABELS_JSON.PO_BOX.getValorTextoJson()));
             array = object.getJSONArray(IOT_LABELS_JSON.ROOM.getValorTextoJson());

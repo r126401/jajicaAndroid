@@ -21,6 +21,8 @@
         android:animateLayoutChanges="true"
         android:background="?attr/colorPrimaryContainer">
 
+
+
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_height="?attr/actionBarSize"
@@ -29,11 +31,20 @@
             android:background="?attr/colorPrimaryContainer">
         </androidx.appcompat.widget.Toolbar>
 
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="match_parent"
+            android:layout_height="300px"
+            android:background="@drawable/fondo">
+
+        </androidx.appcompat.widget.AppCompatImageView>
+
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/textCasa"
+            android:id="@+id/textHome"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/ic_home_admin" />
+            android:drawableStart="@drawable/ic_home_admin"
+            android:layout_marginTop="15dp"
+            android:textColor="?colorOnPrimaryContainer"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -45,7 +56,8 @@
                 android:layout_height="match_parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:tabMode="scrollable"
-                app:layout_constraintStart_toStartOf="parent">
+                app:layout_constraintStart_toStartOf="parent"
+                android:background="?colorPrimaryContainer">
 
             </com.google.android.material.tabs.TabLayout>
 
@@ -57,7 +69,8 @@
                 android:src="@drawable/ic_grid_view_24"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/buttonAdminRoom"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toTopOf="parent"
+                android:background="?colorPrimaryContainer">
 
             </androidx.appcompat.widget.AppCompatImageButton>
 
@@ -65,10 +78,11 @@
                 android:id="@+id/buttonAdminRoom"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_settings"
+                android:src="@drawable/ic_action_options"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toTopOf="parent"
+                android:background="?colorPrimaryContainer">
 
             </androidx.appcompat.widget.AppCompatImageButton>
 

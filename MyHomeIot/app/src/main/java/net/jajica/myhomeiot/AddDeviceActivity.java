@@ -4,7 +4,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -83,20 +83,46 @@ public class AddDeviceActivity extends AppCompatActivity implements View.OnClick
 
     }
 
+    private void notifyErrorOperation() {
+        mbinding.textResult.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_error, 0,0,0);
+        mbinding.textResult.setText(R.string.incorrect_scan);
+
+    }
+
     private void saveNewDevice() {
 
         Boolean resultName, resultId;
+        JSONObject jsonObject;
 
         resultName = validateName();
         resultId = validateDeviceId();
 
         if ((!resultName) || (!resultId)) {
             setResult(RESULT_CANCELED);
+
         } else {
             setResult(RESULT_OK);
+
+
+            try {
+                jsonObject = new JSONObject();
+                jsonObject.put(IOT_LABELS_JSON.DEVICE_NAME.getValorTextoJson(), mbinding.editTextDeviceName.getText().toString());
+                jsonObject.put(IOT_LABELS_JSON.DEVICE_ID.getValorTextoJson(), mbinding.editTextDeviceId.getText().toString());
+                Intent intent;
+                intent = new Intent();
+                intent.setData(Uri.parse(jsonObject.toString()));
+                finish();
+           } catch (JSONException e) {
+                setResult(RESULT_CANCELED);
+                notifyErrorOperation();
+            }
+
+
         }
 
     }
+
+
 
 
     private void scanDevice() {
@@ -127,13 +153,13 @@ public class AddDeviceActivity extends AppCompatActivity implements View.OnClick
             });
 
 
-    private boolean scanResult(String resultado) {
+    private boolean scanResult(String result) {
 
         JSONObject capture;
 
 
         try {
-            capture = new JSONObject(resultado);
+            capture = new JSONObject(result);
             mbinding.editTextDeviceId.setText(capture.getString(IOT_LABELS_JSON.DEVICE_ID.getValorTextoJson()));
             mbinding.textResult.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_check, 0, 0, 0);
             mbinding.textResult.setText(R.string.correct_scan);

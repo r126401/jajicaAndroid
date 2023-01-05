@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/buttonAddHome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="?colorSecondaryContainer"
+        android:drawableStart="@drawable/ic_action_check"
+        android:text="@string/add_home"
+        android:textColor="?colorOnPrimaryContainer"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:layout_editor_absoluteX="16dp"
+        android:layout_gravity="end">
+
+    </androidx.appcompat.widget.AppCompatButton>
+
+    <androidx.recyclerview.widget.RecyclerView
+
+        android:id="@+id/recyclerAdminHomes2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/editAddHome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="@string/add_home"
+        android:textColor="?colorOnPrimaryContainer"
+        android:layout_marginTop="10dp"
+        android:visibility="invisible"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/buttonNewHome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/ic_action_check"
+        android:text="@string/button_ok"
+        android:background="?colorSecondaryContainer"
+        android:visibility="invisible">
+
+    </androidx.appcompat.widget.AppCompatButton>
+
+
+</LinearLayout>
+
+
+
+</LinearLayout>
+
+
+
+
+

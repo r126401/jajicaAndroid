@@ -58,6 +58,21 @@
     <string name="inst_add_device">Scan device qr-code or add manually</string>
     <string name="correct_scan">correct Scan</string>
     <string name="incorrect_scan">Scan no corresponding to any device</string>
+    <string name="default_home">Home</string>
+    <string name="default_room">Lounge</string>
+    <string name="admin_homes">Admin homes</string>
+    <string name="name_home">*Name home</string>
+    <string name="street_home">Address</string>
+    <string name="street_number">Nº</string>
+    <string name="city">City</string>
+    <string name="country">Country</string>
+    <string name="district_postal">CP</string>
+    <string name="longitude">Longitude</string>
+    <string name="latitude">latitude</string>
+    <string name="text_messages_admin_home">complete ubication data</string>
+    <string name="province">Province</string>
+    <string name="add_home">Add home</string>
+    <string name="button_ok">Accept</string>
 
 
 </resources>

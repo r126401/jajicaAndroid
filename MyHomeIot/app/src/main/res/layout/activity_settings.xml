@@ -9,14 +9,14 @@
     android:background="?colorPrimaryContainer"
     >
 
-    <TextView
-        android:id="@+id/textSettings"
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textAdminHomes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/user_profile"
         android:textColor="?colorOnPrimaryContainer"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textMessage"
+        app:layout_constraintTop_toBottomOf="@+id/textMessageAdminHomes"
         android:layout_marginTop="20dp"/>
 
     <GridLayout
@@ -27,8 +27,8 @@
         android:rowCount="4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/textSettings"
-        app:layout_constraintTop_toBottomOf="@+id/textSettings">
+        app:layout_constraintStart_toStartOf="@+id/textAdminHomes"
+        app:layout_constraintTop_toBottomOf="@+id/textAdminHomes">
 
         <androidx.appcompat.widget.AppCompatImageView
             android:layout_width="wrap_content"
@@ -176,7 +176,7 @@
     </GridLayout>
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/textMessage"
+        android:id="@+id/textSettings"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"

@@ -1,8 +1,6 @@
 package net.jajica.myhomeiot;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatButton;
-import androidx.interpolator.view.animation.FastOutLinearInInterpolator;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -10,15 +8,14 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.ImageView;
 
 import com.google.android.material.textfield.TextInputEditText;
 
 import net.jajica.libiot.IOT_LABELS_JSON;
-import net.jajica.myhomeiot.databinding.ActivitySettingsBinding;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import net.jajica.myhomeiot.databinding.ActivitySettingsBinding;
 
 public class SettingsActivity extends AppCompatActivity implements View.OnKeyListener, View.OnClickListener {
 
@@ -131,9 +128,13 @@ public class SettingsActivity extends AppCompatActivity implements View.OnKeyLis
                 mbinding.editTelephone.setEnabled(true);
                 mbinding.editTelephone.requestFocus();
                 break;
-            case R.id.buttonSettingSave:
+                /*
+            case R.id.buttonAddHome:
                 Log.i(TAG, "Guardar");
                 saveData();
+                break;
+
+                 */
 
         }
 

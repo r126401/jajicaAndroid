@@ -138,7 +138,7 @@ public class IotUsersDevices {
 
         return IOT_DEVICE_USERS_RESULT.RESULT_OK;
     }
-    protected IOT_JSON_RESULT json2Object() {
+    public IOT_JSON_RESULT json2Object() {
 
         int i;
         JSONObject jsonSite;
@@ -201,9 +201,12 @@ public class IotUsersDevices {
             return IOT_DEVICE_USERS_RESULT.SITE_NOT_EXITS;
         }
         //Si el site tiene rooms no se puede borrar.
-        if(siteList.get(i).roomList.size() > 0) {
-            return IOT_DEVICE_USERS_RESULT.SITE_WITH_ROOMS;
+        if (siteList.get(i).roomList != null) {
+            if(siteList.get(i).roomList.size() > 0) {
+                return IOT_DEVICE_USERS_RESULT.SITE_WITH_ROOMS;
+            }
         }
+
         siteList.remove(i);
         return IOT_DEVICE_USERS_RESULT.RESULT_OK;
     }
@@ -233,10 +236,13 @@ public class IotUsersDevices {
         Ficheros file;
         ESTADO_FICHEROS estado;
         file = new Ficheros();
-        if ((estado = file.escribirFichero(this.getConfigurationFile(), getJsonObject().toString(), context)) != ESTADO_FICHEROS.FICHERO_OK) {
+        if (object2json() == IOT_DEVICE_USERS_RESULT.RESULT_OK) {
+            if ((estado = file.escribirFichero(this.getConfigurationFile(), getJsonObject().toString(), context)) != ESTADO_FICHEROS.FICHERO_OK) {
 
-            return IOT_OPERATION_CONFIGURATION_DEVICES.CORRUPTED_CONFIGURATION;
+                return IOT_OPERATION_CONFIGURATION_DEVICES.CORRUPTED_CONFIGURATION;
+            }
         }
+
         return IOT_OPERATION_CONFIGURATION_DEVICES.OK_CONFIGURATION;
 
 

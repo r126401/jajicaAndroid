@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 
 import com.google.android.material.navigation.NavigationBarView;
@@ -33,18 +34,18 @@ import net.jajica.libiot.IotDevice;
 
 import net.jajica.libiot.IotSitesDevices;
 import net.jajica.libiot.IotUsersDevices;
-import net.jajica.myhomeiot.databinding.ActivityMainBinding;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import net.jajica.myhomeiot.databinding.ActivityMainBinding;
 
 //import org.eclipse.paho.client.mqttv3.IMqttToken;
 
 
-public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener, Serializable {
+public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener, Serializable, View.OnClickListener {
 
     private final String TAG = "MainActivity";
     private IotUsersDevices configuration;
@@ -62,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 
 
         super.onCreate(savedInstanceState);
+        // capturamos los controles
         mbinding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(mbinding.getRoot());
 
@@ -88,6 +90,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         IOT_OPERATION_CONFIGURATION_DEVICES result;
 
         mbinding.bottomNavigationMenu.setOnItemSelectedListener(this);
+        mbinding.textHome.setOnClickListener(this);
 
         if (mbinding.navView!= null) {
             prepararDrawer(mbinding.navView);
@@ -101,20 +104,50 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         switch (result) {
 
             case OK_CONFIGURATION:
+                if (configuration.getSiteList() == null) {
+                    createDefaultSiteRoomConfiguration();
+                }
                 appStatus = APPLICATION_STATUS.APPLICATION_OK;
                 break;
             case CORRUPTED_CONFIGURATION:
             case NO_CONFIGURATION:
                 appStatus = APPLICATION_STATUS.NO_DEVICES_CONFIGURATION;
+                createDefaultSiteRoomConfiguration();
                 break;
 
         }
 
         makeConnect();
-        createStructure(1);
+        createStructure(0);
 
 
         return APPLICATION_STATUS.APPLICATION_OK;
+    }
+
+    private void createDefaultSiteRoomConfiguration() {
+
+        IotSitesDevices site;
+        IotRoomsDevices room;
+        ArrayList<IotSitesDevices> listSites;
+        ArrayList<IotRoomsDevices> listRooms;
+
+        site = new IotSitesDevices();
+        site.setSiteName(getResources().getString(R.string.default_home));
+        room = new IotRoomsDevices();
+        room.setIdRoom(1);
+        room.setNameRoom(getResources().getString(R.string.default_room));
+        listSites = new ArrayList<>();
+        listRooms = new ArrayList<>();
+        listSites.add(site);
+        listRooms.add(room);
+        site.setRoomList(listRooms);
+        configuration.setSiteList(listSites);
+        configuration.object2json();
+        configuration.saveConfiguration(getApplicationContext());
+        Log.i(TAG, "hola");
+
+
+
     }
 
 
@@ -174,9 +207,9 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 
         if (configuration.getSiteList() != null) {
             rooms = configuration.getSiteList().get(indexSite).getRoomList();
-            mbinding.textCasa.setText(configuration.getSiteList().get(indexSite).getSiteName() + ">");
+            mbinding.textHome.setText(configuration.getSiteList().get(indexSite).getSiteName());
         } else {
-            mbinding.textCasa.setText("Ninguna casa");
+            mbinding.textHome.setText("Ninguna casa");
         }
 
         if (rooms == null)  {
@@ -239,21 +272,18 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         FragmentManager fragmentManager = getSupportFragmentManager();
 
         switch (itemDrawer.getItemId()) {
-            case R.id.item_user_profile:
+            case (R.id.item_user_profile):
                 Log.i(TAG, "user_profile");
-                //fragmentoGenerico = new FragmentoInicio();
                 break;
             case R.id.item_connection:
                 Log.i(TAG, "connection");
-                //fragmentoGenerico = new FragmentoCuenta();
                 break;
             case R.id.item_home_admin:
                 Log.i(TAG, "home_admin");
-                //fragmentoGenerico = new FragmentoCategorias();
+                launchHomesActivity();
                 break;
             case R.id.item_notifications:
                 Log.i(TAG, "notifications");
-                //startActivity(new Intent(this, ActividadConfiguracion.class));
                 break;
         }
         if (fragmentoGenerico != null) {
@@ -444,4 +474,45 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         launcherActivityNewDevice.launch(launcherActivity);
     }
 
+    ActivityResultLauncher<Intent> launcherActivityAdminHomes = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+
+                    if (result.getResultCode() == RESULT_OK) {
+                        String data = result.getData().getDataString();
+                        Log.i(getLocalClassName(), "Recibimos datos " + data);
+                        insertSettingsIntoConfiguration(data);
+
+                    } else {
+                        Log.w(getLocalClassName(), "Error al instalar el dispositivo");
+                    }
+
+                }
+            }
+    );
+
+    private void launchHomesActivity() {
+        Intent launcherActivity = new Intent(MainActivity.this, HomesActivity.class);
+        if (configuration.getJsonObject() != null) {
+            launcherActivity.putExtra(IOT_LABELS_JSON.NAME_SITE.getValorTextoJson(), mbinding.textHome.getText().toString());
+        } else {
+            launcherActivity.putExtra(IOT_LABELS_JSON.NAME_SITE.getValorTextoJson(), "null");
+        }
+
+        launcherActivityAdminHomes.launch(launcherActivity);
+    }
+
+
+    @Override
+    public void onClick(View v) {
+
+        switch (v.getId()) {
+            case (R.id.textHome):
+                launchHomesActivity();
+                break;
+        }
+
+    }
 }

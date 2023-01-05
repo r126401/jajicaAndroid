@@ -56,4 +56,19 @@
     <string name="inst_add_device">Escanea el qr-code del dispositivo o añadelo manualmente</string>
     <string name="correct_scan">Escaneo correcto</string>
     <string name="incorrect_scan">El escaneo no corresponde a ningun dispositivo</string>
+    <string name="default_home">Casa</string>
+    <string name="default_room">Salon</string>
+    <string name="admin_homes">Administrar casas</string>
+    <string name="name_home">*Nombre de la ubicación</string>
+    <string name="street_home">Dirección</string>
+    <string name="street_number">Nº</string>
+    <string name="city">Ciudad</string>
+    <string name="country">Pais</string>
+    <string name="district_postal">Código postal</string>
+    <string name="longitude">Longitud</string>
+    <string name="latitude">Latitud</string>
+    <string name="text_messages_admin_home">Rellena los datos de la ubicacion</string>
+    <string name="province">Provincia</string>
+    <string name="add_home">Añadir ubicacion</string>
+    <string name="button_ok">Aceptar</string>
 </resources>

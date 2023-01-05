@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:layout_gravity="fill_horizontal"
+    android:gravity="fill_horizontal">
+
+<androidx.appcompat.widget.AppCompatImageView
+    android:id="@+id/imageHome"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:src="@drawable/ic_home_admin"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/editTextAdminHome"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/default_home"
+        android:layout_marginStart="20dp"
+        android:minWidth="220dp"/>
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imageEditHome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_action_edit"/>
+
+
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imageDeleteHome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_action_delete"
+        android:layout_gravity="right">
+
+    </androidx.appcompat.widget.AppCompatImageView>
+
+
+
+</LinearLayout>
