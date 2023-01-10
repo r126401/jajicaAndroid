@@ -71,4 +71,7 @@
     <string name="province">Provincia</string>
     <string name="add_home">Añadir ubicacion</string>
     <string name="button_ok">Aceptar</string>
+    <string name="site_no_empty">La ubicacion no esta vacia. Si aceptas, se borraran todos los dispositivos y estancias.</string>
+    <string name="warning">Aviso!</string>
+    <string name="cancel">Cancelar</string>
 </resources>

@@ -67,6 +67,33 @@ public class ListHomesAdapter extends RecyclerView.Adapter<ListHomesAdapter.List
 
     @Override
     public void onBindViewHolder(@NonNull ListHomesAdapter.ListHomesAdapterViewHolder holder, int position) {
+
+        holder.imageEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String data = holder.editText.getText().toString();
+                onRowSelectedData.onRowEditData(data, position);
+                Log.i(TAG, "hh");
+            }
+        });
+        holder.imageDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String data = holder.editText.getText().toString();
+                onRowSelectedData.onDeleteData(data, position);
+                Log.i(TAG, "hh");
+
+            }
+        });
+        holder.editText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String data = holder.editText.getText().toString();
+                onRowSelectedData.onRowSelectedData(data, position);
+                Log.i(TAG, "hh");
+
+            }
+        });
         holder.editText.setText(listSites.get(position).getSiteName());
         if (holder.editText.getText().toString().equals(currentSite)) {
             holder.editText.setTypeface(null, Typeface.BOLD);

@@ -7,7 +7,9 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentResultListener;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.app.AlertDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -19,15 +21,17 @@ import net.jajica.myhomeiot.databinding.ActivityHomesBinding;
 
 import java.util.ArrayList;
 
-public class HomesActivity extends AppCompatActivity implements View.OnClickListener{
+public class HomesActivity extends AppCompatActivity implements View.OnClickListener, ParentHomesFragment.OnPassCurrentSite {
 
     private final String TAG = "HomesActivity";
     ActivityHomesBinding mbinding;
     ArrayList<IotSitesDevices> listSites;
     ListHomesAdapter adapter;
-    Fragment mainAdminHomeFragment;
+    ParentHomesFragment mainAdminHomeFragment;
     Fragment adminHomeFragment;
     String currentSite;
+
+
 
     FragmentTransaction fragmentTransaction;
     FragmentManager fragmentManager;
@@ -65,11 +69,44 @@ public class HomesActivity extends AppCompatActivity implements View.OnClickList
         adminHomeFragment = new AdminHomeFragment();
         fragmentManager = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.containerAdminHomes, ParentHomesFragment.class, bundle);
+        fragmentTransaction.add(R.id.containerAdminHomes, ParentHomesFragment.class, bundle, "ParentHomesAdapter");
+        fragmentTransaction.setReorderingAllowed(true);
+        fragmentTransaction.addToBackStack("ParentHomesAdapter");
         fragmentTransaction.commit();
+
+
+        Log.i(TAG, "hh");
 
     }
 
+
+    @Override
+    public void onPassCurrentSite(String currentSite) {
+
+        Intent intent;
+
+        intent = new Intent();
+        this.currentSite = currentSite;
+        intent.setData(Uri.parse(currentSite));
+        setResult(RESULT_OK, intent);
+        finish();
+
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        //fragmentManager.executePendingTransactions();
+        Fragment fragment = fragmentManager.findFragmentByTag("ParentHomesAdapter");
+        if (fragment == null) {
+            finish();
+        }
+
+
+
+    }
 
 
 }

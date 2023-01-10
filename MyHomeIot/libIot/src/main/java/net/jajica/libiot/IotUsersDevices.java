@@ -212,7 +212,7 @@ public class IotUsersDevices {
     }
 
 
-    protected int searchSiteOfUser(String name) {
+    public int searchSiteOfUser(String name) {
 
         int i;
 

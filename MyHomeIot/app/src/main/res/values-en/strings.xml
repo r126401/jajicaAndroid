@@ -73,6 +73,9 @@
     <string name="province">Province</string>
     <string name="add_home">Add home</string>
     <string name="button_ok">Accept</string>
+    <string name="site_no_empty">The site is not empty. If you accept, the devices and rooms will be deleted.</string>
+    <string name="warning">Warning!</string>
+    <string name="cancel">Cancel</string>
 
 
 </resources>

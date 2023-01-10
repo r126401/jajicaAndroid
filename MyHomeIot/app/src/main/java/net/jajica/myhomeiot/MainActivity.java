@@ -409,6 +409,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                         Log.i(getLocalClassName(), "Recibimos datos " + data);
                         insertSettingsIntoConfiguration(data);
 
+
                     } else {
                         Log.w(getLocalClassName(), "Error al instalar el dispositivo");
                     }
@@ -474,7 +475,8 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         launcherActivityNewDevice.launch(launcherActivity);
     }
 
-    ActivityResultLauncher<Intent> launcherActivityAdminHomes = registerForActivityResult(
+
+    ActivityResultLauncher<Intent> launcherHomesActivity = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {
                 @Override
@@ -483,7 +485,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                     if (result.getResultCode() == RESULT_OK) {
                         String data = result.getData().getDataString();
                         Log.i(getLocalClassName(), "Recibimos datos " + data);
-                        insertSettingsIntoConfiguration(data);
+                        mbinding.textHome.setText(data);
 
                     } else {
                         Log.w(getLocalClassName(), "Error al instalar el dispositivo");
@@ -501,7 +503,8 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
             launcherActivity.putExtra(IOT_LABELS_JSON.NAME_SITE.getValorTextoJson(), "null");
         }
 
-        launcherActivityAdminHomes.launch(launcherActivity);
+        launcherHomesActivity.launch(launcherActivity);
+
     }
 
 
@@ -515,4 +518,5 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         }
 
     }
+
 }

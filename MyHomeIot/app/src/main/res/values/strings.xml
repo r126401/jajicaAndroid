@@ -60,7 +60,6 @@
     <string name="default_room">Salon</string>
     <string name="admin_homes">Administrar casas</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="name_home">*Nombre de la ubicación</string>
     <string name="street_home">Dirección</string>
     <string name="street_number">Nº</string>
@@ -73,4 +72,8 @@
     <string name="province">Provincia</string>
     <string name="add_home">Añadir ubicacion</string>
     <string name="button_ok">Aceptar</string>
+    <string name="site_no_empty">La ubicacion no esta vacia. Si aceptas, se borraran todos los dispositivos y estancias.</string>
+    <string name="warning">Aviso!</string>
+    <string name="cancel">Cancelar</string>
+
 </resources>
