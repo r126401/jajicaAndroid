@@ -19,6 +19,7 @@ import android.view.inputmethod.InputMethodManager;
 
 import net.jajica.libiot.IOT_DEVICE_USERS_RESULT;
 import net.jajica.libiot.IOT_LABELS_JSON;
+import net.jajica.libiot.IotRoomsDevices;
 import net.jajica.libiot.IotSitesDevices;
 import net.jajica.libiot.IotUsersDevices;
 import net.jajica.myhomeiot.databinding.FragmentParentHomesBinding;
@@ -176,11 +177,17 @@ public class ParentHomesFragment extends Fragment implements ListHomesAdapter.On
 
     private IOT_DEVICE_USERS_RESULT addSite() {
         IotSitesDevices site;
+        IotRoomsDevices room;
         String siteName;
         IOT_DEVICE_USERS_RESULT result;
         site = new IotSitesDevices();
         siteName = mbinding.editAddHome.getText().toString();
         site.setSiteName(siteName);
+        room = new IotRoomsDevices();
+        room.setNameRoom(getActivity().getResources().getString(R.string.default_room));
+        room.setIdRoom(1);
+        site.insertRoomForSite(room);
+
         result = user.insertSiteForUser(site);
         if (result == IOT_DEVICE_USERS_RESULT.RESULT_OK) {
             Log.i(TAG, "jj");
