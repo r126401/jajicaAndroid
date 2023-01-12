@@ -111,6 +111,7 @@ public class AddDeviceActivity extends AppCompatActivity implements View.OnClick
                 Intent intent;
                 intent = new Intent();
                 intent.setData(Uri.parse(jsonObject.toString()));
+                setResult(RESULT_OK, intent);
                 finish();
            } catch (JSONException e) {
                 setResult(RESULT_CANCELED);

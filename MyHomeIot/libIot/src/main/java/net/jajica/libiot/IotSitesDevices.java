@@ -182,7 +182,9 @@ public class IotSitesDevices {
         return IOT_DEVICE_USERS_RESULT.RESULT_OK;
     }
 
-    public IOT_DEVICE_USERS_RESULT deleteRoomForSite(String nameRoom) {
+
+
+    public IOT_DEVICE_USERS_RESULT deleteRoomForSite(String nameRoom, Boolean mandatory) {
 
         int i;
         if ((i = searchRoom(nameRoom)) < 0) {
@@ -191,6 +193,7 @@ public class IotSitesDevices {
         // Si el site tiene rooms no se puede borrar.
         if (roomList.get(i).deviceList != null) {
             if (roomList.get(i).deviceList.size() > 0) {
+                if (mandatory) roomList.remove(i);
                 return IOT_DEVICE_USERS_RESULT.ROOM_WITH_DEVICES;
             }
         }

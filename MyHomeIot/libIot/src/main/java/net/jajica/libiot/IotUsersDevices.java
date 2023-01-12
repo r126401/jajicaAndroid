@@ -224,7 +224,7 @@ public class IotUsersDevices {
         return IOT_DEVICE_USERS_RESULT.RESULT_OK;
     }
 
-    public IOT_DEVICE_USERS_RESULT deleteSiteForUser(String nameSite) {
+    public IOT_DEVICE_USERS_RESULT deleteSiteForUser(String nameSite, Boolean mandatory) {
 
         int i;
         if ((i = searchSiteOfUser(nameSite)) < 0) {
@@ -233,6 +233,7 @@ public class IotUsersDevices {
         //Si el site tiene rooms no se puede borrar.
         if (siteList.get(i).roomList != null) {
             if(siteList.get(i).roomList.size() > 0) {
+                if (mandatory) siteList.remove(i);
                 return IOT_DEVICE_USERS_RESULT.SITE_WITH_ROOMS;
             }
         }

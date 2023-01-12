@@ -126,7 +126,7 @@ public class AdminRoomsFragment extends Fragment  implements View.OnClickListene
     private void deleteRoom(String rootName, int position) {
 
 
-        site.deleteRoomForSite(rootName);
+        site.deleteRoomForSite(rootName, false);
         adapter.notifyItemRemoved(position);
         configuration.saveConfiguration(context);
 

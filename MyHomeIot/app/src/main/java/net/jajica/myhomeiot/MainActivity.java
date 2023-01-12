@@ -482,7 +482,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 
                     configuration.reloadConfiguration();
                     createStructure();
- 
+
                 }
             }
     );

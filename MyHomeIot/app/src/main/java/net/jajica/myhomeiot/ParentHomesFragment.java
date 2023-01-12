@@ -108,12 +108,16 @@ public class ParentHomesFragment extends Fragment implements ListHomesAdapter.On
     @Override
     public void onRowSelectedData(String siteName, int position) {
 
-
+/*
         Log.i(TAG, "data");
         Bundle bundle;
         bundle = new Bundle();
         this.currentSite = siteName;
         bundle.putString(IOT_LABELS_JSON.NAME_SITE.getValorTextoJson(), currentSite);
+
+ */
+        user.setCurrentSite(siteName);
+        user.saveConfiguration(getActivity().getApplicationContext());
         onPassCurrentSite.onPassCurrentSite(currentSite);
     }
 
@@ -223,10 +227,11 @@ public class ParentHomesFragment extends Fragment implements ListHomesAdapter.On
             builder.setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    if (user.deleteSiteForUser(siteName) == IOT_DEVICE_USERS_RESULT.RESULT_OK){
-                        user.saveConfiguration(getActivity().getApplicationContext());
-                        adapter.notifyItemRemoved(position);
-                    }
+                    listSites.remove(position);
+                    user.deleteSiteForUser(siteName, true);
+                    user.saveConfiguration(getActivity().getApplicationContext());
+
+                    adapter.notifyItemRemoved(position);
                 }
             });
             builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -239,7 +244,7 @@ public class ParentHomesFragment extends Fragment implements ListHomesAdapter.On
 
             dialog.show();
         } else {
-            if (user.deleteSiteForUser(siteName) == IOT_DEVICE_USERS_RESULT.RESULT_OK){
+            if (user.deleteSiteForUser(siteName, true) == IOT_DEVICE_USERS_RESULT.RESULT_OK){
                 user.saveConfiguration(getActivity().getApplicationContext());
                 adapter.notifyItemRemoved(position);
             }
