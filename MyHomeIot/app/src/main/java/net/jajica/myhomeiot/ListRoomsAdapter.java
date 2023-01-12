@@ -1,6 +1,5 @@
 package net.jajica.myhomeiot;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.util.Log;
@@ -13,50 +12,69 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import net.jajica.libiot.IotSitesDevices;
+import net.jajica.libiot.IotRoomsDevices;
 
 import java.util.ArrayList;
 
-public class ListHomesAdapter extends RecyclerView.Adapter<ListHomesAdapter.ListHomesAdapterViewHolder> {
+public class ListRoomsAdapter extends RecyclerView.Adapter<ListRoomsAdapter.ListRoomsAdapterViewHolder> {
 
-
-    private final String TAG = "ListHomesAdapter";
-    ArrayList<IotSitesDevices> listSites;
-    String currentSite;
+    private final String TAG = "ListRoomsAdapter";
+    private ArrayList<IotRoomsDevices> roomsList;
+    private String currentRoom;
     Context context;
-    public interface OnRowSelectedData {
-        void onRowSelectedData(String siteName, int position);
-        void onDeleteData(String siteName, int position);
-        void onRowEditData(String siteName, int position);
-    }
-    private OnRowSelectedData onRowSelectedData;
+    
 
-    public void setOnRowSelectedData(OnRowSelectedData onRowSelectedData) {
+    public ListRoomsAdapter(ArrayList<IotRoomsDevices> roomsList, String currentRoom, Context context) {
+        this.roomsList = roomsList;
+        this.context = context;
+    }
+
+    public interface OnRowSelectedData {
+        void onRowSelectedData(String roomName, int position);
+        void onDeleteData(String rootName, int position);
+        void onRowEditData(String rootName, int position);
+    }
+    private ListRoomsAdapter.OnRowSelectedData onRowSelectedData;
+
+    public void setOnRowSelectedData(ListRoomsAdapter.OnRowSelectedData onRowSelectedData) {
         this.onRowSelectedData = onRowSelectedData;
     }
 
-    public ListHomesAdapter(String currentSite, ArrayList<IotSitesDevices> listSites, Context context) {
 
-        this.listSites = listSites;
-        this.context = context;
-        this.currentSite = currentSite;
+    public ArrayList<IotRoomsDevices> getRoomsList() {
+        return roomsList;
     }
 
-    @Override
-    public void onViewRecycled(@NonNull ListHomesAdapterViewHolder holder) {
-        super.onViewRecycled(holder);
-        Log.i(TAG, "h");
+    public void setRoomsList(ArrayList<IotRoomsDevices> roomsList) {
+        this.roomsList = roomsList;
+    }
+
+    public String getCurrentRoom() {
+        return currentRoom;
+    }
+
+    public void setCurrentRoom(String currentRoom) {
+        this.currentRoom = currentRoom;
+    }
+
+    public Context getContext() {
+        return context;
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
     }
 
     @NonNull
     @Override
-    public ListHomesAdapter.ListHomesAdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ListRoomsAdapter.ListRoomsAdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list, null, false);
-        return new ListHomesAdapterViewHolder(view);
+        return new ListRoomsAdapterViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ListHomesAdapter.ListHomesAdapterViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ListRoomsAdapter.ListRoomsAdapterViewHolder holder, int position) {
 
         holder.imageEdit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,8 +102,8 @@ public class ListHomesAdapter extends RecyclerView.Adapter<ListHomesAdapter.List
 
             }
         });
-        holder.editText.setText(listSites.get(position).getSiteName());
-        if (holder.editText.getText().toString().equals(currentSite)) {
+        holder.editText.setText(roomsList.get(position).getNameRoom());
+        if (holder.editText.getText().toString().equals(currentRoom)) {
             holder.editText.setTypeface(null, Typeface.BOLD);
         }
 
@@ -93,16 +111,17 @@ public class ListHomesAdapter extends RecyclerView.Adapter<ListHomesAdapter.List
 
     @Override
     public int getItemCount() {
-
-        return listSites.size();
+        return roomsList.size();
     }
 
-    public class ListHomesAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class ListRoomsAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
         AppCompatTextView editText;
         AppCompatImageView imageDelete;
         AppCompatImageView imageEdit;
-        @SuppressLint("ClickableViewAccessibility")
-        public ListHomesAdapterViewHolder(@NonNull View itemView) {
+
+
+        public ListRoomsAdapterViewHolder(@NonNull View itemView) {
             super(itemView);
             editText = (AppCompatTextView) itemView.findViewById(R.id.editTextAdminItem);
             imageDelete = (AppCompatImageView) itemView.findViewById(R.id.imageDeleteItem);
@@ -110,7 +129,6 @@ public class ListHomesAdapter extends RecyclerView.Adapter<ListHomesAdapter.List
             imageDelete.setOnClickListener(this);
             editText.setOnClickListener(this);
             imageEdit.setOnClickListener(this);
-
         }
 
         @Override
@@ -118,6 +136,12 @@ public class ListHomesAdapter extends RecyclerView.Adapter<ListHomesAdapter.List
 
             int position = -1;
             String siteName;
+            if (onRowSelectedData != null) {
+                position = getAbsoluteAdapterPosition();
+                if (position != RecyclerView.NO_POSITION) {
+                    //onRowSelectedData.onRowSelectedData(v, position);
+                }
+            }
             if (onRowSelectedData != null) {
                 position = getAbsoluteAdapterPosition();
                 if (position != RecyclerView.NO_POSITION) {
@@ -140,11 +164,9 @@ public class ListHomesAdapter extends RecyclerView.Adapter<ListHomesAdapter.List
                     break;
 
                 default:
-                Log.i(TAG, "kk");
+                    Log.i(TAG, "kk");
             }
+
         }
     }
-
-
-
 }

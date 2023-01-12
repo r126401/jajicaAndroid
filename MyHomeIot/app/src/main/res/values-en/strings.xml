@@ -76,6 +76,8 @@
     <string name="site_no_empty">The site is not empty. If you accept, the devices and rooms will be deleted.</string>
     <string name="warning">Warning!</string>
     <string name="cancel">Cancel</string>
+    <string name="add_room">Add room</string>
+    <string name="edit_rooms">Edit rooms</string>
 
 
 </resources>

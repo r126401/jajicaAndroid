@@ -74,4 +74,6 @@
     <string name="site_no_empty">La ubicacion no esta vacia. Si aceptas, se borraran todos los dispositivos y estancias.</string>
     <string name="warning">Aviso!</string>
     <string name="cancel">Cancelar</string>
+    <string name="add_room">Añadir estancia</string>
+    <string name="edit_rooms">Editar estancias</string>
 </resources>

@@ -23,6 +23,15 @@ public class IotUsersDevices {
     protected JSONObject jsonObject;
     protected Context context;
     protected String configurationFile;
+    protected String currentSite;
+
+    public String getCurrentSite() {
+        return currentSite;
+    }
+
+    public void setCurrentSite(String currentSite) {
+        this.currentSite = currentSite;
+    }
 
     public JSONObject getJsonObject() {
         return jsonObject;
@@ -96,7 +105,16 @@ public class IotUsersDevices {
         this.siteList = siteList;
     }
 
-
+    private void initValues() {
+        setCurrentSite(null);
+        setTelephone(null);
+        setDni(null);
+        setMail(null);
+        setPassword(null);
+        setUser(null);
+        setJsonObject(null);
+        setSiteList(null);
+    }
 
     public IotUsersDevices(Context context) {
         setConfigurationFile("configuration.conf");
@@ -116,6 +134,7 @@ public class IotUsersDevices {
             jsonObject.put(IOT_LABELS_JSON.PASSWORD.getValorTextoJson(), password);
             jsonObject.put(IOT_LABELS_JSON.MAIL.getValorTextoJson(), mail);
             jsonObject.put(IOT_LABELS_JSON.TELEPHONE.getValorTextoJson(),telephone);
+            jsonObject.put(IOT_LABELS_JSON.CURRENT_SITE.getValorTextoJson(), currentSite);
             if (siteList != null) {
                 array = new JSONArray();
                 for (i=0;i<siteList.size();i++) {
@@ -146,12 +165,17 @@ public class IotUsersDevices {
         IotSitesDevices site;
         IOT_JSON_RESULT res;
         //if (getUser() == null) return IOT_JSON_RESULT.JSON_ERROR;
+        if (jsonObject == null) {
+            initValues();
+            return IOT_JSON_RESULT.JSON_EMPTY;
+        }
 
         setUser(jsonObject.optString(IOT_LABELS_JSON.USER.getValorTextoJson()));
         setDni(jsonObject.optString(IOT_LABELS_JSON.DNI.getValorTextoJson()));
         setPassword(jsonObject.optString(IOT_LABELS_JSON.PASSWORD.getValorTextoJson()));
         setMail(jsonObject.optString(IOT_LABELS_JSON.MAIL.getValorTextoJson()));
         setTelephone(jsonObject.optString(IOT_LABELS_JSON.TELEPHONE.getValorTextoJson()));
+        setCurrentSite(jsonObject.optString(IOT_LABELS_JSON.CURRENT_SITE.getValorTextoJson()));
         try {
             array = jsonObject.getJSONArray(IOT_LABELS_JSON.SITE.getValorTextoJson());
         } catch (JSONException e) {
@@ -188,8 +212,14 @@ public class IotUsersDevices {
             return IOT_DEVICE_USERS_RESULT.SITE_EXITS;
         }
 
-        if (siteList == null) siteList = new ArrayList<IotSitesDevices>();
+        if (siteList == null) {
+            siteList = new ArrayList<IotSitesDevices>();
+
+        }
         siteList.add(site);
+        if (siteList.size() == 1) {
+            setCurrentSite(site.getSiteName());
+        }
 
         return IOT_DEVICE_USERS_RESULT.RESULT_OK;
     }
@@ -378,6 +408,14 @@ public class IotUsersDevices {
             return IOT_OPERATION_CONFIGURATION_DEVICES.CORRUPTED_CONFIGURATION;
         }
         return IOT_OPERATION_CONFIGURATION_DEVICES.DEVICE_MODIFIED;
+    }
+
+    public IOT_OPERATION_CONFIGURATION_DEVICES reloadConfiguration() {
+
+        jsonObject = null;
+        initValues();
+        return loadConfiguration();
+
     }
 
 

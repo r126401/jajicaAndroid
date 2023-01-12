@@ -118,7 +118,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         }
 
         makeConnect();
-        createStructure(0);
+        createStructure();
 
 
         return APPLICATION_STATUS.APPLICATION_OK;
@@ -136,12 +136,8 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         room = new IotRoomsDevices();
         room.setIdRoom(1);
         room.setNameRoom(getResources().getString(R.string.default_room));
-        listSites = new ArrayList<>();
-        listRooms = new ArrayList<>();
-        listSites.add(site);
-        listRooms.add(room);
-        site.setRoomList(listRooms);
-        configuration.setSiteList(listSites);
+        site.insertRoomForSite(room);
+        configuration.insertSiteForUser(site);
         configuration.object2json();
         configuration.saveConfiguration(getApplicationContext());
         Log.i(TAG, "hola");
@@ -198,14 +194,16 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 
     }
 
-    private APPLICATION_STATUS createStructure(int indexSite) {
+    private APPLICATION_STATUS createStructure() {
 
         int i;
+        int indexSite;
         ArrayList<IotRoomsDevices> rooms = null;
         ArrayList<IotDevice> devices;
 
 
         if (configuration.getSiteList() != null) {
+            indexSite = configuration.searchSiteOfUser(configuration.getCurrentSite());
             rooms = configuration.getSiteList().get(indexSite).getRoomList();
             mbinding.textHome.setText(configuration.getSiteList().get(indexSite).getSiteName());
         } else {
@@ -482,15 +480,9 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                 @Override
                 public void onActivityResult(ActivityResult result) {
 
-                    if (result.getResultCode() == RESULT_OK) {
-                        String data = result.getData().getDataString();
-                        Log.i(getLocalClassName(), "Recibimos datos " + data);
-                        mbinding.textHome.setText(data);
-
-                    } else {
-                        Log.w(getLocalClassName(), "Error al instalar el dispositivo");
-                    }
-
+                    configuration.reloadConfiguration();
+                    createStructure();
+ 
                 }
             }
     );

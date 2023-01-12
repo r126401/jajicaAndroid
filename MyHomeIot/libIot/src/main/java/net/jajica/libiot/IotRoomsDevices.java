@@ -37,6 +37,7 @@ public class IotRoomsDevices {
         this.idRoom = idRoom;
     }
 
+
     public ArrayList<IotDevice> getDeviceList() {
         return deviceList;
     }

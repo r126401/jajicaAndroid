@@ -145,7 +145,7 @@ public class ParentHomesFragment extends Fragment implements ListHomesAdapter.On
         bundle.putString(IOT_LABELS_JSON.NAME_SITE.getValorTextoJson(), siteName);
         fragment = new AdminHomeFragment();
 
-        fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction().add(R.id.containerAdminHomes, AdminHomeFragment.class, bundle);
+        fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.containerAdminHomes, AdminHomeFragment.class, bundle);
         fragmentTransaction.setReorderingAllowed(true);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();

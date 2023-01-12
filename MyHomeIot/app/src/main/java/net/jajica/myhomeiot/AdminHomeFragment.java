@@ -25,6 +25,8 @@ public class AdminHomeFragment extends Fragment implements View.OnClickListener{
     FragmentAdminHomeBinding mbinding;
     String currentSite;
     IotUsersDevices configuration;
+    FragmentManager fragmentManager;
+    FragmentTransaction fragmentTransaction;
 
 
 
@@ -59,6 +61,8 @@ public class AdminHomeFragment extends Fragment implements View.OnClickListener{
         mbinding.imageEditLatitude.setOnClickListener(this);
         mbinding.imageEditLongitude.setOnClickListener(this);
         mbinding.buttonSaveSite.setOnClickListener(this);
+        mbinding.imageEditRooms.setOnClickListener(this);
+        mbinding.editRooms.setOnClickListener(this);
         currentSite = requireArguments().getString(IOT_LABELS_JSON.NAME_SITE.getValorTextoJson());
         paintData();
 
@@ -82,6 +86,8 @@ public class AdminHomeFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onClick(View v) {
 
+        Bundle bundle;
+        bundle = new Bundle();
         switch (v.getId()) {
             case (R.id.imageEditNameHome):
                 mbinding.editNameHome.setEnabled(true);
@@ -203,11 +209,8 @@ public class AdminHomeFragment extends Fragment implements View.OnClickListener{
                 break;
             case (R.id.buttonSaveSite):
                 Fragment fragment;
-                Bundle bundle;
-                bundle = new Bundle();
                 fragment = new ParentHomesFragment();
-                FragmentManager fragmentManager;
-                FragmentTransaction fragmentTransaction;
+
                 //fragmentManager = getActivity().getSupportFragmentManager();
                 fragmentManager = getParentFragmentManager();
                 saveData();
@@ -218,6 +221,17 @@ public class AdminHomeFragment extends Fragment implements View.OnClickListener{
 
 
                 fragmentTransaction = fragmentManager.beginTransaction();
+                break;
+            case (R.id.editRooms):
+            case(R.id.imageEditRooms):
+                // Lanzar el fragment AdminRooms_Fragment
+                bundle.putString(IOT_LABELS_JSON.NAME_SITE.getValorTextoJson(), mbinding.editNameHome.getText().toString());
+                fragmentManager = getParentFragmentManager();
+                fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.containerAdminHomes, AdminRoomsFragment.class, bundle);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.setReorderingAllowed(true);
+                fragmentTransaction.commit();
                 break;
         }
 

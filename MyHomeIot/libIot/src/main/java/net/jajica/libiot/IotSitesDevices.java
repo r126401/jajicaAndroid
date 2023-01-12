@@ -189,15 +189,18 @@ public class IotSitesDevices {
             return IOT_DEVICE_USERS_RESULT.ROOM_NOT_EXITS;
         }
         // Si el site tiene rooms no se puede borrar.
-        if (roomList.get(i).deviceList.size() > 0) {
-            return IOT_DEVICE_USERS_RESULT.ROOM_WITH_DEVICES;
+        if (roomList.get(i).deviceList != null) {
+            if (roomList.get(i).deviceList.size() > 0) {
+                return IOT_DEVICE_USERS_RESULT.ROOM_WITH_DEVICES;
+            }
         }
+
         roomList.remove(i);
         return IOT_DEVICE_USERS_RESULT.RESULT_OK;
 
     }
 
-    protected int searchRoom(String nameRoom) {
+    public int searchRoom(String nameRoom) {
 
         IOT_DEVICE_USERS_RESULT res;
         int i;

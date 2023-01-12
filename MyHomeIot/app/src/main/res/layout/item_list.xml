@@ -18,7 +18,7 @@
     android:src="@drawable/ic_home_admin"/>
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/editTextAdminHome"
+        android:id="@+id/editTextAdminItem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/default_home"
@@ -27,7 +27,7 @@
         android:textSize="24sp"/>
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/imageEditHome"
+        android:id="@+id/imageEditItem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_action_edit"/>
@@ -35,7 +35,7 @@
 
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/imageDeleteHome"
+        android:id="@+id/imageDeleteItem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_action_delete"
