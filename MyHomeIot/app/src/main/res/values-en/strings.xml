@@ -78,6 +78,8 @@
     <string name="cancel">Cancel</string>
     <string name="add_room">Add room</string>
     <string name="edit_rooms">Edit rooms</string>
+    <string name="rename_device">Rename device</string>
+    <string name="delete_device">Delete device</string>
 
 
 </resources>

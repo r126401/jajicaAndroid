@@ -1,10 +1,14 @@
 package net.jajica.myhomeiot;
 
 import android.content.Context;
+import android.os.Build;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.PopupMenu;
 
 import androidx.databinding.DataBindingUtil;
 
@@ -16,14 +20,18 @@ import java.util.ArrayList;
 
 import net.jajica.libiot.IotDeviceThermometer;
 import net.jajica.libiot.IotDeviceThermostat;
+import net.jajica.libiot.IotDeviceUnknown;
 import net.jajica.myhomeiot.databinding.ActivityMainBinding;
 import net.jajica.myhomeiot.databinding.SwitchDeviceBinding;
 import net.jajica.myhomeiot.databinding.ThermometerDeviceBinding;
 import net.jajica.myhomeiot.databinding.ThermostatDeviceBinding;
 
+
+
 public class DevicesAdapter extends BaseAdapter {
 
 
+    private final String TAG = "DevicesAdapter";
     private Context context;
     private int idLayout;
     private ArrayList<IotDevice> deviceList;
@@ -82,7 +90,7 @@ public class DevicesAdapter extends BaseAdapter {
 
 
             case UNKNOWN:
-                break;
+                return paintUnknownDevice(position, convertView, parent);
             case INTERRUPTOR:
                 return paintListSwitchDevice(position, convertView, parent);
 
@@ -110,7 +118,7 @@ public class DevicesAdapter extends BaseAdapter {
         }
         device = (IotDeviceSwitch) deviceList.get(position);
         switchDeviceBinding.textdevice.setText(device.getDeviceName());
-        switchDeviceBinding.imageThermometer.setImageResource(R.drawable.ic_switch_off);
+        switchDeviceBinding.imageSwitch.setImageResource(R.drawable.ic_switch_off);
 
 
 
@@ -146,7 +154,54 @@ public class DevicesAdapter extends BaseAdapter {
 
     private View paintUnknownDevice(int position, View convertView, ViewGroup parent) {
 
+        IotDeviceUnknown device;
+        if (convertView == null) {
+            LayoutInflater inflater = (LayoutInflater) context
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            switchDeviceBinding = SwitchDeviceBinding.inflate(inflater, parent, false);
+            convertView = switchDeviceBinding.getRoot();
+        }
+        device = (IotDeviceUnknown) deviceList.get(position);
+        switchDeviceBinding.textdevice.setText(device.getDeviceName());
+        switchDeviceBinding.imageSwitch.setImageResource(R.drawable.ic_switch_off);
+        switchDeviceBinding.imageMenuSwitch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PopupMenu menu;
+                menu = new PopupMenu(context.getApplicationContext(), switchDeviceBinding.imageMenuSwitch);
+                menu.inflate(R.menu.menu_device);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    menu.setForceShowIcon(true);
+                }
+                menu.show();
+                execMenuUnknownDevice(menu, context.getApplicationContext());
+            }
+        });
+
+
+
         return convertView;
+    }
+
+    private void execMenuUnknownDevice(PopupMenu menu, Context context) {
+
+        menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+
+                switch (item.getItemId()) {
+                    case (R.id.item_rename_device):
+                        String dev = switchDeviceBinding.textdevice.getText().toString();
+                        Log.i(TAG, dev);
+                        break;
+                    case (R.id.item_delete_device):
+                        Log.i(TAG, "delte");
+                        break;
+
+                }
+                return false;
+            }
+        });
     }
 
 

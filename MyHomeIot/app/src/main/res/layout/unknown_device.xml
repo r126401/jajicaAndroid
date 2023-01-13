@@ -9,8 +9,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-        <ImageView
-            android:id="@+id/imageSwitch"
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imageDeviceOperation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_switch_on"
@@ -18,7 +18,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
-        </ImageView>
+        </androidx.appcompat.widget.AppCompatImageView>
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/textdevice"
@@ -27,25 +27,25 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageSwitch">
+            app:layout_constraintTop_toBottomOf="@+id/imageDeviceOperation">
         </androidx.appcompat.widget.AppCompatTextView>
         <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/imageMenuSwitch"
+            android:id="@+id/imageMenu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_action_options"
-            app:layout_constraintBottom_toTopOf="@+id/imageSwitch"
+            app:layout_constraintBottom_toTopOf="@+id/imageDeviceOperation"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:layout_margin="5dp">
         </androidx.appcompat.widget.AppCompatImageView>
         <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/imageConnectedDeviceThermostat"
+            android:id="@+id/imageConnectedDevice"
             android:layout_width="30sp"
             android:layout_height="30sp"
             android:paddingRight="5sp"
             android:src="@drawable/ic_connect_nok"
-            app:layout_constraintBottom_toTopOf="@+id/imageSwitch"
+            app:layout_constraintBottom_toTopOf="@+id/imageDeviceOperation"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent">
         </androidx.appcompat.widget.AppCompatImageView>

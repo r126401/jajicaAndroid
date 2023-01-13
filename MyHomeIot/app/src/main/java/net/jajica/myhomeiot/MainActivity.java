@@ -27,12 +27,14 @@ import com.google.android.material.tabs.TabLayoutMediator;
 import net.jajica.libiot.IOT_LABELS_JSON;
 import net.jajica.libiot.IOT_MQTT_STATUS_CONNECTION;
 import net.jajica.libiot.IOT_OPERATION_CONFIGURATION_DEVICES;
+import net.jajica.libiot.IotDeviceUnknown;
 import net.jajica.libiot.IotMqttConnection;
 import net.jajica.libiot.IotRoomsDevices;
 import net.jajica.libiot.IotDevice;
 
 
 import net.jajica.libiot.IotSitesDevices;
+import net.jajica.libiot.IotTools;
 import net.jajica.libiot.IotUsersDevices;
 
 import org.json.JSONException;
@@ -457,7 +459,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                     if (result.getResultCode() == RESULT_OK) {
                         String data = result.getData().getDataString();
                         Log.i(getLocalClassName(), "Recibimos datos " + data);
-                        insertSettingsIntoConfiguration(data);
+                        insertDeviceIntoConfiguration(data);
 
                     } else {
                         Log.w(getLocalClassName(), "Error al instalar el dispositivo");
@@ -466,6 +468,41 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                 }
             }
     );
+
+    private void insertDeviceIntoConfiguration(String data) {
+        String roomName;
+        String siteName;
+        IotSitesDevices site;
+        IotRoomsDevices room;
+        IotDeviceUnknown device;
+        IotTools tools;
+        String text;
+        int indexSite;
+        int indexRoom;
+        TabLayout.Tab tab;
+        tab = mbinding.tabs.getTabAt(mbinding.tabs.getSelectedTabPosition());
+        roomName = tab.getText().toString();
+        siteName = mbinding.textHome.getText().toString();
+        indexSite = configuration.searchSiteOfUser(siteName);
+        if (indexSite < 0) {
+            Log.e(TAG, "No existe el site en la configuracion");
+            return;
+        }
+        site = configuration.getSiteList().get(indexSite);
+        indexRoom = site.searchRoom(roomName);
+        room = site.getRoomList().get(indexRoom);
+        device = new IotDeviceUnknown();
+        tools = new IotTools();
+        device.setDeviceId(tools.getJsonString(data, IOT_LABELS_JSON.DEVICE_ID.getValorTextoJson()));
+        device.setDeviceName(tools.getJsonString(data, IOT_LABELS_JSON.DEVICE_NAME.getValorTextoJson()));
+        room.insertDeviceForRoom(device);
+        configuration.saveConfiguration(getApplicationContext());
+        configuration.reloadConfiguration();
+        createStructure();
+       Log.i(TAG, roomName);
+
+
+    }
 
     private void launchActivityNewDevice() {
 

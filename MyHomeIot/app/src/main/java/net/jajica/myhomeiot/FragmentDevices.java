@@ -7,6 +7,9 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ListAdapter;
 
 import net.jajica.libiot.IotDevice;
 
@@ -48,14 +52,14 @@ public class FragmentDevices extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_devices, container, false);
+        View rootView = inflater.inflate(R.layout.list_devices, container, false);
 
-        GridView grid = (GridView)
-                rootView.findViewById(R.id.gridview);
+        RecyclerView recyclerView = (RecyclerView)
+                rootView.findViewById(R.id.recyclerDevices);
 
-        grid.setAdapter(new DevicesAdapter(getActivity(), idLayout, devices));
-        int a = grid.getWidth();
-        int b = grid.getHeight();
+        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        recyclerView.setAdapter(new IotDeviceAdapter(getActivity(), R.id.recyclerDevices, devices));
+
 
 
 

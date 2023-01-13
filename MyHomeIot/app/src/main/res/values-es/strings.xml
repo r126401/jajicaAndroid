@@ -76,4 +76,6 @@
     <string name="cancel">Cancelar</string>
     <string name="add_room">Añadir estancia</string>
     <string name="edit_rooms">Editar estancias</string>
+    <string name="rename_device">Renombrar dispositivo</string>
+    <string name="delete_device">Borrar dispositivo</string>
 </resources>
