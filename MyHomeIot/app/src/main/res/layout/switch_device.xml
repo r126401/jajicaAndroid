@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-        <ImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/imageSwitch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -18,10 +18,10 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
-        </ImageView>
+        </androidx.appcompat.widget.AppCompatImageView>
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/textdevice"
+            android:id="@+id/textdeviceSwitch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -40,7 +40,7 @@
             android:layout_margin="5dp">
         </androidx.appcompat.widget.AppCompatImageView>
         <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/imageConnectedDeviceThermostat"
+            android:id="@+id/imageConnectedDeviceSwitch"
             android:layout_width="30sp"
             android:layout_height="30sp"
             android:paddingRight="5sp"

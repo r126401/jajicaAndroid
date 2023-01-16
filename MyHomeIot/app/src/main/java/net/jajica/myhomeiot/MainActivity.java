@@ -24,9 +24,13 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
+import net.jajica.libiot.IOT_DEVICE_TYPE;
 import net.jajica.libiot.IOT_LABELS_JSON;
 import net.jajica.libiot.IOT_MQTT_STATUS_CONNECTION;
 import net.jajica.libiot.IOT_OPERATION_CONFIGURATION_DEVICES;
+import net.jajica.libiot.IotDeviceSwitch;
+import net.jajica.libiot.IotDeviceThermometer;
+import net.jajica.libiot.IotDeviceThermostat;
 import net.jajica.libiot.IotDeviceUnknown;
 import net.jajica.libiot.IotMqttConnection;
 import net.jajica.libiot.IotRoomsDevices;
@@ -55,6 +59,11 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     private APPLICATION_STATUS appStatus;
     private ActivityMainBinding mbinding;
     private ViewPagerAdapter viewPagerAdapter;
+    
+    private ArrayList<IotDeviceUnknown> unknownDeviceList;
+    private ArrayList<IotDeviceSwitch> switchDeviceList;
+    private ArrayList<IotDeviceThermometer> thermometerDeviceList;
+    private ArrayList<IotDeviceThermostat> thermostatList;
 
 
 
@@ -63,34 +72,61 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-
+        IOT_OPERATION_CONFIGURATION_DEVICES res;
         super.onCreate(savedInstanceState);
-        // capturamos los controles
-        mbinding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(mbinding.getRoot());
+        
+        if (initApplication() == APPLICATION_STATUS.APPLICATION_OK) {
+            connectAllDevices();
+        }
+        
+    }
+
+    private void connectAllDevices() {
+        
+        int i;
+        connectUnknownDevices();
+        connectSwitchDevices();
+        connectThermometerDevices();
+        connectThermostatDevices();
+        
+        
+        
+    }
+
+    private void collectDeviceList() {
+
+        ArrayList<IotDevice> deviceList;
+
+        //deviceList = configuration.getAllDevices();
+        deviceList = configuration.getDeviceListFotDeviceType(IOT_DEVICE_TYPE.INTERRUPTOR);
+
+        Log.i(TAG, "jjj");
+
+    }
+
+    private void connectThermometerDevices() {
 
 
 
+    }
 
+    private void connectThermostatDevices() {
+    }
 
-        setToolbar(getResources().getResourceName(R.string.app_name), android.R.drawable.ic_delete);
-        initApplication();
+    private void connectSwitchDevices() {
+    }
 
-        mbinding.tabs.setTabMode(TabLayout.MODE_SCROLLABLE);
-        //setToolbar();
-
-
-        Log.i(TAG, "HOLA");
-
-
-
+    private void connectUnknownDevices() {
     }
 
 
     private APPLICATION_STATUS initApplication() {
 
         IOT_OPERATION_CONFIGURATION_DEVICES result;
-
+        // capturamos los controles
+        mbinding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(mbinding.getRoot());
+        setToolbar(getResources().getResourceName(R.string.app_name), android.R.drawable.ic_delete);
         mbinding.bottomNavigationMenu.setOnItemSelectedListener(this);
         mbinding.textHome.setOnClickListener(this);
 
@@ -120,9 +156,9 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         }
 
         makeConnect();
-        createStructure();
-
-
+        //createStructure();
+        mbinding.tabs.setTabMode(TabLayout.MODE_SCROLLABLE);
+        collectDeviceList();
         return APPLICATION_STATUS.APPLICATION_OK;
     }
 
@@ -182,6 +218,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
             public void connectionEstablished(boolean reconnect, String serverURI) {
                 Log.i(TAG, "Conexion estabilizada");
                 notifConnectOk();
+                createStructure();
 
             }
 
@@ -217,13 +254,17 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
             return APPLICATION_STATUS.NO_DEVICES_CONFIGURATION;
         }
         viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), getLifecycle());
+        int j;
         for (i=0;i < rooms.size();i++) {
             devices = rooms.get(i).getDeviceList();
+            if (devices != null) {
+                for (j = 0; j < devices.size(); j++) {
+                    devices.get(j).setCnx(cnx);
+                }
+            }
+
             ArrayList<IotDevice> finalDevices = devices;
             viewPagerAdapter.addFragment(new FragmentDevices(finalDevices, getApplicationContext(), R.layout.switch_device));
-
-
-
 
         }
         mbinding.pager.setAdapter(viewPagerAdapter);

@@ -190,11 +190,27 @@ public class IotRoomsDevices {
         int i;
         api = new IotTools();
         i = api.getFieldIntFromReport(object.toString(), IOT_LABELS_JSON.DEVICE_TYPE);
-        if ( i< -1 ) {
+        if ( i < -1 ) {
             return IOT_DEVICE_TYPE.UNKNOWN;
         }
 
         return type.fromId(i);
+
+    }
+
+    public ArrayList<IotDevice> getDeviceListFotDeviceType(IOT_DEVICE_TYPE type) {
+        int i;
+        ArrayList<IotDevice> deviceList;
+        if (getDeviceList() == null ) {
+            return null;
+        }
+        deviceList = new ArrayList<>();
+        for (i=0;i<getDeviceList().size();i++) {
+            if (getDeviceList().get(i).getDeviceType() == type) {
+                deviceList.add(getDeviceList().get(i));
+            }
+        }
+        return deviceList;
 
     }
 

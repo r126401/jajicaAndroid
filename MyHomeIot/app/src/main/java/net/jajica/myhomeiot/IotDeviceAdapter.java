@@ -17,6 +17,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import net.jajica.libiot.IOT_DEVICE_STATE_CONNECTION;
 import net.jajica.libiot.IOT_DEVICE_TYPE;
 import net.jajica.libiot.IotDevice;
+import net.jajica.libiot.IotDeviceThermometer;
+import net.jajica.libiot.IotDeviceThermostat;
 import net.jajica.libiot.IotDeviceUnknown;
 import net.jajica.myhomeiot.databinding.SwitchDeviceBinding;
 import net.jajica.myhomeiot.databinding.ThermometerDeviceBinding;
@@ -141,33 +143,179 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     static public class IotDeviceSwitchAdapterViewHolder extends RecyclerView.ViewHolder {
 
+        AppCompatImageView imageSwitch;
+        AppCompatImageView imageMenuSwitch;
+        AppCompatImageView imageConnectedDeviceSwitch;
+        AppCompatTextView textDeviceSwitch;
 
         public IotDeviceSwitchAdapterViewHolder(@NonNull View itemView) {
             super(itemView);
+            imageSwitch = (AppCompatImageView) itemView.findViewById(R.id.imageSwitch);
+            imageMenuSwitch = (AppCompatImageView) itemView.findViewById(R.id.imageMenuSwitch);
+            imageConnectedDeviceSwitch = (AppCompatImageView) itemView.findViewById(R.id.imageConnectedDeviceSwitch);
+            textDeviceSwitch = (AppCompatTextView) itemView.findViewById(R.id.textdeviceSwitch);
         }
+
     }
 
     static public class IotDeviceThermometerAdapterViewHolder extends RecyclerView.ViewHolder {
+
+        AppCompatImageView imageMenuThermometer;
+        AppCompatImageView imageConnectedDeviceThermometer;
+        AppCompatTextView textTemperatureThermometer;
+        AppCompatTextView textDeviceThermometer;
+
         public IotDeviceThermometerAdapterViewHolder(@NonNull View itemView) {
             super(itemView);
+            imageMenuThermometer = (AppCompatImageView) itemView.findViewById(R.id.imageMenuThermometer);
+            imageConnectedDeviceThermometer = (AppCompatImageView) itemView.findViewById(R.id.imageConnectedDeviceThermometer);
+            textTemperatureThermometer = (AppCompatTextView) itemView.findViewById(R.id.textTemperatureThermometer);
+            textDeviceThermometer = (AppCompatTextView) itemView.findViewById(R.id.textDeviceThermometer);
         }
     }
 
     static public class IotDeviceThermostatAdapterViewHolder extends RecyclerView.ViewHolder {
+
+        AppCompatTextView textTemperatureThermostat;
+        AppCompatTextView textThresholdThermostat;
+        AppCompatTextView textDeviceThermostat;
+        AppCompatImageView imageMenuThermostat;
+        AppCompatImageView imageHeating;
+        AppCompatImageView imageConnectedDeviceThermostat;
+
         public IotDeviceThermostatAdapterViewHolder(@NonNull View itemView) {
+
             super(itemView);
+            textTemperatureThermostat = (AppCompatTextView) itemView.findViewById(R.id.textTemperatureThermostat);
+            textThresholdThermostat = (AppCompatTextView) itemView.findViewById(R.id.textThresholdThermostat);
+            textDeviceThermostat = (AppCompatTextView) itemView.findViewById(R.id.textDeviceThermostat);
+            imageMenuThermostat = (AppCompatImageView) itemView.findViewById(R.id.imageMenuThermostat);
+            imageHeating = (AppCompatImageView) itemView.findViewById(R.id.imageMenuThermostat);
+            imageConnectedDeviceThermostat = (AppCompatImageView) itemView.findViewById(R.id.imageConnectedDeviceThermostat);
+
         }
     }
 
 
 
     private void paintThermostatDevice(IotDeviceThermostatAdapterViewHolder holder, int position) {
+
+        IotDeviceThermostat thermostat;
+
+        thermostat = (IotDeviceThermostat) deviceList.get(position);
+        holder.textDeviceThermostat.setText(thermostat.getDeviceName());
+        holder.textThresholdThermostat.setText(String.valueOf(thermostat.getThresholdTemperature()));
+        holder.textTemperatureThermostat.setText(String.valueOf(thermostat.getTemperature()));
+        IOT_DEVICE_STATE_CONNECTION status = thermostat.getConnectionState();
+        switch (status) {
+
+
+            case UNKNOWN:
+                break;
+            case DEVICE_CONNECTED:
+                break;
+            case DEVICE_DISCONNECTED:
+                break;
+            case DEVICE_WAITING_RESPONSE:
+                break;
+            case DEVICE_ERROR_COMMUNICATION:
+                break;
+            case DEVICE_ERROR_SUBSCRIPTION:
+                break;
+        }
+
+        holder.imageMenuThermostat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 
     private void paintThermometerDevice(IotDeviceThermometerAdapterViewHolder holder, int position) {
+
+        IotDeviceThermometer thermometer;
+        thermometer = (IotDeviceThermometer) deviceList.get(position);
+        holder.textDeviceThermometer.setText(thermometer.getDeviceName());
+        holder.textTemperatureThermometer.setText(String.valueOf(thermometer.getTemperature()));
+        IOT_DEVICE_STATE_CONNECTION status = thermometer.getConnectionState();
+        switch (status) {
+
+            case UNKNOWN:
+                break;
+            case DEVICE_CONNECTED:
+                break;
+            case DEVICE_DISCONNECTED:
+                break;
+            case DEVICE_WAITING_RESPONSE:
+                break;
+            case DEVICE_ERROR_COMMUNICATION:
+                break;
+            case DEVICE_ERROR_SUBSCRIPTION:
+                break;
+        }
+
+        holder.imageMenuThermometer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
     }
 
     private void paintSwitchDevice(IotDeviceSwitchAdapterViewHolder holder, int position) {
+        holder.textDeviceSwitch.setText(deviceList.get(position).getDeviceName());
+        IOT_DEVICE_STATE_CONNECTION status = deviceList.get(position).getConnectionState();
+        switch (status) {
+
+            case UNKNOWN:
+                break;
+            case DEVICE_CONNECTED:
+                break;
+            case DEVICE_DISCONNECTED:
+                break;
+            case DEVICE_WAITING_RESPONSE:
+                break;
+            case DEVICE_ERROR_COMMUNICATION:
+                break;
+            case DEVICE_ERROR_SUBSCRIPTION:
+                break;
+        }
+
+        holder.imageMenuSwitch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PopupMenu menu;
+                menu = new PopupMenu(context, holder.imageMenuSwitch);
+                menu.inflate(R.menu.menu_device);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    menu.setForceShowIcon(true);
+                }
+                menu.show();
+                execMenuSwitchDevice(menu, context);
+
+            }
+        });
+
+    }
+
+    private void execMenuSwitchDevice(PopupMenu menu, Context context) {
+
+        menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case (R.id.item_rename_device):
+                        break;
+                    case (R.id.item_delete_device):
+                        Log.i(TAG, "delte");
+                        break;
+
+                }
+                return false;
+            }
+        });
     }
 
     private void paintUnknownDevice(IotUnknownDeviceAdapterViewHolder holder, int position) {

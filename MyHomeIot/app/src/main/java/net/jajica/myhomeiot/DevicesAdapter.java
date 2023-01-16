@@ -117,7 +117,7 @@ public class DevicesAdapter extends BaseAdapter {
             convertView = switchDeviceBinding.getRoot();
         }
         device = (IotDeviceSwitch) deviceList.get(position);
-        switchDeviceBinding.textdevice.setText(device.getDeviceName());
+        switchDeviceBinding.textdeviceSwitch.setText(device.getDeviceName());
         switchDeviceBinding.imageSwitch.setImageResource(R.drawable.ic_switch_off);
 
 
@@ -135,7 +135,7 @@ public class DevicesAdapter extends BaseAdapter {
             convertView = thermometerDeviceBinding.getRoot();
         }
         device = (IotDeviceThermometer) deviceList.get(position);
-        thermometerDeviceBinding.textdevice.setText(device.getDeviceName());
+        thermometerDeviceBinding.textDeviceThermometer.setText(device.getDeviceName());
         return convertView;
     }
 
@@ -162,7 +162,7 @@ public class DevicesAdapter extends BaseAdapter {
             convertView = switchDeviceBinding.getRoot();
         }
         device = (IotDeviceUnknown) deviceList.get(position);
-        switchDeviceBinding.textdevice.setText(device.getDeviceName());
+        switchDeviceBinding.textdeviceSwitch.setText(device.getDeviceName());
         switchDeviceBinding.imageSwitch.setImageResource(R.drawable.ic_switch_off);
         switchDeviceBinding.imageMenuSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -191,7 +191,7 @@ public class DevicesAdapter extends BaseAdapter {
 
                 switch (item.getItemId()) {
                     case (R.id.item_rename_device):
-                        String dev = switchDeviceBinding.textdevice.getText().toString();
+                        String dev = switchDeviceBinding.textdeviceSwitch.getText().toString();
                         Log.i(TAG, dev);
                         break;
                     case (R.id.item_delete_device):

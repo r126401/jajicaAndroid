@@ -419,5 +419,40 @@ public class IotUsersDevices {
 
     }
 
+    public ArrayList<IotDevice> getAllDevices() {
+        ArrayList<IotDevice> deviceList;
+        int indexSites;
+        int indexRooms;
+
+        deviceList = new ArrayList<>();
+        for (indexSites = 0; indexSites < this.getSiteList().size(); indexSites++) {
+
+            for (indexRooms = 0; indexRooms < this.getSiteList().get(indexSites).getRoomList().size(); indexRooms++) {
+                if (this.getSiteList().get(indexSites).getRoomList().get(indexRooms).getDeviceList() != null){
+                    deviceList.addAll(this.getSiteList().get(indexSites).getRoomList().get(indexRooms).getDeviceList());
+                }
+
+            }
+        }
+
+        return deviceList;
+
+    }
+
+    public ArrayList<IotDevice> getDeviceListFotDeviceType(IOT_DEVICE_TYPE type) {
+
+        ArrayList<IotDevice> deviceList;
+        int indexSites;
+        int indexRooms;
+
+        deviceList = new ArrayList<>();
+        for (indexSites = 0; indexSites < this.getSiteList().size(); indexSites++) {
+            for (indexRooms = 0; indexRooms < this.getSiteList().get(indexSites).getRoomList().size(); indexRooms++) {
+                deviceList.addAll(this.getSiteList().get(indexSites).getRoomList().get(indexRooms).getDeviceListFotDeviceType(type));
+            }
+        }
+        return deviceList;
+    }
+
 
 }

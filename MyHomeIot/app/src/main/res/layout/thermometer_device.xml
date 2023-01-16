@@ -16,9 +16,9 @@
             android:layout_width="30sp"
             android:layout_height="wrap_content"
             android:src="@drawable/themometer"
-            app:layout_constraintBottom_toTopOf="@+id/textdevice"
+            app:layout_constraintBottom_toTopOf="@+id/textDeviceThermometer"
             app:layout_constraintEnd_toStartOf="@+id/textTemperatureThermometer"
-            app:layout_constraintTop_toBottomOf="@+id/imageRemoveDeviceThermostat">
+            app:layout_constraintTop_toBottomOf="@+id/imageMenuThermometer">
 
         </ImageView>
 
@@ -37,35 +37,36 @@
         </androidx.appcompat.widget.AppCompatTextView>
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/textdevice"
+            android:id="@+id/textDeviceThermometer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="termometro"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:textSize="30dp">
+            android:textSize="30sp">
 
         </androidx.appcompat.widget.AppCompatTextView>
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/imageRemoveDeviceThermostat"
+            android:id="@+id/imageMenuThermometer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/remove"
+            android:src="@drawable/ic_action_options"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_margin="5dp">
 
         </androidx.appcompat.widget.AppCompatImageView>
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/imageConnectedDeviceThermostat"
+            android:id="@+id/imageConnectedDeviceThermometer"
             android:layout_width="30sp"
             android:layout_height="30sp"
-            android:paddingRight="5sp"
+            android:paddingEnd="5sp"
             android:src="@drawable/ic_connect_nok"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/imageRemoveDeviceThermostat">
+            app:layout_constraintTop_toTopOf="@+id/imageMenuThermometer">
 
         </androidx.appcompat.widget.AppCompatImageView>
 
