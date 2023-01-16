@@ -88,16 +88,16 @@ public class FragmentDevices extends Fragment {
             device = devices.get(i);
             switch (type) {
                 case UNKNOWN:
-                    connectUnknownDevice((IotDeviceUnknown) device);
+                    connectUnknownDevice((IotDeviceUnknown) device, i);
                     break;
                 case INTERRUPTOR:
-                    connectSwitchDevice((IotDeviceSwitch) device);
+                    connectSwitchDevice((IotDeviceSwitch) device, i);
                     break;
                 case THERMOMETER:
-                    connectThemometerDevice((IotDeviceThermometer) device);
+                    connectThemometerDevice((IotDeviceThermometer) device, i);
                     break;
                 case CRONOTERMOSTATO:
-                    connectThermostatDevice((IotDeviceThermostat) device);
+                    connectThermostatDevice((IotDeviceThermostat) device, i);
                     break;
                 default:
 
@@ -108,7 +108,7 @@ public class FragmentDevices extends Fragment {
 
     }
 
-    private void connectUnknownDevice(IotDeviceUnknown device) {
+    private void connectUnknownDevice(IotDeviceUnknown device, int position) {
 
         //Subscribir al dispositivo
         device.subscribeDevice();
@@ -134,6 +134,7 @@ public class FragmentDevices extends Fragment {
             public void onReceivedStatus(IOT_CODE_RESULT resultCode) {
 
                 Log.i(TAG, "recibido status " + device.getDeviceName());
+                IotDeviceSwitch dev = device.unknown2Switch();
             }
         });
 
@@ -166,7 +167,7 @@ public class FragmentDevices extends Fragment {
 
     }
 
-    private void connectSwitchDevice(IotDeviceSwitch device) {
+    private void connectSwitchDevice(IotDeviceSwitch device, int position) {
 
         device.subscribeDevice();
         device.setOnErrorReportDevice(new IotDevice.OnReceivedErrorReportDevice() {
@@ -232,7 +233,7 @@ public class FragmentDevices extends Fragment {
     }
 
 
-    private void connectThemometerDevice(IotDeviceThermometer device) {
+    private void connectThemometerDevice(IotDeviceThermometer device, int position) {
 
         device.subscribeDevice();
         device.setOnErrorReportDevice(new IotDevice.OnReceivedErrorReportDevice() {
@@ -292,7 +293,7 @@ public class FragmentDevices extends Fragment {
 
     }
 
-    private void connectThermostatDevice(IotDeviceThermostat device) {
+    private void connectThermostatDevice(IotDeviceThermostat device, int position) {
 
         device.subscribeDevice();
         device.setOnErrorReportDevice(new IotDevice.OnReceivedErrorReportDevice() {

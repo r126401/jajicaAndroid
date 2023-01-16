@@ -38,7 +38,7 @@ public class IotDeviceSwitch extends IotDevice implements Serializable {
         setSubscribeOtaTopic("newVersionOtaIotOnOff");
         setDeviceType(IOT_DEVICE_TYPE.INTERRUPTOR);
     }
-    
+
     private ArrayList<IotScheduleDeviceSwitch> schedules;
 
     public ArrayList<IotScheduleDeviceSwitch> getSchedulesSwitch() {
@@ -46,6 +46,8 @@ public class IotDeviceSwitch extends IotDevice implements Serializable {
     }
 
     protected OnReceivedSetRelay onReceivedSetRelay;
+
+
     public interface OnReceivedSetRelay {
         void onReceivedSetRelay(IOT_CODE_RESULT codeResult);
     }
