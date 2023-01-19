@@ -410,7 +410,7 @@ public abstract class IotDevice implements Serializable {
 
     protected OnReceivedSpontaneousEndSchedule onReceivedSpontaneousEndSchedule;
     public interface OnReceivedSpontaneousEndSchedule {
-        void onReceivesSpontaneousStartSchedule(IOT_CODE_RESULT resultCode);
+        void onReceivesSpontaneousEndSchedule(IOT_CODE_RESULT resultCode);
     }
 
 
@@ -1132,7 +1132,7 @@ public abstract class IotDevice implements Serializable {
             case END_SCHEDULE:
                 result = processEndSchedule(mensaje);
                 if (onReceivedSpontaneousEndSchedule != null) {
-                    onReceivedSpontaneousEndSchedule.onReceivesSpontaneousStartSchedule(result);
+                    onReceivedSpontaneousEndSchedule.onReceivesSpontaneousEndSchedule(result);
                 }
                 break;
             case INFORME_ALARMA:

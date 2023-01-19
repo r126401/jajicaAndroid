@@ -9,6 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/imageDeviceOperation"
             android:layout_width="wrap_content"
@@ -16,19 +17,18 @@
             android:src="@drawable/ic_switch_on"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-        </androidx.appcompat.widget.AppCompatImageView>
+            app:layout_constraintTop_toTopOf="parent"></androidx.appcompat.widget.AppCompatImageView>
 
-        <androidx.appcompat.widget.AppCompatTextView
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/textdevice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageDeviceOperation">
-        </androidx.appcompat.widget.AppCompatTextView>
+            app:layout_constraintTop_toBottomOf="@+id/imageDeviceOperation"
+            android:enabled="false">
+        </com.google.android.material.textfield.TextInputEditText>
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/imageMenu"
             android:layout_width="wrap_content"

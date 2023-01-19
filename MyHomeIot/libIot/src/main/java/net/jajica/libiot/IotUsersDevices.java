@@ -260,6 +260,14 @@ public class IotUsersDevices {
 
     }
 
+    public IotSitesDevices searchSiteObject(String name) {
+
+        int index;
+        index = searchSiteOfUser(name);
+        return this.getSiteList().get(index);
+
+    }
+
 
 
     public IOT_OPERATION_CONFIGURATION_DEVICES saveConfiguration(Context context) {
@@ -453,6 +461,18 @@ public class IotUsersDevices {
         }
         return deviceList;
     }
+
+    public IotDevice getIotDeviceObject(String siteName, String roomName, String idDevice) {
+
+        IotSitesDevices site;
+        IotRoomsDevices room;
+        site = searchSiteObject(siteName);
+        room = site.searchRoomObject(roomName);
+        return room.searchDeviceObject(idDevice);
+
+    }
+
+
 
 
 }

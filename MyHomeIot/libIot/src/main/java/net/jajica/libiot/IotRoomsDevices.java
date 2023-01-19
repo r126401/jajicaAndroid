@@ -214,7 +214,26 @@ public class IotRoomsDevices {
 
     }
 
+    public IotDevice searchDeviceObject(String idDevice) {
 
+        int index;
+        IotDevice device;
+        index = searchDevice(idDevice);
+        return getDeviceList().get(index);
 
+    }
+
+    public IOT_DEVICE_USERS_RESULT deleteDevice(String idDevice) {
+
+        int index;
+        index = searchDevice(idDevice);
+        if (index >= 0) {
+            deviceList.remove(index);
+            return IOT_DEVICE_USERS_RESULT.RESULT_OK;
+        }
+
+        return IOT_DEVICE_USERS_RESULT.RESULT_NOK;
+
+    }
 
 }

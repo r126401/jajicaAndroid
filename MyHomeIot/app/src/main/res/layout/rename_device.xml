@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imageNameDevice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:src="@drawable/ic_action_edit"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <androidx.appcompat.widget.AppCompatCheckedTextView
+        android:id="@+id/textName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/nameDevice"
+        app:layout_constraintBottom_toBottomOf="@+id/imageNameDevice"
+        app:layout_constraintStart_toEndOf="@+id/imageNameDevice"
+        app:layout_constraintTop_toTopOf="@+id/imageNameDevice" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/editTextNameDevice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="@+id/textName"
+        app:layout_constraintStart_toEndOf="@+id/imageNameDevice"
+        app:layout_constraintTop_toBottomOf="@+id/textName" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

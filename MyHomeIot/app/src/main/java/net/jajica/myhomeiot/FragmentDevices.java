@@ -1,6 +1,5 @@
 package net.jajica.myhomeiot;
 
-import android.bluetooth.BluetoothClass;
 import android.content.Context;
 import android.os.Bundle;
 
@@ -8,16 +7,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.GridView;
-import android.widget.ListAdapter;
 
 import net.jajica.libiot.IOT_CODE_RESULT;
 import net.jajica.libiot.IOT_DEVICE_TYPE;
@@ -27,19 +22,25 @@ import net.jajica.libiot.IotDeviceSwitch;
 import net.jajica.libiot.IotDeviceThermometer;
 import net.jajica.libiot.IotDeviceThermostat;
 import net.jajica.libiot.IotDeviceUnknown;
+import net.jajica.libiot.IotSitesDevices;
+import net.jajica.libiot.IotUsersDevices;
 
 import java.util.ArrayList;
-
-import in.srain.cube.views.GridViewWithHeaderAndFooter;
 
 
 public class FragmentDevices extends Fragment {
 
     private final String TAG = "FragmentDevices";
-    public FragmentDevices(ArrayList<IotDevice> devices, Context context, int idLayout) {
+    RecyclerView recyclerView;
+    IotDeviceAdapter adapter;
+    String siteName;
+    String roomName;
+    public FragmentDevices(ArrayList<IotDevice> devices, Context context, int idLayout, String siteName, String roomName) {
         this.devices = devices;
         this.context = context;
         this.idLayout = idLayout;
+        this.siteName = siteName;
+        this.roomName = roomName;
     }
 
     private ArrayList<IotDevice> devices;
@@ -62,13 +63,16 @@ public class FragmentDevices extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.list_devices, container, false);
 
-        RecyclerView recyclerView = (RecyclerView)
-                rootView.findViewById(R.id.recyclerDevices);
+        recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerDevices);
 
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
-        recyclerView.setAdapter(new IotDeviceAdapter(getActivity(), R.id.recyclerDevices, devices));
+        adapter = new IotDeviceAdapter(getActivity(), R.id.recyclerDevices, devices, siteName, roomName);
+        recyclerView.setAdapter(adapter);
 
-        connectDevices(devices);
+        if (devices != null) {
+            connectDevices(devices);
+        }
+
         return rootView;
 
     }
@@ -103,6 +107,7 @@ public class FragmentDevices extends Fragment {
 
             }
 
+
         }
 
 
@@ -134,7 +139,41 @@ public class FragmentDevices extends Fragment {
             public void onReceivedStatus(IOT_CODE_RESULT resultCode) {
 
                 Log.i(TAG, "recibido status " + device.getDeviceName());
-                IotDeviceSwitch dev = device.unknown2Switch();
+                convertUnknownDevice(device, position);
+                /*
+                IOT_DEVICE_TYPE type;
+                type = device.getDeviceType();
+                switch (type) {
+                    case UNKNOWN:
+
+                        break;
+                    case INTERRUPTOR:
+                        IotDeviceSwitch deviceSwitch = device.unknown2Switch();
+                        devices.remove(position);
+                        devices.add(position, deviceSwitch);
+                        adapter.notifyDataSetChanged();
+                        modifyConfiguration(device, position, IOT_DEVICE_TYPE.INTERRUPTOR);
+                        break;
+                    case THERMOMETER:
+                        IotDeviceThermometer deviceThermometer = device.unknown2Thermometer();
+                        devices.remove(position);
+                        devices.add(position, deviceThermometer);
+                        adapter.notifyItemChanged(position);
+                        modifyConfiguration(device, position, IOT_DEVICE_TYPE.THERMOMETER);
+                        break;
+                    case CRONOTERMOSTATO:
+                        IotDeviceThermostat deviceThermostat = device.unknown2Thermostat();
+                        devices.remove(position);
+                        devices.add(position, deviceThermostat);
+                        adapter.notifyItemChanged(position);
+                        modifyConfiguration(device, position, IOT_DEVICE_TYPE.CRONOTERMOSTATO);
+                        break;
+                    default:
+
+                }
+
+
+                 */
             }
         });
 
@@ -142,6 +181,7 @@ public class FragmentDevices extends Fragment {
         device.setOnReceivedSpontaneousStartDevice(new IotDevice.OnReceivedSpontaneousStartDevice() {
             @Override
             public void onReceivedSpontaneousStartDevice(IOT_CODE_RESULT resultCode) {
+                convertUnknownDevice(device, position);
 
             }
         });
@@ -150,17 +190,18 @@ public class FragmentDevices extends Fragment {
         device.setOnReceivedSpontaneousStartSchedule(new IotDevice.OnReceivedSpontaneousStartSchedule() {
             @Override
             public void onReceivesSpontaneousStartSchedule(IOT_CODE_RESULT resultCode) {
+                convertUnknownDevice(device, position);
 
             }
         });
 
         //Fin de un programa
-        device.setOnReceivedSpontaneousEndSchedule(new IotDevice.OnReceivedSpontaneousEndSchedule() {
-            @Override
-            public void onReceivesSpontaneousStartSchedule(IOT_CODE_RESULT resultCode) {
-
-            }
-        });
+device.setOnReceivedSpontaneousEndSchedule(new IotDevice.OnReceivedSpontaneousEndSchedule() {
+    @Override
+    public void onReceivesSpontaneousEndSchedule(IOT_CODE_RESULT resultCode) {
+        convertUnknownDevice(device, position);
+    }
+});
 
 
 
@@ -170,6 +211,7 @@ public class FragmentDevices extends Fragment {
     private void connectSwitchDevice(IotDeviceSwitch device, int position) {
 
         device.subscribeDevice();
+        device.commandGetStatusDevice();
         device.setOnErrorReportDevice(new IotDevice.OnReceivedErrorReportDevice() {
             @Override
             public void onReceivedErrorReportDevice(IOT_CODE_RESULT resultCode) {
@@ -187,6 +229,7 @@ public class FragmentDevices extends Fragment {
         device.setOnReceivedStatus(new IotDevice.OnReceivedStatus() {
             @Override
             public void onReceivedStatus(IOT_CODE_RESULT resultCode) {
+                Log.i(TAG, "recibido estatus en el switch" + device.getDeviceName()) ;
 
             }
         });
@@ -213,7 +256,7 @@ public class FragmentDevices extends Fragment {
 
         device.setOnReceivedSpontaneousEndSchedule(new IotDevice.OnReceivedSpontaneousEndSchedule() {
             @Override
-            public void onReceivesSpontaneousStartSchedule(IOT_CODE_RESULT resultCode) {
+            public void onReceivesSpontaneousEndSchedule(IOT_CODE_RESULT resultCode) {
 
             }
         });
@@ -253,6 +296,7 @@ public class FragmentDevices extends Fragment {
         device.setOnReceivedStatus(new IotDevice.OnReceivedStatus() {
             @Override
             public void onReceivedStatus(IOT_CODE_RESULT resultCode) {
+                Log.i(TAG, "recibido estatus en el termometro" + device.getDeviceName()) ;
 
             }
         });
@@ -279,7 +323,7 @@ public class FragmentDevices extends Fragment {
 
         device.setOnReceivedSpontaneousEndSchedule(new IotDevice.OnReceivedSpontaneousEndSchedule() {
             @Override
-            public void onReceivesSpontaneousStartSchedule(IOT_CODE_RESULT resultCode) {
+            public void onReceivesSpontaneousEndSchedule(IOT_CODE_RESULT resultCode) {
 
             }
         });
@@ -319,7 +363,7 @@ public class FragmentDevices extends Fragment {
         device.setOnReceivedStatus(new IotDevice.OnReceivedStatus() {
             @Override
             public void onReceivedStatus(IOT_CODE_RESULT resultCode) {
-
+                Log.i(TAG, "recibido estatus en el termostato" + device.getDeviceName()) ;
             }
         });
 
@@ -344,7 +388,7 @@ public class FragmentDevices extends Fragment {
 
         device.setOnReceivedSpontaneousEndSchedule(new IotDevice.OnReceivedSpontaneousEndSchedule() {
             @Override
-            public void onReceivesSpontaneousStartSchedule(IOT_CODE_RESULT resultCode) {
+            public void onReceivesSpontaneousEndSchedule(IOT_CODE_RESULT resultCode) {
 
             }
         });
@@ -359,7 +403,60 @@ public class FragmentDevices extends Fragment {
     }
 
 
+    private void modifyConfiguration(IotDevice device, int position, IOT_DEVICE_TYPE type) {
+        IotUsersDevices configuration;
+        IotSitesDevices site;
+        configuration = new IotUsersDevices(context);
+        configuration.loadConfiguration();
+        int indexSite;
+        int indexRoom;
+        IotDevice dev;
 
 
+        dev = configuration.getIotDeviceObject(siteName, roomName, device.getDeviceId());
+        dev.setDeviceType(type);
+        configuration.saveConfiguration(context);
+
+
+        Log.i(TAG, "cambiado");
+    }
+
+
+    private void convertUnknownDevice(IotDeviceUnknown device, int position) {
+
+        Log.i(TAG, "recibido status " + device.getDeviceName());
+        IOT_DEVICE_TYPE type;
+        type = device.getDeviceType();
+        switch (type) {
+            case UNKNOWN:
+
+                break;
+            case INTERRUPTOR:
+                IotDeviceSwitch deviceSwitch = device.unknown2Switch();
+                devices.remove(position);
+                devices.add(position, deviceSwitch);
+                adapter.notifyDataSetChanged();
+                modifyConfiguration(device, position, IOT_DEVICE_TYPE.INTERRUPTOR);
+                break;
+            case THERMOMETER:
+                IotDeviceThermometer deviceThermometer = device.unknown2Thermometer();
+                devices.remove(position);
+                devices.add(position, deviceThermometer);
+                adapter.notifyItemChanged(position);
+                modifyConfiguration(device, position, IOT_DEVICE_TYPE.THERMOMETER);
+                break;
+            case CRONOTERMOSTATO:
+                IotDeviceThermostat deviceThermostat = device.unknown2Thermostat();
+                devices.remove(position);
+                devices.add(position, deviceThermostat);
+                adapter.notifyItemChanged(position);
+                modifyConfiguration(device, position, IOT_DEVICE_TYPE.CRONOTERMOSTATO);
+                break;
+            default:
+
+        }
+
+
+    }
 
 }

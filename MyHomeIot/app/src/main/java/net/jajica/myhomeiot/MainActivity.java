@@ -158,7 +158,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         makeConnect();
         //createStructure();
         mbinding.tabs.setTabMode(TabLayout.MODE_SCROLLABLE);
-        collectDeviceList();
+        //collectDeviceList();
         return APPLICATION_STATUS.APPLICATION_OK;
     }
 
@@ -217,8 +217,8 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
             @Override
             public void connectionEstablished(boolean reconnect, String serverURI) {
                 Log.i(TAG, "Conexion estabilizada");
-                notifConnectOk();
                 createStructure();
+                notifConnectOk();
 
             }
 
@@ -264,7 +264,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
             }
 
             ArrayList<IotDevice> finalDevices = devices;
-            viewPagerAdapter.addFragment(new FragmentDevices(finalDevices, getApplicationContext(), R.layout.switch_device));
+            viewPagerAdapter.addFragment(new FragmentDevices(finalDevices, getApplicationContext(), R.layout.switch_device, configuration.getCurrentSite(), rooms.get(i).getNameRoom() ));
 
         }
         mbinding.pager.setAdapter(viewPagerAdapter);

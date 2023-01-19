@@ -218,6 +218,14 @@ public class IotSitesDevices {
         return -1;
     }
 
+    public IotRoomsDevices searchRoomObject(String nameRoom) {
+
+        int index;
+        index = searchRoom(nameRoom);
+        return getRoomList().get(index);
+
+    }
+
 
     protected IOT_JSON_RESULT json2object(JSONObject object) {
 
