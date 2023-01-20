@@ -69,6 +69,7 @@ public class FragmentDevices extends Fragment {
         adapter = new IotDeviceAdapter(getActivity(), R.id.recyclerDevices, devices, siteName, roomName);
         recyclerView.setAdapter(adapter);
 
+
         if (devices != null) {
             connectDevices(devices);
         }
@@ -140,41 +141,7 @@ public class FragmentDevices extends Fragment {
 
                 Log.i(TAG, "recibido status " + device.getDeviceName());
                 convertUnknownDevice(device, position);
-                /*
-                IOT_DEVICE_TYPE type;
-                type = device.getDeviceType();
-                switch (type) {
-                    case UNKNOWN:
-
-                        break;
-                    case INTERRUPTOR:
-                        IotDeviceSwitch deviceSwitch = device.unknown2Switch();
-                        devices.remove(position);
-                        devices.add(position, deviceSwitch);
-                        adapter.notifyDataSetChanged();
-                        modifyConfiguration(device, position, IOT_DEVICE_TYPE.INTERRUPTOR);
-                        break;
-                    case THERMOMETER:
-                        IotDeviceThermometer deviceThermometer = device.unknown2Thermometer();
-                        devices.remove(position);
-                        devices.add(position, deviceThermometer);
-                        adapter.notifyItemChanged(position);
-                        modifyConfiguration(device, position, IOT_DEVICE_TYPE.THERMOMETER);
-                        break;
-                    case CRONOTERMOSTATO:
-                        IotDeviceThermostat deviceThermostat = device.unknown2Thermostat();
-                        devices.remove(position);
-                        devices.add(position, deviceThermostat);
-                        adapter.notifyItemChanged(position);
-                        modifyConfiguration(device, position, IOT_DEVICE_TYPE.CRONOTERMOSTATO);
-                        break;
-                    default:
-
-                }
-
-
-                 */
-            }
+           }
         });
 
         //Comienzo del dispositivo
@@ -230,6 +197,7 @@ device.setOnReceivedSpontaneousEndSchedule(new IotDevice.OnReceivedSpontaneousEn
             @Override
             public void onReceivedStatus(IOT_CODE_RESULT resultCode) {
                 Log.i(TAG, "recibido estatus en el switch" + device.getDeviceName()) ;
+                adapter.notifyItemChanged(position);
 
             }
         });
@@ -237,12 +205,13 @@ device.setOnReceivedSpontaneousEndSchedule(new IotDevice.OnReceivedSpontaneousEn
         device.setOnReceivedSpontaneousActionRelay(new IotDeviceSwitch.OnReceivedSpontaneousActionRelay() {
             @Override
             public void onReceivedSpontaneousActionRelay(IOT_CODE_RESULT resultCode) {
-
+                adapter.notifyItemChanged(position);
             }
         });
         device.setOnReceivedSetRelay(new IotDeviceSwitch.OnReceivedSetRelay() {
             @Override
             public void onReceivedSetRelay(IOT_CODE_RESULT codeResult) {
+                adapter.notifyItemChanged(position);
 
             }
         });
@@ -257,6 +226,7 @@ device.setOnReceivedSpontaneousEndSchedule(new IotDevice.OnReceivedSpontaneousEn
         device.setOnReceivedSpontaneousEndSchedule(new IotDevice.OnReceivedSpontaneousEndSchedule() {
             @Override
             public void onReceivesSpontaneousEndSchedule(IOT_CODE_RESULT resultCode) {
+                adapter.notifyItemChanged(position);
 
             }
         });
@@ -264,12 +234,14 @@ device.setOnReceivedSpontaneousEndSchedule(new IotDevice.OnReceivedSpontaneousEn
         device.setOnReceivedSpontaneousStartSchedule(new IotDevice.OnReceivedSpontaneousStartSchedule() {
             @Override
             public void onReceivesSpontaneousStartSchedule(IOT_CODE_RESULT resultCode) {
+                adapter.notifyItemChanged(position);
 
             }
         });
         device.setOnReceivedSpontaneousStartDevice(new IotDevice.OnReceivedSpontaneousStartDevice() {
             @Override
             public void onReceivedSpontaneousStartDevice(IOT_CODE_RESULT resultCode) {
+                adapter.notifyItemChanged(position);
 
             }
         });
@@ -364,6 +336,7 @@ device.setOnReceivedSpontaneousEndSchedule(new IotDevice.OnReceivedSpontaneousEn
             @Override
             public void onReceivedStatus(IOT_CODE_RESULT resultCode) {
                 Log.i(TAG, "recibido estatus en el termostato" + device.getDeviceName()) ;
+
             }
         });
 

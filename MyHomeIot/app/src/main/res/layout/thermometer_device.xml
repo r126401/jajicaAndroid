@@ -36,7 +36,7 @@
 
         </androidx.appcompat.widget.AppCompatTextView>
 
-        <androidx.appcompat.widget.AppCompatTextView
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/textDeviceThermometer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -46,7 +46,7 @@
             app:layout_constraintStart_toStartOf="parent"
             android:textSize="30sp">
 
-        </androidx.appcompat.widget.AppCompatTextView>
+        </com.google.android.material.textfield.TextInputEditText>
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/imageMenuThermometer"

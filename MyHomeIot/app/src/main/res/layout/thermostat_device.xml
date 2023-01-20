@@ -52,16 +52,17 @@
 
         </androidx.appcompat.widget.AppCompatTextView>
 
-        <androidx.appcompat.widget.AppCompatTextView
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/textDeviceThermostat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Termostato"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/textThresholdThermostat"
-            app:layout_constraintStart_toStartOf="@+id/imageThermometer">
+            app:layout_constraintStart_toStartOf="@+id/imageThermometer"
+            android:background="@null">
 
-        </androidx.appcompat.widget.AppCompatTextView>
+        </com.google.android.material.textfield.TextInputEditText>
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/imageMenuThermostat"

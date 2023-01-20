@@ -4,15 +4,23 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Build;
+import android.telephony.PhoneNumberFormattingTextWatcher;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.PopupMenu;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.RecyclerView;
@@ -24,6 +32,7 @@ import net.jajica.libiot.IOT_DEVICE_TYPE;
 import net.jajica.libiot.IOT_DEVICE_USERS_RESULT;
 import net.jajica.libiot.IOT_OPERATION_CONFIGURATION_DEVICES;
 import net.jajica.libiot.IotDevice;
+import net.jajica.libiot.IotDeviceSwitch;
 import net.jajica.libiot.IotDeviceThermometer;
 import net.jajica.libiot.IotDeviceThermostat;
 import net.jajica.libiot.IotDeviceUnknown;
@@ -35,6 +44,7 @@ import net.jajica.myhomeiot.databinding.SwitchDeviceBinding;
 import net.jajica.myhomeiot.databinding.ThermometerDeviceBinding;
 import net.jajica.myhomeiot.databinding.ThermostatDeviceBinding;
 
+import java.security.cert.CertificateNotYetValidException;
 import java.util.ArrayList;
 import java.util.zip.Inflater;
 
@@ -45,9 +55,7 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private ArrayList<IotDevice> deviceList;
     private String siteName;
     private String roomName;
-    private SwitchDeviceBinding switchDeviceBinding;
-    private ThermometerDeviceBinding thermometerDeviceBinding;
-    private ThermostatDeviceBinding thermostatDeviceBinding;
+
 
     public IotDeviceAdapter(Context context, int idLayout, ArrayList<IotDevice> deviceList, String siteName, String roomName) {
         this.context = context;
@@ -95,25 +103,24 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         switch(deviceList.get(position).getDeviceType()) {
 
             case UNKNOWN:
-                paintUnknownDevice((IotUnknownDeviceAdapterViewHolder) holder, position);
+                paintUnknownDevice(((IotUnknownDeviceAdapterViewHolder) holder).textDeviceUnknown, ((IotUnknownDeviceAdapterViewHolder) holder).imageMenu, position);
                 break;
             case INTERRUPTOR:
                 paintSwitchDevice((IotDeviceSwitchAdapterViewHolder) holder, position);
                 break;
             case THERMOMETER:
-                paintThermometerDevice((IotDeviceThermometerAdapterViewHolder) holder, position);
+                paintThermometerDevice(((IotDeviceThermometerAdapterViewHolder) holder).textDeviceThermometer, ((IotDeviceThermometerAdapterViewHolder) holder).imageMenuThermometer, position);
                 break;
             case CRONOTERMOSTATO:
-                paintThermostatDevice((IotDeviceThermostatAdapterViewHolder) holder, position);
+                IotDeviceThermostatAdapterViewHolder pepe;
+                paintThermometerDevice(((IotDeviceThermostatAdapterViewHolder) holder).textDeviceThermostat, ((IotDeviceThermostatAdapterViewHolder) holder).imageMenuThermostat, position);
+
                 break;
             default:
                 break;
         }
 
-        Log.i(TAG, "j");
     }
-
-
 
     @Override
     public int getItemViewType(int position) {
@@ -144,7 +151,7 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             imageMenu = (AppCompatImageView) itemView.findViewById(R.id.imageMenu);
             imageConnectedDeviceUnknown = (AppCompatImageView) itemView.findViewById(R.id.imageConnectedDevice);
             imageDeviceOperation = (AppCompatImageView) itemView.findViewById(R.id.imageDeviceOperation);
-            textDeviceUnknown = (TextInputEditText) itemView.findViewById(R.id.textdevice);
+            textDeviceUnknown = (TextInputEditText) itemView.findViewById(R.id.textdeviceUnknown);
         }
     }
 
@@ -154,14 +161,14 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         AppCompatImageView imageSwitch;
         AppCompatImageView imageMenuSwitch;
         AppCompatImageView imageConnectedDeviceSwitch;
-        AppCompatTextView textDeviceSwitch;
+        TextInputEditText textDeviceSwitch;
 
         public IotDeviceSwitchAdapterViewHolder(@NonNull View itemView) {
             super(itemView);
             imageSwitch = (AppCompatImageView) itemView.findViewById(R.id.imageSwitch);
             imageMenuSwitch = (AppCompatImageView) itemView.findViewById(R.id.imageMenuSwitch);
             imageConnectedDeviceSwitch = (AppCompatImageView) itemView.findViewById(R.id.imageConnectedDeviceSwitch);
-            textDeviceSwitch = (AppCompatTextView) itemView.findViewById(R.id.textdeviceSwitch);
+            textDeviceSwitch = (TextInputEditText) itemView.findViewById(R.id.textdeviceSwitch);
         }
 
     }
@@ -171,14 +178,14 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         AppCompatImageView imageMenuThermometer;
         AppCompatImageView imageConnectedDeviceThermometer;
         AppCompatTextView textTemperatureThermometer;
-        AppCompatTextView textDeviceThermometer;
+        TextInputEditText textDeviceThermometer;
 
         public IotDeviceThermometerAdapterViewHolder(@NonNull View itemView) {
             super(itemView);
             imageMenuThermometer = (AppCompatImageView) itemView.findViewById(R.id.imageMenuThermometer);
             imageConnectedDeviceThermometer = (AppCompatImageView) itemView.findViewById(R.id.imageConnectedDeviceThermometer);
             textTemperatureThermometer = (AppCompatTextView) itemView.findViewById(R.id.textTemperatureThermometer);
-            textDeviceThermometer = (AppCompatTextView) itemView.findViewById(R.id.textDeviceThermometer);
+            textDeviceThermometer = (TextInputEditText) itemView.findViewById(R.id.textDeviceThermometer);
         }
     }
 
@@ -186,7 +193,7 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         AppCompatTextView textTemperatureThermostat;
         AppCompatTextView textThresholdThermostat;
-        AppCompatTextView textDeviceThermostat;
+        TextInputEditText textDeviceThermostat;
         AppCompatImageView imageMenuThermostat;
         AppCompatImageView imageHeating;
         AppCompatImageView imageConnectedDeviceThermostat;
@@ -196,9 +203,9 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             super(itemView);
             textTemperatureThermostat = (AppCompatTextView) itemView.findViewById(R.id.textTemperatureThermostat);
             textThresholdThermostat = (AppCompatTextView) itemView.findViewById(R.id.textThresholdThermostat);
-            textDeviceThermostat = (AppCompatTextView) itemView.findViewById(R.id.textDeviceThermostat);
+            textDeviceThermostat = (TextInputEditText) itemView.findViewById(R.id.textDeviceThermostat);
             imageMenuThermostat = (AppCompatImageView) itemView.findViewById(R.id.imageMenuThermostat);
-            imageHeating = (AppCompatImageView) itemView.findViewById(R.id.imageMenuThermostat);
+            imageHeating = (AppCompatImageView) itemView.findViewById(R.id.imageHeating);
             imageConnectedDeviceThermostat = (AppCompatImageView) itemView.findViewById(R.id.imageConnectedDeviceThermostat);
 
         }
@@ -206,82 +213,35 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
 
 
-    private void paintThermostatDevice(IotDeviceThermostatAdapterViewHolder holder, int position) {
-
-        IotDeviceThermostat thermostat;
-
-        thermostat = (IotDeviceThermostat) deviceList.get(position);
-        holder.textDeviceThermostat.setText(thermostat.getDeviceName());
-        holder.textThresholdThermostat.setText(String.valueOf(thermostat.getThresholdTemperature()));
-        holder.textTemperatureThermostat.setText(String.valueOf(thermostat.getTemperature()));
-        IOT_DEVICE_STATE_CONNECTION status = thermostat.getConnectionState();
-        switch (status) {
-
-
-            case UNKNOWN:
-                break;
-            case DEVICE_CONNECTED:
-                break;
-            case DEVICE_DISCONNECTED:
-                break;
-            case DEVICE_WAITING_RESPONSE:
-                break;
-            case DEVICE_ERROR_COMMUNICATION:
-                break;
-            case DEVICE_ERROR_SUBSCRIPTION:
-                break;
-        }
-
-        holder.imageMenuThermostat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-    }
-
-    private void paintThermometerDevice(IotDeviceThermometerAdapterViewHolder holder, int position) {
-
-        IotDeviceThermometer thermometer;
-        thermometer = (IotDeviceThermometer) deviceList.get(position);
-        holder.textDeviceThermometer.setText(thermometer.getDeviceName());
-        holder.textTemperatureThermometer.setText(String.valueOf(thermometer.getTemperature()));
-        IOT_DEVICE_STATE_CONNECTION status = thermometer.getConnectionState();
-        switch (status) {
-
-            case UNKNOWN:
-                break;
-            case DEVICE_CONNECTED:
-                break;
-            case DEVICE_DISCONNECTED:
-                break;
-            case DEVICE_WAITING_RESPONSE:
-                break;
-            case DEVICE_ERROR_COMMUNICATION:
-                break;
-            case DEVICE_ERROR_SUBSCRIPTION:
-                break;
-        }
-
-        holder.imageMenuThermometer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
+    private void paintThermostatDevice(TextInputEditText editText, AppCompatImageView imageMenu, int position) {
+        paintDevice(editText, imageMenu, position);
 
     }
+
+    private void paintThermometerDevice(TextInputEditText editText, AppCompatImageView imageMenu, int position) {
+
+        paintDevice(editText, imageMenu, position);
+
+
+    }
+
+
+
 
     private void paintSwitchDevice(IotDeviceSwitchAdapterViewHolder holder, int position) {
-        holder.textDeviceSwitch.setText(deviceList.get(position).getDeviceName());
-        IOT_DEVICE_STATE_CONNECTION status = deviceList.get(position).getConnectionState();
-        switch (status) {
+
+        IotDeviceSwitch device;
+        paintDevice(holder.textDeviceSwitch, holder.imageMenuSwitch, position);
+        device = (IotDeviceSwitch) deviceList.get(position);
+        switch (device.getConnectionState()) {
 
             case UNKNOWN:
                 break;
             case DEVICE_CONNECTED:
+                holder.imageConnectedDeviceSwitch.setImageResource(R.drawable.ic_connect_ok);
                 break;
             case DEVICE_DISCONNECTED:
+                holder.imageConnectedDeviceSwitch.setImageResource(R.drawable.ic_connect_nok);
                 break;
             case DEVICE_WAITING_RESPONSE:
                 break;
@@ -290,96 +250,86 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             case DEVICE_ERROR_SUBSCRIPTION:
                 break;
         }
+        if (device.getRelay() == null) return;
+        switch (device.getRelay()) {
 
-        holder.imageMenuSwitch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PopupMenu menu;
-                menu = new PopupMenu(context, holder.imageMenuSwitch);
-                menu.inflate(R.menu.menu_device);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    menu.setForceShowIcon(true);
-                }
-                menu.show();
-                execMenuSwitchDevice(menu, context);
-
-            }
-        });
-
-    }
-
-    private void execMenuSwitchDevice(PopupMenu menu, Context context) {
-
-        menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()) {
-                    case (R.id.item_rename_device):
-                        break;
-                    case (R.id.item_delete_device):
-                        Log.i(TAG, "delte");
-                        break;
-
-                }
-                return false;
-            }
-        });
-    }
-
-    private void paintUnknownDevice(IotUnknownDeviceAdapterViewHolder holder, int position) {
-
-        holder.textDeviceUnknown.setText(deviceList.get(position).getDeviceName());
-        IOT_DEVICE_STATE_CONNECTION status = deviceList.get(position).getConnectionState();
-        switch (status) {
-
+            case OFF:
+                holder.imageSwitch.setImageResource(R.drawable.ic_switch_off);
+                break;
+            case ON:
+                holder.imageSwitch.setImageResource(R.drawable.ic_switch_on);
+                break;
             case UNKNOWN:
-                break;
-            case DEVICE_CONNECTED:
-                break;
-            case DEVICE_DISCONNECTED:
-                break;
-            case DEVICE_WAITING_RESPONSE:
-                break;
-            case DEVICE_ERROR_COMMUNICATION:
-                break;
-            case DEVICE_ERROR_SUBSCRIPTION:
+                holder.imageSwitch.setImageResource(R.drawable.ic_question_24);
                 break;
         }
-        holder.imageMenu.setOnClickListener(new View.OnClickListener() {
+        Log.i("jj", "kk");
+
+
+    }
+
+    private void paintDevice(TextInputEditText editText, AppCompatImageView imageMenu, int position) {
+
+        editText.setText(deviceList.get(position).getDeviceName());
+        imageMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PopupMenu menu;
-                menu = new PopupMenu(context, holder.imageMenu);
-                menu.inflate(R.menu.menu_device);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    menu.setForceShowIcon(true);
-                }
-                menu.show();
-                execMenuUnknownDevice(menu, context, position, holder);
-
+                processMenuDevice(imageMenu, editText, position);
             }
         });
     }
 
-    private void execMenuUnknownDevice(PopupMenu menu, Context context, int position, IotUnknownDeviceAdapterViewHolder holder) {
+    private void paintUnknownDevice(TextInputEditText editText, AppCompatImageView imageMenu, int position) {
 
-        menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+        paintDevice(editText, imageMenu, position);
+    }
+
+    private void modifyNameDevice(TextInputEditText editText, int position) {
+
+        editText.addTextChangedListener(new TextWatcher() {
             @Override
-            public boolean onMenuItemClick(MenuItem item) {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-                switch (item.getItemId()) {
-                    case (R.id.item_rename_device):
-                        modifyNameDevice(position, holder);
-                        break;
-                    case (R.id.item_delete_device):
-                        Log.i(TAG, "delte");
-                        deleteDevice(position);
-                        break;
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String data = s.toString();
+                int index;
+                if ((index = data.indexOf("\n")) > 0) {
+                    data = data.replace("\n","");
+                    editText.setText(data);
+                    editText.setEnabled(false);
+                    deviceList.get(position).setDeviceName(data);
+                    notifyItemChanged(position);
+                    IotUsersDevices configuration;
+                    configuration = new IotUsersDevices(context);
+                    configuration.loadConfiguration();
+                    IotDevice device;
+
+                    device = configuration.getIotDeviceObject(siteName, roomName, deviceList.get(position).getDeviceId());
+                    if (device != null) {
+                        device.setDeviceName(data);
+                        configuration.saveConfiguration(context);
+                    }
+
 
                 }
-                return false;
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
             }
         });
+        editText.setEnabled(true);
+        editText.requestFocus();
+        MyHomeIotTools tools;
+        tools = new MyHomeIotTools(context);
+        editText.setSelection(editText.getText().length());
+        tools.showKeyboard(InputMethodManager.SHOW_FORCED);
     }
 
     private void deleteDevice(int position) {
@@ -399,15 +349,31 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             notifyItemRemoved(position);
         }
     }
+    private void processMenuDevice(AppCompatImageView imageMenu , TextInputEditText editText, int position) {
+        PopupMenu menu;
+        menu = new PopupMenu(context, imageMenu);
+        menu.inflate(R.menu.menu_device);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            menu.setForceShowIcon(true);
+        }
+        menu.show();
+        menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case (R.id.item_rename_device):
+                        modifyNameDevice(editText, position);
+                        break;
+                    case (R.id.item_delete_device):
+                        deleteDevice(position);
+                        Log.i(TAG, "delte");
+                        break;
 
-    private void modifyNameDevice(int position, IotUnknownDeviceAdapterViewHolder holder) {
-
-        holder.textDeviceUnknown.setEnabled(true);
-
-
+                }
+                return false;
+            }
+        });
 
     }
-
-
 
 }
