@@ -515,7 +515,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         String siteName;
         IotSitesDevices site;
         IotRoomsDevices room;
-        IotDeviceUnknown device;
+        IotDevice device;
         IotTools tools;
         String text;
         int indexSite;
@@ -529,6 +529,16 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
             Log.e(TAG, "No existe el site en la configuracion");
             return;
         }
+
+        device = new IotDeviceUnknown();
+        tools = new IotTools();
+        device.setDeviceId(tools.getJsonString(data, IOT_LABELS_JSON.DEVICE_ID.getValorTextoJson()));
+        device.setDeviceName(tools.getJsonString(data, IOT_LABELS_JSON.DEVICE_NAME.getValorTextoJson()));
+        configuration.insertIotDevice(device, siteName, roomName);
+        configuration.reloadConfiguration();
+        createStructure();
+
+/*
         site = configuration.getSiteList().get(indexSite);
         indexRoom = site.searchRoom(roomName);
         room = site.getRoomList().get(indexRoom);
@@ -542,6 +552,8 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         createStructure();
        Log.i(TAG, roomName);
 
+
+         */
 
     }
 

@@ -298,8 +298,9 @@ public class IotMqttConnection implements Serializable {
 
         MqttMessage mensaje;
 
-        if (client == null) {
-            Log.e(TAG, "el cliente mqtt es nulo");
+        if ((client == null) || (topic == null)){
+            Log.e(TAG, "el cliente mqtt o el topic es nulo");
+            return IOT_DEVICE_STATE_CONNECTION.DEVICE_ERROR_COMMUNICATION;
         }
         if (stateConnection == IOT_MQTT_STATUS_CONNECTION.CONEXION_MQTT_ACTIVE) {
             mensaje = new MqttMessage();
@@ -324,6 +325,10 @@ public class IotMqttConnection implements Serializable {
     public IOT_MQTT_STATUS_CONNECTION subscribeTopic(String topic, OnSubscriptionTopic listener) {
 
         Log.w(TAG, "topic " + topic);
+        if (topic == null) {
+            return IOT_MQTT_STATUS_CONNECTION.CONEXION_MQTT_ERROR_CONNECT;
+
+        }
         if (stateConnection == IOT_MQTT_STATUS_CONNECTION.CONEXION_MQTT_ACTIVE) {
             client.subscribe(topic, 0, context, new IMqttActionListener() {
                 @Override

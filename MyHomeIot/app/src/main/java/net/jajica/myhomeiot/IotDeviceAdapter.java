@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.PopupMenu;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -103,17 +104,16 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         switch(deviceList.get(position).getDeviceType()) {
 
             case UNKNOWN:
-                paintUnknownDevice(((IotUnknownDeviceAdapterViewHolder) holder).textDeviceUnknown, ((IotUnknownDeviceAdapterViewHolder) holder).imageMenu, position);
+                paintUnknownDevice((IotUnknownDeviceAdapterViewHolder) holder, position);
                 break;
             case INTERRUPTOR:
                 paintSwitchDevice((IotDeviceSwitchAdapterViewHolder) holder, position);
                 break;
             case THERMOMETER:
-                paintThermometerDevice(((IotDeviceThermometerAdapterViewHolder) holder).textDeviceThermometer, ((IotDeviceThermometerAdapterViewHolder) holder).imageMenuThermometer, position);
-                break;
+                paintThermometerDevice((IotDeviceThermometerAdapterViewHolder) holder, position);
+                 break;
             case CRONOTERMOSTATO:
-                IotDeviceThermostatAdapterViewHolder pepe;
-                paintThermometerDevice(((IotDeviceThermostatAdapterViewHolder) holder).textDeviceThermostat, ((IotDeviceThermostatAdapterViewHolder) holder).imageMenuThermostat, position);
+                paintThermostatDevice((IotDeviceThermostatAdapterViewHolder) holder, position);
 
                 break;
             default:
@@ -145,6 +145,8 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         TextInputEditText textDeviceUnknown;
         AppCompatImageView imageDeviceOperation;
 
+        ProgressBar progressBarUnknownDevice;
+
 
         public IotUnknownDeviceAdapterViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -152,6 +154,7 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             imageConnectedDeviceUnknown = (AppCompatImageView) itemView.findViewById(R.id.imageConnectedDevice);
             imageDeviceOperation = (AppCompatImageView) itemView.findViewById(R.id.imageDeviceOperation);
             textDeviceUnknown = (TextInputEditText) itemView.findViewById(R.id.textdeviceUnknown);
+            progressBarUnknownDevice = (ProgressBar) itemView.findViewById(R.id.progressBarUnknownDevice);
         }
     }
 
@@ -162,6 +165,7 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         AppCompatImageView imageMenuSwitch;
         AppCompatImageView imageConnectedDeviceSwitch;
         TextInputEditText textDeviceSwitch;
+        ProgressBar progressBarSwitchDevice;
 
         public IotDeviceSwitchAdapterViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -169,6 +173,7 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             imageMenuSwitch = (AppCompatImageView) itemView.findViewById(R.id.imageMenuSwitch);
             imageConnectedDeviceSwitch = (AppCompatImageView) itemView.findViewById(R.id.imageConnectedDeviceSwitch);
             textDeviceSwitch = (TextInputEditText) itemView.findViewById(R.id.textdeviceSwitch);
+            progressBarSwitchDevice = (ProgressBar) itemView.findViewById(R.id.progressBarSwitchDevice);
         }
 
     }
@@ -179,6 +184,7 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         AppCompatImageView imageConnectedDeviceThermometer;
         AppCompatTextView textTemperatureThermometer;
         TextInputEditText textDeviceThermometer;
+        ProgressBar progressBarThermometerDevice;
 
         public IotDeviceThermometerAdapterViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -186,6 +192,7 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             imageConnectedDeviceThermometer = (AppCompatImageView) itemView.findViewById(R.id.imageConnectedDeviceThermometer);
             textTemperatureThermometer = (AppCompatTextView) itemView.findViewById(R.id.textTemperatureThermometer);
             textDeviceThermometer = (TextInputEditText) itemView.findViewById(R.id.textDeviceThermometer);
+            progressBarThermometerDevice = (ProgressBar) itemView.findViewById(R.id.progressBarThermometerDevice);
         }
     }
 
@@ -197,6 +204,7 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         AppCompatImageView imageMenuThermostat;
         AppCompatImageView imageHeating;
         AppCompatImageView imageConnectedDeviceThermostat;
+        ProgressBar progressBarThermostatDevice;
 
         public IotDeviceThermostatAdapterViewHolder(@NonNull View itemView) {
 
@@ -207,20 +215,26 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             imageMenuThermostat = (AppCompatImageView) itemView.findViewById(R.id.imageMenuThermostat);
             imageHeating = (AppCompatImageView) itemView.findViewById(R.id.imageHeating);
             imageConnectedDeviceThermostat = (AppCompatImageView) itemView.findViewById(R.id.imageConnectedDeviceThermostat);
+            progressBarThermostatDevice = (ProgressBar) itemView.findViewById(R.id.progressBarThermostatDevice);
 
         }
     }
 
 
 
-    private void paintThermostatDevice(TextInputEditText editText, AppCompatImageView imageMenu, int position) {
-        paintDevice(editText, imageMenu, position);
+    private void paintThermostatDevice(IotDeviceThermostatAdapterViewHolder holder, int position) {
+        paintDevice(holder.textDeviceThermostat, holder.imageMenuThermostat, position);
 
     }
 
-    private void paintThermometerDevice(TextInputEditText editText, AppCompatImageView imageMenu, int position) {
+    private void paintThermometerDevice(IotDeviceThermometerAdapterViewHolder holder, int position) {
 
-        paintDevice(editText, imageMenu, position);
+        IotDeviceThermometer device;
+        device = (IotDeviceThermometer) deviceList.get(position);
+        paintDevice(holder.textDeviceThermometer, holder.imageMenuThermometer, position);
+        paintStatusIconDevice(holder.progressBarThermometerDevice, holder.imageConnectedDeviceThermometer, position);
+        holder.textDeviceThermometer.setText(device.getDeviceName());
+        holder.textTemperatureThermometer.setText(String.valueOf(device.getTemperature()));
 
 
     }
@@ -231,25 +245,9 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private void paintSwitchDevice(IotDeviceSwitchAdapterViewHolder holder, int position) {
 
         IotDeviceSwitch device;
-        paintDevice(holder.textDeviceSwitch, holder.imageMenuSwitch, position);
         device = (IotDeviceSwitch) deviceList.get(position);
-        switch (device.getConnectionState()) {
-
-            case UNKNOWN:
-                break;
-            case DEVICE_CONNECTED:
-                holder.imageConnectedDeviceSwitch.setImageResource(R.drawable.ic_connect_ok);
-                break;
-            case DEVICE_DISCONNECTED:
-                holder.imageConnectedDeviceSwitch.setImageResource(R.drawable.ic_connect_nok);
-                break;
-            case DEVICE_WAITING_RESPONSE:
-                break;
-            case DEVICE_ERROR_COMMUNICATION:
-                break;
-            case DEVICE_ERROR_SUBSCRIPTION:
-                break;
-        }
+        paintDevice(holder.textDeviceSwitch, holder.imageMenuSwitch, position);
+        paintStatusIconDevice(holder.progressBarSwitchDevice, holder.imageConnectedDeviceSwitch, position);
         if (device.getRelay() == null) return;
         switch (device.getRelay()) {
 
@@ -279,10 +277,13 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         });
     }
 
-    private void paintUnknownDevice(TextInputEditText editText, AppCompatImageView imageMenu, int position) {
+    private void paintUnknownDevice(IotUnknownDeviceAdapterViewHolder holder, int position) {
 
-        paintDevice(editText, imageMenu, position);
+        paintDevice(holder.textDeviceUnknown, holder.imageMenu, position);
+        paintStatusIconDevice(holder.progressBarUnknownDevice, holder.imageConnectedDeviceUnknown, position);
     }
+
+
 
     private void modifyNameDevice(TextInputEditText editText, int position) {
 
@@ -373,6 +374,31 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 return false;
             }
         });
+
+    }
+
+    private void paintStatusIconDevice(ProgressBar progressBar, AppCompatImageView imageConnection, int position) {
+
+        switch (deviceList.get(position).getConnectionState()) {
+
+            case UNKNOWN:
+                break;
+            case DEVICE_CONNECTED:
+                progressBar.setVisibility(View.INVISIBLE);
+                imageConnection.setImageResource(R.drawable.ic_connect_ok);
+                break;
+            case DEVICE_DISCONNECTED:
+                progressBar.setVisibility(View.INVISIBLE);
+                imageConnection.setImageResource(R.drawable.ic_connect_nok);
+                break;
+            case DEVICE_ERROR_SUBSCRIPTION:
+            case DEVICE_WAITING_RESPONSE:
+            case DEVICE_ERROR_COMMUNICATION:
+                progressBar.setVisibility(View.VISIBLE);
+                imageConnection.setImageResource(R.drawable.ic_connect_nok);
+                break;
+
+        }
 
     }
 

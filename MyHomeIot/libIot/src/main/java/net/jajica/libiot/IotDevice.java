@@ -1,6 +1,7 @@
 package net.jajica.libiot;
 
 
+import android.content.Context;
 import android.util.Log;
 
 
@@ -23,6 +24,7 @@ import java.util.TimerTask;
 
 
 public abstract class IotDevice implements Serializable {
+
 
 
     protected String publishOtaTopic;
@@ -1282,23 +1284,21 @@ public abstract class IotDevice implements Serializable {
      */
     protected IOT_DEVICE_STATE_CONNECTION sendCommand(String textoComando, String topic) {
         Timer timerCommand = null;
-        IOT_DEVICE_STATE_CONNECTION estado;
-        if ((estado = cnx.publishTopic(topic, textoComando)) != IOT_DEVICE_STATE_CONNECTION.DEVICE_WAITING_RESPONSE) {
-            setConnectionState(estado);
-            return estado;
+        IOT_DEVICE_STATE_CONNECTION status;
+        if ((status = cnx.publishTopic(topic, textoComando)) != IOT_DEVICE_STATE_CONNECTION.DEVICE_WAITING_RESPONSE) {
+            setConnectionState(status);
+            return status;
         }
-
         setConnectionState(IOT_DEVICE_STATE_CONNECTION.DEVICE_WAITING_RESPONSE);
+        timerCommand = new Timer();
 
-        if (timerCommand == null) {
-            timerCommand = new Timer();
-        }
         timerCommand.schedule(new TimerTask() {
             @Override
             public void run() {
                 if (getConnectionState() != IOT_DEVICE_STATE_CONNECTION.DEVICE_CONNECTED) {
                     if (onReceivedTimeoutCommand != null) {
                         //Log.i(TAG, "Enviamos timeout: " + getTokenFromReport(textoComando));
+                        setConnectionState(IOT_DEVICE_STATE_CONNECTION.DEVICE_DISCONNECTED);
                         onReceivedTimeoutCommand.onReceivedTimeoutCommand(getTokenFromReport(textoComando));
                     }
                 }

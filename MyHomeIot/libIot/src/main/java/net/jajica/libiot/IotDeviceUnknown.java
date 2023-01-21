@@ -9,7 +9,7 @@ public class IotDeviceUnknown extends IotDevice implements Serializable {
 
         IotDeviceSwitch device;
         device = new IotDeviceSwitch();
-        device.setDeviceId(this.getDeviceName());
+        device.setDeviceName(this.getDeviceName());
         device.setCnx(this.getCnx());
         device.setDeviceId(this.getDeviceId());
         device.setSubscriptionTopic(this.getSubscriptionTopic());
