@@ -57,6 +57,17 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private String siteName;
     private String roomName;
 
+    private OnDeleteDevice onDeleteDevice;
+
+    public void setOnDeleteDevice(OnDeleteDevice onDeleteDevice) {
+        this.onDeleteDevice = onDeleteDevice;
+    }
+
+    public interface OnDeleteDevice {
+
+        public void onDeleteDevice(int position);
+    }
+
 
     public IotDeviceAdapter(Context context, int idLayout, ArrayList<IotDevice> deviceList, String siteName, String roomName) {
         this.context = context;
@@ -232,7 +243,7 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         IotDeviceThermometer device;
         device = (IotDeviceThermometer) deviceList.get(position);
         paintDevice(holder.textDeviceThermometer, holder.imageMenuThermometer, position);
-        paintStatusIconDevice(holder.progressBarThermometerDevice, holder.imageConnectedDeviceThermometer, position);
+        paintStatusIconDevice(holder.progressBarThermometerDevice, holder.imageConnectedDeviceThermometer, holder.imageMenuThermometer, position);
         holder.textDeviceThermometer.setText(device.getDeviceName());
         holder.textTemperatureThermometer.setText(String.valueOf(device.getTemperature()));
 
@@ -247,7 +258,7 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         IotDeviceSwitch device;
         device = (IotDeviceSwitch) deviceList.get(position);
         paintDevice(holder.textDeviceSwitch, holder.imageMenuSwitch, position);
-        paintStatusIconDevice(holder.progressBarSwitchDevice, holder.imageConnectedDeviceSwitch, position);
+        paintStatusIconDevice(holder.progressBarSwitchDevice, holder.imageConnectedDeviceSwitch,holder.imageSwitch, position);
         if (device.getRelay() == null) return;
         switch (device.getRelay()) {
 
@@ -258,7 +269,7 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 holder.imageSwitch.setImageResource(R.drawable.ic_switch_on);
                 break;
             case UNKNOWN:
-                holder.imageSwitch.setImageResource(R.drawable.ic_question_24);
+                holder.imageSwitch.setImageResource(R.drawable.ic_switch_unknown);
                 break;
         }
         Log.i("jj", "kk");
@@ -280,7 +291,7 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private void paintUnknownDevice(IotUnknownDeviceAdapterViewHolder holder, int position) {
 
         paintDevice(holder.textDeviceUnknown, holder.imageMenu, position);
-        paintStatusIconDevice(holder.progressBarUnknownDevice, holder.imageConnectedDeviceUnknown, position);
+        paintStatusIconDevice(holder.progressBarUnknownDevice, holder.imageConnectedDeviceUnknown, holder.imageDeviceOperation, position);
     }
 
 
@@ -346,8 +357,10 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         if(device.getDeviceId().equals(deviceList.get(position).getDeviceId())) {
             configuration.deleteIotDevice(device.getDeviceId(), siteName, roomName);
-            deviceList.remove(position);
-            notifyItemRemoved(position);
+            configuration.saveConfiguration(context);
+            //deviceList.remove(position);
+            //notifyItemRemoved(position);
+            onDeleteDevice.onDeleteDevice(position);
         }
     }
     private void processMenuDevice(AppCompatImageView imageMenu , TextInputEditText editText, int position) {
@@ -377,7 +390,7 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     }
 
-    private void paintStatusIconDevice(ProgressBar progressBar, AppCompatImageView imageConnection, int position) {
+    private void paintStatusIconDevice(ProgressBar progressBar, AppCompatImageView imageConnection, AppCompatImageView imageDevice, int position) {
 
         switch (deviceList.get(position).getConnectionState()) {
 
@@ -390,13 +403,16 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             case DEVICE_DISCONNECTED:
                 progressBar.setVisibility(View.INVISIBLE);
                 imageConnection.setImageResource(R.drawable.ic_connect_nok);
+                imageDevice.setImageResource(R.drawable.ic_switch_unknown);
                 break;
-            case DEVICE_ERROR_SUBSCRIPTION:
             case DEVICE_WAITING_RESPONSE:
+            case DEVICE_ERROR_SUBSCRIPTION:
             case DEVICE_ERROR_COMMUNICATION:
                 progressBar.setVisibility(View.VISIBLE);
                 imageConnection.setImageResource(R.drawable.ic_connect_nok);
+                imageDevice.setImageResource(R.drawable.ic_unknown_device);
                 break;
+
 
         }
 

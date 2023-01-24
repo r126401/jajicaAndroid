@@ -264,7 +264,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
             }
 
             ArrayList<IotDevice> finalDevices = devices;
-            viewPagerAdapter.addFragment(new FragmentDevices(finalDevices, getApplicationContext(), R.layout.switch_device, configuration.getCurrentSite(), rooms.get(i).getNameRoom() ));
+            viewPagerAdapter.addFragment(new FragmentDevices(finalDevices, getApplicationContext(), configuration.getCurrentSite(), rooms.get(i).getNameRoom() ));
 
         }
         mbinding.pager.setAdapter(viewPagerAdapter);
@@ -534,26 +534,12 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         tools = new IotTools();
         device.setDeviceId(tools.getJsonString(data, IOT_LABELS_JSON.DEVICE_ID.getValorTextoJson()));
         device.setDeviceName(tools.getJsonString(data, IOT_LABELS_JSON.DEVICE_NAME.getValorTextoJson()));
+        device.setDeviceType(IOT_DEVICE_TYPE.UNKNOWN);
         configuration.insertIotDevice(device, siteName, roomName);
-        configuration.reloadConfiguration();
-        createStructure();
-
-/*
-        site = configuration.getSiteList().get(indexSite);
-        indexRoom = site.searchRoom(roomName);
-        room = site.getRoomList().get(indexRoom);
-        device = new IotDeviceUnknown();
-        tools = new IotTools();
-        device.setDeviceId(tools.getJsonString(data, IOT_LABELS_JSON.DEVICE_ID.getValorTextoJson()));
-        device.setDeviceName(tools.getJsonString(data, IOT_LABELS_JSON.DEVICE_NAME.getValorTextoJson()));
-        room.insertDeviceForRoom(device);
         configuration.saveConfiguration(getApplicationContext());
         configuration.reloadConfiguration();
         createStructure();
-       Log.i(TAG, roomName);
 
-
-         */
 
     }
 

@@ -430,6 +430,27 @@ public class IotMqttConnection implements Serializable {
         return -1;
     }
 
+    public IOT_MQTT_STATUS_CONNECTION unSubscribeTopic(String topic) {
+
+        Log.w(TAG, "topic " + topic);
+        if (topic == null) {
+            return IOT_MQTT_STATUS_CONNECTION.CONEXION_MQTT_ERROR_CONNECT;
+
+        }
+        if (stateConnection == IOT_MQTT_STATUS_CONNECTION.CONEXION_MQTT_ACTIVE) {
+            client.unsubscribe(topic);
+
+
+        } else {
+            Log.w(TAG, "No estas conectado al broker");
+            stateConnection = IOT_MQTT_STATUS_CONNECTION.CONEXION_MQTT_ERROR_SUSCRIPCION_TOPIC;
+        }
+
+        return stateConnection;
+
+    }
+
+
 
 
 

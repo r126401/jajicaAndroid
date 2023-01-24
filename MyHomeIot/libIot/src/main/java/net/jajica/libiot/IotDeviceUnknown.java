@@ -15,6 +15,7 @@ public class IotDeviceUnknown extends IotDevice implements Serializable {
         device.setSubscriptionTopic(this.getSubscriptionTopic());
         device.setPublishTopic(this.getPublishTopic());
         device.setDeviceState(this.getDeviceState());
+        device.setDeviceType(IOT_DEVICE_TYPE.INTERRUPTOR);
         return device;
     }
 

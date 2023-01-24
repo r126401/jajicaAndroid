@@ -7,4 +7,4 @@
     android:horizontalSpacing="@dimen/grid_view_padding"
     android:numColumns="2"
     android:padding="@dimen/grid_view_padding"
-    android:stretchMode="columnWidth" />
+    android:stretchMode="columnWidth"/>

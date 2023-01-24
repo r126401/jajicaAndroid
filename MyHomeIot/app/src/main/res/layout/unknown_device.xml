@@ -14,9 +14,10 @@
             android:id="@+id/imageDeviceOperation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_switch_on"
+            android:src="@drawable/ic_unknown_device"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
         </androidx.appcompat.widget.AppCompatImageView>
@@ -30,7 +31,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageDeviceOperation"
             android:enabled="false"
-            android:text="jlsajdlkjsafdds"
             android:background="@null">
         </com.google.android.material.textfield.TextInputEditText>
         <androidx.appcompat.widget.AppCompatImageView

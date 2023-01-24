@@ -1,7 +1,6 @@
 package net.jajica.libiot;
 
 
-import android.content.Context;
 import android.util.Log;
 
 
@@ -1909,6 +1908,37 @@ public abstract class IotDevice implements Serializable {
         return IOT_CODE_RESULT.RESUT_CODE_OK;
 
     }
+
+    public IOT_DEVICE_STATE_CONNECTION unSubscribeDevice(String topic) {
+
+        int i;
+        if (listenerArrivedMessages == null) {
+            return IOT_DEVICE_STATE_CONNECTION.DEVICE_ERROR_SUBSCRIPTION;
+        }
+        if (listenerArrivedMessages.listTopics == null) {
+            return IOT_DEVICE_STATE_CONNECTION.DEVICE_ERROR_SUBSCRIPTION;
+        }
+        for (i=0;i<listenerArrivedMessages.listTopics.size(); i++) {
+            if(listenerArrivedMessages.listTopics.get(i).equals(topic)) {
+                cnx.unSubscribeTopic(topic);
+                listenerArrivedMessages.listTopics.remove(i);
+                if (listenerArrivedMessages.listTopics.size() == 0) {
+                    listenerArrivedMessages = null;
+                    return IOT_DEVICE_STATE_CONNECTION.DEVICE_NO_SUBSCRIPT;
+                }
+            }
+        }
+        return IOT_DEVICE_STATE_CONNECTION.DEVICE_ERROR_SUBSCRIPTION;
+
+
+    }
+
+    public IOT_DEVICE_STATE_CONNECTION unSubscribeDevice() {
+
+        return unSubscribeDevice(getSubscriptionTopic());
+    }
+
+
 
 
 }
