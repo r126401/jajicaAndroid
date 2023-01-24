@@ -537,7 +537,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         device.setDeviceType(IOT_DEVICE_TYPE.UNKNOWN);
         configuration.insertIotDevice(device, siteName, roomName);
         configuration.saveConfiguration(getApplicationContext());
-        configuration.reloadConfiguration();
+        //configuration.reloadConfiguration();
         createStructure();
 
 
@@ -556,7 +556,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                 @Override
                 public void onActivityResult(ActivityResult result) {
 
-                    configuration.reloadConfiguration();
+                    //configuration.reloadConfiguration();
                     createStructure();
 
                 }

@@ -208,6 +208,7 @@ device.setOnReceivedSpontaneousEndSchedule(new IotDevice.OnReceivedSpontaneousEn
             @Override
             public void onReceivedStatus(IOT_CODE_RESULT resultCode) {
                 Log.i(TAG, "recibido status switch " + device.getDeviceName() + "-- hash: " + device.hashCode());
+
                 adapter.notifyItemChanged(position);
 
             }
