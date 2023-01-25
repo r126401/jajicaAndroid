@@ -631,24 +631,25 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 
         FragmentManager fragmentManager;
         Fragment fragment;
-        int i;
+        int i, j;
         FragmentDevices fragmentDevices;
         List<Fragment> listFragments;
         ArrayList<IotDevice> devices;
         IotDevice device;
         fragmentManager = getSupportFragmentManager();
         listFragments = fragmentManager.getFragments();
-        fragmentDevices = (FragmentDevices) listFragments.get(0);
-        devices = fragmentDevices.getDeviceList();
-        for (i=0;i<devices.size();i++) {
-            if ((device = devices.get(i)).getDeviceId().equals(deviceId)) {
-                fragmentDevices.connectUnknownDevice((IotDeviceUnknown) device, i);
-                device.commandGetStatusDevice();
+        for (j = 0; j < listFragments.size(); j++) {
+            fragmentDevices = (FragmentDevices) listFragments.get(j);
+            devices = fragmentDevices.getDeviceList();
+            for (i = 0; i < devices.size(); i++) {
+                if ((device = devices.get(i)).getDeviceId().equals(deviceId)) {
+                    fragmentDevices.connectUnknownDevice((IotDeviceUnknown) device, i);
+                    device.commandGetStatusDevice();
+                }
             }
+
         }
-
-
-
     }
+
 
 }
