@@ -23,6 +23,7 @@ import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
+import com.google.android.material.textfield.TextInputEditText;
 
 import net.jajica.libiot.IOT_DEVICE_TYPE;
 import net.jajica.libiot.IOT_LABELS_JSON;
@@ -46,6 +47,8 @@ import org.json.JSONObject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
+
 import net.jajica.myhomeiot.databinding.ActivityMainBinding;
 
 //import org.eclipse.paho.client.mqttv3.IMqttToken;
@@ -500,7 +503,13 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                     if (result.getResultCode() == RESULT_OK) {
                         String data = result.getData().getDataString();
                         Log.i(getLocalClassName(), "Recibimos datos " + data);
-                        insertDeviceIntoConfiguration(data);
+                        String deviceId;
+                        deviceId = insertDeviceIntoConfiguration(data);
+                        if (deviceId != null) {
+                            notifyNewDevice(deviceId);
+                        }
+
+                        //localeFragment(data);
 
                     } else {
                         Log.w(getLocalClassName(), "Error al instalar el dispositivo");
@@ -510,7 +519,32 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
             }
     );
 
-    private void insertDeviceIntoConfiguration(String data) {
+    private void localeFragment(String data) {
+
+        FragmentManager fragmentManager;
+        Fragment fragment;
+        List<Fragment> list;
+        FragmentDevices a;
+        fragmentManager = getSupportFragmentManager();
+        list = fragmentManager.getFragments();
+        int i;
+        ArrayList<IotDevice> deviceList;
+        TextInputEditText editText;
+        for (i=0;i<list.size();i++) {
+            a = (FragmentDevices) list.get(i);
+            deviceList = a.getDeviceList();
+            Log.i(TAG, "kk");
+
+
+        }
+
+
+
+
+
+    }
+
+    private String  insertDeviceIntoConfiguration(String data) {
         String roomName;
         String siteName;
         IotSitesDevices site;
@@ -527,7 +561,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         indexSite = configuration.searchSiteOfUser(siteName);
         if (indexSite < 0) {
             Log.e(TAG, "No existe el site en la configuracion");
-            return;
+            return null;
         }
 
         device = new IotDeviceUnknown();
@@ -535,10 +569,13 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         device.setDeviceId(tools.getJsonString(data, IOT_LABELS_JSON.DEVICE_ID.getValorTextoJson()));
         device.setDeviceName(tools.getJsonString(data, IOT_LABELS_JSON.DEVICE_NAME.getValorTextoJson()));
         device.setDeviceType(IOT_DEVICE_TYPE.UNKNOWN);
+        device.setCnx(cnx);
         configuration.insertIotDevice(device, siteName, roomName);
         configuration.saveConfiguration(getApplicationContext());
+        return device.getDeviceId();
+
         //configuration.reloadConfiguration();
-        createStructure();
+        //createStructure();
 
 
     }
@@ -556,8 +593,12 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                 @Override
                 public void onActivityResult(ActivityResult result) {
 
-                    //configuration.reloadConfiguration();
-                    createStructure();
+                    String data = result.getData().getDataString();
+                    if (!configuration.getCurrentSite().equals(data)) {
+                        configuration.setCurrentSite(data);
+                        mbinding.textHome.setText(data);
+                        createStructure();
+                    }
 
                 }
             }
@@ -584,6 +625,29 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                 launchHomesActivity();
                 break;
         }
+    }
+
+    private void notifyNewDevice(String deviceId) {
+
+        FragmentManager fragmentManager;
+        Fragment fragment;
+        int i;
+        FragmentDevices fragmentDevices;
+        List<Fragment> listFragments;
+        ArrayList<IotDevice> devices;
+        IotDevice device;
+        fragmentManager = getSupportFragmentManager();
+        listFragments = fragmentManager.getFragments();
+        fragmentDevices = (FragmentDevices) listFragments.get(0);
+        devices = fragmentDevices.getDeviceList();
+        for (i=0;i<devices.size();i++) {
+            if ((device = devices.get(i)).getDeviceId().equals(deviceId)) {
+                fragmentDevices.connectUnknownDevice((IotDeviceUnknown) device, i);
+                device.commandGetStatusDevice();
+            }
+        }
+
+
 
     }
 

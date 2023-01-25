@@ -45,6 +45,10 @@ public class FragmentDevices extends Fragment implements SwipeRefreshLayout.OnRe
         this.roomName = roomName;
     }
 
+    public ArrayList<IotDevice> getDeviceList() {
+        return deviceList;
+    }
+
     private ArrayList<IotDevice> deviceList;
     private Context context;
 
@@ -111,7 +115,7 @@ public class FragmentDevices extends Fragment implements SwipeRefreshLayout.OnRe
         }
     }
 
-    private void connectUnknownDevice(IotDeviceUnknown device, int position) {
+    public void connectUnknownDevice(IotDeviceUnknown device, int position) {
 
 
         //Recepcion de los timeouts a los comandos
@@ -284,7 +288,7 @@ device.setOnReceivedSpontaneousEndSchedule(new IotDevice.OnReceivedSpontaneousEn
         device.setOnReceivedStatus(new IotDevice.OnReceivedStatus() {
             @Override
             public void onReceivedStatus(IOT_CODE_RESULT resultCode) {
-                Log.i(TAG, "recibido estatus en el termometro" + device.getDeviceName()) ;
+                Log.i(TAG, "recibido estatus en el termometro " + device.getDeviceName()) ;
                 adapter.notifyItemChanged(position);
 
             }
@@ -446,10 +450,11 @@ device.setOnReceivedSpontaneousEndSchedule(new IotDevice.OnReceivedSpontaneousEn
                 break;
             case THERMOMETER:
                 IotDeviceThermometer deviceThermometer = device.unknown2Thermometer();
-                deviceList.remove(position);
-                deviceList.add(position, deviceThermometer);
                 modifyConfiguration(device.getDeviceId(), position, IOT_DEVICE_TYPE.THERMOMETER);
+                deviceList.set(position, (IotDevice) deviceThermometer);
                 adapter.notifyItemChanged(position);
+                connectThemometerDevice(deviceThermometer, position);
+                device.commandGetStatusDevice();
                 break;
             case CRONOTERMOSTATO:
                 IotDeviceThermostat deviceThermostat = device.unknown2Thermostat();

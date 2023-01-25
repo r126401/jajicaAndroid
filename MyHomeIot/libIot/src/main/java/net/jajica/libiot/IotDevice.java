@@ -1284,6 +1284,16 @@ public abstract class IotDevice implements Serializable {
     protected IOT_DEVICE_STATE_CONNECTION sendCommand(String textoComando, String topic) {
         Timer timerCommand = null;
         IOT_DEVICE_STATE_CONNECTION status;
+        if (topic == null) {
+            Log.w(TAG, "topic vacio. Comando : " + textoComando);
+        }
+        if (textoComando == null) {
+            Log.w(TAG, "textoComando vacio. topic : " + topic);
+        }
+        if (cnx == null) {
+            Log.e(TAG, "No hay conexion mqtt en el dispositivo");
+            return IOT_DEVICE_STATE_CONNECTION.DEVICE_ERROR_COMMUNICATION;
+        }
         if ((status = cnx.publishTopic(topic, textoComando)) != IOT_DEVICE_STATE_CONNECTION.DEVICE_WAITING_RESPONSE) {
             setConnectionState(status);
             return status;

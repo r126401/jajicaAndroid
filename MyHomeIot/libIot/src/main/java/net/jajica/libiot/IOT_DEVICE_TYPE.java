@@ -5,8 +5,8 @@ import java.io.Serializable;
 public enum IOT_DEVICE_TYPE implements Serializable {
     UNKNOWN(-1),
     INTERRUPTOR(0),
-    THERMOMETER(2),
-    CRONOTERMOSTATO(1),
+    THERMOMETER(1),
+    CRONOTERMOSTATO(2),
     OTA_SERVER(100);
 
     private int tipo;

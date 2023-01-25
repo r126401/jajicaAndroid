@@ -243,9 +243,16 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         IotDeviceThermometer device;
         device = (IotDeviceThermometer) deviceList.get(position);
         paintDevice(holder.textDeviceThermometer, holder.imageMenuThermometer, position);
-        paintStatusIconDevice(holder.progressBarThermometerDevice, holder.imageConnectedDeviceThermometer, holder.imageMenuThermometer, position);
+        //paintStatusIconDevice(holder.progressBarThermometerDevice, holder.imageConnectedDeviceThermometer, holder.imageMenuThermometer, position);
+        paintStatusIconThermometerDevice(holder, position);
         holder.textDeviceThermometer.setText(device.getDeviceName());
-        holder.textTemperatureThermometer.setText(String.valueOf(device.getTemperature()));
+        String dato;
+        MyHomeIotTools tools;
+        Double temp;
+        tools = new MyHomeIotTools();
+        temp = tools.roundData(device.getTemperature(), 1);
+
+        holder.textTemperatureThermometer.setText(String.valueOf(temp) + " ºC");
 
 
     }
@@ -258,7 +265,7 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         IotDeviceSwitch device;
         device = (IotDeviceSwitch) deviceList.get(position);
         paintDevice(holder.textDeviceSwitch, holder.imageMenuSwitch, position);
-        paintStatusIconDevice(holder.progressBarSwitchDevice, holder.imageConnectedDeviceSwitch,holder.imageSwitch, position);
+        paintStatusIconSwitchDevice(holder, position);
         if (device.getRelay() == null) return;
         switch (device.getRelay()) {
 
@@ -417,5 +424,117 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         }
 
     }
+
+    private void paintStatusIconUnknownDevice(ProgressBar progressBar, AppCompatImageView imageConnection, AppCompatImageView imageDevice, int position) {
+
+        switch (deviceList.get(position).getConnectionState()) {
+
+            case UNKNOWN:
+                break;
+            case DEVICE_CONNECTED:
+                progressBar.setVisibility(View.INVISIBLE);
+                imageConnection.setImageResource(R.drawable.ic_connect_ok);
+                break;
+            case DEVICE_DISCONNECTED:
+                progressBar.setVisibility(View.INVISIBLE);
+                imageConnection.setImageResource(R.drawable.ic_connect_nok);
+                imageDevice.setImageResource(R.drawable.ic_switch_unknown);
+                break;
+            case DEVICE_WAITING_RESPONSE:
+            case DEVICE_ERROR_SUBSCRIPTION:
+            case DEVICE_ERROR_COMMUNICATION:
+                progressBar.setVisibility(View.VISIBLE);
+                imageConnection.setImageResource(R.drawable.ic_connect_nok);
+                imageDevice.setImageResource(R.drawable.ic_unknown_device);
+                break;
+
+
+        }
+
+    }
+
+
+    private void paintStatusIconSwitchDevice(IotDeviceSwitchAdapterViewHolder holder, int position) {
+
+        switch (deviceList.get(position).getConnectionState()) {
+
+            case UNKNOWN:
+                break;
+            case DEVICE_CONNECTED:
+                holder.progressBarSwitchDevice.setVisibility(View.INVISIBLE);
+                holder.imageConnectedDeviceSwitch.setImageResource(R.drawable.ic_connect_ok);
+                break;
+            case DEVICE_DISCONNECTED:
+                holder.progressBarSwitchDevice.setVisibility(View.INVISIBLE);
+                holder.imageConnectedDeviceSwitch.setImageResource(R.drawable.ic_connect_nok);
+                holder.imageSwitch.setImageResource(R.drawable.ic_switch_unknown);
+                break;
+            case DEVICE_WAITING_RESPONSE:
+            case DEVICE_ERROR_SUBSCRIPTION:
+            case DEVICE_ERROR_COMMUNICATION:
+                holder.progressBarSwitchDevice.setVisibility(View.VISIBLE);
+                holder.imageConnectedDeviceSwitch.setImageResource(R.drawable.ic_connect_nok);
+                holder.imageSwitch.setImageResource(R.drawable.ic_unknown_device);
+                break;
+
+
+        }
+
+    }
+
+    private void paintStatusIconThermometerDevice(IotDeviceThermometerAdapterViewHolder holder, int position) {
+
+        switch (deviceList.get(position).getConnectionState()) {
+
+            case UNKNOWN:
+                break;
+            case DEVICE_CONNECTED:
+                holder.progressBarThermometerDevice.setVisibility(View.INVISIBLE);
+                holder.imageConnectedDeviceThermometer.setImageResource(R.drawable.ic_connect_ok);
+                break;
+            case DEVICE_DISCONNECTED:
+                holder.progressBarThermometerDevice.setVisibility(View.INVISIBLE);
+                holder.imageConnectedDeviceThermometer.setImageResource(R.drawable.ic_connect_nok);
+                break;
+            case DEVICE_WAITING_RESPONSE:
+            case DEVICE_ERROR_SUBSCRIPTION:
+            case DEVICE_ERROR_COMMUNICATION:
+                holder.progressBarThermometerDevice.setVisibility(View.VISIBLE);
+                holder.imageConnectedDeviceThermometer.setImageResource(R.drawable.ic_connect_nok);
+                break;
+
+
+        }
+
+    }
+
+
+    private void paintStatusIconThermostatDevice(ProgressBar progressBar, AppCompatImageView imageConnection, AppCompatImageView imageDevice, int position) {
+
+        switch (deviceList.get(position).getConnectionState()) {
+
+            case UNKNOWN:
+                break;
+            case DEVICE_CONNECTED:
+                progressBar.setVisibility(View.INVISIBLE);
+                imageConnection.setImageResource(R.drawable.ic_connect_ok);
+                break;
+            case DEVICE_DISCONNECTED:
+                progressBar.setVisibility(View.INVISIBLE);
+                imageConnection.setImageResource(R.drawable.ic_connect_nok);
+                imageDevice.setImageResource(R.drawable.ic_switch_unknown);
+                break;
+            case DEVICE_WAITING_RESPONSE:
+            case DEVICE_ERROR_SUBSCRIPTION:
+            case DEVICE_ERROR_COMMUNICATION:
+                progressBar.setVisibility(View.VISIBLE);
+                imageConnection.setImageResource(R.drawable.ic_connect_nok);
+                imageDevice.setImageResource(R.drawable.ic_unknown_device);
+                break;
+        }
+
+
+    }
+
 
 }

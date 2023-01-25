@@ -118,7 +118,7 @@ public class ParentHomesFragment extends Fragment implements ListHomesAdapter.On
  */
         user.setCurrentSite(siteName);
         user.saveConfiguration(getActivity().getApplicationContext());
-        onPassCurrentSite.onPassCurrentSite(currentSite);
+        onPassCurrentSite.onPassCurrentSite(siteName);
     }
 
     /**

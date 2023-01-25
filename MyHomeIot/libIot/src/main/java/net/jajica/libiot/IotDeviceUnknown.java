@@ -23,24 +23,26 @@ public class IotDeviceUnknown extends IotDevice implements Serializable {
 
         IotDeviceThermometer device;
         device = new IotDeviceThermometer();
-        device.setDeviceId(this.getDeviceName());
+        device.setDeviceName(this.getDeviceName());
         device.setCnx(this.getCnx());
         device.setDeviceId(this.getDeviceId());
         device.setSubscriptionTopic(this.getSubscriptionTopic());
         device.setPublishTopic(this.getPublishTopic());
         device.setDeviceState(this.getDeviceState());
+        device.setDeviceType(IOT_DEVICE_TYPE.THERMOMETER);
         return device;
     }
 
     public IotDeviceThermostat unknown2Thermostat() {
         IotDeviceThermostat device;
         device = new IotDeviceThermostat();
-        device.setDeviceId(this.getDeviceName());
+        device.setDeviceId(this.getDeviceId());
         device.setCnx(this.getCnx());
         device.setDeviceId(this.getDeviceId());
         device.setSubscriptionTopic(this.getSubscriptionTopic());
         device.setPublishTopic(this.getPublishTopic());
         device.setDeviceState(this.getDeviceState());
+        device.setDeviceType(IOT_DEVICE_TYPE.CRONOTERMOSTATO);
         return device;
     }
 
