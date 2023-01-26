@@ -11,5 +11,12 @@
         android:title="@string/delete_device">
     </item>
 
+    <item
+        android:id="@+id/item_move_device"
+        android:icon="@drawable/ic_move"
+        android:title="@string/move_device">
+
+    </item>
+
 
 </menu>

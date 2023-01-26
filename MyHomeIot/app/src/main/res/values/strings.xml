@@ -81,5 +81,6 @@
     <string name="edit_rooms">Editar estancias</string>
     <string name="rename_device">Renombrar dispositivo</string>
     <string name="delete_device">Borrar dispositivo</string>
+    <string name="move_device">Mover dispositivo</string>
 
 </resources>

@@ -50,6 +50,7 @@ public class IotDeviceThermostat extends IotDeviceThermometer implements Seriali
         this.relay = relay;
     }
 
+
     public void setThresholdTemperature(Double thresholdTemperature) {
         this.thresholdTemperature = thresholdTemperature;
     }
@@ -78,6 +79,8 @@ public class IotDeviceThermostat extends IotDeviceThermometer implements Seriali
         setPublishOtaTopic("OtaIotCronoTemp");
         setSubscribeOtaTopic("newVersionOtaIotCronoTemp");
         setDeviceType(IOT_DEVICE_TYPE.CRONOTERMOSTATO);
+        setThresholdTemperature(-1000.0);
+        setRelay(IOT_SWITCH_RELAY.UNKNOWN);
 
     }
 
@@ -197,6 +200,7 @@ public class IotDeviceThermostat extends IotDeviceThermometer implements Seriali
         api = new IotTools();
         i = api.getJsonInt(message, IOT_LABELS_JSON.STATE_RELAY.getValorTextoJson());
         if (i<0) {
+
             return IOT_CODE_RESULT.RESULT_CODE_NOK;
         }
         setRelay(IOT_SWITCH_RELAY.ON.fromId(i));

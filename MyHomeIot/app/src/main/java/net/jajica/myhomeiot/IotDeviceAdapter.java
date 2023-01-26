@@ -234,7 +234,19 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
 
     private void paintThermostatDevice(IotDeviceThermostatAdapterViewHolder holder, int position) {
+        IotDeviceThermostat device;
+        MyHomeIotTools tool;
+        tool = new MyHomeIotTools();
+        device = (IotDeviceThermostat) deviceList.get(position);
         paintDevice(holder.textDeviceThermostat, holder.imageMenuThermostat, position);
+        paintStatusIconThermostatDevice(holder, position);
+        holder.textDeviceThermostat.setText(device.getDeviceName());
+        double data;
+        data = tool.roundData(device.getTemperature(), 1);
+        holder.textTemperatureThermostat.setText(String.valueOf(data));
+        data = tool.roundData(device.getThresholdTemperature(), 1);
+        holder.textThresholdThermostat.setText(String.valueOf(data));
+
 
     }
 
@@ -509,27 +521,44 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
 
-    private void paintStatusIconThermostatDevice(ProgressBar progressBar, AppCompatImageView imageConnection, AppCompatImageView imageDevice, int position) {
+    private void paintStatusIconThermostatDevice(IotDeviceThermostatAdapterViewHolder holder, int position) {
 
-        switch (deviceList.get(position).getConnectionState()) {
+        IotDeviceThermostat device;
+        device = (IotDeviceThermostat) deviceList.get(position);
+
+        switch (device.getConnectionState()) {
 
             case UNKNOWN:
                 break;
             case DEVICE_CONNECTED:
-                progressBar.setVisibility(View.INVISIBLE);
-                imageConnection.setImageResource(R.drawable.ic_connect_ok);
+                holder.progressBarThermostatDevice.setVisibility(View.INVISIBLE);
+                holder.imageConnectedDeviceThermostat.setImageResource(R.drawable.ic_connect_ok);
+                holder.imageHeating.setImageResource(R.drawable.heating);
                 break;
             case DEVICE_DISCONNECTED:
-                progressBar.setVisibility(View.INVISIBLE);
-                imageConnection.setImageResource(R.drawable.ic_connect_nok);
-                imageDevice.setImageResource(R.drawable.ic_switch_unknown);
+                holder.progressBarThermostatDevice.setVisibility(View.INVISIBLE);
+                holder.imageConnectedDeviceThermostat.setImageResource(R.drawable.ic_connect_nok);
+                holder.imageHeating.setImageResource(R.drawable.ic_switch_unknown);
                 break;
             case DEVICE_WAITING_RESPONSE:
             case DEVICE_ERROR_SUBSCRIPTION:
             case DEVICE_ERROR_COMMUNICATION:
-                progressBar.setVisibility(View.VISIBLE);
-                imageConnection.setImageResource(R.drawable.ic_connect_nok);
-                imageDevice.setImageResource(R.drawable.ic_unknown_device);
+                holder.progressBarThermostatDevice.setVisibility(View.VISIBLE);
+                holder.imageConnectedDeviceThermostat.setImageResource(R.drawable.ic_connect_nok);
+                holder.imageHeating.setImageResource(R.drawable.ic_unknown_device);
+                break;
+        }
+
+        switch (device.getRelay()) {
+
+
+            case OFF:
+                holder.imageHeating.setVisibility(View.INVISIBLE);
+                break;
+            case ON:
+                holder.imageHeating.setVisibility(View.VISIBLE);
+                break;
+            case UNKNOWN:
                 break;
         }
 
