@@ -1,66 +1,51 @@
 package net.jajica.myhomeiot;
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Build;
-import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.textfield.TextInputEditText;
 
-import net.jajica.libiot.IOT_DEVICE_STATE_CONNECTION;
 import net.jajica.libiot.IOT_DEVICE_TYPE;
-import net.jajica.libiot.IOT_DEVICE_USERS_RESULT;
-import net.jajica.libiot.IOT_OPERATION_CONFIGURATION_DEVICES;
 import net.jajica.libiot.IotDevice;
 import net.jajica.libiot.IotDeviceSwitch;
 import net.jajica.libiot.IotDeviceThermometer;
 import net.jajica.libiot.IotDeviceThermostat;
-import net.jajica.libiot.IotDeviceUnknown;
 import net.jajica.libiot.IotRoomsDevices;
 import net.jajica.libiot.IotSitesDevices;
 import net.jajica.libiot.IotUsersDevices;
-import net.jajica.myhomeiot.databinding.ActivityMainBinding;
-import net.jajica.myhomeiot.databinding.SwitchDeviceBinding;
-import net.jajica.myhomeiot.databinding.ThermometerDeviceBinding;
-import net.jajica.myhomeiot.databinding.ThermostatDeviceBinding;
 
-import java.security.cert.CertificateNotYetValidException;
 import java.util.ArrayList;
-import java.util.zip.Inflater;
 
 public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final String TAG = "DevicesAdapter";
     private Context context;
-    private int idLayout;
+    protected int idLayout;
     private ArrayList<IotDevice> deviceList;
     private String siteName;
     private String roomName;
 
-    private OnDeleteDevice onDeleteDevice;
 
-    public void setOnDeleteDevice(OnDeleteDevice onDeleteDevice) {
-        this.onDeleteDevice = onDeleteDevice;
+
+    private OnDeleteDevice onDeleteDeviceListener;
+    private OnSelectedDevice onSelectedDeviceListener;
+
+    public void setOnDeleteDeviceListener(OnDeleteDevice onDeleteDeviceListener) {
+        this.onDeleteDeviceListener = onDeleteDeviceListener;
     }
 
     public interface OnDeleteDevice {
@@ -68,6 +53,13 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         public void onDeleteDevice(int position);
     }
 
+    public interface OnSelectedDevice {
+        public void onSelectedDevice(IotDevice device);
+    }
+
+    public void setOnSelectedDeviceListener(OnSelectedDevice onSelectedDeviceListener) {
+        this.onSelectedDeviceListener = onSelectedDeviceListener;
+    }
 
     public IotDeviceAdapter(Context context, int idLayout, ArrayList<IotDevice> deviceList, String siteName, String roomName) {
         this.context = context;
@@ -85,21 +77,63 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         IOT_DEVICE_TYPE type = IOT_DEVICE_TYPE.UNKNOWN;
         type = type.fromId(viewType);
         LayoutInflater inflater;
+        IotDeviceSwitchAdapterViewHolder holderSwitch;
+        IotDeviceThermometerAdapterViewHolder holderThermometer;
+        IotDeviceThermostatAdapterViewHolder holderThermostat;
         switch (type) {
 
             case UNKNOWN:
-                view = LayoutInflater.from(context).inflate(R.layout.unknown_device, parent, false);
+                view = LayoutInflater.from(context).inflate(R.layout.unknown_device, parent, false);;
                 return new IotUnknownDeviceAdapterViewHolder(view);
             case INTERRUPTOR:
                 view = LayoutInflater.from(context).inflate(R.layout.switch_device, parent, false);
-                return new IotDeviceSwitchAdapterViewHolder(view);
+
+                holderSwitch = new IotDeviceSwitchAdapterViewHolder(view);
+                view.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        int position = holderSwitch.getLayoutPosition();
+                        if (onSelectedDeviceListener != null) {
+                            onSelectedDeviceListener.onSelectedDevice(deviceList.get(position));
+                        }
+                        Log.i(TAG, "iii");
+                    }
+                });
+                //return new IotDeviceSwitchAdapterViewHolder(view);
+                return holderSwitch;
             case THERMOMETER:
                 view = LayoutInflater.from(context).inflate(R.layout.thermometer_device, parent, false);
-                return new IotDeviceThermometerAdapterViewHolder(view);
+                holderThermometer = new IotDeviceThermometerAdapterViewHolder(view);
+                view.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        int position = holderThermometer.getLayoutPosition();
+                        if (onSelectedDeviceListener != null) {
+                            onSelectedDeviceListener.onSelectedDevice(deviceList.get(position));
+                        }
+                        Log.i(TAG, "iii");
+                    }
+                });
+                //return new IotDeviceSwitchAdapterViewHolder(view);
+                return holderThermometer;
+
 
             case CRONOTERMOSTATO:
                 view = LayoutInflater.from(context).inflate(R.layout.thermostat_device, parent, false);
-                return new IotDeviceThermostatAdapterViewHolder(view);
+                holderThermostat = new IotDeviceThermostatAdapterViewHolder(view);
+                view.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        int position = holderThermostat.getLayoutPosition();
+                        if (onSelectedDeviceListener != null) {
+                            onSelectedDeviceListener.onSelectedDevice(deviceList.get(position));
+                        }
+                        Log.i(TAG, "iii");
+                    }
+                });
+                //return new IotDeviceSwitchAdapterViewHolder(view);
+                return holderThermostat;
+
             default:
                 break;
         }
@@ -108,6 +142,8 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         return new IotUnknownDeviceAdapterViewHolder(view);
 
     }
+
+
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
@@ -130,6 +166,7 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             default:
                 break;
         }
+
 
     }
 
@@ -172,11 +209,15 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     static public class IotDeviceSwitchAdapterViewHolder extends RecyclerView.ViewHolder {
 
+        private final String TAG = "IotDeviceSwitchAdapterViewHolder";
         AppCompatImageView imageSwitch;
         AppCompatImageView imageMenuSwitch;
         AppCompatImageView imageConnectedDeviceSwitch;
         TextInputEditText textDeviceSwitch;
         ProgressBar progressBarSwitchDevice;
+
+
+
 
         public IotDeviceSwitchAdapterViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -186,6 +227,8 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             textDeviceSwitch = (TextInputEditText) itemView.findViewById(R.id.textdeviceSwitch);
             progressBarSwitchDevice = (ProgressBar) itemView.findViewById(R.id.progressBarSwitchDevice);
         }
+
+
 
     }
 
@@ -272,10 +315,22 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
 
 
-    private void paintSwitchDevice(IotDeviceSwitchAdapterViewHolder holder, int position) {
+    private void paintSwitchDevice(IotDeviceSwitchAdapterViewHolder holder, int position)  {
 
         IotDeviceSwitch device;
         device = (IotDeviceSwitch) deviceList.get(position);
+
+        /*
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (onSelectedHolderDeviceListener != null) {
+                    onSelectedHolderDeviceListener.onSelectedDevice(deviceList.get(position));
+                }
+            }
+        });
+
+         */
         paintDevice(holder.textDeviceSwitch, holder.imageMenuSwitch, position);
         paintStatusIconSwitchDevice(holder, position);
         if (device.getRelay() == null) return;
@@ -292,6 +347,8 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 break;
         }
         Log.i("jj", "kk");
+
+
 
 
     }
@@ -379,7 +436,7 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             configuration.saveConfiguration(context);
             //deviceList.remove(position);
             //notifyItemRemoved(position);
-            onDeleteDevice.onDeleteDevice(position);
+            onDeleteDeviceListener.onDeleteDevice(position);
         }
     }
     private void processMenuDevice(AppCompatImageView imageMenu , TextInputEditText editText, int position) {

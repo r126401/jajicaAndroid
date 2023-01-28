@@ -27,7 +27,7 @@ import net.jajica.libiot.IotUsersDevices;
 import java.util.ArrayList;
 
 
-public class FragmentDevices extends Fragment implements SwipeRefreshLayout.OnRefreshListener, IotDeviceAdapter.OnDeleteDevice {
+public class FragmentDevices extends Fragment implements SwipeRefreshLayout.OnRefreshListener, IotDeviceAdapter.OnDeleteDevice, IotDeviceAdapter.OnSelectedDevice {
 
     private final String TAG = "FragmentDevices";
     RecyclerView recyclerView;
@@ -62,8 +62,9 @@ public class FragmentDevices extends Fragment implements SwipeRefreshLayout.OnRe
     private void createListDevices() {
 
         adapter = new IotDeviceAdapter(getActivity(), R.id.recyclerDevices, deviceList, siteName, roomName);
-        adapter.setOnDeleteDevice(this);
+        adapter.setOnDeleteDeviceListener(this);
         recyclerView.setAdapter(adapter);
+        adapter.setOnSelectedDeviceListener(this);
         if (deviceList != null) {
             connectDevices();
             askDevices();
@@ -514,5 +515,12 @@ device.setOnReceivedSpontaneousEndSchedule(new IotDevice.OnReceivedSpontaneousEn
         deviceList.get(position).unSubscribeDevice();
         deviceList.remove(position);
         adapter.notifyItemRemoved(position);
+    }
+
+    @Override
+    public void onSelectedDevice(IotDevice device) {
+
+        Log.i(TAG, "Seleccionado el item " + device.getDeviceName() + " : " + device.getDeviceId());
+
     }
 }
