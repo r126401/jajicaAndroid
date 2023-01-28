@@ -67,60 +67,46 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="23d00115-d3af-48c2-a0e5-936070caa06f" name="Default Changelist" comment="se hace el ubgrade de gradel a 7.1.0">
-      <change beforePath="$PROJECT_DIR$/.gradle/7.2/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.2/fileHashes/fileHashes.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/checksums/checksums.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/checksums/sha1-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/checksums/sha1-checksums.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_arch_core_core_runtime_2_0_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_arch_core_core_runtime_2_0_0_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_asynclayoutinflater_asynclayoutinflater_1_0_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_asynclayoutinflater_asynclayoutinflater_1_0_0_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_cursoradapter_cursoradapter_1_0_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_cursoradapter_cursoradapter_1_0_0_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_customview_customview_1_0_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_customview_customview_1_0_0_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_documentfile_documentfile_1_0_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_documentfile_documentfile_1_0_0_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_drawerlayout_drawerlayout_1_0_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_drawerlayout_drawerlayout_1_0_0_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_fragment_fragment_1_0_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_fragment_fragment_1_0_0_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_interpolator_interpolator_1_0_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_interpolator_interpolator_1_0_0_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_legacy_legacy_support_core_ui_1_0_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_legacy_legacy_support_core_ui_1_0_0_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_legacy_legacy_support_core_utils_1_0_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_legacy_legacy_support_core_utils_1_0_0_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_legacy_legacy_support_v4_1_0_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_legacy_legacy_support_v4_1_0_0_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_lifecycle_lifecycle_livedata_2_0_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_lifecycle_lifecycle_livedata_2_0_0_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_lifecycle_lifecycle_livedata_core_2_0_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_lifecycle_lifecycle_livedata_core_2_0_0_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_lifecycle_lifecycle_runtime_2_0_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_lifecycle_lifecycle_runtime_2_0_0_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_lifecycle_lifecycle_viewmodel_2_0_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_lifecycle_lifecycle_viewmodel_2_0_0_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_loader_loader_1_0_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_loader_loader_1_0_0_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_localbroadcastmanager_localbroadcastmanager_1_0_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_localbroadcastmanager_localbroadcastmanager_1_0_0_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_print_print_1_0_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_print_print_1_0_0_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_slidingpanelayout_slidingpanelayout_1_0_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_slidingpanelayout_slidingpanelayout_1_0_0_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_swiperefreshlayout_swiperefreshlayout_1_0_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_swiperefreshlayout_swiperefreshlayout_1_0_0_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_test_core_1_2_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_test_core_1_2_0_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_test_espresso_espresso_core_3_1_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_test_espresso_espresso_core_3_1_0_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_test_espresso_espresso_idling_resource_3_1_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_test_espresso_espresso_idling_resource_3_1_0_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_test_ext_junit_1_1_1_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_test_ext_junit_1_1_1_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_test_monitor_1_2_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_test_monitor_1_2_0_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_test_runner_1_1_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_test_runner_1_1_0_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_vectordrawable_vectordrawable_1_0_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_vectordrawable_vectordrawable_1_0_0_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_vectordrawable_vectordrawable_animated_1_0_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_vectordrawable_vectordrawable_animated_1_0_0_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_versionedparcelable_versionedparcelable_1_0_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_versionedparcelable_versionedparcelable_1_0_0_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_viewpager_viewpager_1_0_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_viewpager_viewpager_1_0_0_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_jakewharton_timber_timber_4_1_2_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_jakewharton_timber_timber_4_1_2_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_ycuwq_widgets_datepicker_1_0_1_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_ycuwq_widgets_datepicker_1_0_1_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/app/IotControl.app.androidTest.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/app/IotControl.app.androidTest.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/app/IotControl.app.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/app/IotControl.app.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/app/IotControl.app.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/app/IotControl.app.main.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/app/IotControl.app.unitTest.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/app/IotControl.app.unitTest.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/java/net/jajica/myhomeiot/SwitchActivity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/java/net/jajica/myhomeiot/ThermometerActivity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/java/net/jajica/myhomeiot/ThermostatActivity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/drawable-anydpi/ic_action_connect_nok.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/drawable-anydpi/ic_action_connect_ok.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/drawable-anydpi/ic_ntp_off.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/drawable-anydpi/ic_ntp_on.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/drawable-anydpi/ic_wifi_off.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/drawable-anydpi/ic_wifi_on.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/drawable-hdpi/ic_action_connect_nok.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/drawable-hdpi/ic_action_connect_ok.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/drawable-hdpi/ic_ntp_off.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/drawable-hdpi/ic_ntp_on.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/drawable-hdpi/ic_wifi_off.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/drawable-hdpi/ic_wifi_on.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/drawable-mdpi/ic_action_connect_nok.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/drawable-mdpi/ic_action_connect_ok.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/drawable-mdpi/ic_ntp_off.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/drawable-mdpi/ic_ntp_on.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/drawable-mdpi/ic_wifi_off.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/drawable-mdpi/ic_wifi_on.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/drawable-xhdpi/ic_action_connect_nok.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/drawable-xhdpi/ic_action_connect_ok.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/drawable-xhdpi/ic_ntp_off.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/drawable-xhdpi/ic_ntp_on.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/drawable-xhdpi/ic_wifi_off.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/drawable-xhdpi/ic_wifi_on.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/drawable-xxhdpi/ic_action_connect_nok.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/drawable-xxhdpi/ic_action_connect_ok.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/drawable-xxhdpi/ic_ntp_off.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/drawable-xxhdpi/ic_ntp_on.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/drawable-xxhdpi/ic_wifi_off.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/drawable-xxhdpi/ic_wifi_on.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/drawable/ic_alarm.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/layout/activity_switch.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/layout/activity_thermometer.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/layout/activity_thermostat.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../MyHomeIot/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../MyHomeIot/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MyHomeIot/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/AndroidManifest.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../MyHomeIot/app/src/main/java/net/jajica/myhomeiot/FragmentDevices.java" beforeDir="false" afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/java/net/jajica/myhomeiot/FragmentDevices.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../MyHomeIot/app/src/main/java/net/jajica/myhomeiot/IotDeviceAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/java/net/jajica/myhomeiot/IotDeviceAdapter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/layout/list_devices.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/layout/list_devices.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/layout/switch_device.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/layout/switch_device.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/layout/thermometer_device.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/layout/thermometer_device.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/layout/thermostat_device.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/layout/thermostat_device.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/layout/unknown_device.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/layout/unknown_device.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../MyHomeIot/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../MyHomeIot/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../MyHomeIot/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../MyHomeIot/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../MyHomeIot/libIot/src/main/java/net/jajica/libiot/IotDevice.java" beforeDir="false" afterPath="$PROJECT_DIR$/../MyHomeIot/libIot/src/main/java/net/jajica/libiot/IotDevice.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../MyHomeIot/libIot/src/main/java/net/jajica/libiot/IotMqttConnection.java" beforeDir="false" afterPath="$PROJECT_DIR$/../MyHomeIot/libIot/src/main/java/net/jajica/libiot/IotMqttConnection.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -130,7 +116,7 @@
   <component name="Cvs2Configuration">
     <option name="OVERRIDE_EXISTING_TAG_FOR_PROJECT" value="false" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[/home/t126401/.android/avd/Pixel_5_API_30.avd]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[adb-5ab456a8-YZ0yyK._adb-tls-connect._tcp]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -186,12 +172,12 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.cidr.known.project.marker": "true",
-    "cidr.known.project.marker": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="PsdUISettings">
     <option name="MODULE_TAB" value="Properties" />
     <option name="LAST_EDITED_SIGNING_CONFIG" value="debug" />

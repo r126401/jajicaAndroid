@@ -1,8 +1,14 @@
 package net.jajica.myhomeiot;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultCaller;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -16,6 +22,7 @@ import android.view.ViewGroup;
 
 import net.jajica.libiot.IOT_CODE_RESULT;
 import net.jajica.libiot.IOT_DEVICE_TYPE;
+import net.jajica.libiot.IOT_LABELS_JSON;
 import net.jajica.libiot.IOT_TYPE_ALARM_DEVICE;
 import net.jajica.libiot.IotDevice;
 import net.jajica.libiot.IotDeviceSwitch;
@@ -37,6 +44,10 @@ public class FragmentDevices extends Fragment implements SwipeRefreshLayout.OnRe
     String roomName;
 
     IotUsersDevices configuration;
+    private ActivityResultLauncher<Intent> switchLauncher;
+    private ActivityResultLauncher<Intent> ThermometerLauncher;
+    private ActivityResultLauncher<Intent> ThermostatLauncher;
+
 
     public FragmentDevices(ArrayList<IotDevice> deviceList, Context context, String siteName, String roomName) {
         this.deviceList = deviceList;
@@ -520,7 +531,30 @@ device.setOnReceivedSpontaneousEndSchedule(new IotDevice.OnReceivedSpontaneousEn
     @Override
     public void onSelectedDevice(IotDevice device) {
 
-        Log.i(TAG, "Seleccionado el item " + device.getDeviceName() + " : " + device.getDeviceId());
+        device.object2Json();
+        switch (device.getDeviceType()) {
+
+            case INTERRUPTOR:
+                Intent launcherSwitch = new Intent(context, SwitchActivity.class);
+
+                launcherSwitch.putExtra(IOT_LABELS_JSON.DEVICES.getValorTextoJson(), device.getDispositivoJson().toString());
+                startActivity(launcherSwitch);
+                break;
+            case THERMOMETER:
+                Intent launcherThermometer = new Intent(context, ThermometerActivity.class);
+                launcherThermometer.putExtra(IOT_LABELS_JSON.DEVICES.getValorTextoJson(), device.getDispositivoJson().toString());
+                startActivity(launcherThermometer);
+                break;
+            case CRONOTERMOSTATO:
+                Intent launcherThermostat = new Intent(context, ThermostatActivity.class);
+                launcherThermostat.putExtra(IOT_LABELS_JSON.DEVICES.getValorTextoJson(), device.getDispositivoJson().toString());
+                break;
+        }
 
     }
+
+
+
+
+
 }
