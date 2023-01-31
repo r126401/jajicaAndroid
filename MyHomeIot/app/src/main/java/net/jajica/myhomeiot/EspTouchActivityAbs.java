@@ -78,7 +78,7 @@ public abstract class EspTouchActivityAbs extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         menu.add(Menu.NONE, MENU_ITEM_ABOUT, 0, R.string.menu_item_about)
-                .setIcon(R.drawable.ic_info_outline_white_24dp)
+                .setIcon(R.drawable.ic_action_info)
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
         return super.onCreateOptionsMenu(menu);
     }

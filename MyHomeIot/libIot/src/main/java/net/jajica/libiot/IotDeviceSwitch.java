@@ -351,7 +351,34 @@ public class IotDeviceSwitch extends IotDevice implements Serializable {
         return IOT_CODE_RESULT.RESUT_CODE_OK;
     }
 
+    @Override
+    public JSONObject object2Json() {
 
+
+        if(getRelay() != null) {
+            try {
+                dispositivoJson.put(IOT_LABELS_JSON.STATE_RELAY.getValorTextoJson(), getRelay().getEstadoRele());
+
+            } catch (JSONException e) {
+                //return null;
+            }
+        }
+        return super.object2Json();
+    }
+
+    @Override
+    public IOT_JSON_RESULT json2Object(JSONObject jsonDevice) {
+
+        IOT_SWITCH_RELAY status = IOT_SWITCH_RELAY.UNKNOWN;
+        try {
+            setRelay(status.fromId(jsonDevice.getInt(IOT_LABELS_JSON.STATE_RELAY.getValorTextoJson())));
+        } catch (JSONException e) {
+            //return IOT_JSON_RESULT.JSON_CORRUPTO;
+           // return null;
+        }
+
+        return super.json2Object(jsonDevice);
+    }
 
 
 }

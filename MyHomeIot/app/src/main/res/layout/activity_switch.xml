@@ -15,16 +15,17 @@
         android:layout_weight="40">
 
         <GridLayout
-            android:id="@+id/gridLayout3"
+            android:id="@+id/gridLayoutSchedule"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:columnCount="3"
-            app:layout_constraintBottom_toTopOf="@+id/buttonsPanelSwitch"
+            app:layout_constraintBottom_toTopOf="@+id/bottomActionsSwitch"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imagePanelSwitch">
 
             <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/textStartSchedule"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
@@ -34,6 +35,7 @@
                 android:text="12:00" />
 
             <ProgressBar
+                android:id="@+id/progressSchedule"
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
@@ -43,6 +45,7 @@
             </ProgressBar>
 
             <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/textEndSchedule"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
@@ -55,7 +58,7 @@
         </GridLayout>
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/appCompatImageView"
+            android:id="@+id/imageAlarmSwitch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_alarm"
@@ -66,12 +69,13 @@
         </androidx.appcompat.widget.AppCompatImageView>
 
         <ProgressBar
+            android:id="@+id/progressOperationSwitch"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            app:layout_constraintBottom_toTopOf="@+id/gridLayout3"
-            app:layout_constraintEnd_toEndOf="@+id/appCompatImageView"
-            app:layout_constraintStart_toStartOf="@+id/appCompatImageView"
-            app:layout_constraintTop_toBottomOf="@+id/appCompatImageView">
+            app:layout_constraintBottom_toTopOf="@+id/gridLayoutSchedule"
+            app:layout_constraintEnd_toEndOf="@+id/imageAlarmSwitch"
+            app:layout_constraintStart_toStartOf="@+id/imageAlarmSwitch"
+            app:layout_constraintTop_toBottomOf="@+id/imageAlarmSwitch">
 
         </ProgressBar>
 
@@ -85,39 +89,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 
-        <GridLayout
-            android:id="@+id/buttonsPanelSwitch"
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottomActionsSwitch"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:numColumns="7"
-            android:rowCount="1"
-            app:flow_horizontalAlign="end"
+            android:layout_height="48dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layoutDirection="rtl"
-            android:layout_margin="5dp">
+            app:menu="@menu/menu_switch"
+            app:labelVisibilityMode="unlabeled">
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_move"
-                android:layout_marginEnd="10dp"/>
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_move"
-                android:layout_marginEnd="10dp"/>
-            <androidx.appcompat.widget.AppCompatImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_move"
-                android:layout_marginEnd="10dp"/>
-            <androidx.appcompat.widget.AppCompatImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_move"
-                android:layout_marginEnd="10dp"/>
-        </GridLayout>
+        </com.google.android.material.bottomnavigation.BottomNavigationView>
 
         <GridLayout
             android:id="@+id/gridLayout2"
@@ -130,41 +111,54 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/imageBrokerConnected"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
                 android:src="@drawable/ic_wifi_on" />
 
             <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/imageConnectedDeviceSwitch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
-                android:src="@drawable/ic_action_connect_nok" />
+                android:src="@drawable/ic_action_connect_ok" />
 
             <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/imageUpgradeFirmwareSwitch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
-                android:src="@drawable/ic_ntp_on" />
+                android:src="@drawable/ic_action_upgrade"
+                android:visibility="invisible"/>
 
             <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/textDeviceInfoSwitch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
                 android:layout_marginEnd="10dp"
-                android:drawableLeft="@drawable/ic_move"
-                android:src="@drawable/ic_move"
+                android:drawableLeft="@drawable/ic_action_device"
                 android:text="@string/move_device" />
-
 
         </GridLayout>
 
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textStatusSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/auto"
+            app:layout_constraintBottom_toTopOf="@+id/imagePanelSwitch"
+            app:layout_constraintEnd_toEndOf="@+id/imagePanelSwitch"
+            app:layout_constraintStart_toStartOf="@+id/imagePanelSwitch"
+            app:layout_constraintTop_toBottomOf="@+id/gridLayout2">
 
+        </androidx.appcompat.widget.AppCompatTextView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <FrameLayout
-        android:id="@+id/frameLayout"
+        android:id="@+id/containerSwitch"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="60">

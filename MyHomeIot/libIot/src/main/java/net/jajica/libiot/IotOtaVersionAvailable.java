@@ -1,7 +1,7 @@
 package net.jajica.libiot;
 
 
-public class IotOtaVersionAvalilable {
+public class IotOtaVersionAvailable {
 
     protected String otaServer;
     protected int otaPort;
@@ -70,7 +70,7 @@ public class IotOtaVersionAvalilable {
 
 
 
-    IotOtaVersionAvalilable(String topicPublicacion, String topicSubscripcion) {
+    IotOtaVersionAvailable(String topicPublicacion, String topicSubscripcion) {
         setOtaServer(null);
         setOtaPort(0);
         setOtaUrl(null);
@@ -165,6 +165,26 @@ public class IotOtaVersionAvalilable {
 
         return IOT_CODE_RESULT.RESUT_CODE_OK;
 
+    }
+
+    public Boolean isOtaVersionAvailable(String currentVersion) {
+        Double versionAvaliable;
+        Double version;
+        if ((getOtaVersionAvailable() == null) || (getOtaVersionAvailable().isEmpty())){
+            return false;
+        }
+        versionAvaliable = Double.valueOf(getOtaVersionAvailable());
+        version = Double.valueOf(currentVersion);
+        return versionAvaliable > version;
+
+
+    }
+    public int getOtaVersionIntAvailable() {
+        int versionAvaliable;
+        versionAvaliable = Integer.parseInt(getOtaVersionAvailable());
+
+
+        return 0;
     }
 
 

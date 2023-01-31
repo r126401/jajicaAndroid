@@ -346,7 +346,7 @@ public class IotMqttConnection implements Serializable {
             });
 
         } else {
-            Log.w(TAG, "No estas conectado al broker");
+            Log.w(TAG, "No estas conectado al broker para el topic " + topic);
             stateConnection = IOT_MQTT_STATUS_CONNECTION.CONEXION_MQTT_ERROR_SUSCRIPCION_TOPIC;
         }
 

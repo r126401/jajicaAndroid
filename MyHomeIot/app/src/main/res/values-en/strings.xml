@@ -81,6 +81,15 @@
     <string name="rename_device">Rename device</string>
     <string name="delete_device">Delete device</string>
     <string name="move_device">Move device</string>
+    <string name="auto">AUTO</string>
+    <string name="manual">MANUAL</string>
+    <string name="arrancando">STARTING</string>
+    <string name="no_programs">NO PROGRAMS</string>
+    <string name="upgrade_in_progress">UPGRADING</string>
+    <string name="syncronizing">SYNCRONIZING</string>
+    <string name="waiting_start">WAITING END START</string>
+    <string name="start_before_Factory">START BEFOR FACTORY</string>
+    <string name="unknown">UNKNOWN</string>
 
 
 </resources>

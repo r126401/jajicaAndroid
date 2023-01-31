@@ -48,6 +48,15 @@ public class IotAlarmDevice {
 
     }
 
+    public Boolean activeAlarms() {
+
+        return (getMqttAlarm() == IOT_ALARM_VALUE.ALARM_ON) ||
+                (getWifiAlarm() == IOT_ALARM_VALUE.ALARM_ON) ||
+                (getNtpAlarm() == IOT_ALARM_VALUE.ALARM_ON) ||
+                (getNvsAlarm() == IOT_ALARM_VALUE.ALARM_ON);
+
+    }
+
 
 
 

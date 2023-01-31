@@ -536,6 +536,7 @@ device.setOnReceivedSpontaneousEndSchedule(new IotDevice.OnReceivedSpontaneousEn
 
             case INTERRUPTOR:
                 Intent launcherSwitch = new Intent(context, SwitchActivity.class);
+                device.object2Json();
 
                 launcherSwitch.putExtra(IOT_LABELS_JSON.DEVICES.getValorTextoJson(), device.getDispositivoJson().toString());
                 startActivity(launcherSwitch);

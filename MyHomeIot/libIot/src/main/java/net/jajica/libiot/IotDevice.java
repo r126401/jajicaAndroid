@@ -83,7 +83,7 @@ public abstract class IotDevice implements Serializable {
     /**
      * Estado del dispositivo
      */
-    protected IOT_DEVICE_STATE deviceState;
+    protected IOT_DEVICE_STATE deviceStatus;
 
     /**
      * Estado de la conexion al dispositivo
@@ -114,7 +114,7 @@ public abstract class IotDevice implements Serializable {
     /**
      * Puntero a la estructura de la version reportada por el dispositivo
      */
-    protected IotOtaVersionAvalilable dataOta;
+    protected IotOtaVersionAvailable dataOta;
     /**
      * Version actual del dispositivo
      */
@@ -147,6 +147,10 @@ public abstract class IotDevice implements Serializable {
     protected String topicOtaVersionAvailable;
     protected long freeMem;
     protected Double uptime;
+
+    public String getCurrentOtaVersion() {
+        return currentOtaVersion;
+    }
 
     public String getPublishOtaTopic() {
         return publishOtaTopic;
@@ -574,16 +578,16 @@ public abstract class IotDevice implements Serializable {
      * Obtiene el estado del dispositivo
      * @return Retorna el estado del dispositivo
      */
-    public IOT_DEVICE_STATE getDeviceState() {
-        return deviceState;
+    public IOT_DEVICE_STATE getDeviceStatus() {
+        return deviceStatus;
     }
 
     /**
      * Pone el estado del dispositivo
-     * @param deviceState Es el nuevo estado del dispositivo
+     * @param deviceStatus Es el nuevo estado del dispositivo
      */
-    public void setDeviceState(IOT_DEVICE_STATE deviceState) {
-        this.deviceState = deviceState;
+    public void setDeviceStatus(IOT_DEVICE_STATE deviceStatus) {
+        this.deviceStatus = deviceStatus;
     }
 
     /**
@@ -606,7 +610,7 @@ public abstract class IotDevice implements Serializable {
      * Obtiene la estructura OTA donde viene la informacion par upgrade OTA
      * @return
      */
-    public IotOtaVersionAvalilable getDataOta() {
+    public IotOtaVersionAvailable getDataOta() {
         return dataOta;
     }
 
@@ -614,7 +618,7 @@ public abstract class IotDevice implements Serializable {
      * Asigna la estructura ota al dispositivo
      * @param dataOta Es la estructura OTA en la que vienen los datos para upgrade
      */
-    public void setDataOta(IotOtaVersionAvalilable dataOta) {
+    public void setDataOta(IotOtaVersionAvailable dataOta) {
         this.dataOta = dataOta;
     }
 
@@ -654,7 +658,7 @@ public abstract class IotDevice implements Serializable {
         subscriptionTopic = null;
         publishTopic = null;
         dataOta = null;
-        deviceState = IOT_DEVICE_STATE.INDETERMINADO;
+        deviceStatus = IOT_DEVICE_STATE.INDETERMINADO;
         connectionState = IOT_DEVICE_STATE_CONNECTION.UNKNOWN;
         finUpgrade = 0;
         activeSchedule = null;
@@ -681,7 +685,7 @@ public abstract class IotDevice implements Serializable {
         subscriptionTopic = null;
         publishTopic = null;
         dataOta = null;
-        deviceState = IOT_DEVICE_STATE.INDETERMINADO;
+        deviceStatus = IOT_DEVICE_STATE.INDETERMINADO;
         connectionState = IOT_DEVICE_STATE_CONNECTION.UNKNOWN;
         finUpgrade = 0;
         activeSchedule = null;
@@ -707,7 +711,7 @@ public abstract class IotDevice implements Serializable {
         subscriptionTopic = null;
         publishTopic = null;
         dataOta = null;
-        deviceState = IOT_DEVICE_STATE.INDETERMINADO;
+        deviceStatus = IOT_DEVICE_STATE.INDETERMINADO;
         connectionState = IOT_DEVICE_STATE_CONNECTION.UNKNOWN;
         finUpgrade = 0;
         activeSchedule = null;
@@ -754,7 +758,7 @@ public abstract class IotDevice implements Serializable {
         subscriptionTopic = null;
         publishTopic = null;
         dataOta = null;
-        deviceState = IOT_DEVICE_STATE.INDETERMINADO;
+        deviceStatus = IOT_DEVICE_STATE.INDETERMINADO;
         connectionState = IOT_DEVICE_STATE_CONNECTION.UNKNOWN;
         finUpgrade = 0;
         activeSchedule = null;
@@ -768,19 +772,22 @@ public abstract class IotDevice implements Serializable {
 
     /**
      * Este metodo vuelca la estructura json del dispositivo en la propia estructura de la clase
-     * @param dispositivoJson es la estructura json
+     * @param jsonDevice es la estructura json
      * @return Se devuelve el resultado de la operacion
      */
-    public IOT_JSON_RESULT json2Object(JSONObject dispositivoJson) {
+    public IOT_JSON_RESULT json2Object(JSONObject jsonDevice) {
 
-        int tipo;
+        int value;
         try {
-            deviceName = dispositivoJson.getString(IOT_LABELS_JSON.DEVICE_NAME.getValorTextoJson());
-            deviceId = dispositivoJson.getString(IOT_LABELS_JSON.DEVICE_ID.getValorTextoJson());
-            publishTopic = dispositivoJson.getString(IOT_LABELS_JSON.TOPIC_PUBLISH.getValorTextoJson());
-            subscriptionTopic = dispositivoJson.getString(IOT_LABELS_JSON.TOPIC_SUBSCRIPTION.getValorTextoJson());
-            tipo = dispositivoJson.getInt(IOT_LABELS_JSON.DEVICE_TYPE.getValorTextoJson());
-            deviceType = deviceType.fromId(tipo);
+            deviceName = jsonDevice.getString(IOT_LABELS_JSON.DEVICE_NAME.getValorTextoJson());
+            deviceId = jsonDevice.getString(IOT_LABELS_JSON.DEVICE_ID.getValorTextoJson());
+            publishTopic = jsonDevice.getString(IOT_LABELS_JSON.TOPIC_PUBLISH.getValorTextoJson());
+            subscriptionTopic = jsonDevice.getString(IOT_LABELS_JSON.TOPIC_SUBSCRIPTION.getValorTextoJson());
+            value = jsonDevice.getInt(IOT_LABELS_JSON.DEVICE_TYPE.getValorTextoJson());
+            deviceType = deviceType.fromId(value);
+            value = jsonDevice.optInt(IOT_LABELS_JSON.STATUS_DEVICE.getValorTextoJson());
+            deviceStatus = deviceStatus.fromId(value);
+            currentOtaVersion = jsonDevice.optString(IOT_LABELS_JSON.OTA_VERSION.getValorTextoJson());
         } catch (JSONException e) {
             return IOT_JSON_RESULT.JSON_CORRUPTO;
         }
@@ -788,7 +795,7 @@ public abstract class IotDevice implements Serializable {
         if (!isDeviceValid()) {
             return IOT_JSON_RESULT.JSON_CORRUPTO;
         }
-        setDispositivoJson(dispositivoJson);
+        setDispositivoJson(jsonDevice);
 
         return IOT_JSON_RESULT.JSON_OK;
     }
@@ -843,6 +850,21 @@ public abstract class IotDevice implements Serializable {
         } catch (JSONException e) {
             e.printStackTrace();
             return null;
+        }
+
+        try {
+            dispositivoJson.put(IOT_LABELS_JSON.STATUS_DEVICE.getValorTextoJson(), getDeviceStatus().getDeviceState());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        if (currentOtaVersion != null) {
+            try {
+                dispositivoJson.put(IOT_LABELS_JSON.OTA_VERSION.getValorTextoJson(), getCurrentOtaVersion());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
         }
 
 
@@ -913,7 +935,7 @@ public abstract class IotDevice implements Serializable {
 
     public IOT_DEVICE_STATE_CONNECTION subscribeOtaServer() {
         if (dataOta == null) {
-            dataOta = new IotOtaVersionAvalilable(getPublishOtaTopic(), getSubscribeOtaTopic());
+            dataOta = new IotOtaVersionAvailable(getPublishOtaTopic(), getSubscribeOtaTopic());
         }
         return subscribeDevice(getSubscribeOtaTopic());
     }
@@ -1343,7 +1365,7 @@ public abstract class IotDevice implements Serializable {
         IOT_DEVICE_STATE estadoDispositivo = IOT_DEVICE_STATE.INDETERMINADO;
         estado = api.getJsonInt(respuesta, IOT_LABELS_JSON.STATUS_DEVICE.getValorTextoJson());
         if (estado > IOT_DEVICE_STATE.INDETERMINADO.getDeviceState()) {
-            setDeviceState(estadoDispositivo.fromId(estado));
+            setDeviceStatus(estadoDispositivo.fromId(estado));
             return IOT_CODE_RESULT.RESUT_CODE_OK;
         } else {
             Log.e(TAG, "Error al obtener el estado del dispositivo en el Status");
@@ -1759,7 +1781,7 @@ public abstract class IotDevice implements Serializable {
         IOT_CODE_RESULT code;
         Log.i(TAG, "se procesa la respuesta del servidor OTA");
         if (dataOta == null) {
-            dataOta = new IotOtaVersionAvalilable(getPublishOtaTopic(), getSubscribeOtaTopic());
+            dataOta = new IotOtaVersionAvailable(getPublishOtaTopic(), getSubscribeOtaTopic());
         }
         if ((code = dataOta.setDataOtaFromReport(message)) != IOT_CODE_RESULT.RESUT_CODE_OK) {
             return code;
