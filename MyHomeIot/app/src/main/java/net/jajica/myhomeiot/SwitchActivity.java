@@ -1,6 +1,8 @@
 package net.jajica.myhomeiot;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,7 +23,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import net.jajica.libiot.IotOtaVersionAvailable;
+import net.jajica.libiot.IotScheduleDeviceSwitch;
 import net.jajica.myhomeiot.databinding.ActivitySwitchBinding;
+
+import java.util.ArrayList;
 
 public class SwitchActivity extends AppCompatActivity {
 
@@ -30,14 +35,24 @@ public class SwitchActivity extends AppCompatActivity {
     private IotMqttConnection cnx;
 
     private ActivitySwitchBinding mbinding;
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_switch);
 
-        mbinding = ActivitySwitchBinding.inflate(getLayoutInflater());
-        setContentView(mbinding.getRoot());
+    private FragmentManager fragmentManager;
+    private FragmentTransaction fragmentTransaction;
+
+    private SwitchScheduleFragment switchScheduleFragment;
+
+    private Bundle bundleSchedule;
+
+    private void intiActivity() {
         JSONObject jsonObject = null;
+
+        fragmentManager = getSupportFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
+        ArrayList<IotScheduleDeviceSwitch> schedules;
+        schedules = device.getSchedulesSwitch();
+        bundleSchedule = new Bundle();
+        bundleSchedule.putSerializable();
+
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         String data = bundle.getString(IOT_LABELS_JSON.DEVICES.getValorTextoJson());
@@ -46,6 +61,7 @@ public class SwitchActivity extends AppCompatActivity {
         } catch (JSONException exception) {
             Log.e(TAG, "Error al recibir el json desde MainActivity");
         }
+
 
         device = new IotDeviceSwitch();
         if (data != null) {
@@ -56,6 +72,20 @@ public class SwitchActivity extends AppCompatActivity {
         device.setCnx(cnx);
         configureListeners();
         updateDevice();
+
+    }
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        //setContentView(R.layout.activity_switch);
+
+        mbinding = ActivitySwitchBinding.inflate(getLayoutInflater());
+        setContentView(mbinding.getRoot());
+
+
+        intiActivity();
 
 
     }
@@ -87,6 +117,13 @@ public class SwitchActivity extends AppCompatActivity {
             }
         });
 
+        device.setOnReceivedScheduleDevice(new IotDevice.OnReceivedScheduleDevice() {
+            @Override
+            public void onReceivedScheduleDevice(IOT_CODE_RESULT resultCode) {
+                Log.i(TAG, "list sdchedules");
+            }
+        });
+
 
     }
 
@@ -102,6 +139,7 @@ public class SwitchActivity extends AppCompatActivity {
                 device.subscribeDevice();
                 device.subscribeOtaServer();
                 device.commandGetStatusDevice();
+                device.commandGetScheduleDevice();
                 updateDevice();
                 device.getOtaVersionAvailableCommand();
             }
