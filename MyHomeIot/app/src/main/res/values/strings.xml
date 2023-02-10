@@ -91,5 +91,14 @@
     <string name="waiting_start">ESPERANDO FIN DE ARRANQUE</string>
     <string name="start_before_Factory">ARRANQUE DESPUES DE FACTORY</string>
     <string name="unknown">INDETERMINADO</string>
+    <string name="from">Desde</string>
+    <string name="to">hasta</string>
+    <string name="abrev_monday">L</string>
+    <string name="abrev_tuesday">M</string>
+    <string name="abrev_wednesday">X</string>
+    <string name="abrev_thursday">J</string>
+    <string name="abrev_friday">V</string>
+    <string name="abrev_saturday">S</string>
+    <string name="abrev_sunday">D</string>
 
 </resources>

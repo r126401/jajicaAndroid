@@ -43,16 +43,11 @@ public class SwitchActivity extends AppCompatActivity {
 
     private Bundle bundleSchedule;
 
-    private void intiActivity() {
+    private void initActivity() {
         JSONObject jsonObject = null;
 
         fragmentManager = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
-        ArrayList<IotScheduleDeviceSwitch> schedules;
-        schedules = device.getSchedulesSwitch();
-        bundleSchedule = new Bundle();
-        bundleSchedule.putSerializable();
-
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         String data = bundle.getString(IOT_LABELS_JSON.DEVICES.getValorTextoJson());
@@ -73,6 +68,7 @@ public class SwitchActivity extends AppCompatActivity {
         configureListeners();
         updateDevice();
 
+
     }
 
 
@@ -85,7 +81,7 @@ public class SwitchActivity extends AppCompatActivity {
         setContentView(mbinding.getRoot());
 
 
-        intiActivity();
+        initActivity();
 
 
     }
@@ -117,12 +113,6 @@ public class SwitchActivity extends AppCompatActivity {
             }
         });
 
-        device.setOnReceivedScheduleDevice(new IotDevice.OnReceivedScheduleDevice() {
-            @Override
-            public void onReceivedScheduleDevice(IOT_CODE_RESULT resultCode) {
-                Log.i(TAG, "list sdchedules");
-            }
-        });
 
 
     }
@@ -139,9 +129,10 @@ public class SwitchActivity extends AppCompatActivity {
                 device.subscribeDevice();
                 device.subscribeOtaServer();
                 device.commandGetStatusDevice();
-                device.commandGetScheduleDevice();
+                //device.commandGetScheduleDevice();
                 updateDevice();
                 device.getOtaVersionAvailableCommand();
+                getSwitchSchedule();
             }
 
             @Override
@@ -324,6 +315,17 @@ private void paintRelayStatus() {
             mbinding.imagePanelSwitch.setImageResource(R.drawable.ic_switch_unknown);
             break;
     }
+}
+
+private void getSwitchSchedule() {
+
+        switchScheduleFragment = new SwitchScheduleFragment(device);
+        fragmentTransaction.add(R.id.containerSwitch, switchScheduleFragment, null);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+
+
+
 }
 
 

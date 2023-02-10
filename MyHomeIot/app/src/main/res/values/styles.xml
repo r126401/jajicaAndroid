@@ -9,7 +9,40 @@
 
 </style>
 
+    <style name="textActiveDayStyle" parent="Widget.AppCompat.TextView">
+
+        <item name="android:background">@drawable/round_corners_active_days</item>
+        <item name="android:layout_marginEnd">5dp</item>
+        <item name="android:layout_marginStart">5dp</item>
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">20dp</item>
+        <item name="android:layout_width">35dp</item>
+        <item name="android:height">35dp</item>
+        <item name="android:gravity">center</item>
+
+    </style>
 
 
+    <style name="textDeactiveDayStyle" parent="Widget.AppCompat.TextView">
+
+        <item name="android:background">@drawable/round_corners_deactive_days</item>
+        <item name="android:layout_marginStart">10dp</item>
+        <item name="android:layout_marginEnd">10dp</item>
+
+    </style>
+
+    <style name="textScheduleStyle" parent="Widget.AppCompat.TextView">
+
+        <item name="android:textSize">20dp</item>
+        <item name="android:layout_marginStart">5dp</item>
+        <item name="android:layout_marginEnd">5dp</item>
+    </style>
+
+    <style name="layoutScheduleStyle">
+
+        <item name="background">@drawable/round_corners_schedule_layout</item>
+
+    </style>
 
 </resources>

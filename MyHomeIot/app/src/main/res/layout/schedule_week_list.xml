@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="40dp">
+
+    <GridLayout
+        android:id="@+id/gridWeek"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:columnCount="7"
+        android:orientation="horizontal"
+        android:rowCount="1"
+        android:layout_gravity="center">
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textMonday"
+            android:text="@string/abrev_monday"
+            style="@style/textActiveDayStyle"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textTuesday"
+            style="@style/textActiveDayStyle"
+            android:text="@string/abrev_tuesday"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textWednesday"
+            style="@style/textActiveDayStyle"
+            android:text="@string/abrev_wednesday"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textThursday"
+            style="@style/textActiveDayStyle"
+            android:text="@string/abrev_thursday"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textFriday"
+            style="@style/textActiveDayStyle"
+            android:text="@string/abrev_friday"/>
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textSaturday"
+            style="@style/textActiveDayStyle"
+            android:text="@string/abrev_saturday"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textSunday"
+            style="@style/textActiveDayStyle"
+            android:text="@string/abrev_sunday"/>
+    </GridLayout>
+
+
+
+</LinearLayout>

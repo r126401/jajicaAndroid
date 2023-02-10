@@ -90,6 +90,15 @@
     <string name="waiting_start">WAITING END START</string>
     <string name="start_before_Factory">START BEFOR FACTORY</string>
     <string name="unknown">UNKNOWN</string>
+    <string name="from">From</string>
+    <string name="to">to</string>
+    <string name="abrev_monday">M</string>
+    <string name="abrev_tuesday">T</string>
+    <string name="abrev_wednesday">W</string>
+    <string name="abrev_thursday">R</string>
+    <string name="abrev_friday">F</string>
+    <string name="abrev_saturday">S</string>
+    <string name="abrev_sunday">U</string>
 
 
 </resources>
