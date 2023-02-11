@@ -6,6 +6,7 @@ import android.view.inputmethod.InputMethodManager;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.util.Formatter;
 
 public class MyHomeIotTools {
 
@@ -47,13 +48,26 @@ public class MyHomeIotTools {
 
     protected double roundData(double valor, int decimales) {
 
-
-
-
         BigDecimal bd = new BigDecimal(valor);
         bd = bd.setScale(decimales, RoundingMode.HALF_UP);
 
         return bd.doubleValue();
+
+    }
+
+    public String formatHour(int hora, int minuto) {
+
+        Formatter formato;
+        formato = new Formatter();
+        return formato.format("%02d:%02d", hora, minuto).toString();
+
+    }
+
+    public String formatData(int data) {
+
+        Formatter formatter;
+        formatter = new Formatter();
+        return formatter.format("%02d", data).toString();
 
     }
 

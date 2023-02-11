@@ -37,7 +37,7 @@ public class IotScheduleDevice implements Serializable {
         minute = 0;
         second = 0;
         weekDay = 0;
-        setScheduleState(IOT_STATE_SCHEDULE.PROGRAMA_INACTIVO);
+        setScheduleState(IOT_STATE_SCHEDULE.INACTIVE_SCHEDULE);
         mask = 0;
         year = 0;
         month = 0;
@@ -108,7 +108,7 @@ public class IotScheduleDevice implements Serializable {
             return;
         }
         int i;
-        IOT_STATE_SCHEDULE estado = IOT_STATE_SCHEDULE.PROGRAMA_DESCONOCIDO;
+        IOT_STATE_SCHEDULE estado = IOT_STATE_SCHEDULE.UNKNOWN_SCHEDULE;
         i= Integer.parseInt(getRawSchedule().substring(10,11));
         setScheduleState(estado.fromId(i));
     }
@@ -116,7 +116,7 @@ public class IotScheduleDevice implements Serializable {
     protected IOT_STATE_SCHEDULE setParametersDiarySchedule() {
         if(getRawSchedule() == null) {
             Log.e(TAG, "Error: No hay scheduleId");
-            return IOT_STATE_SCHEDULE.PROGRAMA_INVALIDO;
+            return IOT_STATE_SCHEDULE.INVALID_SCHEDULE;
         }
         if (getScheduleType() != IOT_CLASS_SCHEDULE.DIARY_SCHEDULE) {
             Log.e(TAG, "Error: El tipo de programa no es diario");
@@ -129,7 +129,7 @@ public class IotScheduleDevice implements Serializable {
 
 
 
-        return IOT_STATE_SCHEDULE.PROGRAMA_VALIDO;
+        return IOT_STATE_SCHEDULE.VALID_SCHEDULE;
 
     }
 
@@ -381,7 +381,7 @@ public class IotScheduleDevice implements Serializable {
         i = api.getJsonInt(message, IOT_LABELS_JSON.STATUS_SCHEDULE.getValorTextoJson());
         if (i < 0)
         return IOT_CODE_RESULT.RESULT_CODE_ERROR;
-        setScheduleState(IOT_STATE_SCHEDULE.PROGRAMA_DESCONOCIDO.fromId(i));
+        setScheduleState(IOT_STATE_SCHEDULE.UNKNOWN_SCHEDULE.fromId(i));
 
         return IOT_CODE_RESULT.RESUT_CODE_OK;
     }
@@ -402,5 +402,9 @@ public class IotScheduleDevice implements Serializable {
 
     }
 
+    public Boolean getActiveDay(int day) {
+
+        return activeDays[day];
+    }
 
 }

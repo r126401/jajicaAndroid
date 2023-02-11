@@ -19,7 +19,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/textTuesday"
-            style="@style/textActiveDayStyle"
+            style="@style/textDeactiveDayStyle"
             android:text="@string/abrev_tuesday"/>
 
         <androidx.appcompat.widget.AppCompatTextView

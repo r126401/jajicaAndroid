@@ -1,11 +1,11 @@
 package net.jajica.libiot;
 
 public enum IOT_STATE_SCHEDULE {
-    PROGRAMA_DESCONOCIDO(-1),
-    PROGRAMA_INACTIVO(0),
-    PROGRAMA_ACTIVO(1),
-    PROGRAMA_INVALIDO(-2),
-    PROGRAMA_VALIDO(2);
+    UNKNOWN_SCHEDULE(-1),
+    INACTIVE_SCHEDULE(0),
+    ACTIVE_SCHEDULE(1),
+    INVALID_SCHEDULE(-2),
+    VALID_SCHEDULE(2);
 
     private int estadoPrograma;
 

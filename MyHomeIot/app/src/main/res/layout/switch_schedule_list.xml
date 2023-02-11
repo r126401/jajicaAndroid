@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="10dp"
-    android:layout_marginBottom="10dp"
+    android:layout_marginTop="2dp"
+    android:layout_marginBottom="2dp"
     android:background="@drawable/round_corners_schedule_layout">
 
     <androidx.appcompat.widget.AppCompatImageView
@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:src="@drawable/ic_action_unlock"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/linearLayoutCompat"
+        app:layout_constraintEnd_toStartOf="@+id/layoutWeek"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -26,15 +26,15 @@
         android:src="@drawable/ic_action_delete"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/linearLayoutCompat"
+        app:layout_constraintStart_toEndOf="@+id/layoutWeek"
         app:layout_constraintTop_toTopOf="parent" />
 
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/imageActiveSchedule"
+        android:id="@+id/imageCurrentSchedule"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_active_schedule"
+        android:src="@drawable/ic_current_schedule"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -46,7 +46,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayoutCompat"
+        app:layout_constraintBottom_toTopOf="@+id/layoutWeek"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -82,14 +82,13 @@
             android:id="@+id/textToHour"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="12:00"
             app:layout_constraintStart_toEndOf="@+id/textFromHour"
             style="@style/textScheduleStyle"/>
     </LinearLayout>
 
 
-    <androidx.appcompat.widget.LinearLayoutCompat
-        android:id="@+id/linearLayoutCompat"
+    <LinearLayout
+        android:id="@+id/layoutWeek"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -98,10 +97,11 @@
         android:layout_marginBottom="10dp">
 
         <include
+            android:id="@+id/layoutWeekSchedule"
             layout="@layout/schedule_week_list"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/imageScheduleStatus" />
-    </androidx.appcompat.widget.LinearLayoutCompat>
+            app:layout_constraintStart_toEndOf="@+id/imageScheduleStatus"/>
+    </LinearLayout>
 
 
 
