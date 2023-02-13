@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".NewSwitchScheduleFragment">
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textScheduleType"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:text="NUEVO PROGRAMA"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </androidx.appcompat.widget.AppCompatTextView>
+
+
+        <TextView
+
+            android:id="@+id/titlePanelWeek"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="Dias de la semana"
+            app:layout_constraintTop_toBottomOf="@+id/textScheduleType" />
+
+
+        <LinearLayout
+            android:id="@+id/layoutWeekPanel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/titlePanelWeek">
+
+            <include layout="@layout/schedule_week_list"></include>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginTop="50dp"
+            android:id="@+id/layouttitleTimePicker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="100"
+            tools:layout_editor_absoluteY="59dp"
+            app:layout_constraintTop_toBottomOf="@id/layoutWeekPanel">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/titleFrom"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="50"
+                android:gravity="center"
+                android:text="@string/from" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/titleTo"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="50"
+                android:gravity="center"
+                android:text="@string/to" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layoutTimePickersPanel"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:orientation="horizontal"
+            android:weightSum="100"
+            app:layout_constraintTop_toBottomOf="@+id/layouttitleTimePicker">
+
+            <TimePicker
+                android:id="@+id/timePickerFrom"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="50"
+                android:timePickerMode="spinner"
+                android:numbersSelectorColor="?attr/colorPrimarySurface">
+
+            </TimePicker>
+
+            <TimePicker
+                android:id="@+id/timePickerTo"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="50"
+                android:timePickerMode="spinner">
+
+            </TimePicker>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layoutButtonsTimePicker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/buttonCancelSchedule"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="50"
+                android:text="@string/cancel">
+
+            </androidx.appcompat.widget.AppCompatButton>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/buttonAcceptSchedule"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="50"
+                android:text="@string/button_ok">
+
+            </androidx.appcompat.widget.AppCompatButton>
+
+        </LinearLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

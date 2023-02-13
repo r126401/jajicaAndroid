@@ -289,6 +289,10 @@ public abstract class IotDevice implements Serializable {
         void onReceivedDeleteScheduleDevice(IOT_CODE_RESULT resultCode);
     }
 
+    public void setOnReceivedDeleteScheduleDevice(OnReceivedDeleteScheduleDevice onReceivedDeleteScheduleDevice) {
+        this.onReceivedDeleteScheduleDevice = onReceivedDeleteScheduleDevice;
+    }
+
     public void setOnReceivedDeleteDevice(OnReceivedDeleteScheduleDevice onReceivedDeleteScheduleDevice) {
         this.onReceivedDeleteScheduleDevice = onReceivedDeleteScheduleDevice;
     }

@@ -97,4 +97,6 @@
     <string name="abrev_friday">V</string>
     <string name="abrev_saturday">S</string>
     <string name="abrev_sunday">D</string>
+    <string name="new_schedule">Nuevo programa</string>
+    <string name="modify_schedule">Modificar programa</string>
 </resources>

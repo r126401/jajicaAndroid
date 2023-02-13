@@ -6,6 +6,7 @@ import android.view.inputmethod.InputMethodManager;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.util.Calendar;
 import java.util.Formatter;
 
 public class MyHomeIotTools {
@@ -68,6 +69,49 @@ public class MyHomeIotTools {
         Formatter formatter;
         formatter = new Formatter();
         return formatter.format("%02d", data).toString();
+
+    }
+
+
+    public String convertDuration(int hora, int minuto, int duracion) {
+
+        Calendar fecha;
+        String horafinal;
+        if (duracion == 0) {
+            horafinal = "siempre";
+        } else {
+            fecha = Calendar.getInstance();
+            fecha.set(Calendar.HOUR_OF_DAY, hora);
+            fecha.set(Calendar.MINUTE, minuto);
+            fecha.set(Calendar.SECOND, duracion);
+
+
+            horafinal = formatHour(fecha.get(Calendar.HOUR_OF_DAY), fecha.get(Calendar.MINUTE));
+
+        }
+        return horafinal;
+
+
+    }
+
+    public String extractMinuteForConvertDuration(String dat) {
+
+        String minute;
+        int index;
+        index = dat.indexOf(":") + 1;
+        minute = dat.substring(index);
+        return minute;
+
+    }
+
+    public String extractHourForConvertDuration(String dat ) {
+
+        String hour;
+        int index;
+        index = dat.indexOf(":");
+        hour = dat.substring(0,dat.indexOf(":"));
+
+        return hour;
 
     }
 

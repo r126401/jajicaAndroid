@@ -5,24 +5,39 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.jajica.libiot.IotScheduleDeviceSwitch;
-import net.jajica.myhomeiot.databinding.SwitchScheduleListBinding;
-import net.jajica.myhomeiot.databinding.ScheduleWeekListBinding;
+import net.jajica.myhomeiot.databinding.ListSwitchScheduleBinding;
+import net.jajica.myhomeiot.databinding.ListScheduleEmptyBinding;
 
 import java.util.ArrayList;
 
 public class SwitchScheduleAdapter extends RecyclerView.Adapter<SwitchScheduleAdapter.SwitchScheduleAdapterViewHolder> {
 
     private static final String TAG = "SwitchScheduleAdapter";
-    ArrayList<IotScheduleDeviceSwitch> listSchedule;
-    Context context;
+    private ArrayList<IotScheduleDeviceSwitch> listSchedule;
+    private Context context;
+    private SwitchScheduleAdapterViewHolder holder;
+
+    private OnItemClickSelected onItemClickSelected;
+
+    enum ITEM_TYPE {
+        DELETE_SCHEDULE,
+        CHANGE_STATUS_SCHEDULE,
+        MODIFY_SCHEDULE;
+    }
+
+    public interface OnItemClickSelected {
+        void onItemClickSelected(ITEM_TYPE event, int position);
+    }
+
+    public void setOnItemClickSelected(OnItemClickSelected onItemClickSelected) {
+        this.onItemClickSelected = onItemClickSelected;
+    }
 
     public SwitchScheduleAdapter(ArrayList<IotScheduleDeviceSwitch> listSchedule, Context context) {
         this.listSchedule = listSchedule;
@@ -33,32 +48,87 @@ public class SwitchScheduleAdapter extends RecyclerView.Adapter<SwitchScheduleAd
     @Override
     public SwitchScheduleAdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        SwitchScheduleListBinding binding;
-        binding = SwitchScheduleListBinding.inflate(layoutInflater, parent, false);
-        return new SwitchScheduleAdapterViewHolder(binding);
+        ListSwitchScheduleBinding binding;
+        ListScheduleEmptyBinding emptyBinding;
+        if (listSchedule == null) {
+            emptyBinding = ListScheduleEmptyBinding.inflate(layoutInflater, parent, false);
+            return new SwitchScheduleAdapterViewHolder(emptyBinding);
+        } else {
+            binding = ListSwitchScheduleBinding.inflate(layoutInflater, parent, false);
+            return new SwitchScheduleAdapterViewHolder(binding);
+        }
+
+
     }
+
+
 
     @Override
     public void onBindViewHolder(@NonNull SwitchScheduleAdapterViewHolder holder, int position) {
 
-        paintItemSchedule(holder, position);
+        if (listSchedule != null) {
+            paintItemSchedule(holder, position);
+
+            holder.mbinding.imageScheduleStatus.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    if(onItemClickSelected != null) {
+                        holder.mbinding.progressComandSchedule.setVisibility(View.VISIBLE);
+                        onItemClickSelected.onItemClickSelected(ITEM_TYPE.CHANGE_STATUS_SCHEDULE, position);
+                    }
+
+                }
+            });
+
+            holder.mbinding.imageDeleteSchedule.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    holder.mbinding.progressComandSchedule.setVisibility(View.VISIBLE);
+                    onItemClickSelected.onItemClickSelected(ITEM_TYPE.DELETE_SCHEDULE, position);
+
+                }
+            });
+
+            holder.mbinding.getRoot().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    onItemClickSelected.onItemClickSelected(ITEM_TYPE.MODIFY_SCHEDULE, position);
+
+                }
+            });
+        }
+
 
     }
 
 
     @Override
     public int getItemCount() {
-        return listSchedule.size();
+
+
+        if (listSchedule == null) {
+            return 1;
+        } else {
+            return listSchedule.size();
+        }
+
+
+
     }
 
     public class SwitchScheduleAdapterViewHolder extends RecyclerView.ViewHolder {
 
-        private SwitchScheduleListBinding mbinding;
-        private ScheduleWeekListBinding mbindingWeek;
+        private ListSwitchScheduleBinding mbinding;
+        private ListScheduleEmptyBinding mEmptyBinding;
 
+        public SwitchScheduleAdapterViewHolder(ListScheduleEmptyBinding mEmptyBinding) {
+            super(mEmptyBinding.getRoot());
+            this.mEmptyBinding = mEmptyBinding;
+        }
 
-
-        public SwitchScheduleAdapterViewHolder(@NonNull SwitchScheduleListBinding mbinding) {
+        public SwitchScheduleAdapterViewHolder(@NonNull ListSwitchScheduleBinding mbinding) {
             super(mbinding.getRoot());
 
             this.mbinding = mbinding;
@@ -73,9 +143,23 @@ public class SwitchScheduleAdapter extends RecyclerView.Adapter<SwitchScheduleAd
         String data;
         data = tool.formatHour(listSchedule.get(position).getHour(), listSchedule.get(position).getMinute());
         holder.mbinding.textFromHour.setText(data);
-        data = tool.formatHour(listSchedule.get(position).getDuration())
+        data = tool.convertDuration(listSchedule.get(position).getHour(), listSchedule.get(position).getMinute(), listSchedule.get(position).getDuration());
+        holder.mbinding.textToHour.setText(data);
         paintStatusSchedule(holder, position);
         paintWeekSchedule(holder, position);
+        paintActiveSchedule(holder, position);
+        holder.mbinding.progressComandSchedule.setVisibility(View.INVISIBLE);
+
+    }
+
+
+    private void paintActiveSchedule(SwitchScheduleAdapterViewHolder holder, int position) {
+
+        if (listSchedule.get(position).getActiveSchedule()) {
+            holder.mbinding.imageCurrentSchedule.setVisibility(View.VISIBLE);
+        } else {
+            holder.mbinding.imageCurrentSchedule.setVisibility(View.INVISIBLE);
+        }
     }
 
     private void paintWeekSchedule(SwitchScheduleAdapterViewHolder holder, int position) {
@@ -121,24 +205,19 @@ public class SwitchScheduleAdapter extends RecyclerView.Adapter<SwitchScheduleAd
 
             case UNKNOWN_SCHEDULE:
                 holder.mbinding.imageScheduleStatus.setImageResource(R.drawable.ic_action_lock);
-                holder.mbinding.imageCurrentSchedule.setVisibility(View.INVISIBLE);
                 break;
             case INACTIVE_SCHEDULE:
                 holder.mbinding.imageScheduleStatus.setImageResource(R.drawable.ic_action_lock);
-                holder.mbinding.imageCurrentSchedule.setVisibility(View.INVISIBLE);
                 break;
             case ACTIVE_SCHEDULE:
                 holder.mbinding.imageScheduleStatus.setImageResource(R.drawable.ic_action_unlock);
-                holder.mbinding.imageCurrentSchedule.setVisibility(View.VISIBLE);
 
                 break;
             case INVALID_SCHEDULE:
                 holder.mbinding.imageScheduleStatus.setImageResource(R.drawable.ic_action_lock);
-                holder.mbinding.imageCurrentSchedule.setVisibility(View.INVISIBLE);
                 break;
             case VALID_SCHEDULE:
                 holder.mbinding.imageScheduleStatus.setImageResource(R.drawable.ic_action_unlock);
-                holder.mbinding.imageCurrentSchedule.setVisibility(View.INVISIBLE);
                 break;
         }
 

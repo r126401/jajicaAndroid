@@ -99,6 +99,8 @@
     <string name="abrev_friday">F</string>
     <string name="abrev_saturday">S</string>
     <string name="abrev_sunday">U</string>
+    <string name="new_schedule">New Schedule</string>
+    <string name="modify_schedule">Modify schedule</string>
 
 
 </resources>

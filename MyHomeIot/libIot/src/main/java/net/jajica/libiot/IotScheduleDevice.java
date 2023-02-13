@@ -315,6 +315,10 @@ public class IotScheduleDevice implements Serializable {
         this.activeSchedule = activeSchedule;
     }
 
+    public Boolean getActiveSchedule() {
+        return this.activeSchedule;
+    }
+
     public int getDuration() {
         return duration;
     }
