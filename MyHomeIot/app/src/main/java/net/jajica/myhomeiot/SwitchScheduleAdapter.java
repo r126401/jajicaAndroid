@@ -1,5 +1,6 @@
 package net.jajica.myhomeiot;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,12 +24,15 @@ public class SwitchScheduleAdapter extends RecyclerView.Adapter<SwitchScheduleAd
     private Context context;
     private SwitchScheduleAdapterViewHolder holder;
 
+    private ArrayList<AppCompatTextView> listWeek;
+
     private OnItemClickSelected onItemClickSelected;
 
     enum ITEM_TYPE {
         DELETE_SCHEDULE,
         CHANGE_STATUS_SCHEDULE,
         MODIFY_SCHEDULE;
+
     }
 
     public interface OnItemClickSelected {
@@ -42,7 +46,10 @@ public class SwitchScheduleAdapter extends RecyclerView.Adapter<SwitchScheduleAd
     public SwitchScheduleAdapter(ArrayList<IotScheduleDeviceSwitch> listSchedule, Context context) {
         this.listSchedule = listSchedule;
         this.context = context;
+
+
     }
+
 
     @NonNull
     @Override
@@ -55,16 +62,29 @@ public class SwitchScheduleAdapter extends RecyclerView.Adapter<SwitchScheduleAd
             return new SwitchScheduleAdapterViewHolder(emptyBinding);
         } else {
             binding = ListSwitchScheduleBinding.inflate(layoutInflater, parent, false);
+            initArrayWeek(binding);
+
             return new SwitchScheduleAdapterViewHolder(binding);
         }
+    }
 
+    private void initArrayWeek(ListSwitchScheduleBinding binding) {
 
+        if (listWeek == null) {
+            listWeek = new ArrayList<>();
+        }
+        listWeek.add(binding.layoutWeekSchedule.textSunday);
+        listWeek.add(binding.layoutWeekSchedule.textMonday);
+        listWeek.add(binding.layoutWeekSchedule.textTuesday);
+        listWeek.add(binding.layoutWeekSchedule.textWednesday);
+        listWeek.add(binding.layoutWeekSchedule.textThursday);
+        listWeek.add(binding.layoutWeekSchedule.textFriday);
+        listWeek.add(binding.layoutWeekSchedule.textSaturday);
     }
 
 
-
     @Override
-    public void onBindViewHolder(@NonNull SwitchScheduleAdapterViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull SwitchScheduleAdapterViewHolder holder, @SuppressLint("RecyclerView") int position) {
 
         if (listSchedule != null) {
             paintItemSchedule(holder, position);
@@ -148,9 +168,11 @@ public class SwitchScheduleAdapter extends RecyclerView.Adapter<SwitchScheduleAd
         paintStatusSchedule(holder, position);
         paintWeekSchedule(holder, position);
         paintActiveSchedule(holder, position);
+        paintWeekSchedule(holder, position);
         holder.mbinding.progressComandSchedule.setVisibility(View.INVISIBLE);
 
     }
+
 
 
     private void paintActiveSchedule(SwitchScheduleAdapterViewHolder holder, int position) {
@@ -165,6 +187,8 @@ public class SwitchScheduleAdapter extends RecyclerView.Adapter<SwitchScheduleAd
     private void paintWeekSchedule(SwitchScheduleAdapterViewHolder holder, int position) {
 
         int mask;
+        MyHomeIotTools tool;
+        tool = new MyHomeIotTools();
         IotScheduleDeviceSwitch schedule;
         schedule = listSchedule.get(position);
         mask = schedule.getMask();
@@ -173,23 +197,7 @@ public class SwitchScheduleAdapter extends RecyclerView.Adapter<SwitchScheduleAd
             case UNKNOWN_SCHEDULE:
                 break;
             case DIARY_SCHEDULE:
-                if (schedule.getActiveDay(0)) {
-                    updateWeekDay(holder.mbinding.layoutWeekSchedule.textSunday, true);
-                }else {
-                    updateWeekDay(holder.mbinding.layoutWeekSchedule.textSunday, false);
-                }
-                if (schedule.getActiveDay(1)) updateWeekDay(holder.mbinding.layoutWeekSchedule.textMonday, true);
-                else updateWeekDay(holder.mbinding.layoutWeekSchedule.textMonday, false);
-                if (schedule.getActiveDay(2)) updateWeekDay(holder.mbinding.layoutWeekSchedule.textTuesday, true);
-                else updateWeekDay(holder.mbinding.layoutWeekSchedule.textTuesday, false);
-                if (schedule.getActiveDay(3)) updateWeekDay(holder.mbinding.layoutWeekSchedule.textWednesday, true);
-                else updateWeekDay(holder.mbinding.layoutWeekSchedule.textWednesday, false);
-                if (schedule.getActiveDay(4)) updateWeekDay(holder.mbinding.layoutWeekSchedule.textThursday, true);
-                else updateWeekDay(holder.mbinding.layoutWeekSchedule.textThursday, false);
-                if (schedule.getActiveDay(5)) updateWeekDay(holder.mbinding.layoutWeekSchedule.textFriday, true);
-                else updateWeekDay(holder.mbinding.layoutWeekSchedule.textFriday, false);
-                if (schedule.getActiveDay(6)) updateWeekDay(holder.mbinding.layoutWeekSchedule.textSaturday, true);
-                else updateWeekDay(holder.mbinding.layoutWeekSchedule.textSaturday, false);
+                listWeek = tool.mask2controls(listWeek, schedule.getActiveDays());
                 break;
             case WEEKLY_SCHEDULE:
                 break;
@@ -223,19 +231,12 @@ public class SwitchScheduleAdapter extends RecyclerView.Adapter<SwitchScheduleAd
 
     }
 
-    private void updateWeekDay(AppCompatTextView day, boolean activado) {
-
-        if (activado == false) {
-            day.setBackgroundResource(R.drawable.round_corners_deactive_days);
-            day.setTag(false);
-        } else {
-            day.setBackgroundResource(R.drawable.round_corners_active_days);
-            day.setTag(true);
-        }
 
 
 
-    }
+
+
+
 
 
 }

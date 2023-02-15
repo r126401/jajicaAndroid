@@ -129,11 +129,11 @@ public class SwitchScheduleFragment extends Fragment {
                     case MODIFY_SCHEDULE:
                         Log.i(TAG, "kk");
                         schedule = device.getSchedulesSwitch().get(position);
-                        NewSwitchScheduleFragment newSwitchScheduleFragment;
-                        newSwitchScheduleFragment = new NewSwitchScheduleFragment(schedule);
+                        ActionSwitchScheduleFragment actionSwitchScheduleFragment;
+                        actionSwitchScheduleFragment = new ActionSwitchScheduleFragment(schedule);
                         FragmentManager fragmentManager = getParentFragmentManager();
                         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                        fragmentTransaction.replace(R.id.containerSwitch, newSwitchScheduleFragment, "modifySchedule");
+                        fragmentTransaction.replace(R.id.containerSwitch, actionSwitchScheduleFragment, "modifySchedule");
                         fragmentTransaction.setReorderingAllowed(true);
                         fragmentTransaction.addToBackStack("schedule");
                         fragmentTransaction.commit();

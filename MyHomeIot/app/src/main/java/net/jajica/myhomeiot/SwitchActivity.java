@@ -2,7 +2,6 @@ package net.jajica.myhomeiot;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -30,10 +29,10 @@ import org.json.JSONObject;
 
 import net.jajica.libiot.IotOtaVersionAvailable;
 import net.jajica.libiot.IotScheduleDeviceSwitch;
-import net.jajica.myhomeiot.databinding.ActivitySwitchBinding;
-import net.jajica.myhomeiot.databinding.FragmentNewSwitchScheduleBinding;
 
-public class SwitchActivity extends AppCompatActivity implements  NavigationBarView.OnItemSelectedListener, NewSwitchScheduleFragment.OnActionSchedule {
+import net.jajica.myhomeiot.databinding.ActivitySwitchBinding;
+
+public class SwitchActivity extends AppCompatActivity implements  NavigationBarView.OnItemSelectedListener, ActionSwitchScheduleFragment.OnActionSchedule {
 
     private final String TAG = "SwitchActivity";
     private IotDeviceSwitch device;
@@ -45,7 +44,7 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
     private FragmentTransaction fragmentTransaction;
 
     private SwitchScheduleFragment switchScheduleFragment;
-    private NewSwitchScheduleFragment newSwitchScheduleFragment;
+    private ActionSwitchScheduleFragment actionSwitchScheduleFragment;
 
     private Bundle bundleSchedule;
 
@@ -356,9 +355,9 @@ private void getSwitchSchedule() {
 
             case (R.id.item_new_schedule):
                 fragmentTransaction = fragmentManager.beginTransaction();
-                newSwitchScheduleFragment = new NewSwitchScheduleFragment(null);
-                newSwitchScheduleFragment.setOnActionSchedule(this);
-                fragmentTransaction.replace(R.id.containerSwitch, newSwitchScheduleFragment, "FragmentActionSchedule");
+                actionSwitchScheduleFragment = new ActionSwitchScheduleFragment(null);
+                actionSwitchScheduleFragment.setOnActionSchedule(this);
+                fragmentTransaction.replace(R.id.containerSwitch, actionSwitchScheduleFragment, "FragmentActionSchedule");
                 fragmentTransaction.setReorderingAllowed(true);
                 fragmentTransaction.addToBackStack("schedule");
                 fragmentTransaction.commit();
@@ -368,9 +367,9 @@ private void getSwitchSchedule() {
     }
 
     @Override
-    public void onActionSchedule(IotScheduleDeviceSwitch schedule, NewSwitchScheduleFragment.OPERATION_SCHEDULE operationSchedule) {
+    public void onActionSchedule(IotScheduleDeviceSwitch schedule, ActionSwitchScheduleFragment.OPERATION_SCHEDULE operationSchedule) {
 
-        if (operationSchedule == NewSwitchScheduleFragment.OPERATION_SCHEDULE.NEW_SCHEDULE) {
+        if (operationSchedule == ActionSwitchScheduleFragment.OPERATION_SCHEDULE.NEW_SCHEDULE) {
             device.commandNewScheduleDevice(schedule);
         }
 

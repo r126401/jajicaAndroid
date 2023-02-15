@@ -25,8 +25,8 @@ public class IotScheduleDevice implements Serializable {
     protected IOT_STATE_SCHEDULE scheduleState;
     protected int mask;
     protected IOT_DEVICE_TYPE deviceType;
-    protected boolean [] activeDays;
-    protected boolean activeSchedule;
+    protected Boolean[] activeDays;
+    protected Boolean activeSchedule;
     protected int duration;
 
     IotScheduleDevice() {
@@ -43,7 +43,7 @@ public class IotScheduleDevice implements Serializable {
         month = 0;
         day = 0;
         deviceType = IOT_DEVICE_TYPE.UNKNOWN;
-        activeDays = new boolean[7];
+        activeDays = new Boolean[7];
         activeSchedule = false;
     }
 
@@ -53,7 +53,7 @@ public class IotScheduleDevice implements Serializable {
         setTypeScheduleFromScheduleId();
         setStateScheduleFromScheduleId();
         setActiveSchedule(false);
-        activeDays = new boolean[7];
+        activeDays = new Boolean[7];
 
     }
 
@@ -68,7 +68,7 @@ public class IotScheduleDevice implements Serializable {
         }
         setTypeScheduleFromScheduleId();
         setParametersDiarySchedule();
-        activeDays = new boolean[7];
+        activeDays = new Boolean[7];
         setMaskDiarySchedule();
         setDeviceType(IOT_DEVICE_TYPE.UNKNOWN);
         setStateScheduleFromScheduleId();
@@ -299,19 +299,19 @@ public class IotScheduleDevice implements Serializable {
         this.deviceType = deviceType;
     }
 
-    public boolean[] getActiveDays() {
+    public Boolean[] getActiveDays() {
         return activeDays;
     }
 
-    public void setActiveDays(boolean[] activeDays) {
+    public void setActiveDays(Boolean[] activeDays) {
         this.activeDays = activeDays;
     }
 
-    public boolean isActiveSchedule() {
+    public Boolean isActiveSchedule() {
         return activeSchedule;
     }
 
-    public void setActiveSchedule(boolean activeSchedule) {
+    public void setActiveSchedule(Boolean activeSchedule) {
         this.activeSchedule = activeSchedule;
     }
 

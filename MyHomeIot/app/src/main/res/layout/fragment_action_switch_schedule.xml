@@ -9,7 +9,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".NewSwitchScheduleFragment">
+        tools:context=".ActionSwitchScheduleFragment">
 
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -43,7 +43,9 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/titlePanelWeek">
 
-            <include layout="@layout/schedule_week_list"></include>
+            <include
+                android:id="@+id/layoutWeekSchedule"
+                layout="@layout/schedule_week_list"></include>
         </LinearLayout>
 
         <LinearLayout

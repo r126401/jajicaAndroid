@@ -1,22 +1,33 @@
 package net.jajica.myhomeiot;
 
 import android.os.Bundle;
+
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.fragment.app.Fragment;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import net.jajica.libiot.IOT_CLASS_SCHEDULE;
+import net.jajica.libiot.IOT_SWITCH_RELAY;
 import net.jajica.libiot.IotScheduleDeviceSwitch;
-import net.jajica.myhomeiot.databinding.FragmentNewSwitchScheduleBinding;
 
+import net.jajica.myhomeiot.databinding.FragmentActionSwitchScheduleBinding;
 
-public class NewSwitchScheduleFragment extends Fragment implements View.OnClickListener{
+import java.util.ArrayList;
 
-    private FragmentNewSwitchScheduleBinding binding;
+public class ActionSwitchScheduleFragment extends Fragment implements View.OnClickListener{
+
+    private final String TAG = "ActionSwitchScheduleFragment";
+    private FragmentActionSwitchScheduleBinding binding;
     private IotScheduleDeviceSwitch schedule;
 
     private OPERATION_SCHEDULE operationSchedule;
 
     private OnActionSchedule onActionSchedule;
+
+    private ArrayList<AppCompatTextView> listControlWeek;
 
     public interface OnActionSchedule {
 
@@ -33,11 +44,11 @@ public class NewSwitchScheduleFragment extends Fragment implements View.OnClickL
         MODIFY_SCHEDULE;
     }
 
-    public NewSwitchScheduleFragment() {
+    public ActionSwitchScheduleFragment() {
         // Required empty public constructor
     }
 
-    public NewSwitchScheduleFragment(IotScheduleDeviceSwitch schedule) {
+    public ActionSwitchScheduleFragment(IotScheduleDeviceSwitch schedule) {
 
         if (schedule == null) {
             operationSchedule = OPERATION_SCHEDULE.NEW_SCHEDULE;
@@ -75,10 +86,16 @@ public class NewSwitchScheduleFragment extends Fragment implements View.OnClickL
             minute = tool.extractMinuteForConvertDuration(data);
             binding.timePickerTo.setHour(Integer.parseInt(hour));
             binding.timePickerTo.setMinute(Integer.parseInt(minute));
+            listControlWeek = new ArrayList<>();
+
+
+
 
 
 
         }
+        binding.buttonAcceptSchedule.setOnClickListener(this);
+        binding.buttonCancelSchedule.setOnClickListener(this);
 
     }
     @Override
@@ -86,7 +103,7 @@ public class NewSwitchScheduleFragment extends Fragment implements View.OnClickL
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView;
-        binding = FragmentNewSwitchScheduleBinding.inflate(inflater, container, false);
+        binding = FragmentActionSwitchScheduleBinding.inflate(inflater, container, false);
         rootView = binding.getRoot();
         binding.timePickerFrom.setIs24HourView(true);
         binding.timePickerTo.setIs24HourView(true);
@@ -125,11 +142,42 @@ public class NewSwitchScheduleFragment extends Fragment implements View.OnClickL
     }
 
     private void processCancelSchedule() {
+
     }
 
     private void processActionSchedule() {
+
+        MyHomeIotTools tool;
+        int duration;
+        tool = new MyHomeIotTools();
+
+        duration = tool.diffDate(
+                binding.timePickerFrom.getHour(),
+                binding.timePickerFrom.getMinute(),
+                binding.timePickerTo.getHour(),
+                binding.timePickerTo.getMinute());
+
+        if (schedule == null) {
+            schedule = new IotScheduleDeviceSwitch();
+            schedule.setScheduleType(IOT_CLASS_SCHEDULE.DIARY_SCHEDULE);
+            schedule.setHour(binding.timePickerFrom.getHour());
+            schedule.setMinute(binding.timePickerFrom.getMinute());
+            schedule.setDuration(duration);
+            schedule.setMask(tool.readMask(listControlWeek));
+            schedule.setRelay(IOT_SWITCH_RELAY.ON);
+
+        }
+
         
     }
+
+
+
+
+
+
+
+
 
 
 }

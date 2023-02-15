@@ -1,16 +1,21 @@
 package net.jajica.myhomeiot;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.inputmethod.InputMethodManager;
+
+import androidx.appcompat.widget.AppCompatTextView;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Formatter;
 
 public class MyHomeIotTools {
 
+    private static final String TAG = "MyHomeIotTools";
     Context context;
 
     public MyHomeIotTools(Context context) {
@@ -115,5 +120,89 @@ public class MyHomeIotTools {
 
     }
 
+    public int diffDate(int hour1, int min1, int hour2, int min2) {
+
+        Calendar fecha1;
+        Calendar fecha2;
+
+        fecha1 = Calendar.getInstance();
+        fecha2 = Calendar.getInstance();
+        fecha1.set(fecha1.get(Calendar.YEAR), fecha1.get(Calendar.MONTH), fecha1.get(Calendar.DAY_OF_MONTH), hour1, min1);
+        if ((hour2 == 0) && (min2 == 0)) {
+            fecha2.set(fecha1.get(Calendar.YEAR), fecha1.get(Calendar.MONTH), 1 + fecha1.get(Calendar.DAY_OF_MONTH), hour2, min2);
+        } else {
+            fecha2.set(fecha1.get(Calendar.YEAR), fecha1.get(Calendar.MONTH), fecha1.get(Calendar.DAY_OF_MONTH), hour2, min2);
+        }
+
+        return (int) ((fecha2.getTime().getTime() - fecha1.getTime().getTime())/1000);
+    }
+
+
+    public void updateWeekDay(AppCompatTextView day, boolean activado) {
+
+        if (activado == false) {
+            day.setBackgroundResource(R.drawable.round_corners_deactive_days);
+            day.setTag(false);
+        } else {
+            day.setBackgroundResource(R.drawable.round_corners_active_days);
+            day.setTag(true);
+        }
+
+
+
+    }
+
+
+    /**
+     * Esta funcion recibe los controles de AppCompatTextView, lee el tag y en funcion de ello
+     * genera la mascara
+     * @param list
+     * @return
+     */
+    public int readMask(ArrayList<AppCompatTextView> list) {
+
+        int i;
+        int mask = 0;
+        for (i=0;i<7;i++) {
+            if ((Boolean) list.get(i).getTag()) mask = mask | calculatePower(2, i);
+        }
+        Log.i(TAG, "Mascara:" + mask);
+        return mask;
+
+    }
+
+    /**
+     * Esta funcion calcula el resultado de un entero elevado a otro
+     * @param num
+     * @param pow
+     * @return
+     */
+    private static int calculatePower(int num, int pow) {
+
+        if (pow == 0) {
+            return 1;
+        } else {
+            return num * calculatePower(num, pow - 1);
+        }
+    }
+
+
+    public ArrayList<AppCompatTextView> mask2controls(ArrayList<AppCompatTextView> list, Boolean[] activeDays) {
+
+        int i;
+        for (i=0;i<7;i++) {
+
+            if (activeDays[i]) {
+                list.get(i).setTag(true);
+                list.get(i).setBackgroundResource(R.drawable.round_corners_active_days);
+            } else {
+                list.get(i).setTag(false);
+                list.get(i).setBackgroundResource(R.drawable.round_corners_deactive_days);
+            }
+        }
+        return list;
+
+
+    }
 
 }
