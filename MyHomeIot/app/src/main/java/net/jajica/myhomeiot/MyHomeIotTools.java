@@ -8,7 +8,9 @@ import androidx.appcompat.widget.AppCompatTextView;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Formatter;
@@ -147,9 +149,6 @@ public class MyHomeIotTools {
             day.setBackgroundResource(R.drawable.round_corners_active_days);
             day.setTag(true);
         }
-
-
-
     }
 
 
@@ -163,7 +162,7 @@ public class MyHomeIotTools {
 
         int i;
         int mask = 0;
-        for (i=0;i<7;i++) {
+        for (i=0;i<list.size();i++) {
             if ((Boolean) list.get(i).getTag()) mask = mask | calculatePower(2, i);
         }
         Log.i(TAG, "Mascara:" + mask);
@@ -187,10 +186,13 @@ public class MyHomeIotTools {
     }
 
 
-    public ArrayList<AppCompatTextView> mask2controls(ArrayList<AppCompatTextView> list, Boolean[] activeDays) {
+    public void  mask2controls(ArrayList<AppCompatTextView> list, Boolean[] activeDays) {
+
+        if (list == null) list = new ArrayList<>();
+
 
         int i;
-        for (i=0;i<7;i++) {
+        for (i=0;i<list.size();i++) {
 
             if (activeDays[i]) {
                 list.get(i).setTag(true);
@@ -200,9 +202,41 @@ public class MyHomeIotTools {
                 list.get(i).setBackgroundResource(R.drawable.round_corners_deactive_days);
             }
         }
-        return list;
+
+    }
 
 
+    public int getCurrentHourMinute(Boolean hour) {
+        DateFormat formatter;
+        Calendar calendar;
+        long time;
+        String date;
+
+        calendar = Calendar.getInstance();
+        time = calendar.getTime().getTime();
+        if (hour) {
+            formatter = new SimpleDateFormat("HH");
+        } else {
+            formatter = new SimpleDateFormat("mm");
+        }
+        date = formatter.format(time);
+        return Integer.parseInt(date);
+
+    }
+
+
+    public int currentHour() {
+        Calendar calendario;
+        String hoy;
+        long tiempo;
+        int hora;
+
+        calendario = Calendar.getInstance();
+        tiempo = calendario.getTime().getTime();
+        DateFormat formatter = new SimpleDateFormat("HH");
+        hoy = formatter.format(tiempo);
+        hora = Integer.parseInt(hoy);
+        return hora;
     }
 
 }

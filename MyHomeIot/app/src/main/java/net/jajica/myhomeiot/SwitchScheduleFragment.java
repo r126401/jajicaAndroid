@@ -81,6 +81,7 @@ public class SwitchScheduleFragment extends Fragment {
         device.setOnReceivedNewSchedule(new IotDevice.OnReceivedNewSchedule() {
             @Override
             public void onReceivedNewSchedule(IOT_CODE_RESULT resultCode) {
+
                 Log.i(TAG, "kk");
             }
         });

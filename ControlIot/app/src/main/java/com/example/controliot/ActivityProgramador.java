@@ -744,12 +744,9 @@ public class ActivityProgramador extends AppCompatActivity implements TimePicker
                     textFecha.setText(calculo.ponerFechaDeHoy());
                 } else {
                     textFecha.setText(programaIotTermostato.getDia() + "/"+programaIotTermostato.getMes() + "/" +programaIotTermostato.getAno());
-
                 }
             } else {
                 textFecha.setText(calculo.ponerFechaDeHoy());
-
-
             }
         } else {
             textFecha.setVisibility(View.INVISIBLE);

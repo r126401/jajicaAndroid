@@ -37,13 +37,14 @@ public class IotScheduleDevice implements Serializable {
         minute = 0;
         second = 0;
         weekDay = 0;
-        setScheduleState(IOT_STATE_SCHEDULE.INACTIVE_SCHEDULE);
+        setScheduleState(IOT_STATE_SCHEDULE.UNKNOWN_SCHEDULE);
         mask = 0;
         year = 0;
         month = 0;
         day = 0;
         deviceType = IOT_DEVICE_TYPE.UNKNOWN;
         activeDays = new Boolean[7];
+        setAllActivesDays(true);
         activeSchedule = false;
     }
 
@@ -54,6 +55,7 @@ public class IotScheduleDevice implements Serializable {
         setStateScheduleFromScheduleId();
         setActiveSchedule(false);
         activeDays = new Boolean[7];
+        setAllActivesDays(true);
 
     }
 
@@ -409,6 +411,15 @@ public class IotScheduleDevice implements Serializable {
     public Boolean getActiveDay(int day) {
 
         return activeDays[day];
+    }
+
+    public void setAllActivesDays(Boolean active) {
+
+        int i;
+        for (i=0;i< activeDays.length;i++) {
+            activeDays[i] = active;
+        }
+
     }
 
 }

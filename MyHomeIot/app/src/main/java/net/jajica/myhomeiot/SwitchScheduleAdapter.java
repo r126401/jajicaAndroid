@@ -15,6 +15,7 @@ import net.jajica.libiot.IotScheduleDeviceSwitch;
 import net.jajica.myhomeiot.databinding.ListSwitchScheduleBinding;
 import net.jajica.myhomeiot.databinding.ListScheduleEmptyBinding;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class SwitchScheduleAdapter extends RecyclerView.Adapter<SwitchScheduleAdapter.SwitchScheduleAdapterViewHolder> {
@@ -24,7 +25,7 @@ public class SwitchScheduleAdapter extends RecyclerView.Adapter<SwitchScheduleAd
     private Context context;
     private SwitchScheduleAdapterViewHolder holder;
 
-    private ArrayList<AppCompatTextView> listWeek;
+
 
     private OnItemClickSelected onItemClickSelected;
 
@@ -62,24 +63,20 @@ public class SwitchScheduleAdapter extends RecyclerView.Adapter<SwitchScheduleAd
             return new SwitchScheduleAdapterViewHolder(emptyBinding);
         } else {
             binding = ListSwitchScheduleBinding.inflate(layoutInflater, parent, false);
-            initArrayWeek(binding);
-
             return new SwitchScheduleAdapterViewHolder(binding);
         }
     }
 
-    private void initArrayWeek(ListSwitchScheduleBinding binding) {
+    private void initArrayWeek(ListSwitchScheduleBinding binding, ArrayList<AppCompatTextView> list) {
 
-        if (listWeek == null) {
-            listWeek = new ArrayList<>();
-        }
-        listWeek.add(binding.layoutWeekSchedule.textSunday);
-        listWeek.add(binding.layoutWeekSchedule.textMonday);
-        listWeek.add(binding.layoutWeekSchedule.textTuesday);
-        listWeek.add(binding.layoutWeekSchedule.textWednesday);
-        listWeek.add(binding.layoutWeekSchedule.textThursday);
-        listWeek.add(binding.layoutWeekSchedule.textFriday);
-        listWeek.add(binding.layoutWeekSchedule.textSaturday);
+        list.add(binding.layoutWeekSchedule.textSunday);
+        list.add(binding.layoutWeekSchedule.textMonday);
+        list.add(binding.layoutWeekSchedule.textTuesday);
+        list.add(binding.layoutWeekSchedule.textWednesday);
+        list.add(binding.layoutWeekSchedule.textThursday);
+        list.add(binding.layoutWeekSchedule.textFriday);
+        list.add(binding.layoutWeekSchedule.textSaturday);
+
     }
 
 
@@ -143,6 +140,8 @@ public class SwitchScheduleAdapter extends RecyclerView.Adapter<SwitchScheduleAd
         private ListSwitchScheduleBinding mbinding;
         private ListScheduleEmptyBinding mEmptyBinding;
 
+        private ArrayList<AppCompatTextView> listWeek;
+
         public SwitchScheduleAdapterViewHolder(ListScheduleEmptyBinding mEmptyBinding) {
             super(mEmptyBinding.getRoot());
             this.mEmptyBinding = mEmptyBinding;
@@ -150,8 +149,10 @@ public class SwitchScheduleAdapter extends RecyclerView.Adapter<SwitchScheduleAd
 
         public SwitchScheduleAdapterViewHolder(@NonNull ListSwitchScheduleBinding mbinding) {
             super(mbinding.getRoot());
-
             this.mbinding = mbinding;
+            listWeek = new ArrayList<>();
+            initArrayWeek(mbinding, listWeek);
+
         }
 
     }
@@ -168,7 +169,7 @@ public class SwitchScheduleAdapter extends RecyclerView.Adapter<SwitchScheduleAd
         paintStatusSchedule(holder, position);
         paintWeekSchedule(holder, position);
         paintActiveSchedule(holder, position);
-        paintWeekSchedule(holder, position);
+        //paintWeekSchedule(holder, position);
         holder.mbinding.progressComandSchedule.setVisibility(View.INVISIBLE);
 
     }
@@ -197,7 +198,7 @@ public class SwitchScheduleAdapter extends RecyclerView.Adapter<SwitchScheduleAd
             case UNKNOWN_SCHEDULE:
                 break;
             case DIARY_SCHEDULE:
-                listWeek = tool.mask2controls(listWeek, schedule.getActiveDays());
+                tool.mask2controls(holder.listWeek, schedule.getActiveDays());
                 break;
             case WEEKLY_SCHEDULE:
                 break;

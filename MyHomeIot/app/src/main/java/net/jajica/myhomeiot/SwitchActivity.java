@@ -121,12 +121,7 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
             }
         });
 
-        device.setOnReceivedNewSchedule(new IotDevice.OnReceivedNewSchedule() {
-            @Override
-            public void onReceivedNewSchedule(IOT_CODE_RESULT resultCode) {
-                Log.i(TAG, "kk");
-            }
-        });
+
 
 
 
@@ -144,7 +139,6 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
                 device.subscribeDevice();
                 device.subscribeOtaServer();
                 device.commandGetStatusDevice();
-                //device.commandGetScheduleDevice();
                 updateDevice();
                 device.getOtaVersionAvailableCommand();
                 getSwitchSchedule();
@@ -335,6 +329,7 @@ private void paintRelayStatus() {
 private void getSwitchSchedule() {
 
         switchScheduleFragment = new SwitchScheduleFragment(device);
+        fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.add(R.id.containerSwitch, switchScheduleFragment, "Schedule");
         fragmentTransaction.setReorderingAllowed(true);
         //fragmentTransaction.addToBackStack(null);
