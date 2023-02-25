@@ -52,6 +52,8 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
 
 
 
+
+
     private void initActivity() {
         JSONObject jsonObject = null;
 
@@ -184,13 +186,8 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
         //Pintamos si el dispositivo esta conectado o no
         paintDeviceStateSwitch();
         paintOtaDataSwitch();
-
         paintRelayStatus();
         paintConnections();
-
-
-
-
     }
 
     private void paintBrokerStatus() {
@@ -299,12 +296,19 @@ private void paintPanelProgressSchedule() {
         mbinding.gridLayoutSchedule.setVisibility(View.VISIBLE);
         tool = new MyHomeIotTools();
         index = device.searchSchedule(device.getActiveSchedule());
-        schedule = device.getSchedulesSwitch().get(index);
-        from = tool.formatHour(schedule.getHour(), schedule.getMinute());
-        to = tool.convertDuration(schedule.getHour(), schedule.getMinute(), schedule.getDuration());
-        currentTimeSchedule = tool.currentDate2DurationSchedule(from);
-        progress = (currentTimeSchedule * 100) / schedule.getDuration();
-        mbinding.progressSchedule.setProgress(progress);
+        if (index >= 0) {
+            schedule = device.getSchedulesSwitch().get(index);
+            from = tool.formatHour(schedule.getHour(), schedule.getMinute());
+            to = tool.convertDuration(schedule.getHour(), schedule.getMinute(), schedule.getDuration());
+            currentTimeSchedule = tool.currentDate2DurationSchedule(from);
+            progress = (currentTimeSchedule * 100) / schedule.getDuration();
+            mbinding.progressSchedule.setProgress(progress);
+            mbinding.textStartSchedule.setText(from);
+            mbinding.textEndSchedule.setText(to);
+        } else {
+            mbinding.gridLayoutSchedule.setVisibility(View.INVISIBLE);
+        }
+
 
 
 
@@ -367,8 +371,25 @@ private void paintScheduleFragment() {
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.add(R.id.containerSwitch, switchScheduleFragment, "Schedule");
         fragmentTransaction.setReorderingAllowed(true);
-        //fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
+
+        switchScheduleFragment.setOnSendEventSchedule(new SwitchScheduleFragment.OnSendEventSchedule() {
+            @Override
+            public void onSendEventSchedule(ActionSwitchScheduleFragment.OPERATION_SCHEDULE operation) {
+                switch (operation) {
+
+                    case NEW_SCHEDULE:
+                        break;
+                    case DELETE_SCHEDULE:
+                        break;
+                    case MODIFY_SCHEDULE:
+                        break;
+                    case DISPLAY_SCHEDULE:
+                        paintPanelProgressSchedule();
+                        break;
+                }
+            }
+        });
 
 
 

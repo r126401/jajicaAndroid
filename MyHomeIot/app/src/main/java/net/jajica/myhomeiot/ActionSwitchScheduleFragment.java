@@ -42,7 +42,8 @@ public class ActionSwitchScheduleFragment extends Fragment implements View.OnCli
     enum OPERATION_SCHEDULE {
         NEW_SCHEDULE,
         DELETE_SCHEDULE,
-        MODIFY_SCHEDULE
+        MODIFY_SCHEDULE,
+        DISPLAY_SCHEDULE
     }
 
     public ActionSwitchScheduleFragment() {
