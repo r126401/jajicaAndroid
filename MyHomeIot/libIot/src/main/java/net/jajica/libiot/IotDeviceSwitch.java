@@ -91,6 +91,11 @@ public class IotDeviceSwitch extends IotDevice implements Serializable {
         int i;
         IotScheduleDeviceSwitch programa;
 
+        if (schedules!= null) {
+            if (schedules.size() > 0) schedules.clear();
+            Log.i(TAG, "device es :  " + hashCode() + " schedules borrados");
+        }
+
 
         try {
             respuesta = new JSONObject(textoRecibido);
@@ -186,7 +191,7 @@ public class IotDeviceSwitch extends IotDevice implements Serializable {
     }
 
     @Override
-    protected int searchSchedule(String schedule) {
+    public int searchSchedule(String schedule) {
         int i;
         if (getSchedulesSwitch() == null) {
             Log.w(TAG, "No hay schedules");

@@ -25,7 +25,10 @@ public class SwitchScheduleAdapter extends RecyclerView.Adapter<SwitchScheduleAd
     private Context context;
     private SwitchScheduleAdapterViewHolder holder;
 
+    public void setListSchedule(ArrayList<IotScheduleDeviceSwitch> listSchedule) {
 
+        this.listSchedule = listSchedule;
+    }
 
     private OnItemClickSelected onItemClickSelected;
 

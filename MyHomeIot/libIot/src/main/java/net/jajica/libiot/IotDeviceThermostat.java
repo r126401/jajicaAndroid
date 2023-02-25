@@ -331,11 +331,14 @@ public class IotDeviceThermostat extends IotDeviceThermometer implements Seriali
     private ArrayList<IotScheduleDeviceThermostat> loadSchedules(String textoRecibido) {
 
         JSONObject objeto, respuesta;
-        JSONObject objetoPrograma = null;
         JSONArray arrayProgramas;
         int i;
         IotScheduleDeviceThermostat programa;
 
+        if (schedules!= null) {
+            if (schedules.size() > 0) schedules.clear();
+            Log.i(TAG, "device es :  " + hashCode() + " schedules borrados");
+        }
 
         try {
             respuesta = new JSONObject(textoRecibido);
@@ -427,6 +430,7 @@ public class IotDeviceThermostat extends IotDeviceThermometer implements Seriali
         return IOT_CODE_RESULT.RESUT_CODE_OK;
 
     }
+
 
 
 

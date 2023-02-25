@@ -286,7 +286,7 @@ public abstract class IotDevice implements Serializable {
     protected OnReceivedDeleteScheduleDevice onReceivedDeleteScheduleDevice;
 
     public interface OnReceivedDeleteScheduleDevice {
-        void onReceivedDeleteScheduleDevice(IOT_CODE_RESULT resultCode);
+        void onReceivedDeleteScheduleDevice(IOT_CODE_RESULT resultCode, String scheduleId);
     }
 
     public void setOnReceivedDeleteScheduleDevice(OnReceivedDeleteScheduleDevice onReceivedDeleteScheduleDevice) {
@@ -1009,6 +1009,8 @@ public abstract class IotDevice implements Serializable {
             tipoInforme = IOT_REPORT_TYPE.COMMAND_REPORT;
         }
 
+        Log.i(TAG, "Recibimos " + tipoInforme.toString() + " de " + topic);
+
         switch (tipoInforme) {
 
             case COMMAND_REPORT:
@@ -1036,6 +1038,7 @@ public abstract class IotDevice implements Serializable {
         idComando = api.getCommandId(mensaje);
         IOT_CODE_RESULT res;
 
+
         switch (idComando) {
 
             case INFO_DEVICE:
@@ -1055,6 +1058,9 @@ public abstract class IotDevice implements Serializable {
                 res = processGetScheduleFromReport(mensaje);
                 if(onReceivedScheduleDevice != null) {
                     onReceivedScheduleDevice.onReceivedScheduleDevice(IOT_CODE_RESULT.RESUT_CODE_OK);
+                } else {
+                    Log.w(TAG, "No se procesa el listener onReceivedScheduleDevice porque es nulo");
+                    Log.w(TAG, "device es : IotDeviceGetSchedule" + hashCode());
                 }
 
                 break;
@@ -1066,9 +1072,17 @@ public abstract class IotDevice implements Serializable {
 
                 break;
             case REMOVE_SCHEDULE:
+                String scheduleId = null;
                 res = processDeleteScheduleFromReport(mensaje);
+                if (res == IOT_CODE_RESULT.RESUT_CODE_OK) {
+                scheduleId = getFieldStringFromReport(mensaje, IOT_LABELS_JSON.SCHEDULE_ID);
+            }
+
                 if (onReceivedDeleteScheduleDevice != null) {
-                    onReceivedDeleteScheduleDevice.onReceivedDeleteScheduleDevice(res);
+                    onReceivedDeleteScheduleDevice.onReceivedDeleteScheduleDevice(res, scheduleId);
+                } else {
+                    Log.w(TAG, "No se procesa el listener onReceivedDeleteScheduleDevice porque es nulo");
+                    Log.w(TAG, "device es : IotDevice RemoveSchedule" + hashCode());
                 }
 
                 break;
@@ -1123,6 +1137,8 @@ public abstract class IotDevice implements Serializable {
             default:
                 break;
         }
+
+        Log.d(TAG, "Procesado comando " + idComando + " de " + topic);
 
     }
 
@@ -1474,7 +1490,7 @@ public abstract class IotDevice implements Serializable {
      * @return  Se devuelve el resultado de la  peticion del comando
      */
     protected IOT_CODE_RESULT processGetScheduleFromReport(String message) {
-        Log.i(TAG, "Recibida programacion");
+        Log.i(TAG, "Recibido mensaje de programacion de " + getSubscriptionTopic());
         setDeviceStateFromReport(message);
         setProgrammerStateFromReport(message);
         setCurrentScheduleFromReport(message);
@@ -1497,12 +1513,12 @@ public abstract class IotDevice implements Serializable {
         IotScheduleDevice programa;
 
 
+
+
         try {
             respuesta = new JSONObject(textoRecibido);
             arrayProgramas = respuesta.getJSONArray(IOT_LABELS_JSON.SCHEDULE.getValorTextoJson());
             for(i=0;i<arrayProgramas.length();i++) {
-                if (schedules == null) schedules = new ArrayList<IotScheduleDevice>();
-
                 objeto = arrayProgramas.getJSONObject(i);
                 programa = new IotScheduleDevice(objeto);
                 if (programa.getScheduleId().equals(getActiveSchedule())) {

@@ -29,13 +29,17 @@ public class SwitchScheduleFragment extends Fragment {
 
     private SwitchScheduleAdapter adapter;
 
-    IotDeviceSwitch device;
+    static IotDeviceSwitch device;
     public SwitchScheduleFragment() {
         // Required empty public constructor
     }
 
     public SwitchScheduleFragment(IotDeviceSwitch device) {
+
+
         this.device = device;
+        //device.subscribeDevice();
+        Log.i(TAG, "device es : Constructor" + device.hashCode());
     }
 
 
@@ -46,19 +50,21 @@ public class SwitchScheduleFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
+
+
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View rootView;
-        mbinding = FragmentSwitchScheduleBinding.inflate(inflater, container, false);
-        rootView = mbinding.getRoot();
-        device.commandGetScheduleDevice();
+
+    private void configureListener() {
+
+        Log.i(TAG, "device es : configureListener " + device.hashCode());
         device.setOnReceivedScheduleDevice(new IotDevice.OnReceivedScheduleDevice() {
             @Override
             public void onReceivedScheduleDevice(IOT_CODE_RESULT resultCode) {
                 Log.i(TAG, "hola");
+                Log.i(TAG, "device es : onReceivedScheduleDevice " + device.hashCode());
+                Log.i(TAG, "device es :" + device.getSchedulesSwitch().size());
                 fillAdapter();
             }
         });
@@ -73,29 +79,42 @@ public class SwitchScheduleFragment extends Fragment {
 
         device.setOnReceivedDeleteScheduleDevice(new IotDevice.OnReceivedDeleteScheduleDevice() {
             @Override
-            public void onReceivedDeleteScheduleDevice(IOT_CODE_RESULT resultCode) {
-                adapter.notifyDataSetChanged();
+            public void onReceivedDeleteScheduleDevice(IOT_CODE_RESULT resultCode, String scheduleId) {
+                device.commandGetScheduleDevice();
+                Log.i(TAG, "device es : onReceivedDeleteScheduleDevice " + device.hashCode());
+
             }
         });
 
         device.setOnReceivedNewSchedule(new IotDevice.OnReceivedNewSchedule() {
             @Override
             public void onReceivedNewSchedule(IOT_CODE_RESULT resultCode) {
+                Log.i(TAG, "Se recibe la respuesta del nuevo programa y estamos listos para insertarlo");
+                device.commandGetScheduleDevice();
 
-                Log.i(TAG, "kk");
+                Log.i(TAG, "Se ha insertado un nuevo programa");
             }
         });
-
-
-
-
 
         device.setOnReceivedTimeoutCommand(new IotDevice.OnReceivedTimeoutCommand() {
             @Override
             public void onReceivedTimeoutCommand(String token) {
-                adapter.notifyDataSetChanged();
+                //adapter.notifyDataSetChanged();
             }
         });
+
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View rootView;
+        mbinding = FragmentSwitchScheduleBinding.inflate(inflater, container, false);
+        rootView = mbinding.getRoot();
+        configureListener();
+        fillAdapter();
+        //device.commandGetScheduleDevice();
+        //Log.i(TAG, "device es : commandGetScheduleDevice" + device.hashCode());
 
         return rootView;
 
@@ -103,8 +122,19 @@ public class SwitchScheduleFragment extends Fragment {
 
     private void fillAdapter() {
 
-        if (adapter == null) adapter = new SwitchScheduleAdapter(device.getSchedulesSwitch(), getActivity().getApplicationContext());
+        if (adapter == null) {
+            adapter = new SwitchScheduleAdapter(device.getSchedulesSwitch(), getActivity().getApplicationContext());
+            configureListenerAdapter();
+        }
+        mbinding.recyclerSwitchScheduleList.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
+        mbinding.recyclerSwitchScheduleList.setAdapter(adapter);
 
+
+
+    }
+
+
+    private void configureListenerAdapter() {
         adapter.setOnItemClickSelected(new SwitchScheduleAdapter.OnItemClickSelected() {
             @Override
             public void onItemClickSelected(SwitchScheduleAdapter.ITEM_TYPE event, int position) {
@@ -114,11 +144,15 @@ public class SwitchScheduleFragment extends Fragment {
 
                     case DELETE_SCHEDULE:
                         Log.i(TAG, "kk");
+                        schedule = device.getSchedulesSwitch().get(position);
+                        device.commandDeleteScheduleDevice(schedule.getScheduleId());
+                        Log.i(TAG, "device es : adapter delete" + device.hashCode());
                         break;
                     case CHANGE_STATUS_SCHEDULE:
                         Log.i(TAG, "kk");
 
                         schedule = device.getSchedulesSwitch().get(position);
+                        Log.i(TAG, "device es : change estatus" + device.hashCode());
                         if (schedule.getScheduleState() == IOT_STATE_SCHEDULE.ACTIVE_SCHEDULE) {
                             schedule.setScheduleState(IOT_STATE_SCHEDULE.INACTIVE_SCHEDULE);
 
@@ -130,6 +164,7 @@ public class SwitchScheduleFragment extends Fragment {
                     case MODIFY_SCHEDULE:
                         Log.i(TAG, "kk");
                         schedule = device.getSchedulesSwitch().get(position);
+                        Log.i(TAG, "device: Fragment" + device.hashCode());
                         ActionSwitchScheduleFragment actionSwitchScheduleFragment;
                         actionSwitchScheduleFragment = new ActionSwitchScheduleFragment(schedule);
                         FragmentManager fragmentManager = getParentFragmentManager();
@@ -144,13 +179,9 @@ public class SwitchScheduleFragment extends Fragment {
                 }
             }
         });
-        mbinding.recyclerSwitchScheduleList.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
-        mbinding.recyclerSwitchScheduleList.setAdapter(adapter);
-
-
-
 
     }
+
 
 
 

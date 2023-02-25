@@ -32,6 +32,8 @@ import net.jajica.libiot.IotScheduleDeviceSwitch;
 
 import net.jajica.myhomeiot.databinding.ActivitySwitchBinding;
 
+import java.nio.file.StandardOpenOption;
+
 public class SwitchActivity extends AppCompatActivity implements  NavigationBarView.OnItemSelectedListener, ActionSwitchScheduleFragment.OnActionSchedule {
 
     private final String TAG = "SwitchActivity";
@@ -103,6 +105,8 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
             public void onReceivedStatus(IOT_CODE_RESULT resultCode) {
                 Log.i(TAG, "ff");
                 updateDevice();
+                device.commandGetScheduleDevice();
+
 
             }
         });
@@ -118,6 +122,17 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
             public void onReceivedOtaVersionAvailableDevice(IOT_CODE_RESULT resultCode) {
 
                 paintOtaDataSwitch();
+            }
+        });
+
+        device.setOnReceivedScheduleDevice(new IotDevice.OnReceivedScheduleDevice() {
+            @Override
+            public void onReceivedScheduleDevice(IOT_CODE_RESULT resultCode) {
+                if (resultCode == IOT_CODE_RESULT.RESUT_CODE_OK) {
+                    Log.i(TAG, "Recibida programacion desde el dispositivo");
+                    paintPanelProgressSchedule();
+                    paintScheduleFragment();
+                }
             }
         });
 
@@ -141,7 +156,7 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
                 device.commandGetStatusDevice();
                 updateDevice();
                 device.getOtaVersionAvailableCommand();
-                getSwitchSchedule();
+                //paintScheduleFragment();
             }
 
             @Override
@@ -169,7 +184,7 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
         //Pintamos si el dispositivo esta conectado o no
         paintDeviceStateSwitch();
         paintOtaDataSwitch();
-        paintPanelProgressSchedule();
+
         paintRelayStatus();
         paintConnections();
 
@@ -269,11 +284,31 @@ private void paintOtaDataSwitch() {
 
 private void paintPanelProgressSchedule() {
 
+        String from;
+        String to;
+        MyHomeIotTools tool;
+        int currentTimeSchedule;
+        int progress;
+        int index;
+
+        IotScheduleDeviceSwitch schedule;
         if (device.getActiveSchedule() == null) {
             mbinding.gridLayoutSchedule.setVisibility(View.INVISIBLE);
             return;
         }
         mbinding.gridLayoutSchedule.setVisibility(View.VISIBLE);
+        tool = new MyHomeIotTools();
+        index = device.searchSchedule(device.getActiveSchedule());
+        schedule = device.getSchedulesSwitch().get(index);
+        from = tool.formatHour(schedule.getHour(), schedule.getMinute());
+        to = tool.convertDuration(schedule.getHour(), schedule.getMinute(), schedule.getDuration());
+        currentTimeSchedule = tool.currentDate2DurationSchedule(from);
+        progress = (currentTimeSchedule * 100) / schedule.getDuration();
+        mbinding.progressSchedule.setProgress(progress);
+
+
+
+
 }
 
 private void paintConnections() {
@@ -326,8 +361,8 @@ private void paintRelayStatus() {
     }
 }
 
-private void getSwitchSchedule() {
-
+private void paintScheduleFragment() {
+        Log.i(TAG, "device es : switch" + device.hashCode());
         switchScheduleFragment = new SwitchScheduleFragment(device);
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.add(R.id.containerSwitch, switchScheduleFragment, "Schedule");
@@ -368,7 +403,9 @@ private void getSwitchSchedule() {
             device.commandNewScheduleDevice(schedule);
         }
 
-
-
     }
+
+
+
+
 }

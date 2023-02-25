@@ -239,4 +239,47 @@ public class MyHomeIotTools {
         return hora;
     }
 
+    public String duration2Date(String inicio, int duracion) {
+
+        Calendar fecha;
+        int hora;
+        int minuto;
+        String horaFinal;
+
+        fecha = Calendar.getInstance();
+        hora = Integer.valueOf(inicio.substring(0,2));
+        minuto = Integer.valueOf(inicio.substring(3,5));
+        fecha.set(fecha.get(Calendar.YEAR), fecha.get(Calendar.MONTH), fecha.get(Calendar.DAY_OF_MONTH), hora, minuto);
+        fecha.setTimeInMillis(fecha.getTimeInMillis() + duracion * 1000);
+
+        horaFinal = formatHour(fecha.get(Calendar.HOUR_OF_DAY), fecha.get(Calendar.MINUTE));
+        return horaFinal;
+
+
+    }
+
+
+    public int currentDate2DurationSchedule(String inicio) {
+
+        Calendar fechaInicio, fechaFin;
+        int hora;
+        int minuto;
+        long milisFin, milisInicio;
+        hora = Integer.parseInt(inicio.substring(0,2));
+        minuto = Integer.parseInt(inicio.substring(3,5));
+        fechaFin = Calendar.getInstance();
+        fechaInicio = Calendar.getInstance();
+        fechaInicio.set(fechaInicio.get(Calendar.YEAR), fechaInicio.get(Calendar.MONTH), fechaInicio.get(Calendar.DAY_OF_MONTH), hora, minuto);
+        milisInicio = fechaInicio.getTimeInMillis()/1000;
+        milisFin = fechaFin.getTimeInMillis()/1000;
+
+
+        return (int) (milisFin - milisInicio);
+
+
+
+    }
+
+
+
 }
