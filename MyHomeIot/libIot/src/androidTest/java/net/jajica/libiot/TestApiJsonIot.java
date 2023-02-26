@@ -104,7 +104,7 @@ public class TestApiJsonIot {
                 disp.setDeviceName("test");
                 disp.subscribeDevice();
                 //disp.RegisterListenerMqttConnection();
-                disp.setRelayCommand(IOT_SWITCH_RELAY.OFF);
+                disp.commandSetRelay(IOT_SWITCH_RELAY.OFF);
 
             }
 

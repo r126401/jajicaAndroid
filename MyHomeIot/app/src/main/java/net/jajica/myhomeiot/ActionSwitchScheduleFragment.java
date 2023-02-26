@@ -30,6 +30,11 @@ public class ActionSwitchScheduleFragment extends Fragment implements View.OnCli
 
     private ArrayList<AppCompatTextView> listWeek;
 
+
+    /**
+     * Este interface implementa las notificaciones de las operaciones que se realizan desde este
+     * fragment con el objetivo de acutalizar las vistas del adapter y principal de la activity
+     */
     public interface OnActionSchedule {
 
         void onActionSchedule(IotScheduleDeviceSwitch schedule, OPERATION_SCHEDULE operationSchedule);
@@ -39,6 +44,9 @@ public class ActionSwitchScheduleFragment extends Fragment implements View.OnCli
         this.onActionSchedule = onActionSchedule;
     }
 
+    /**
+     * Enumera las operaciones que se pueden realizar desde este fragment.
+     */
     enum OPERATION_SCHEDULE {
         NEW_SCHEDULE,
         DELETE_SCHEDULE,
@@ -50,6 +58,10 @@ public class ActionSwitchScheduleFragment extends Fragment implements View.OnCli
         // Required empty public constructor
     }
 
+    /**
+     *
+     * @param schedule es el programa en curso sobre el que se puede actuar
+     */
     public ActionSwitchScheduleFragment(IotScheduleDeviceSwitch schedule) {
 
         if (schedule == null) {
@@ -63,7 +75,9 @@ public class ActionSwitchScheduleFragment extends Fragment implements View.OnCli
     }
 
 
-
+    /**
+     * Pinta adecuadamente los controles de los dias de la semana según la informacion recibida.
+     */
 
     private void initListWeek() {
         int i;
@@ -90,6 +104,9 @@ public class ActionSwitchScheduleFragment extends Fragment implements View.OnCli
     }
 
 
+    /**
+     * Inicializa los parametros del fragment
+     */
     private void initDataFragment() {
 
         MyHomeIotTools tool;
@@ -147,6 +164,21 @@ public class ActionSwitchScheduleFragment extends Fragment implements View.OnCli
             });
         }
     }
+
+    /**
+     * Este metodo pinta la vista del fragment.
+     * Se utiliza la tecnica para capturar los controles dinamicamente con databinding.
+     *
+     * @param inflater The LayoutInflater object that can be used to inflate
+     * any views in the fragment,
+     * @param container If non-null, this is the parent view that the fragment's
+     * UI should be attached to.  The fragment should not add the view itself,
+     * but this can be used to generate the LayoutParams of the view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     *
+     * @return
+     */
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -164,6 +196,12 @@ public class ActionSwitchScheduleFragment extends Fragment implements View.OnCli
         initDataFragment();
         return rootView;
     }
+
+    /**
+     * Este metodo procesa la informacion recogida en los controles y la envia al fragment padre
+     * para que pueda lanzar al comando de modificacion del programa.
+     * @param v The view that was clicked.
+     */
     @Override
     public void onClick(View v) {
 
@@ -186,11 +224,20 @@ public class ActionSwitchScheduleFragment extends Fragment implements View.OnCli
 
     }
 
+    /**
+     * Este metodo devuelve el control al fragment anterior.
+     */
     private void processCancelSchedule() {
 
         getParentFragmentManager().popBackStack();
 
     }
+
+    /**
+     * Este metodo captura la informacion de los controles y la carga en el objeto schedule
+     * para poder lanzar la peticion al dispositivo.
+     *
+     */
 
     private void processActionSchedule() {
 

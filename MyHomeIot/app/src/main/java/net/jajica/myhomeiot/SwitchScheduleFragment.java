@@ -36,15 +36,21 @@ public class SwitchScheduleFragment extends Fragment {
         // Required empty public constructor
     }
 
+    /**
+     * Contructor de la clase
+     * @param device Es el dispositivo del cual hay que pintar los programas y actuar sobre ellos.
+     */
     public SwitchScheduleFragment(IotDeviceSwitch device) {
 
 
         this.device = device;
-        //device.subscribeDevice();
-        Log.i(TAG, "device es : Constructor" + device.hashCode());
     }
 
 
+    /**
+     * Interfaz utilizado para enviar a la activity los eventos que se produzcan en las operaciones
+     * sobre los programas y de esta manera poder actualizar la vista principal del dispositivo
+     */
     public interface OnSendEventSchedule {
         void onSendEventSchedule(ActionSwitchScheduleFragment.OPERATION_SCHEDULE operation);
     }
@@ -59,7 +65,9 @@ public class SwitchScheduleFragment extends Fragment {
 
     }
 
-
+    /**
+     * Este metodo configura los listener que va a utilizar el fragment.
+     */
     private void configureListener() {
 
         Log.i(TAG, "device es : configureListener " + device.hashCode());
@@ -124,6 +132,18 @@ public class SwitchScheduleFragment extends Fragment {
 
     }
 
+    /**
+     * Este metodo crea la vista que se va a visualizar en el fragment
+     * @param inflater The LayoutInflater object that can be used to inflate
+     * any views in the fragment,
+     * @param container If non-null, this is the parent view that the fragment's
+     * UI should be attached to.  The fragment should not add the view itself,
+     * but this can be used to generate the LayoutParams of the view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     *
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -132,13 +152,13 @@ public class SwitchScheduleFragment extends Fragment {
         rootView = mbinding.getRoot();
         configureListener();
         fillAdapter();
-        //device.commandGetScheduleDevice();
-        //Log.i(TAG, "device es : commandGetScheduleDevice" + device.hashCode());
-
         return rootView;
 
     }
 
+    /**
+     * Este metodo pinta los programas del dispositivo.
+     */
     private void fillAdapter() {
 
         if (adapter == null) {
@@ -152,6 +172,13 @@ public class SwitchScheduleFragment extends Fragment {
 
     }
 
+    /**
+     * Este metodo implemente los listener suminitrados por el adapter para poder tratar los eventos
+     * que se pueden hacer de cada uno de los programas que estan en el adapter.
+     * Delete schedule
+     * Change_status_schedule
+     * Modify_schedule. Este último, abre un nuevo fragment para modificar el programa.
+     */
 
     private void configureListenerAdapter() {
         adapter.setOnItemClickSelected(new SwitchScheduleAdapter.OnItemClickSelected() {

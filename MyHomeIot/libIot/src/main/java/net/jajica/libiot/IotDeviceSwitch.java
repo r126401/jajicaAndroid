@@ -238,7 +238,7 @@ public class IotDeviceSwitch extends IotDevice implements Serializable {
 
     }
 
-    public IOT_DEVICE_STATE_CONNECTION setRelayCommand(IOT_SWITCH_RELAY action) {
+    public IOT_DEVICE_STATE_CONNECTION commandSetRelay(IOT_SWITCH_RELAY action) {
 
         JSONObject parameters;
         parameters = new JSONObject();

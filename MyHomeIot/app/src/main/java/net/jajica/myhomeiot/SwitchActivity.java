@@ -32,9 +32,7 @@ import net.jajica.libiot.IotScheduleDeviceSwitch;
 
 import net.jajica.myhomeiot.databinding.ActivitySwitchBinding;
 
-import java.nio.file.StandardOpenOption;
-
-public class SwitchActivity extends AppCompatActivity implements  NavigationBarView.OnItemSelectedListener, ActionSwitchScheduleFragment.OnActionSchedule {
+public class SwitchActivity extends AppCompatActivity implements  NavigationBarView.OnItemSelectedListener, ActionSwitchScheduleFragment.OnActionSchedule, View.OnClickListener {
 
     private final String TAG = "SwitchActivity";
     private IotDeviceSwitch device;
@@ -51,9 +49,11 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
     private Bundle bundleSchedule;
 
 
-
-
-
+    /**
+     * Este metodo inicializa y recibe los datos desde mainActivity
+     * Crea un nuevo dispositivo con la conexion al servidor Mqtt
+     * Configura los listeners y pinta el dispositivo
+     */
     private void initActivity() {
         JSONObject jsonObject = null;
 
@@ -68,7 +68,7 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
         } catch (JSONException exception) {
             Log.e(TAG, "Error al recibir el json desde MainActivity");
         }
-
+        mbinding.imagePanelSwitch.setOnClickListener(this);
 
         device = new IotDeviceSwitch();
         if (data != null) {
@@ -98,10 +98,18 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
 
     }
 
+    /**
+     * Este metodo configura los listener para la recepcion de comandos y espontaneos
+     * En base a la informacion recibida se pintan los diferentes elementos del interfaz
+     */
     private void configureListenersDeviceSwitch() {
 
 
         //Configuramos los listeners de comandos.
+
+        /**
+         * Recepcion del comando status
+         */
         device.setOnReceivedStatus(new IotDevice.OnReceivedStatus() {
             @Override
             public void onReceivedStatus(IOT_CODE_RESULT resultCode) {
@@ -112,6 +120,10 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
 
             }
         });
+
+        /**
+         * Recepcion del comando infoDevice
+         */
         device.setOnReceivedInfoDevice(new IotDevice.OnReceivedInfoDevice() {
             @Override
             public void onReceivedInfoDevice(IOT_CODE_RESULT resultCode) {
@@ -119,6 +131,9 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
             }
         });
 
+        /**
+         * Recepcion de la informacion de OTA disponible
+         */
         device.setOnReceivedOtaVersionAvailableDevice(new IotDevice.OnReceivedOtaVersionAvailableDevice() {
             @Override
             public void onReceivedOtaVersionAvailableDevice(IOT_CODE_RESULT resultCode) {
@@ -127,6 +142,9 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
             }
         });
 
+        /**
+         * Recepcion del comando de visualizacion de programas
+         */
         device.setOnReceivedScheduleDevice(new IotDevice.OnReceivedScheduleDevice() {
             @Override
             public void onReceivedScheduleDevice(IOT_CODE_RESULT resultCode) {
@@ -138,12 +156,65 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
             }
         });
 
+        device.setOnReceivedSetRelay(new IotDeviceSwitch.OnReceivedSetRelay() {
+            @Override
+            public void onReceivedSetRelay(IOT_CODE_RESULT codeResult) {
+                updateDevice();
+            }
+        });
 
+        /**
+         * Recepcion de espontaneo de inicio del dispositivo
+         */
+        device.setOnReceivedSpontaneousStartDevice(new IotDevice.OnReceivedSpontaneousStartDevice() {
+            @Override
+            public void onReceivedSpontaneousStartDevice(IOT_CODE_RESULT resultCode) {
 
+            }
+        });
+
+        /**
+         * Recepcion de espontaneo de cambio de estado en el switch
+         */
+        device.setOnReceivedSpontaneousActionRelay(new IotDeviceSwitch.OnReceivedSpontaneousActionRelay() {
+            @Override
+            public void onReceivedSpontaneousActionRelay(IOT_CODE_RESULT resultCode) {
+
+            }
+        });
+
+        /**
+         * Recepcion de comienzo de un programa
+         */
+        device.setOnReceivedSpontaneousStartSchedule(new IotDevice.OnReceivedSpontaneousStartSchedule() {
+            @Override
+            public void onReceivesSpontaneousStartSchedule(IOT_CODE_RESULT resultCode) {
+
+            }
+        });
+
+        /**
+         * Recepcion de fin de un programa
+         */
+        device.setOnReceivedSpontaneousEndSchedule(new IotDevice.OnReceivedSpontaneousEndSchedule() {
+            @Override
+            public void onReceivesSpontaneousEndSchedule(IOT_CODE_RESULT resultCode) {
+
+            }
+        });
 
 
     }
 
+    /**
+     * Crea la conexion mqtt para que el dispositivo se conecte al servidor mqtt y pueda
+     * enviar comandos y recibir espontaneos.
+     *
+     * Cuando la conexion se establece se llama a connectionEstablished en la cual se comenzará
+     * actualizar el dispositivo
+     * @return Recibe el estado intermedio de la conexion.
+     *
+     */
     private IOT_MQTT_STATUS_CONNECTION createConnectionMqtt() {
 
         IOT_MQTT_STATUS_CONNECTION status;
@@ -171,6 +242,9 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
 
     }
 
+    /**
+     * Se refresca la vista del dispositivo en funcion de los mensajes recibidos
+     */
     private void updateDevice() {
 
         IOT_SWITCH_RELAY statusRelay;
@@ -190,6 +264,9 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
         paintConnections();
     }
 
+    /**
+     * Se actualiza el estado del broker
+     */
     private void paintBrokerStatus() {
 
         if (cnx.isConnected()) {
@@ -201,7 +278,10 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
     }
 
 
-
+    /**
+     * Este metodo actualiza el estado del dispositivo:
+     *
+     */
     private void paintDeviceStateSwitch() {
 
         IOT_DEVICE_STATE status;
@@ -257,8 +337,10 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
     }
 
 
-
-private void paintOtaDataSwitch() {
+    /**
+     * Este metodo actualiza la informacion cuando hay una nueva version disponible
+     */
+    private void paintOtaDataSwitch() {
 
     IotOtaVersionAvailable otaVersionAvailable;
 
@@ -279,7 +361,10 @@ private void paintOtaDataSwitch() {
 
 }
 
-private void paintPanelProgressSchedule() {
+    /**
+     * Este metodo pinta el progreso de un programa concreto cuando esta activo.
+     */
+    private void paintPanelProgressSchedule() {
 
         String from;
         String to;
@@ -310,12 +395,12 @@ private void paintPanelProgressSchedule() {
         }
 
 
-
-
-
 }
 
-private void paintConnections() {
+    /**
+     * Este metodo pinta el estado de la conexion del dispositivo
+     */
+    private void paintConnections() {
 
     switch (device.getConnectionState()) {
 
@@ -348,24 +433,33 @@ private void paintConnections() {
 
 }
 
-private void paintRelayStatus() {
+    /**
+     * Este metodo pinta el estado del relay
+     */
+    private void paintRelayStatus() {
 
 
     switch (device.getRelay()) {
 
         case OFF:
             mbinding.imagePanelSwitch.setImageResource(R.drawable.ic_switch_off);
+            mbinding.imagePanelSwitch.setTag(IOT_SWITCH_RELAY.OFF);
             break;
         case ON:
             mbinding.imagePanelSwitch.setImageResource(R.drawable.ic_switch_on);
+            mbinding.imagePanelSwitch.setTag(IOT_SWITCH_RELAY.ON);
             break;
         case UNKNOWN:
             mbinding.imagePanelSwitch.setImageResource(R.drawable.ic_switch_unknown);
+            mbinding.imagePanelSwitch.setTag(IOT_SWITCH_RELAY.UNKNOWN);
             break;
     }
 }
 
-private void paintScheduleFragment() {
+    /**
+     * Este metodo abre el fragment en el que se visualizan los programas del dispositivo
+     */
+    private void paintScheduleFragment() {
         Log.i(TAG, "device es : switch" + device.hashCode());
         switchScheduleFragment = new SwitchScheduleFragment(device);
         fragmentTransaction = fragmentManager.beginTransaction();
@@ -396,9 +490,12 @@ private void paintScheduleFragment() {
 }
 
 
-
-
-
+    /**
+     * Este metodo se utiliza para dar funcionalidad al control onNavigationItemSelected
+     * y lanzar otras opciones.
+     * @param item The selected item
+     * @return
+     */
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
@@ -417,6 +514,14 @@ private void paintScheduleFragment() {
         return false;
     }
 
+    /**
+     * Este metodo recibe la notificacion desde ActionSwitchScheduleFragment para actualizar la vista
+     * despues de que se cree un nuevo programa desde dicho fragment.
+     * De esta manera se comprueba si el nuevo programa es el actual y se debe actualizar
+     * la barra de progreso del programa actual.
+     * @param schedule
+     * @param operationSchedule
+     */
     @Override
     public void onActionSchedule(IotScheduleDeviceSwitch schedule, ActionSwitchScheduleFragment.OPERATION_SCHEDULE operationSchedule) {
 
@@ -425,6 +530,44 @@ private void paintScheduleFragment() {
         }
 
     }
+
+
+    @Override
+    public void onClick(View v) {
+
+        switch (v.getId()) {
+
+            case (R.id.imagePanelSwitch):
+                setSwitch();
+                break;
+
+        }
+
+    }
+
+    private void setSwitch() {
+
+        IOT_SWITCH_RELAY statusRelay;
+        statusRelay = (IOT_SWITCH_RELAY) mbinding.imagePanelSwitch.getTag();
+
+        switch (statusRelay) {
+
+            case OFF:
+                statusRelay = IOT_SWITCH_RELAY.ON;
+                break;
+            case ON:
+                statusRelay = IOT_SWITCH_RELAY.OFF;
+                break;
+            case UNKNOWN:
+                break;
+        }
+
+        device.commandSetRelay(statusRelay);
+        paintConnections();
+
+
+    }
+
 
 
 
