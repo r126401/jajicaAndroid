@@ -96,6 +96,19 @@ public abstract class IotDevice implements Serializable {
     protected IotMqttConnection cnx;
 
     /**
+     * Lista de items de info del dispositivo
+     */
+    protected ArrayList<IotInfoDevice> listInfoDevice;
+
+    public ArrayList<IotInfoDevice> getListInfoDevice() {
+        return listInfoDevice;
+    }
+
+    public void setListInfoDevice(ArrayList<IotInfoDevice> listInfoDevice) {
+        this.listInfoDevice = listInfoDevice;
+    }
+
+    /**
      * Este metodo devuelve la identidad de la conexion mqtt
      * @return Se retorna la identidad de la conexion
      */
@@ -669,6 +682,7 @@ public abstract class IotDevice implements Serializable {
         dispositivoJson = new JSONObject();
         alarms = new IotAlarmDevice();
         setDeviceType(IOT_DEVICE_TYPE.UNKNOWN);
+        listInfoDevice = null;
 
     }
 
@@ -696,6 +710,7 @@ public abstract class IotDevice implements Serializable {
         dispositivoJson = new JSONObject();
         schedules = null;
         alarms = new IotAlarmDevice();
+        listInfoDevice = null;
 
     }
 
@@ -1399,10 +1414,41 @@ public abstract class IotDevice implements Serializable {
      * Metodo para invocar el comando info sobre el dispositivo
      * @return Se devuelve el estado de la conexion del dispositivo despues de lanzar la peticion
      */
-    public IOT_DEVICE_STATE_CONNECTION getInfoDeviceCommand() {
+    public IOT_DEVICE_STATE_CONNECTION commandGetInfoDevice() {
 
         return simpleCommand(IOT_COMMANDS.INFO_DEVICE);
 
+    }
+
+    protected IOT_CODE_RESULT json2InfoDevice() {
+
+        int i;
+        IotInfoDevice info;
+        JSONArray labels;
+        String name;
+        String value;
+        labels = object2Json().names();
+        if (listInfoDevice == null) listInfoDevice = new ArrayList<>();
+        for(i=0;i<labels.length();i++) {
+            try {
+                info = new IotInfoDevice();
+                name = labels.getString(i);
+                value = dispositivoJson.getString(name);
+                info.setItemLabelInfoDevice(name);
+                info.setItemValueInfoDevice(value);
+                info.setItemConfigurableInfoDevice(false);
+                listInfoDevice.add(info);
+            } catch (JSONException e) {
+                e.printStackTrace();
+                return IOT_CODE_RESULT.RESULT_CODE_NOK;
+            }
+
+
+
+        }
+
+
+        return IOT_CODE_RESULT.RESUT_CODE_OK;
     }
 
     /**
@@ -1412,6 +1458,7 @@ public abstract class IotDevice implements Serializable {
      */
     protected IOT_CODE_RESULT processInfoDeviceFromReport(String message) {
 
+
         setCurrentOtaVersionFromReport(message);
         setConnectionState(IOT_DEVICE_STATE_CONNECTION.DEVICE_CONNECTED);
         setDeviceStateFromReport(message);
@@ -1420,6 +1467,8 @@ public abstract class IotDevice implements Serializable {
         setFreeMemFromReport(message);
         setUpTimeFromReport(message);
         object2Json();
+        json2InfoDevice();
+
         Log.i(TAG, message);
         return IOT_CODE_RESULT.RESUT_CODE_OK;
     }

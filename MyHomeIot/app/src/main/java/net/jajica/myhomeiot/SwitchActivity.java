@@ -24,6 +24,7 @@ import net.jajica.libiot.IotDevice;
 import net.jajica.libiot.IotDeviceSwitch;
 import net.jajica.libiot.IotMqttConnection;
 
+import org.eclipse.paho.client.mqttv3.internal.wire.MultiByteInteger;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -128,6 +129,8 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
             @Override
             public void onReceivedInfoDevice(IOT_CODE_RESULT resultCode) {
 
+                Log.i(TAG, "kk " + device.getDeviceId());
+
             }
         });
 
@@ -138,7 +141,7 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
             @Override
             public void onReceivedOtaVersionAvailableDevice(IOT_CODE_RESULT resultCode) {
 
-                paintOtaDataSwitch();
+                paintOtaData();
             }
         });
 
@@ -170,6 +173,8 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
             @Override
             public void onReceivedSpontaneousStartDevice(IOT_CODE_RESULT resultCode) {
 
+                updateDevice();
+
             }
         });
 
@@ -179,6 +184,8 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
         device.setOnReceivedSpontaneousActionRelay(new IotDeviceSwitch.OnReceivedSpontaneousActionRelay() {
             @Override
             public void onReceivedSpontaneousActionRelay(IOT_CODE_RESULT resultCode) {
+
+                updateDevice();
 
             }
         });
@@ -190,6 +197,8 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
             @Override
             public void onReceivesSpontaneousStartSchedule(IOT_CODE_RESULT resultCode) {
 
+                updateDevice();
+
             }
         });
 
@@ -199,6 +208,8 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
         device.setOnReceivedSpontaneousEndSchedule(new IotDevice.OnReceivedSpontaneousEndSchedule() {
             @Override
             public void onReceivesSpontaneousEndSchedule(IOT_CODE_RESULT resultCode) {
+
+                updateDevice();
 
             }
         });
@@ -234,6 +245,7 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
 
             @Override
             public void connectionLost(Throwable cause) {
+                updateDevice();
 
             }
         });
@@ -249,19 +261,31 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
 
         IOT_SWITCH_RELAY statusRelay;
 
+
+
+
+
+        //Pintamos si el dispositivo esta conectado o no
+        paintStatusCommunication();
+        paintTextStatus();
+        paintAlarmStatus();
+        paintDeviceStatus();
+        paintOtaData();
+        paintRelayStatus();
+
+    }
+
+    private void paintTextStatus() {
         mbinding.textDeviceInfoSwitch.setText(device.getDeviceName());
+    }
+
+    private void paintAlarmStatus() {
+
         if (device.getAlarms().activeAlarms()) {
             mbinding.imageAlarmSwitch.setVisibility(View.VISIBLE);
         } else {
             mbinding.imageAlarmSwitch.setVisibility(View.INVISIBLE);
         }
-
-
-        //Pintamos si el dispositivo esta conectado o no
-        paintDeviceStateSwitch();
-        paintOtaDataSwitch();
-        paintRelayStatus();
-        paintConnections();
     }
 
     /**
@@ -273,7 +297,9 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
             mbinding.imageBrokerConnected.setImageResource(R.drawable.ic_wifi_on);
         } else {
             mbinding.imageBrokerConnected.setImageResource(R.drawable.ic_wifi_off);
+            device.setConnectionState(IOT_DEVICE_STATE_CONNECTION.DEVICE_DISCONNECTED);
         }
+
 
     }
 
@@ -282,7 +308,7 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
      * Este metodo actualiza el estado del dispositivo:
      *
      */
-    private void paintDeviceStateSwitch() {
+    private void paintDeviceStatus() {
 
         IOT_DEVICE_STATE status;
 
@@ -340,7 +366,7 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
     /**
      * Este metodo actualiza la informacion cuando hay una nueva version disponible
      */
-    private void paintOtaDataSwitch() {
+    private void paintOtaData() {
 
     IotOtaVersionAvailable otaVersionAvailable;
 
@@ -400,7 +426,9 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
     /**
      * Este metodo pinta el estado de la conexion del dispositivo
      */
-    private void paintConnections() {
+    private void paintStatusCommunication() {
+
+        paintBrokerStatus();
 
     switch (device.getConnectionState()) {
 
@@ -481,12 +509,13 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
                     case DISPLAY_SCHEDULE:
                         paintPanelProgressSchedule();
                         break;
+                    case REFRESH_SCHEDULE:
+                        device.commandGetStatusDevice();
+                        updateDevice();
+
                 }
             }
         });
-
-
-
 }
 
 
@@ -510,6 +539,9 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
                 fragmentTransaction.addToBackStack("schedule");
                 fragmentTransaction.commit();
                 break;
+
+            case (R.id.item_info_switch):
+                device.commandGetInfoDevice();
         }
         return false;
     }
@@ -563,7 +595,7 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
         }
 
         device.commandSetRelay(statusRelay);
-        paintConnections();
+        paintStatusCommunication();
 
 
     }

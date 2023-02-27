@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,7 +22,7 @@ import net.jajica.myhomeiot.databinding.FragmentSwitchScheduleBinding;
 
 
 
-public class SwitchScheduleFragment extends Fragment {
+public class SwitchScheduleFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
 
     private final String TAG = "SwitchScheduleFragment";
@@ -44,6 +45,16 @@ public class SwitchScheduleFragment extends Fragment {
 
 
         this.device = device;
+    }
+
+    @Override
+    public void onRefresh() {
+
+        if (onSendEventSchedule != null) {
+            onSendEventSchedule.onSendEventSchedule(ActionSwitchScheduleFragment.OPERATION_SCHEDULE.REFRESH_SCHEDULE);
+        }
+        mbinding.swipeSwitchScheduleList.setRefreshing(false);
+
     }
 
 
@@ -167,6 +178,7 @@ public class SwitchScheduleFragment extends Fragment {
         }
         mbinding.recyclerSwitchScheduleList.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
         mbinding.recyclerSwitchScheduleList.setAdapter(adapter);
+        mbinding.swipeSwitchScheduleList.setOnRefreshListener(this);
 
 
 
