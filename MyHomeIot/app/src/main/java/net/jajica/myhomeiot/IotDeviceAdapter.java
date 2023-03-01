@@ -5,6 +5,7 @@ import android.os.Build;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -442,10 +443,13 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private void processMenuDevice(AppCompatImageView imageMenu , TextInputEditText editText, int position) {
         PopupMenu menu;
         menu = new PopupMenu(context, imageMenu);
+        menu.setGravity(Gravity.CENTER);
         menu.inflate(R.menu.menu_device);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             menu.setForceShowIcon(true);
         }
+
+
         menu.show();
         menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
@@ -456,7 +460,7 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         break;
                     case (R.id.item_delete_device):
                         deleteDevice(position);
-                        Log.i(TAG, "delte");
+                        Log.i(TAG, "delete");
                         break;
 
                 }

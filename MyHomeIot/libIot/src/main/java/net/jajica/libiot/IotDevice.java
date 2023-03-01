@@ -1324,6 +1324,39 @@ public abstract class IotDevice implements Serializable {
     }
 
     /**
+     * Metodo para invocar un reset al dispositivo
+     * @return
+     */
+
+    public IOT_DEVICE_STATE_CONNECTION commandResetDevice() {
+
+        return simpleCommand(IOT_COMMANDS.RESET);
+    }
+
+    /**
+     * Metodo para invocar un factory reset al dispositivo
+     * @return
+     */
+    public IOT_DEVICE_STATE_CONNECTION commandFactoryReset() {
+
+        return simpleCommand(IOT_COMMANDS.FACTORY_RESET);
+    }
+
+
+    public IOT_DEVICE_STATE_CONNECTION commandUpgradeFirmware(IotOtaVersionAvailable otaData) {
+
+        JSONObject parameters;
+        IOT_DEVICE_STATE_CONNECTION state = IOT_DEVICE_STATE_CONNECTION.UNKNOWN;
+        parameters = otaData.otaData2Json(otaData);
+        if (parameters != null) {
+            state = commandwithParameters(IOT_COMMANDS.UPGRADE_FIRMWARE, IOT_LABELS_JSON.DLG_UPGDRADE_FIRMWARE.getValorTextoJson(), parameters);
+        }
+        return state;
+
+    }
+
+
+    /**
      * Metodo para lanzar la peticion con el comando json ya construido
      * @param textoComando Es el texto del comando json
      * @return Se devuelve el estado de la conexion del dispositivo despues de lanzar la peticion
@@ -1428,7 +1461,11 @@ public abstract class IotDevice implements Serializable {
         String name;
         String value;
         labels = object2Json().names();
-        if (listInfoDevice == null) listInfoDevice = new ArrayList<>();
+        if (listInfoDevice == null) {
+            listInfoDevice = new ArrayList<>();
+        } else {
+            listInfoDevice.clear();
+        }
         for(i=0;i<labels.length();i++) {
             try {
                 info = new IotInfoDevice();

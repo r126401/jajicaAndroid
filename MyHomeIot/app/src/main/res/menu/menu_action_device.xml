@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/item_reset_device"
+        android:icon="@drawable/ic_action_reset"
+        android:title="@string/reset_device">
+    </item>
+    <item
+        android:id="@+id/item_factory_reset_device"
+        android:icon="@drawable/ic_action_factory_reset"
+        android:title="@string/factory_reset_device">
+    </item>
+
+    <item
+        android:id="@+id/item_upgrade_firmware_device"
+        android:icon="@drawable/ic_action_upgrade"
+        android:title="@string/upgrade_device">
+
+    </item>
+
+
+</menu>

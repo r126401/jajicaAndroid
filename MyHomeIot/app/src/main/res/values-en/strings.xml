@@ -101,6 +101,9 @@
     <string name="abrev_sunday">U</string>
     <string name="new_schedule">New Schedule</string>
     <string name="modify_schedule">Modify schedule</string>
+    <string name="reset_device">Reset...</string>
+    <string name="factory_reset_device">Factory reset...</string>
+    <string name="upgrade_device">Upgrade...</string>
 
 
 </resources>

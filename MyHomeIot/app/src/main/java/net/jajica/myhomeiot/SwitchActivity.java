@@ -6,10 +6,12 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.PopupMenu;
 
 
 import com.google.android.material.navigation.NavigationBarView;
@@ -46,6 +48,8 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
 
     private SwitchScheduleFragment switchScheduleFragment;
     private ActionSwitchScheduleFragment actionSwitchScheduleFragment;
+
+    private InfoDeviceFragment infoDeviceFragment;
 
     private Bundle bundleSchedule;
 
@@ -130,6 +134,8 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
             public void onReceivedInfoDevice(IOT_CODE_RESULT resultCode) {
 
                 Log.i(TAG, "kk " + device.getDeviceId());
+                launchInfoDeviceFragment();
+
 
             }
         });
@@ -214,6 +220,40 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
             }
         });
 
+        device.setOnReceivedResetDevice(new IotDevice.OnReceivedResetDevice() {
+            @Override
+            public void onReceivedResetDevice(IOT_CODE_RESULT resultCode) {
+
+                Log.i(TAG, "Recibido reset al dispositivo");
+
+            }
+        });
+
+        device.setOnReceivedFactoryResetDevice(new IotDevice.OnReceivedFactoryResetDevice() {
+            @Override
+            public void onReceivedFactoryResetDevice(IOT_CODE_RESULT resultCode) {
+
+            }
+        });
+
+        device.setOnReceivedUpgradeFirmwareDevice(new IotDevice.OnReceivedUpgradeFirmwareDevice() {
+            @Override
+            public void onReceivedUpgradeFirmwareDevice(IOT_CODE_RESULT codeResult) {
+
+            }
+        });
+
+
+    }
+
+    private void launchInfoDeviceFragment() {
+
+        infoDeviceFragment = new InfoDeviceFragment(device.getListInfoDevice());
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.containerSwitch, infoDeviceFragment, "infoDeviceFragment");
+        fragmentTransaction.setReorderingAllowed(true);
+        fragmentTransaction.addToBackStack("schedule");
+        fragmentTransaction.commit();
 
     }
 
@@ -542,8 +582,54 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
 
             case (R.id.item_info_switch):
                 device.commandGetInfoDevice();
+                break;
+
+            case (R.id.item_comandos_switch):
+                PopupMenu menu;
+                menu = new PopupMenu(getApplicationContext(),mbinding.bottomActionsSwitch);
+                menu.inflate(R.menu.menu_action_device);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    menu.setForceShowIcon(true);
+                }
+                menu.show();
+                menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+
+                        switch (item.getItemId()) {
+                            case (R.id.item_reset_device):
+                                executeReset();
+                                break;
+                            case (R.id.item_factory_reset_device):
+                                executeFactoryReset();
+                                break;
+                            case (R.id.item_upgrade_firmware_device):
+                                executeUpgradeFirmware();
+                                break;
+                        }
+
+                        return false;
+                    }
+                });
+                break;
+
         }
         return false;
+    }
+
+    private void executeUpgradeFirmware() {
+
+
+        device.commandUpgradeFirmware(device.getDataOta());
+    }
+
+    private void executeFactoryReset() {
+
+        device.commandFactoryReset();
+    }
+
+    private void executeReset() {
+        device.commandResetDevice();
     }
 
     /**

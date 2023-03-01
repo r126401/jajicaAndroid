@@ -1,6 +1,9 @@
 package net.jajica.libiot;
 
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class IotOtaVersionAvailable {
 
     protected String otaServer;
@@ -188,8 +191,24 @@ public class IotOtaVersionAvailable {
     }
 
 
+    public JSONObject otaData2Json(IotOtaVersionAvailable otaData) {
 
+        JSONObject objectOtaData;
+        objectOtaData = new JSONObject();
+        try {
 
+            objectOtaData.put(IOT_LABELS_JSON.OTA_SERVER.getValorTextoJson(), otaData.getOtaServer());
+            objectOtaData.put(IOT_LABELS_JSON.OTA_PORT.getValorTextoJson(), otaData.getOtaPort());
+            objectOtaData.put(IOT_LABELS_JSON.OTA_URL.getValorTextoJson(), otaData.getOtaUrl());
+            objectOtaData.put(IOT_LABELS_JSON.OTA_FILE.getValorTextoJson(), otaData.getOtaFile());
+            objectOtaData.put(IOT_LABELS_JSON.OTA_VERSION.getValorTextoJson(), otaData.getOtaVersionAvailable());
+        } catch (JSONException e) {
+            return null;
+
+        }
+        return objectOtaData;
+
+    }
 }
 
 

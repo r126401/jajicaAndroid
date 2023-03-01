@@ -99,4 +99,7 @@
     <string name="abrev_sunday">D</string>
     <string name="new_schedule">Nuevo programa</string>
     <string name="modify_schedule">Modificar programa</string>
+    <string name="reset_device">Reset...</string>
+    <string name="factory_reset_device">Reincio de fabrica...</string>
+    <string name="upgrade_device">Actualizar...</string>
 </resources>
