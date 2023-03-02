@@ -1343,11 +1343,11 @@ public abstract class IotDevice implements Serializable {
     }
 
 
-    public IOT_DEVICE_STATE_CONNECTION commandUpgradeFirmware(IotOtaVersionAvailable otaData) {
+    public IOT_DEVICE_STATE_CONNECTION commandUpgradeFirmware() {
 
         JSONObject parameters;
         IOT_DEVICE_STATE_CONNECTION state = IOT_DEVICE_STATE_CONNECTION.UNKNOWN;
-        parameters = otaData.otaData2Json(otaData);
+        parameters =dataOta.otaData2Json();
         if (parameters != null) {
             state = commandwithParameters(IOT_COMMANDS.UPGRADE_FIRMWARE, IOT_LABELS_JSON.DLG_UPGDRADE_FIRMWARE.getValorTextoJson(), parameters);
         }

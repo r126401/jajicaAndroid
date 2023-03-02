@@ -104,6 +104,10 @@
     <string name="reset_device">Reset...</string>
     <string name="factory_reset_device">Factory reset...</string>
     <string name="upgrade_device">Upgrade...</string>
+    <string name="confirm_reset">The device will reboot but its settings will be retained</string>
+    <string name="confirm_factory_reset">The device will return to factory settings</string>
+    <string name="confirm_upgrade_firmware">The device will install the new version available</string>
+    <string name="upgrading">Upgrading...</string>
 
 
 </resources>

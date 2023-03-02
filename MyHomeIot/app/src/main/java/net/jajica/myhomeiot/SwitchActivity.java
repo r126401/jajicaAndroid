@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,6 +19,7 @@ import android.widget.PopupMenu;
 import com.google.android.material.navigation.NavigationBarView;
 
 import net.jajica.libiot.IOT_CODE_RESULT;
+import net.jajica.libiot.IOT_COMMANDS;
 import net.jajica.libiot.IOT_DEVICE_STATE;
 import net.jajica.libiot.IOT_DEVICE_STATE_CONNECTION;
 import net.jajica.libiot.IOT_LABELS_JSON;
@@ -26,7 +29,6 @@ import net.jajica.libiot.IotDevice;
 import net.jajica.libiot.IotDeviceSwitch;
 import net.jajica.libiot.IotMqttConnection;
 
-import org.eclipse.paho.client.mqttv3.internal.wire.MultiByteInteger;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -598,13 +600,13 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
 
                         switch (item.getItemId()) {
                             case (R.id.item_reset_device):
-                                executeReset();
+                                confirmCommand(R.drawable.ic_action_reset, R.string.reset_device, R.string.confirm_reset, IOT_COMMANDS.RESET);
                                 break;
                             case (R.id.item_factory_reset_device):
-                                executeFactoryReset();
+                                confirmCommand(R.drawable.ic_action_factory_reset, R.string.factory_reset_device, R.string.confirm_factory_reset, IOT_COMMANDS.FACTORY_RESET);
                                 break;
                             case (R.id.item_upgrade_firmware_device):
-                                executeUpgradeFirmware();
+                                confirmCommand(R.drawable.ic_action_upgrade, R.string.upgrade_device, R.string.confirm_upgrade_firmware, IOT_COMMANDS.UPGRADE_FIRMWARE);
                                 break;
                         }
 
@@ -617,20 +619,6 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
         return false;
     }
 
-    private void executeUpgradeFirmware() {
-
-
-        device.commandUpgradeFirmware(device.getDataOta());
-    }
-
-    private void executeFactoryReset() {
-
-        device.commandFactoryReset();
-    }
-
-    private void executeReset() {
-        device.commandResetDevice();
-    }
 
     /**
      * Este metodo recibe la notificacion desde ActionSwitchScheduleFragment para actualizar la vista
@@ -683,6 +671,56 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
         device.commandSetRelay(statusRelay);
         paintStatusCommunication();
 
+
+    }
+
+    private void confirmCommand(int icon, int title, int message, IOT_COMMANDS command) {
+
+        AlertDialog.Builder alert;
+        alert = new AlertDialog.Builder(this);
+        alert.setIcon(icon);
+        alert.setTitle(title);
+        alert.setMessage(message);
+
+        alert.setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                switch (command) {
+
+
+                    case RESET:
+                        device.commandResetDevice();
+                        break;
+                    case FACTORY_RESET:
+                        device.commandFactoryReset();
+                        break;
+                    case UPGRADE_FIRMWARE:
+                        //device.commandUpgradeFirmware();
+                        sceneUpgradeFirmware();
+
+                }
+
+            }
+        });
+
+        alert.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
+        alert.show();
+
+    }
+
+    private void sceneUpgradeFirmware() {
+
+        UpgradeFragment scene;
+
+        scene = new UpgradeFragment(this);
+        scene.show(fragmentManager.beginTransaction(), "hola");
 
     }
 

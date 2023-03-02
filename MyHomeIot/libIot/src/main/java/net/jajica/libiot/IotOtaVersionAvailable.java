@@ -191,17 +191,17 @@ public class IotOtaVersionAvailable {
     }
 
 
-    public JSONObject otaData2Json(IotOtaVersionAvailable otaData) {
+    public JSONObject otaData2Json() {
 
         JSONObject objectOtaData;
         objectOtaData = new JSONObject();
         try {
 
-            objectOtaData.put(IOT_LABELS_JSON.OTA_SERVER.getValorTextoJson(), otaData.getOtaServer());
-            objectOtaData.put(IOT_LABELS_JSON.OTA_PORT.getValorTextoJson(), otaData.getOtaPort());
-            objectOtaData.put(IOT_LABELS_JSON.OTA_URL.getValorTextoJson(), otaData.getOtaUrl());
-            objectOtaData.put(IOT_LABELS_JSON.OTA_FILE.getValorTextoJson(), otaData.getOtaFile());
-            objectOtaData.put(IOT_LABELS_JSON.OTA_VERSION.getValorTextoJson(), otaData.getOtaVersionAvailable());
+            objectOtaData.put(IOT_LABELS_JSON.OTA_SERVER.getValorTextoJson(), getOtaServer());
+            objectOtaData.put(IOT_LABELS_JSON.OTA_PORT.getValorTextoJson(), getOtaPort());
+            objectOtaData.put(IOT_LABELS_JSON.OTA_URL.getValorTextoJson(), getOtaUrl());
+            objectOtaData.put(IOT_LABELS_JSON.OTA_FILE.getValorTextoJson(), getOtaFile());
+            objectOtaData.put(IOT_LABELS_JSON.OTA_VERSION.getValorTextoJson(), getOtaVersionAvailable());
         } catch (JSONException e) {
             return null;
 

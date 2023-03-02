@@ -105,5 +105,9 @@
     <string name="reset_device">Reset...</string>
     <string name="factory_reset_device">Reinicio de Fabrica...</string>
     <string name="upgrade_device">Actualizar...</string>
+    <string name="confirm_reset">El dispositivo se reiniciara pero se conservará su configuración</string>
+    <string name="confirm_factory_reset">El dispositivo volvera a valores de fabrica</string>
+    <string name="confirm_upgrade_firmware">El dispositivo instalara la nueva version disponible</string>
+    <string name="upgrading">Actualizando...</string>
 
 </resources>
