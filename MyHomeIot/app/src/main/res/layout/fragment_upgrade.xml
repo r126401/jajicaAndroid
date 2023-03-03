@@ -41,4 +41,17 @@
     </com.google.android.material.progressindicator.LinearProgressIndicator>
 
 
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textPorcentage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="25%"
+        app:layout_constraintBottom_toTopOf="@+id/progressUpgrade"
+        app:layout_constraintEnd_toEndOf="@+id/progressUpgrade"
+        app:layout_constraintStart_toStartOf="@+id/progressUpgrade"
+        app:layout_constraintTop_toBottomOf="@+id/textUpgradeDevice">
+
+    </androidx.appcompat.widget.AppCompatTextView>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

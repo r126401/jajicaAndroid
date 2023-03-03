@@ -718,8 +718,8 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
     private void sceneUpgradeFirmware() {
 
         UpgradeFragment scene;
-
-        scene = new UpgradeFragment(this);
+        device.commandUpgradeFirmware();
+        scene = new UpgradeFragment(this, device, 120000);
         scene.show(fragmentManager.beginTransaction(), "hola");
 
     }
