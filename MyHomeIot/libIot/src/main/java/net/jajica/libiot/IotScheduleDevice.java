@@ -422,4 +422,5 @@ public class IotScheduleDevice implements Serializable {
 
     }
 
+
 }

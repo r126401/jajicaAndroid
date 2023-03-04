@@ -175,7 +175,13 @@ public class SwitchScheduleFragment extends Fragment implements SwipeRefreshLayo
         if (adapter == null) {
             adapter = new SwitchScheduleAdapter(device.getSchedulesSwitch(), getActivity().getApplicationContext());
             configureListenerAdapter();
+        } else {
+            adapter.setListSchedule(device.getSchedulesSwitch());
+            adapter.notifyDataSetChanged();
+
+
         }
+
         mbinding.recyclerSwitchScheduleList.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
         mbinding.recyclerSwitchScheduleList.setAdapter(adapter);
         mbinding.swipeSwitchScheduleList.setOnRefreshListener(this);

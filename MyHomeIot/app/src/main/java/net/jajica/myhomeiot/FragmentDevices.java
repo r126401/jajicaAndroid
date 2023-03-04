@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import net.jajica.libiot.IOT_CODE_RESULT;
+import net.jajica.libiot.IOT_DEVICE_STATE_CONNECTION;
 import net.jajica.libiot.IOT_DEVICE_TYPE;
 import net.jajica.libiot.IOT_LABELS_JSON;
 import net.jajica.libiot.IOT_TYPE_ALARM_DEVICE;
@@ -535,11 +536,15 @@ device.setOnReceivedSpontaneousEndSchedule(new IotDevice.OnReceivedSpontaneousEn
         switch (device.getDeviceType()) {
 
             case INTERRUPTOR:
-                Intent launcherSwitch = new Intent(context, SwitchActivity.class);
-                device.object2Json();
+                if (device.getConnectionState() == IOT_DEVICE_STATE_CONNECTION.DEVICE_CONNECTED) {
+                    Intent launcherSwitch = new Intent(context, SwitchActivity.class);
+                    device.object2Json();
 
-                launcherSwitch.putExtra(IOT_LABELS_JSON.DEVICES.getValorTextoJson(), device.getDispositivoJson().toString());
-                startActivity(launcherSwitch);
+                    launcherSwitch.putExtra(IOT_LABELS_JSON.DEVICES.getValorTextoJson(), device.getDispositivoJson().toString());
+                    startActivity(launcherSwitch);
+
+                }
+
                 break;
             case THERMOMETER:
                 Intent launcherThermometer = new Intent(context, ThermometerActivity.class);

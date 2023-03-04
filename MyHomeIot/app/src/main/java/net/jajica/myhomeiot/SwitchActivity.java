@@ -235,6 +235,9 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
             @Override
             public void onReceivedFactoryResetDevice(IOT_CODE_RESULT resultCode) {
 
+                device.setConnectionState(IOT_DEVICE_STATE_CONNECTION.DEVICE_DISCONNECTED);
+                updateDevice();
+
             }
         });
 
@@ -720,7 +723,7 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
         UpgradeFragment scene;
         device.commandUpgradeFirmware();
         scene = new UpgradeFragment(this, device, 120000);
-        scene.show(fragmentManager.beginTransaction(), "hola");
+        scene.show(fragmentManager.beginTransaction(), "upgrade device");
 
     }
 

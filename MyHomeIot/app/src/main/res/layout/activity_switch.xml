@@ -56,15 +56,7 @@
                 android:src="@drawable/ic_move"
                 android:text="14:00" />
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/upgrade_device"
-                app:layout_constraintEnd_toEndOf="@+id/gridLayoutSchedule"
-                app:layout_constraintStart_toStartOf="@+id/gridLayoutSchedule"
-                app:layout_constraintTop_toBottomOf="@+id/gridLayoutSchedule">
 
-            </androidx.appcompat.widget.AppCompatTextView>
 
 
         </GridLayout>
@@ -166,21 +158,12 @@
             app:layout_constraintBottom_toTopOf="@+id/imagePanelSwitch"
             app:layout_constraintEnd_toEndOf="@+id/imagePanelSwitch"
             app:layout_constraintStart_toStartOf="@+id/imagePanelSwitch"
-            app:layout_constraintTop_toBottomOf="@+id/gridLayout2">
-
-        </androidx.appcompat.widget.AppCompatTextView>
+            app:layout_constraintTop_toBottomOf="@+id/gridLayout2"/>
 
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/textSceneMessage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/upgrade_device"
-            app:layout_constraintBottom_toTopOf="@+id/gridLayoutSchedule"
-            app:layout_constraintEnd_toEndOf="@+id/gridLayoutSchedule"
-            app:layout_constraintStart_toEndOf="@+id/imagePanelSwitch">
 
-        </androidx.appcompat.widget.AppCompatTextView>
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

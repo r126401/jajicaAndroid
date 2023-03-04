@@ -106,4 +106,7 @@
     <string name="confirm_factory_reset">El dispositivo volvera a valores de fabrica</string>
     <string name="confirm_upgrade_firmware">El dispositivo instalara la nueva version disponible</string>
     <string name="upgrading">Actualizando...</string>
+    <string name="upgrade_succesfully">Actualización realizada con éxito</string>
+    <string name="upgrade_unsucessfully">Actualizacion fallida</string>
+    <string name="new_version_available">Nueva versión disponible</string>
 </resources>

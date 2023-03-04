@@ -2077,6 +2077,29 @@ public abstract class IotDevice implements Serializable {
     }
 
 
+    /**
+     * Este metodo valida si el programa que se quiere añadir o modificar entra en conflicto
+     * con algun otro ya establecido.
+     * @param schedule es el programa a chequear
+     * @return true si se puede añadir o modificar. False en caso contrario.
+     */
+    public Boolean checkValidSchedule(IotScheduleDevice schedule) {
+
+        int firstInterval;
+        int secondInterval;
+
+
+        firstInterval = (schedule.getHour() * 3600) + (schedule.getMinute() * 60) + schedule.getSecond();
+        secondInterval = firstInterval + schedule.duration;
+
+
+
+
+        return true;
+
+    }
+
+
 
 
 }

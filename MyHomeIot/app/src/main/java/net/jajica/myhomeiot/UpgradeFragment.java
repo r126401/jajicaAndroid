@@ -88,8 +88,9 @@ public class UpgradeFragment extends DialogFragment {
             public void onReceivedSpontaneousStartDevice(IOT_CODE_RESULT resultCode) {
                 if (device.getEndUpgradeFlag() == 1) {
                     Log.i(TAG, "Se ha recibido el fin de upgrade");
-                    mBinding.textUpgradeDevice.setText("Upgrade realizado con exito");
+                    mBinding.textUpgradeDevice.setText(R.string.upgrade_succesfully);
                     endUpgrade = true;
+                    mBinding.textPorcentage.setText("100 %");
 
                 } else {
                     Log.i(TAG, "upgrade abortado");
@@ -98,7 +99,7 @@ public class UpgradeFragment extends DialogFragment {
                 }
                 timer.cancel();
                 setCancelable(true);
-                mBinding.textUpgradeDevice.setText("Upgrade abortado!!!");
+                mBinding.textUpgradeDevice.setText(R.string.upgrade_unsucessfully);
             }
         });
     }
@@ -119,13 +120,13 @@ public class UpgradeFragment extends DialogFragment {
         return alertDialog.create();
     }
 
-
     private void waitingUpgrade() {
 
 
 
         mBinding.progressUpgrade.setMin(0);
         mBinding.progressUpgrade.setMax((int) delay/1000);
+        mBinding.textUpgradeDevice.setText(R.string.upgrading);
 
         timer = new CountDownTimer(delay, interval) {
             @Override
@@ -144,7 +145,7 @@ public class UpgradeFragment extends DialogFragment {
             public void onFinish() {
 
                 if (!endUpgrade) {
-                    mBinding.textUpgradeDevice.setText("Upgrade sin exito");
+                    mBinding.textUpgradeDevice.setText(R.string.upgrade_unsucessfully);
                     setCancelable(true);
                 }
 

@@ -61,13 +61,21 @@ public class SwitchScheduleAdapter extends RecyclerView.Adapter<SwitchScheduleAd
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         ListSwitchScheduleBinding binding;
         ListScheduleEmptyBinding emptyBinding;
-        if (listSchedule == null) {
+        if (listSchedule != null) {
+            if (listSchedule.size() == 0) {
+                emptyBinding = ListScheduleEmptyBinding.inflate(layoutInflater, parent, false);
+                return new SwitchScheduleAdapterViewHolder(emptyBinding);
+            } else {
+                binding = ListSwitchScheduleBinding.inflate(layoutInflater, parent, false);
+                return new SwitchScheduleAdapterViewHolder(binding);
+
+            }
+        } else {
             emptyBinding = ListScheduleEmptyBinding.inflate(layoutInflater, parent, false);
             return new SwitchScheduleAdapterViewHolder(emptyBinding);
-        } else {
-            binding = ListSwitchScheduleBinding.inflate(layoutInflater, parent, false);
-            return new SwitchScheduleAdapterViewHolder(binding);
         }
+
+
     }
 
     private void initArrayWeek(ListSwitchScheduleBinding binding, ArrayList<AppCompatTextView> list) {
@@ -87,37 +95,40 @@ public class SwitchScheduleAdapter extends RecyclerView.Adapter<SwitchScheduleAd
     public void onBindViewHolder(@NonNull SwitchScheduleAdapterViewHolder holder, @SuppressLint("RecyclerView") int position) {
 
         if (listSchedule != null) {
-            paintItemSchedule(holder, position);
+            if (listSchedule.size() > 0) {
+                paintItemSchedule(holder, position);
 
-            holder.mbinding.imageScheduleStatus.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+                holder.mbinding.imageScheduleStatus.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
 
-                    if(onItemClickSelected != null) {
-                        holder.mbinding.progressComandSchedule.setVisibility(View.VISIBLE);
-                        onItemClickSelected.onItemClickSelected(ITEM_TYPE.CHANGE_STATUS_SCHEDULE, position);
+                        if (onItemClickSelected != null) {
+                            holder.mbinding.progressComandSchedule.setVisibility(View.VISIBLE);
+                            onItemClickSelected.onItemClickSelected(ITEM_TYPE.CHANGE_STATUS_SCHEDULE, position);
+                        }
+
                     }
+                });
 
-                }
-            });
+                holder.mbinding.imageDeleteSchedule.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
 
-            holder.mbinding.imageDeleteSchedule.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+                        holder.mbinding.progressComandSchedule.setVisibility(View.VISIBLE);
+                        onItemClickSelected.onItemClickSelected(ITEM_TYPE.DELETE_SCHEDULE, position);
 
-                    holder.mbinding.progressComandSchedule.setVisibility(View.VISIBLE);
-                    onItemClickSelected.onItemClickSelected(ITEM_TYPE.DELETE_SCHEDULE, position);
+                    }
+                });
 
-                }
-            });
+                holder.mbinding.getRoot().setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        onItemClickSelected.onItemClickSelected(ITEM_TYPE.MODIFY_SCHEDULE, position);
 
-            holder.mbinding.getRoot().setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    onItemClickSelected.onItemClickSelected(ITEM_TYPE.MODIFY_SCHEDULE, position);
+                    }
+                });
+            }
 
-                }
-            });
         }
 
 
@@ -128,11 +139,21 @@ public class SwitchScheduleAdapter extends RecyclerView.Adapter<SwitchScheduleAd
     public int getItemCount() {
 
 
-        if (listSchedule == null) {
-            return 1;
+
+
+        if (listSchedule != null) {
+            if (listSchedule.size() == 0) {
+                return 1;
+            } else {
+                return listSchedule.size();
+            }
         } else {
-            return listSchedule.size();
+            return 1;
         }
+
+
+
+
 
 
 
