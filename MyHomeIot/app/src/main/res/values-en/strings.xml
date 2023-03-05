@@ -111,6 +111,8 @@
     <string name="upgrade_succesfully">Upgrade sucessfully</string>
     <string name="upgrade_unsucessfully">Upgrade unsuccessfully</string>
     <string name="new_version_available">New version available</string>
+    <string name="error_dates">Error in dates configure</string>
+    <string name="error">Error!</string>
 
 
 </resources>

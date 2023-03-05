@@ -109,4 +109,6 @@
     <string name="upgrade_succesfully">Actualización realizada con éxito</string>
     <string name="upgrade_unsucessfully">Actualizacion fallida</string>
     <string name="new_version_available">Nueva versión disponible</string>
+    <string name="error_dates">Error en las fechas configuradas!</string>
+    <string name="error">Error!</string>
 </resources>

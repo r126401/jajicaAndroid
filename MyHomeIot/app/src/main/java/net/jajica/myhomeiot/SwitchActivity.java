@@ -632,11 +632,24 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
      * @param operationSchedule
      */
     @Override
-    public void onActionSchedule(IotScheduleDeviceSwitch schedule, ActionSwitchScheduleFragment.OPERATION_SCHEDULE operationSchedule) {
+    public void onActionSchedule(IotScheduleDeviceSwitch schedule, ActionSwitchScheduleFragment.OPERATION_SCHEDULE operationSchedule, String additionalInfo) {
 
         if (operationSchedule == ActionSwitchScheduleFragment.OPERATION_SCHEDULE.NEW_SCHEDULE) {
-            device.commandNewScheduleDevice(schedule);
+            if (device.checkValidSchedule(schedule, null)) {
+                device.commandNewScheduleDevice(schedule);
+            }
+
         }
+
+        if (operationSchedule == ActionSwitchScheduleFragment.OPERATION_SCHEDULE.MODIFY_SCHEDULE) {
+
+            if (device.checkValidSchedule(schedule, additionalInfo)) {
+                device.commandModifyScheduleDevice(schedule);
+            }
+
+        }
+
+
 
     }
 

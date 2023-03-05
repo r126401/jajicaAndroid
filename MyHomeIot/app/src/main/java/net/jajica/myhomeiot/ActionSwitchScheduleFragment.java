@@ -1,5 +1,6 @@
 package net.jajica.myhomeiot;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -17,6 +18,7 @@ import net.jajica.libiot.IOT_SWITCH_RELAY;
 import net.jajica.libiot.IotScheduleDeviceSwitch;
 import net.jajica.myhomeiot.databinding.FragmentActionSwitchScheduleBinding;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class ActionSwitchScheduleFragment extends Fragment implements View.OnClickListener{
 
@@ -30,6 +32,7 @@ public class ActionSwitchScheduleFragment extends Fragment implements View.OnCli
 
     private ArrayList<AppCompatTextView> listWeek;
 
+    private String oldSchedule;
 
     /**
      * Este interface implementa las notificaciones de las operaciones que se realizan desde este
@@ -37,7 +40,7 @@ public class ActionSwitchScheduleFragment extends Fragment implements View.OnCli
      */
     public interface OnActionSchedule {
 
-        void onActionSchedule(IotScheduleDeviceSwitch schedule, OPERATION_SCHEDULE operationSchedule);
+        void onActionSchedule(IotScheduleDeviceSwitch schedule, OPERATION_SCHEDULE operationSchedule, String adittionalInfo);
     }
 
     public void setOnActionSchedule(OnActionSchedule onActionSchedule) {
@@ -72,6 +75,12 @@ public class ActionSwitchScheduleFragment extends Fragment implements View.OnCli
         }
 
         this.schedule = schedule;
+        if (schedule != null) {
+            oldSchedule = schedule.getScheduleId();
+        } else {
+            oldSchedule = null;
+        }
+
 
     }
 
@@ -209,11 +218,13 @@ public class ActionSwitchScheduleFragment extends Fragment implements View.OnCli
         switch (v.getId()) {
 
             case (R.id.buttonAcceptSchedule):
-                processActionSchedule();
-                if (onActionSchedule != null) {
-                    onActionSchedule.onActionSchedule(schedule, operationSchedule);
-                    getParentFragmentManager().popBackStack();
+                if (processActionSchedule()) {
+                    if (onActionSchedule != null) {
+                        onActionSchedule.onActionSchedule(schedule, operationSchedule, oldSchedule);
+                        getParentFragmentManager().popBackStack();
+                    }
                 }
+
                 break;
             case (R.id.buttonCancelSchedule):
                 processCancelSchedule();
@@ -240,11 +251,16 @@ public class ActionSwitchScheduleFragment extends Fragment implements View.OnCli
      *
      */
 
-    private void processActionSchedule() {
+    private Boolean processActionSchedule() {
 
         MyHomeIotTools tool;
         int duration;
         tool = new MyHomeIotTools();
+
+        if (!checkRulesControls()) {
+            errorMessage();
+            return false;
+        }
 
         duration = tool.diffDate(
                 binding.timePickerFrom.getHour(),
@@ -261,16 +277,37 @@ public class ActionSwitchScheduleFragment extends Fragment implements View.OnCli
             schedule.setScheduleState(IOT_STATE_SCHEDULE.ACTIVE_SCHEDULE);
         }
 
-
+        return true;
     }
 
 
+    private Boolean checkRulesControls() {
+
+        int time1;
+        int time2;
+
+        time1 = (binding.timePickerFrom.getHour() * 3600) + (binding.timePickerFrom.getMinute() * 60);
+        time2 = (binding.timePickerTo.getHour() * 3600) + (binding.timePickerTo.getMinute() * 60);
+
+        if (time1 >= time2) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    private void errorMessage() {
+
+        AlertDialog.Builder builder;
+        builder = new AlertDialog.Builder(getActivity());
+        builder.setIcon(R.drawable.ic_action_error);
+        builder.setTitle(R.string.error);
+        builder.setMessage(R.string.error_dates);
+        builder.create();
+        builder.show();
 
 
 
-
-
-
-
+    }
 
 }

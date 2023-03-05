@@ -2083,23 +2083,46 @@ public abstract class IotDevice implements Serializable {
      * @param schedule es el programa a chequear
      * @return true si se puede añadir o modificar. False en caso contrario.
      */
-    public Boolean checkValidSchedule(IotScheduleDevice schedule) {
+    public Boolean checkValidSchedule(IotScheduleDevice schedule, String oldScheduleId) {
 
-        int firstInterval;
-        int secondInterval;
-
-
-        firstInterval = (schedule.getHour() * 3600) + (schedule.getMinute() * 60) + schedule.getSecond();
-        secondInterval = firstInterval + schedule.duration;
-
+        int beginInterval;
+        int endInterval;
+        int seconds;
+        int i;
+        ArrayList<IotScheduleDevice> listSchedules;
 
 
+        listSchedules = getSchedules();
+        seconds = (schedule.getHour() * 3600) + (schedule.getMinute() * 60) + schedule.getSecond();
 
+        if (listSchedules != null) {
+            for(i=0;i<listSchedules.size();i++) {
+                if (listSchedules.get(i).getScheduleId().equals(oldScheduleId)) {
+                    continue;
+                }
+                beginInterval = (listSchedules.get(i).getHour() * 3600) +
+                        (listSchedules.get(i).getMinute() * 60) + listSchedules.get(i).second;
+                endInterval = beginInterval + listSchedules.get(i).duration;
+                if (!checkInterval(seconds, beginInterval, endInterval)) {
+                    return false;
+
+                } else {
+                    if(!checkInterval((seconds + listSchedules.get(i).duration), beginInterval, endInterval)) {
+                        return false;
+                    }
+                }
+            }
+        }
         return true;
-
     }
 
+    private Boolean checkInterval(int seconds, int beginInterval, int endInterval) {
 
-
+        if((seconds >= beginInterval) && (seconds < endInterval)) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 
 }
