@@ -68,6 +68,10 @@ public class ThermostatActivity extends AppCompatActivity implements View.OnClic
         mBinding.imageUpTemperature.setOnClickListener(this);
         mBinding.imageUpTemperature.setOnLongClickListener(this);
         mBinding.imageUpTemperature.setOnTouchListener(this);
+        autodecremento = false;
+        autoincremento = false;
+        handler = new Handler();
+        counter = null;
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         String data = bundle.getString(IOT_LABELS_JSON.DEVICES.getValorTextoJson());
