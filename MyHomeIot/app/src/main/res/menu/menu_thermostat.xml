@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/item_info_thermostat"
+        android:icon="@drawable/ic_action_info"
+        android:title="info">
+
+    </item>
+
+    <item
+        android:id="@+id/item_settings_thermostat"
+        android:icon="@drawable/ic_settings"
+        android:title="@string/settings">
+
+    </item>
+
+    <item
+        android:id="@+id/item_new_schedule"
+        android:icon="@drawable/ic_action_new_schedule"
+        android:title="new">
+
+    </item>
+
+    <item
+        android:id="@+id/item_comandos_thermostat"
+        android:icon="@drawable/ic_action_options"
+        android:title="mas...">
+
+    </item>
+
+</menu>

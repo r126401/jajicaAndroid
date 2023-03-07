@@ -111,6 +111,9 @@ public class IotRoomsDevices {
             return -2;
         }
         for (i=0;i<deviceList.size();i++) {
+            if (deviceList.get(i).getDeviceId() == null) {
+                return i;
+            }
             if(idDevice.equals(deviceList.get(i).getDeviceId())) {
                 return i;
             }

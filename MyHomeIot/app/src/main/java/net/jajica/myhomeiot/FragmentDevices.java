@@ -554,6 +554,7 @@ device.setOnReceivedSpontaneousEndSchedule(new IotDevice.OnReceivedSpontaneousEn
             case CRONOTERMOSTATO:
                 Intent launcherThermostat = new Intent(context, ThermostatActivity.class);
                 launcherThermostat.putExtra(IOT_LABELS_JSON.DEVICES.getValorTextoJson(), device.getDispositivoJson().toString());
+                startActivity(launcherThermostat);
                 break;
         }
 

@@ -103,6 +103,8 @@ public class IotDeviceThermometer extends IotDevice implements Serializable {
         this.onReceivedSpontaneousChangeTemperature = onReceivedSpontaneousChangeTemperature;
     }
 
+
+
     @Override
     protected void processCommand(String topic, MqttMessage message) {
         super.processCommand(topic, message);

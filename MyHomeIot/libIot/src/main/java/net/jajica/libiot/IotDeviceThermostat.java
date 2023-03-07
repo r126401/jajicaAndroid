@@ -274,26 +274,38 @@ public class IotDeviceThermostat extends IotDeviceThermometer implements Seriali
         }
 
     }
-/*
-    @Override
-    protected void processSpontaneous(String topic, MqttMessage message) {
-        super.processSpontaneous(topic, message);
-        IOT_SPONTANEOUS_TYPE typeInform;
-        String mensaje = new String(message.getPayload());
-        typeInform = getSpontaneousType(mensaje);
-        IOT_CODE_RESULT result;
-        switch (typeInform) {
 
-            case CAMBIO_TEMPERATURA:
-                processSpontaneousChangeTemperature(mensaje);
-                if (onReceivedSpontaneousChangeTemperature != null) {
-                    onReceivedSpontaneousChangeTemperature.onReceivedSpontaneousChangeTemperature();
-                }
-                break;
+
+
+
+        @Override
+        protected void processSpontaneous(String topic, MqttMessage message) {
+            super.processSpontaneous(topic, message);
+            IOT_SPONTANEOUS_TYPE typeInform;
+            String mensaje = new String(message.getPayload());
+            typeInform = getSpontaneousType(mensaje);
+            IOT_CODE_RESULT result;
+            switch (typeInform) {
+
+                case CAMBIO_UMBRAL_TEMPERATURA:
+                    result = processSpontaneousChangeThresholdTemperature(mensaje);
+                    if (onReceivedSetThresholdTemperature != null) {
+                        onReceivedSetThresholdTemperature.onReceivedSetThresholdTemperature(result);
+                    }
+                    break;
+
+            }
+
+
         }
 
+    private IOT_CODE_RESULT processSpontaneousChangeThresholdTemperature(String mensaje) {
+
+        return processCommonParameters(mensaje);
+
     }
-*/
+
+
     @Override
     protected IOT_CODE_RESULT processSpontaneousChangeTemperature(String message) {
         setThresholdTemperatureFromReport(message);

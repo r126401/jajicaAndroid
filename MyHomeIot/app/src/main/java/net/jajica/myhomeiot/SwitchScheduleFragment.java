@@ -231,6 +231,12 @@ public class SwitchScheduleFragment extends Fragment implements SwipeRefreshLayo
                         Log.i(TAG, "device: Fragment" + device.hashCode());
                         ActionSwitchScheduleFragment actionSwitchScheduleFragment;
                         actionSwitchScheduleFragment = new ActionSwitchScheduleFragment(schedule);
+                        actionSwitchScheduleFragment.setOnActionSchedule(new ActionSwitchScheduleFragment.OnActionSchedule() {
+                            @Override
+                            public void onActionSchedule(IotScheduleDeviceSwitch schedule, ActionSwitchScheduleFragment.OPERATION_SCHEDULE operationSchedule, String adittionalInfo) {
+                                device.commandModifyScheduleDevice(schedule);
+                            }
+                        });
                         FragmentManager fragmentManager = getParentFragmentManager();
                         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                         fragmentTransaction.replace(R.id.containerSwitch, actionSwitchScheduleFragment, "modifySchedule");

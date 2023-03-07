@@ -43,7 +43,7 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
     private IotDeviceSwitch device;
     private IotMqttConnection cnx;
 
-    private ActivitySwitchBinding mbinding;
+    private ActivitySwitchBinding mBinding;
 
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
@@ -53,7 +53,6 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
 
     private InfoDeviceFragment infoDeviceFragment;
 
-    private Bundle bundleSchedule;
 
 
     /**
@@ -64,7 +63,7 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
     private void initActivity() {
         JSONObject jsonObject = null;
 
-        mbinding.bottomActionsSwitch.setOnItemSelectedListener(this);
+        mBinding.bottomActionsSwitch.setOnItemSelectedListener(this);
         fragmentManager = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
         Intent intent = getIntent();
@@ -75,7 +74,7 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
         } catch (JSONException exception) {
             Log.e(TAG, "Error al recibir el json desde MainActivity");
         }
-        mbinding.imagePanelSwitch.setOnClickListener(this);
+        mBinding.imagePanelSwitch.setOnClickListener(this);
 
         device = new IotDeviceSwitch();
         if (data != null) {
@@ -96,8 +95,8 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.activity_switch);
 
-        mbinding = ActivitySwitchBinding.inflate(getLayoutInflater());
-        setContentView(mbinding.getRoot());
+        mBinding = ActivitySwitchBinding.inflate(getLayoutInflater());
+        setContentView(mBinding.getRoot());
 
 
         initActivity();
@@ -321,15 +320,15 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
     }
 
     private void paintTextStatus() {
-        mbinding.textDeviceInfoSwitch.setText(device.getDeviceName());
+        mBinding.textDeviceInfoSwitch.setText(device.getDeviceName());
     }
 
     private void paintAlarmStatus() {
 
         if (device.getAlarms().activeAlarms()) {
-            mbinding.imageAlarmSwitch.setVisibility(View.VISIBLE);
+            mBinding.imageAlarmSwitch.setVisibility(View.VISIBLE);
         } else {
-            mbinding.imageAlarmSwitch.setVisibility(View.INVISIBLE);
+            mBinding.imageAlarmSwitch.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -339,9 +338,9 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
     private void paintBrokerStatus() {
 
         if (cnx.isConnected()) {
-            mbinding.imageBrokerConnected.setImageResource(R.drawable.ic_wifi_on);
+            mBinding.imageBrokerConnected.setImageResource(R.drawable.ic_wifi_on);
         } else {
-            mbinding.imageBrokerConnected.setImageResource(R.drawable.ic_wifi_off);
+            mBinding.imageBrokerConnected.setImageResource(R.drawable.ic_wifi_off);
             device.setConnectionState(IOT_DEVICE_STATE_CONNECTION.DEVICE_DISCONNECTED);
         }
 
@@ -365,42 +364,42 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
             case NORMAL_AUTOMAN:
                 if (device.getSchedulesSwitch()!= null) {
                     if (device.getSchedulesSwitch().size() > 0) {
-                        mbinding.textStatusSwitch.setVisibility(View.VISIBLE);
-                        mbinding.textStatusSwitch.setText(getResources().getString(R.string.auto));
+                        mBinding.textStatusSwitch.setVisibility(View.VISIBLE);
+                        mBinding.textStatusSwitch.setText(getResources().getString(R.string.auto));
                     } else {
-                        mbinding.textStatusSwitch.setVisibility(View.INVISIBLE);
+                        mBinding.textStatusSwitch.setVisibility(View.INVISIBLE);
                     }
 
                 } else {
-                    mbinding.textStatusSwitch.setVisibility(View.INVISIBLE);
+                    mBinding.textStatusSwitch.setVisibility(View.INVISIBLE);
                 }
 
                 break;
             case NORMAL_MANUAL:
-                mbinding.textStatusSwitch.setText(getResources().getString(R.string.manual));
+                mBinding.textStatusSwitch.setText(getResources().getString(R.string.manual));
                 break;
             case NORMAL_ARRANCANDO:
-                mbinding.textStatusSwitch.setText(getResources().getString(R.string.arrancando));
+                mBinding.textStatusSwitch.setText(getResources().getString(R.string.arrancando));
                 break;
             case NORMAL_SIN_PROGRAMACION:
-                mbinding.textStatusSwitch.setText(getResources().getString(R.string.no_programs));
+                mBinding.textStatusSwitch.setText(getResources().getString(R.string.no_programs));
                 break;
             case UPGRADE_IN_PROGRESS:
-                mbinding.textStatusSwitch.setText(getResources().getString(R.string.upgrade_in_progress));
+                mBinding.textStatusSwitch.setText(getResources().getString(R.string.upgrade_in_progress));
                 break;
             case NORMAL_SYNCHRONIZING:
-                mbinding.textStatusSwitch.setText(getResources().getString(R.string.syncronizing));
+                mBinding.textStatusSwitch.setText(getResources().getString(R.string.syncronizing));
                 break;
             case WAITING_END_START:
-                mbinding.textStatusSwitch.setText(getResources().getString(R.string.waiting_start));
+                mBinding.textStatusSwitch.setText(getResources().getString(R.string.waiting_start));
                 break;
             case START_BEFORE_FACTORY:
-                mbinding.textStatusSwitch.setText(getResources().getString(R.string.start_before_Factory));
+                mBinding.textStatusSwitch.setText(getResources().getString(R.string.start_before_Factory));
                 break;
             case NORMAL_END_ACTIVE_SCHEDULE:
                 break;
             case INDETERMINADO:
-                mbinding.textStatusSwitch.setText(getResources().getString(R.string.unknown));
+                mBinding.textStatusSwitch.setText(getResources().getString(R.string.unknown));
                 break;
         }
 
@@ -421,10 +420,10 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
         }
 
         if (otaVersionAvailable.isOtaVersionAvailable(device.getCurrentOtaVersion())) {
-            mbinding.imageUpgradeFirmwareSwitch.setVisibility(View.VISIBLE);
+            mBinding.imageUpgradeFirmwareSwitch.setVisibility(View.VISIBLE);
 
         } else {
-            mbinding.imageUpgradeFirmwareSwitch.setVisibility(View.INVISIBLE);
+            mBinding.imageUpgradeFirmwareSwitch.setVisibility(View.INVISIBLE);
         }
 
     Log.i(TAG, "Recibidos datos Ota");
@@ -446,10 +445,10 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
 
         IotScheduleDeviceSwitch schedule;
         if (device.getActiveSchedule() == null) {
-            mbinding.gridLayoutSchedule.setVisibility(View.INVISIBLE);
+            mBinding.gridLayoutSchedule.setVisibility(View.INVISIBLE);
             return;
         }
-        mbinding.gridLayoutSchedule.setVisibility(View.VISIBLE);
+        mBinding.gridLayoutSchedule.setVisibility(View.VISIBLE);
         tool = new MyHomeIotTools();
         index = device.searchSchedule(device.getActiveSchedule());
         if (index >= 0) {
@@ -458,11 +457,11 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
             to = tool.convertDuration(schedule.getHour(), schedule.getMinute(), schedule.getDuration());
             currentTimeSchedule = tool.currentDate2DurationSchedule(from);
             progress = (currentTimeSchedule * 100) / schedule.getDuration();
-            mbinding.progressSchedule.setProgress(progress);
-            mbinding.textStartSchedule.setText(from);
-            mbinding.textEndSchedule.setText(to);
+            mBinding.progressSchedule.setProgress(progress);
+            mBinding.textStartSchedule.setText(from);
+            mBinding.textEndSchedule.setText(to);
         } else {
-            mbinding.gridLayoutSchedule.setVisibility(View.INVISIBLE);
+            mBinding.gridLayoutSchedule.setVisibility(View.INVISIBLE);
         }
 
 
@@ -478,30 +477,30 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
     switch (device.getConnectionState()) {
 
         case UNKNOWN:
-            mbinding.progressOperationSwitch.setVisibility(View.INVISIBLE);
+            mBinding.progressOperationSwitch.setVisibility(View.INVISIBLE);
             break;
         case DEVICE_CONNECTED:
-            mbinding.imageConnectedDeviceSwitch.setImageResource(R.drawable.ic_action_connect_ok);
+            mBinding.imageConnectedDeviceSwitch.setImageResource(R.drawable.ic_action_connect_ok);
             break;
         case DEVICE_DISCONNECTED:
-            mbinding.imageConnectedDeviceSwitch.setImageResource(R.drawable.ic_action_connect_nok);
+            mBinding.imageConnectedDeviceSwitch.setImageResource(R.drawable.ic_action_connect_nok);
             break;
         case DEVICE_WAITING_RESPONSE:
-            mbinding.imageConnectedDeviceSwitch.setImageResource(R.drawable.ic_action_waiting_response);
+            mBinding.imageConnectedDeviceSwitch.setImageResource(R.drawable.ic_action_waiting_response);
             break;
         case DEVICE_ERROR_COMMUNICATION:
         case DEVICE_NO_SUBSCRIPT:
         case DEVICE_ERROR_NO_SUBSCRIPT:
         case DEVICE_ERROR_SUBSCRIPTION:
-            mbinding.imageConnectedDeviceSwitch.setImageResource(R.drawable.ic_action_error);
+            mBinding.imageConnectedDeviceSwitch.setImageResource(R.drawable.ic_action_error);
             break;
 
     }
 
     if (device.getConnectionState() == IOT_DEVICE_STATE_CONNECTION.DEVICE_WAITING_RESPONSE) {
-        mbinding.progressOperationSwitch.setVisibility(View.VISIBLE);
+        mBinding.progressOperationSwitch.setVisibility(View.VISIBLE);
     } else {
-        mbinding.progressOperationSwitch.setVisibility(View.INVISIBLE);
+        mBinding.progressOperationSwitch.setVisibility(View.INVISIBLE);
     }
 
 }
@@ -515,16 +514,16 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
     switch (device.getRelay()) {
 
         case OFF:
-            mbinding.imagePanelSwitch.setImageResource(R.drawable.ic_switch_off);
-            mbinding.imagePanelSwitch.setTag(IOT_SWITCH_RELAY.OFF);
+            mBinding.imagePanelSwitch.setImageResource(R.drawable.ic_switch_off);
+            mBinding.imagePanelSwitch.setTag(IOT_SWITCH_RELAY.OFF);
             break;
         case ON:
-            mbinding.imagePanelSwitch.setImageResource(R.drawable.ic_switch_on);
-            mbinding.imagePanelSwitch.setTag(IOT_SWITCH_RELAY.ON);
+            mBinding.imagePanelSwitch.setImageResource(R.drawable.ic_switch_on);
+            mBinding.imagePanelSwitch.setTag(IOT_SWITCH_RELAY.ON);
             break;
         case UNKNOWN:
-            mbinding.imagePanelSwitch.setImageResource(R.drawable.ic_switch_unknown);
-            mbinding.imagePanelSwitch.setTag(IOT_SWITCH_RELAY.UNKNOWN);
+            mBinding.imagePanelSwitch.setImageResource(R.drawable.ic_switch_unknown);
+            mBinding.imagePanelSwitch.setTag(IOT_SWITCH_RELAY.UNKNOWN);
             break;
     }
 }
@@ -591,8 +590,8 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
 
             case (R.id.item_comandos_switch):
                 PopupMenu menu;
-                menu = new PopupMenu(getApplicationContext(),mbinding.bottomActionsSwitch);
-                menu.inflate(R.menu.menu_action_device);
+                menu = new PopupMenu(getApplicationContext(), mBinding.bottomActionsSwitch);
+                menu.inflate(R.menu.menu_action_device_switch);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                     menu.setForceShowIcon(true);
                 }
@@ -670,7 +669,7 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
     private void setSwitch() {
 
         IOT_SWITCH_RELAY statusRelay;
-        statusRelay = (IOT_SWITCH_RELAY) mbinding.imagePanelSwitch.getTag();
+        statusRelay = (IOT_SWITCH_RELAY) mBinding.imagePanelSwitch.getTag();
 
         switch (statusRelay) {
 

@@ -1,9 +1,237 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ThermostatActivity">
+    tools:context=".ThermostatActivity"
+    android:orientation="vertical"
+    android:weightSum="100">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layoutThermostat"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="50">
+
+        <GridLayout
+            android:id="@+id/gridLayoutStatusDevice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:columnCount="5"
+            android:layoutDirection="rtl"
+            android:padding="10dp"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/imageBrokerConnected"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:src="@drawable/ic_wifi_on" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/imageConnectedDeviceThermostat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:src="@drawable/ic_action_connect_ok" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/imageUpgradeFirmwareThermostat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:src="@drawable/ic_action_upgrade"
+                android:visibility="invisible"/>
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/imageAlarmDevice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:src="@drawable/ic_action_alarm"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/textDeviceInfoThermostat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginEnd="10dp"
+                android:drawableLeft="@drawable/ic_action_device"
+                android:text="@string/move_device" />
+
+        </GridLayout>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textStatusThermostat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/auto"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/gridLayoutStatusDevice" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textTemperature"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/themometer"
+            android:text="25.5"
+            android:textSize="40dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textStatusThermostat" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/appCompatTextView7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ºC"
+            android:textSize="40dp"
+            app:layout_constraintBottom_toBottomOf="@+id/textTemperature"
+            app:layout_constraintStart_toEndOf="@+id/textTemperature"
+            app:layout_constraintTop_toTopOf="@+id/textTemperature">
+
+        </androidx.appcompat.widget.AppCompatTextView>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textThresholdTemperature"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:drawableStart="@drawable/ic_action_heating"
+            android:text="21.5"
+            android:textSize="30dp"
+            app:layout_constraintBottom_toTopOf="@+id/gridLayoutSchedule"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textTemperature" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/appCompatTextView6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ºC"
+            android:textSize="30dp"
+            app:layout_constraintBottom_toBottomOf="@+id/textThresholdTemperature"
+            app:layout_constraintStart_toEndOf="@+id/textThresholdTemperature">
+
+        </androidx.appcompat.widget.AppCompatTextView>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imageDownTemperature"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_action_left"
+            app:layout_constraintBottom_toBottomOf="@+id/textThresholdTemperature"
+            app:layout_constraintEnd_toStartOf="@+id/textThresholdTemperature"
+            app:layout_constraintTop_toTopOf="@+id/textThresholdTemperature"
+            android:layout_marginRight="10dp"/>
+
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imageUpTemperature"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_action_right"
+            app:layout_constraintBottom_toBottomOf="@+id/textThresholdTemperature"
+            app:layout_constraintStart_toEndOf="@+id/appCompatTextView6"
+            app:layout_constraintTop_toTopOf="@+id/textThresholdTemperature"
+            android:layout_marginStart="10dp"/>
+
+
+        <GridLayout
+            android:id="@+id/gridLayoutSchedule"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:columnCount="3"
+
+            app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/textStartSchedule"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginEnd="10dp"
+                android:drawableStart="@drawable/ic_ntp_on"
+                android:drawablePadding="5dp"
+                android:gravity="center"
+                android:src="@drawable/ic_move"
+                android:text="12:00" />
+
+            <ProgressBar
+                android:id="@+id/progressSchedule"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:max="100">
+
+            </ProgressBar>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/textEndSchedule"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginStart="10dp"
+                android:drawableEnd="@drawable/ic_ntp_on"
+                android:drawablePadding="5dp"
+                android:gravity="center"
+                android:src="@drawable/ic_move"
+                android:text="14:00" />
+
+
+        </GridLayout>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imageHeatingThermostat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/heating"
+            app:layout_constraintBottom_toBottomOf="@+id/textThresholdTemperature"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/appCompatTextView7"
+            app:layout_constraintTop_toTopOf="@+id/textTemperature" />
+
+        <ProgressBar
+            android:id="@+id/progressOperationThermostat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/textTemperature">
+
+        </ProgressBar>
+
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottomNavigationView"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            app:menu="@menu/menu_thermostat"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:labelVisibilityMode="unlabeled"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+    <FrameLayout
+        android:id="@+id/containerThermostat"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="50">
+
+    </FrameLayout>
+
+
+</LinearLayout>
