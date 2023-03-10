@@ -70,6 +70,14 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         this.roomName = roomName;
     }
 
+    public void setDeviceList(ArrayList<IotDevice> deviceList) {
+        this.deviceList = deviceList;
+    }
+
+    public ArrayList<IotDevice> getDeviceList() {
+        return deviceList;
+    }
+
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

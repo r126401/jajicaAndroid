@@ -27,7 +27,7 @@
 
             <TextView
                 android:id="@+id/textMessageSchedule1"
-                style="@style/textScheduleStyle"
+                style="@style/textThresholdTemperature"
                 android:layout_width="250dp"
                 android:layout_height="wrap_content"
                 android:text="No hay ningun programa configurado aún.\n"
@@ -40,7 +40,7 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/appCompatTextView4"
-                style="@style/textScheduleStyle"
+                style="@style/textThresholdTemperature"
                 android:layout_width="250dp"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_action_new_schedule"

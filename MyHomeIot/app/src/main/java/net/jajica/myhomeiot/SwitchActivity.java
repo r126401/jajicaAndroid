@@ -256,7 +256,7 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.containerSwitch, infoDeviceFragment, "infoDeviceFragment");
         fragmentTransaction.setReorderingAllowed(true);
-        fragmentTransaction.addToBackStack("schedule");
+        fragmentTransaction.addToBackStack("scheduleSwitch");
         fragmentTransaction.commit();
 
     }
@@ -535,7 +535,7 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
         Log.i(TAG, "device es : switch" + device.hashCode());
         switchScheduleFragment = new SwitchScheduleFragment(device);
         fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.containerSwitch, switchScheduleFragment, "Schedule");
+        fragmentTransaction.add(R.id.containerSwitch, switchScheduleFragment, "ScheduleSwitch");
         fragmentTransaction.setReorderingAllowed(true);
         fragmentTransaction.commit();
 
@@ -574,13 +574,13 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
 
         switch (item.getItemId()) {
 
-            case (R.id.item_new_schedule):
+            case (R.id.item_new_schedule_thermostat):
                 fragmentTransaction = fragmentManager.beginTransaction();
                 actionSwitchScheduleFragment = new ActionSwitchScheduleFragment(null);
                 actionSwitchScheduleFragment.setOnActionSchedule(this);
-                fragmentTransaction.replace(R.id.containerSwitch, actionSwitchScheduleFragment, "FragmentActionSchedule");
+                fragmentTransaction.replace(R.id.containerSwitch, actionSwitchScheduleFragment, "NewScheduleSwitch");
                 fragmentTransaction.setReorderingAllowed(true);
-                fragmentTransaction.addToBackStack("schedule");
+                fragmentTransaction.addToBackStack("scheduleSwitch");
                 fragmentTransaction.commit();
                 break;
 

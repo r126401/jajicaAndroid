@@ -16,14 +16,14 @@
     </item>
 
     <item
-        android:id="@+id/item_new_schedule"
+        android:id="@+id/item_new_schedule_thermostat"
         android:icon="@drawable/ic_action_new_schedule"
         android:title="new">
 
     </item>
 
     <item
-        android:id="@+id/item_comandos_thermostat"
+        android:id="@+id/item_commands_thermostat"
         android:icon="@drawable/ic_action_options"
         android:title="mas...">
 

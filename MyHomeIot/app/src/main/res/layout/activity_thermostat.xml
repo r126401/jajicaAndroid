@@ -13,7 +13,7 @@
         android:id="@+id/layoutThermostat"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="50">
+        android:layout_weight="40">
 
         <GridLayout
             android:id="@+id/gridLayoutStatusDevice"
@@ -149,7 +149,7 @@
             android:layout_height="wrap_content"
             android:columnCount="3"
 
-            app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
+            app:layout_constraintBottom_toTopOf="@+id/bottomActionThermostat"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
 
@@ -213,7 +213,7 @@
 
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bottomNavigationView"
+            android:id="@+id/bottomActionThermostat"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             app:menu="@menu/menu_thermostat"
@@ -229,7 +229,7 @@
         android:id="@+id/containerThermostat"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="50">
+        android:layout_weight="60">
 
     </FrameLayout>
 

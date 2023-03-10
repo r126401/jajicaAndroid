@@ -14,9 +14,9 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:src="@drawable/ic_action_unlock"
-        app:layout_constraintEnd_toStartOf="@+id/layoutWeek"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
 
 
     <androidx.appcompat.widget.AppCompatImageView
@@ -43,48 +43,77 @@
         android:id="@+id/layoutHoursSchedule"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/layoutWeek"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginBottom="10dp"
-        android:layout_marginTop="10dp">
+        app:layout_constraintTop_toTopOf="parent">
 
 
         <TextView
             android:id="@+id/textFrom"
+            style="@style/textThresholdTemperature"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/from"
-            app:layout_constraintTop_toTopOf="parent"
-            style="@style/textThresholdTemperature"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/textFromHour"
+            style="@style/textThresholdTemperature"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="--:--"
-            style="@style/textThresholdTemperature"
-            app:layout_constraintStart_toEndOf="@+id/textFrom"/>
+            app:layout_constraintStart_toEndOf="@+id/textFrom" />
 
         <TextView
             android:id="@+id/textTo"
+            style="@style/textThresholdTemperature"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/to"
-            app:layout_constraintStart_toEndOf="@+id/textFromHour"
-            style="@style/textThresholdTemperature"/>
+            app:layout_constraintStart_toEndOf="@+id/textFromHour" />
 
         <TextView
             android:id="@+id/textToHour"
+            style="@style/textThresholdTemperature"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toEndOf="@+id/textFromHour"
             android:text="--:--"
-            style="@style/textThresholdTemperature"/>
+            app:layout_constraintStart_toEndOf="@+id/textFromHour" />
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/layoutThreshold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/layoutWeek"
+        app:layout_constraintEnd_toEndOf="@+id/layoutHoursSchedule"
+        app:layout_constraintStart_toStartOf="@+id/layoutHoursSchedule"
+        app:layout_constraintTop_toBottomOf="@+id/layoutHoursSchedule">
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textThresholdTemperature"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="--.-"
+            android:textSize="30dp">
+
+        </androidx.appcompat.widget.AppCompatTextView>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textUnityThreshold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" ºC"
+            android:textSize="30dp">
+
+        </androidx.appcompat.widget.AppCompatTextView>
+
+
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/layoutWeek"

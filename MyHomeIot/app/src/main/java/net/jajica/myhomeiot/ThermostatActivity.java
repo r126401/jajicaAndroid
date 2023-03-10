@@ -1,21 +1,30 @@
 package net.jajica.myhomeiot;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import com.google.android.material.navigation.NavigationBarView;
+
 import net.jajica.libiot.IOT_CODE_RESULT;
+import net.jajica.libiot.IOT_COMMANDS;
 import net.jajica.libiot.IOT_DEVICE_STATE;
 import net.jajica.libiot.IOT_DEVICE_STATE_CONNECTION;
 import net.jajica.libiot.IOT_JSON_RESULT;
@@ -27,6 +36,7 @@ import net.jajica.libiot.IotDeviceThermometer;
 import net.jajica.libiot.IotDeviceThermostat;
 import net.jajica.libiot.IotMqttConnection;
 import net.jajica.libiot.IotOtaVersionAvailable;
+import net.jajica.libiot.IotScheduleDeviceThermostat;
 import net.jajica.myhomeiot.databinding.ActivityThermostatBinding;
 
 import org.json.JSONException;
@@ -34,7 +44,8 @@ import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 
-public class ThermostatActivity extends AppCompatActivity implements View.OnClickListener, View.OnLongClickListener, View.OnTouchListener{
+public class ThermostatActivity extends AppCompatActivity implements View.OnClickListener, View.OnLongClickListener, View.OnTouchListener,
+        NavigationBarView.OnItemSelectedListener, ActionThermostatScheduleFragment.OnActionSchedule {
 
     private final String TAG = "ThermostatActivity";
     private IotDeviceThermostat device;
@@ -42,6 +53,9 @@ public class ThermostatActivity extends AppCompatActivity implements View.OnClic
     private ActivityThermostatBinding mBinding;
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
+
+    private ThermostatScheduleFragment thermostatScheduleFragment;
+    private ActionThermostatScheduleFragment actionThermostatScheduleFragment;
     private CountDownTimer counter;
     private Handler handler;
     private Boolean autoincremento;
@@ -68,6 +82,7 @@ public class ThermostatActivity extends AppCompatActivity implements View.OnClic
         mBinding.imageUpTemperature.setOnClickListener(this);
         mBinding.imageUpTemperature.setOnLongClickListener(this);
         mBinding.imageUpTemperature.setOnTouchListener(this);
+        mBinding.bottomActionThermostat.setOnItemSelectedListener(this);
         autodecremento = false;
         autoincremento = false;
         handler = new Handler();
@@ -130,7 +145,7 @@ public class ThermostatActivity extends AppCompatActivity implements View.OnClic
             public void onReceivedInfoDevice(IOT_CODE_RESULT resultCode) {
 
                 Log.i(TAG, "kk " + device.getDeviceId());
-                //launchInfoDeviceFragment();
+                launchInfoDeviceFragment();
 
 
             }
@@ -156,7 +171,7 @@ public class ThermostatActivity extends AppCompatActivity implements View.OnClic
                 if (resultCode == IOT_CODE_RESULT.RESUT_CODE_OK) {
                     Log.i(TAG, "Recibida programacion desde el dispositivo");
                     paintPanelProgressSchedule();
-                    //paintScheduleFragment();
+                    paintScheduleFragment();
                 }
             }
         });
@@ -243,6 +258,8 @@ public class ThermostatActivity extends AppCompatActivity implements View.OnClic
         });
     }
 
+    private void launchInfoDeviceFragment() {
+    }
 
 
     private IOT_MQTT_STATUS_CONNECTION createConnectionMqtt() {
@@ -610,6 +627,81 @@ public class ThermostatActivity extends AppCompatActivity implements View.OnClic
         return false;
     }
 
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+        switch (item.getItemId()) {
+
+            case (R.id.item_info_thermostat):
+                launchInfoThermostat();
+                break;
+            case (R.id.item_settings_thermostat):
+                launchSettingsThermostat();
+                break;
+            case (R.id.item_new_schedule_thermostat):
+                launchNewScheduleThermostat();
+
+                break;
+            case (R.id.item_commands_thermostat):
+                launchMenucommandsThermostat();
+                break;
+
+        }
+
+
+        return false;
+    }
+
+    private void launchMenucommandsThermostat() {
+        PopupMenu menu;
+        menu = new PopupMenu(getApplicationContext(), mBinding.bottomActionThermostat);
+        menu.inflate(R.menu.menu_action_device_switch);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            menu.setForceShowIcon(true);
+        }
+        menu.show();
+        menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+
+                switch (item.getItemId()) {
+                    case (R.id.item_reset_device):
+                        confirmCommand(R.drawable.ic_action_reset, R.string.reset_device, R.string.confirm_reset, IOT_COMMANDS.RESET);
+                        break;
+                    case (R.id.item_factory_reset_device):
+                        confirmCommand(R.drawable.ic_action_factory_reset, R.string.factory_reset_device, R.string.confirm_factory_reset, IOT_COMMANDS.FACTORY_RESET);
+                        break;
+                    case (R.id.item_upgrade_firmware_device):
+                        confirmCommand(R.drawable.ic_action_upgrade, R.string.upgrade_device, R.string.confirm_upgrade_firmware, IOT_COMMANDS.UPGRADE_FIRMWARE);
+                        break;
+                }
+
+                return false;
+            }
+        });
+    }
+
+    private void launchNewScheduleThermostat() {
+
+        fragmentTransaction = fragmentManager.beginTransaction();
+        actionThermostatScheduleFragment = new ActionThermostatScheduleFragment(null);
+        actionThermostatScheduleFragment.setOnActionSchedule(this);
+        fragmentTransaction.replace(R.id.containerThermostat, actionThermostatScheduleFragment, "NewScheduleThermostat");
+        fragmentTransaction.setReorderingAllowed(true);
+        fragmentTransaction.addToBackStack("ScheduleThermostat");
+        fragmentTransaction.commit();
+    }
+
+    private void launchSettingsThermostat() {
+    }
+
+    private void launchInfoThermostat() {
+
+        device.commandGetInfoDevice();
+    }
+
+
+
     class modificacionPulsacionLargaDoble implements Runnable {
 
         TextView textControl;
@@ -647,4 +739,110 @@ public class ThermostatActivity extends AppCompatActivity implements View.OnClic
 
         }
     }
+
+    private void paintScheduleFragment() {
+        Log.i(TAG, "device es : Thermostat" + device.hashCode());
+        thermostatScheduleFragment = new ThermostatScheduleFragment(device);
+        fragmentManager = getSupportFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.add(R.id.containerThermostat, thermostatScheduleFragment, "ScheduleThermostat");
+        fragmentTransaction.setReorderingAllowed(true);
+        fragmentTransaction.commit();
+
+        thermostatScheduleFragment.setOnSendEventSchedule(new ThermostatScheduleFragment.OnSendEventSchedule() {
+            @Override
+            public void onSendEventSchedule(ActionThermostatScheduleFragment.OPERATION_SCHEDULE operation) {
+                switch (operation) {
+
+                    case NEW_SCHEDULE:
+                        break;
+                    case DELETE_SCHEDULE:
+                        break;
+                    case MODIFY_SCHEDULE:
+                        break;
+                    case DISPLAY_SCHEDULE:
+                        paintPanelProgressSchedule();
+                        break;
+                    case REFRESH_SCHEDULE:
+                        device.commandGetStatusDevice();
+                        updateDevice();
+
+                }
+            }
+        });
+
+    }
+
+    @Override
+    public void onActionSchedule(IotScheduleDeviceThermostat schedule, ActionThermostatScheduleFragment.OPERATION_SCHEDULE operationSchedule, String aditionalInfo) {
+
+        if (operationSchedule == ActionThermostatScheduleFragment.OPERATION_SCHEDULE.NEW_SCHEDULE) {
+            if (device.checkValidSchedule(schedule, null)) {
+                device.commandNewScheduleDevice(schedule);
+            }
+
+        }
+
+        if (operationSchedule == ActionThermostatScheduleFragment.OPERATION_SCHEDULE.MODIFY_SCHEDULE) {
+
+            if (device.checkValidSchedule(schedule, aditionalInfo)) {
+                device.commandModifyScheduleDevice(schedule);
+            }
+
+        }
+
+
+    }
+
+    private void confirmCommand(int icon, int title, int message, IOT_COMMANDS command) {
+
+        AlertDialog.Builder alert;
+        alert = new AlertDialog.Builder(this);
+        alert.setIcon(icon);
+        alert.setTitle(title);
+        alert.setMessage(message);
+
+        alert.setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                switch (command) {
+
+
+                    case RESET:
+                        device.commandResetDevice();
+                        break;
+                    case FACTORY_RESET:
+                        device.commandFactoryReset();
+                        break;
+                    case UPGRADE_FIRMWARE:
+                        //device.commandUpgradeFirmware();
+                        sceneUpgradeFirmware();
+
+                }
+
+            }
+        });
+
+        alert.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
+        alert.show();
+
+    }
+
+    private void sceneUpgradeFirmware() {
+
+        UpgradeFragment scene;
+        device.commandUpgradeFirmware();
+        scene = new UpgradeFragment(this, device, 120000);
+        scene.show(fragmentManager.beginTransaction(), "upgrade device");
+
+    }
+
+
 }

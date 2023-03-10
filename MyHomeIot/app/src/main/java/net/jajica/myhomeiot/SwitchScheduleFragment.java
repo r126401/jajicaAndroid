@@ -241,7 +241,7 @@ public class SwitchScheduleFragment extends Fragment implements SwipeRefreshLayo
                         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                         fragmentTransaction.replace(R.id.containerSwitch, actionSwitchScheduleFragment, "modifySchedule");
                         fragmentTransaction.setReorderingAllowed(true);
-                        fragmentTransaction.addToBackStack("schedule");
+                        fragmentTransaction.addToBackStack("scheduleSwitch");
                         fragmentTransaction.commit();
 
 

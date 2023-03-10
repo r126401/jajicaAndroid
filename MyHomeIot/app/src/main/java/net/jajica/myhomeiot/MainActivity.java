@@ -63,10 +63,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     private ActivityMainBinding mbinding;
     private ViewPagerAdapter viewPagerAdapter;
     
-    private ArrayList<IotDeviceUnknown> unknownDeviceList;
-    private ArrayList<IotDeviceSwitch> switchDeviceList;
-    private ArrayList<IotDeviceThermometer> thermometerDeviceList;
-    private ArrayList<IotDeviceThermostat> thermostatList;
+
 
 
 
@@ -636,18 +633,32 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         List<Fragment> listFragments;
         ArrayList<IotDevice> devices;
         IotDevice device;
+        int index = mbinding.tabs.getSelectedTabPosition();
+        mbinding.tabs.getTabAt(index);
+        String dat = mbinding.tabs.getTabAt(index).getText().toString();
+        device = configuration.getIotDeviceObject(configuration.getCurrentSite(), dat, deviceId);
         fragmentManager = getSupportFragmentManager();
         listFragments = fragmentManager.getFragments();
-        for (j = 0; j < listFragments.size(); j++) {
-            fragmentDevices = (FragmentDevices) listFragments.get(j);
-            devices = fragmentDevices.getDeviceList();
-            for (i = 0; i < devices.size(); i++) {
-                if ((device = devices.get(i)).getDeviceId().equals(deviceId)) {
-                    fragmentDevices.connectUnknownDevice((IotDeviceUnknown) device, i);
-                    device.commandGetStatusDevice();
+        fragmentDevices = (FragmentDevices) listFragments.get(index);
+        //fragmentDevices = (FragmentDevices) fragmentManager.findFragmentById(index);
+        fragmentDevices.addNewDevice(device);
+        if (fragmentDevices.getDeviceList() == null) {
+            fragmentDevices.connectUnknownDevice((IotDeviceUnknown) device, 0);
+            device.commandGetStatusDevice();
+        } else {
+            for (j = 0; j < listFragments.size(); j++) {
+                fragmentDevices = (FragmentDevices) listFragments.get(j);
+                devices = fragmentDevices.getDeviceList();
+                if (devices != null) {
+                    for (i = 0; i < devices.size(); i++) {
+                        if ((device = devices.get(i)).getDeviceId().equals(deviceId)) {
+                            fragmentDevices.connectUnknownDevice((IotDeviceUnknown) device, i);
+                            device.commandGetStatusDevice();
+                        }
+                    }
                 }
-            }
 
+            }
         }
     }
 

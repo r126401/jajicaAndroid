@@ -122,8 +122,9 @@
         android:layout_height="50dp"
         app:layout_anchor="@+id/nested"
         app:layout_anchorGravity="bottom|center"
-        android:background="@color/colorPrimary"
-        app:menu="@menu/connections_devices_menu"/>
+        android:background="?attr/colorPrimaryContainer"
+        app:menu="@menu/connections_devices_menu"
+        app:labelVisibilityMode="unlabeled"/>
 
 
 

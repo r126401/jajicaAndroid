@@ -38,7 +38,7 @@
 
     </style>
 
-    <style name="textScheduleStyle" parent="Widget.AppCompat.TextView">
+    <style name="textThresholdTemperature" parent="Widget.AppCompat.TextView">
 
         <item name="android:textSize">20dp</item>
         <item name="android:layout_marginStart">5dp</item>

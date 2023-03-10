@@ -2,7 +2,7 @@ package net.jajica.myhomeiot;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.util.Log;
+import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,25 +11,35 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import net.jajica.libiot.IotScheduleDeviceSwitch;
-import net.jajica.myhomeiot.databinding.ListSwitchScheduleBinding;
-import net.jajica.myhomeiot.databinding.ListScheduleEmptyBinding;
 
-import java.lang.reflect.Array;
+import net.jajica.libiot.IotScheduleDeviceThermostat;
+
 import java.util.ArrayList;
 
-public class SwitchScheduleAdapter extends RecyclerView.Adapter<SwitchScheduleAdapter.SwitchScheduleAdapterViewHolder> {
 
-    private static final String TAG = "SwitchScheduleAdapter";
-    private ArrayList<IotScheduleDeviceSwitch> listSchedule;
+import net.jajica.myhomeiot.databinding.ListScheduleEmptyBinding;
+import net.jajica.myhomeiot.databinding.ListThermostatScheduleBinding;
+
+public class ThermostatScheduleAdapter extends RecyclerView.Adapter<ThermostatScheduleAdapter.ThermostatScheduleAdapterViewHolder> {
+
+
+    private final String TAG = "ThermostatScheduleAdapter";
+    private ArrayList<IotScheduleDeviceThermostat> listSchedule;
     private Context context;
+    private ThermostatScheduleAdapterViewHolder holder;
 
-    public void setListSchedule(ArrayList<IotScheduleDeviceSwitch> listSchedule) {
 
+    public void setListSchedule(ArrayList<IotScheduleDeviceThermostat> listSchedule) {
         this.listSchedule = listSchedule;
     }
 
-    private OnItemClickSelected onItemClickSelected;
+
+    public ThermostatScheduleAdapter(ArrayList<IotScheduleDeviceThermostat> listSchedule, Context context) {
+        this.listSchedule = listSchedule;
+        this.context = context;
+    }
+
+    private ThermostatScheduleAdapter.OnItemClickSelected onItemClickSelected;
 
     enum ITEM_TYPE {
         DELETE_SCHEDULE,
@@ -39,45 +49,46 @@ public class SwitchScheduleAdapter extends RecyclerView.Adapter<SwitchScheduleAd
     }
 
     public interface OnItemClickSelected {
-        void onItemClickSelected(ITEM_TYPE event, int position);
+        void onItemClickSelected(ThermostatScheduleAdapter.ITEM_TYPE event, int position);
     }
 
-    public void setOnItemClickSelected(OnItemClickSelected onItemClickSelected) {
+    public void setOnItemClickSelected(ThermostatScheduleAdapter.OnItemClickSelected onItemClickSelected) {
         this.onItemClickSelected = onItemClickSelected;
     }
 
-    public SwitchScheduleAdapter(ArrayList<IotScheduleDeviceSwitch> listSchedule, Context context) {
-        this.listSchedule = listSchedule;
-        this.context = context;
-
-
-    }
 
 
     @NonNull
     @Override
-    public SwitchScheduleAdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        ListSwitchScheduleBinding binding;
+    public ThermostatScheduleAdapter.ThermostatScheduleAdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+
+        ListThermostatScheduleBinding binding;
         ListScheduleEmptyBinding emptyBinding;
+
+        LayoutInflater layoutInflater = LayoutInflater.from(context);
+
         if (listSchedule != null) {
             if (listSchedule.size() == 0) {
                 emptyBinding = ListScheduleEmptyBinding.inflate(layoutInflater, parent, false);
-                return new SwitchScheduleAdapterViewHolder(emptyBinding);
+                return new ThermostatScheduleAdapter.ThermostatScheduleAdapterViewHolder(emptyBinding);
             } else {
-                binding = ListSwitchScheduleBinding.inflate(layoutInflater, parent, false);
-                return new SwitchScheduleAdapterViewHolder(binding);
+                binding = ListThermostatScheduleBinding.inflate(layoutInflater, parent, false);
+                return new ThermostatScheduleAdapter.ThermostatScheduleAdapterViewHolder(binding);
 
             }
         } else {
             emptyBinding = ListScheduleEmptyBinding.inflate(layoutInflater, parent, false);
-            return new SwitchScheduleAdapterViewHolder(emptyBinding);
+            return new ThermostatScheduleAdapter.ThermostatScheduleAdapterViewHolder(emptyBinding);
         }
+
+
+
+
 
 
     }
 
-    private void initArrayWeek(ListSwitchScheduleBinding binding, ArrayList<AppCompatTextView> list) {
+    private void initArrayWeek(ListThermostatScheduleBinding binding, ArrayList<AppCompatTextView> list) {
 
         list.add(binding.layoutWeekSchedule.textSunday);
         list.add(binding.layoutWeekSchedule.textMonday);
@@ -91,7 +102,7 @@ public class SwitchScheduleAdapter extends RecyclerView.Adapter<SwitchScheduleAd
 
 
     @Override
-    public void onBindViewHolder(@NonNull SwitchScheduleAdapterViewHolder holder, @SuppressLint("RecyclerView") int position) {
+    public void onBindViewHolder(@NonNull ThermostatScheduleAdapter.ThermostatScheduleAdapterViewHolder holder, @SuppressLint("RecyclerView") int position) {
 
         if (listSchedule != null) {
             if (listSchedule.size() > 0) {
@@ -103,7 +114,7 @@ public class SwitchScheduleAdapter extends RecyclerView.Adapter<SwitchScheduleAd
 
                         if (onItemClickSelected != null) {
                             holder.mbinding.progressComandSchedule.setVisibility(View.VISIBLE);
-                            onItemClickSelected.onItemClickSelected(ITEM_TYPE.CHANGE_STATUS_SCHEDULE, position);
+                            onItemClickSelected.onItemClickSelected(ThermostatScheduleAdapter.ITEM_TYPE.CHANGE_STATUS_SCHEDULE, position);
                         }
 
                     }
@@ -114,7 +125,7 @@ public class SwitchScheduleAdapter extends RecyclerView.Adapter<SwitchScheduleAd
                     public void onClick(View view) {
 
                         holder.mbinding.progressComandSchedule.setVisibility(View.VISIBLE);
-                        onItemClickSelected.onItemClickSelected(ITEM_TYPE.DELETE_SCHEDULE, position);
+                        onItemClickSelected.onItemClickSelected(ThermostatScheduleAdapter.ITEM_TYPE.DELETE_SCHEDULE, position);
 
                     }
                 });
@@ -122,7 +133,7 @@ public class SwitchScheduleAdapter extends RecyclerView.Adapter<SwitchScheduleAd
                 holder.mbinding.getRoot().setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        onItemClickSelected.onItemClickSelected(ITEM_TYPE.MODIFY_SCHEDULE, position);
+                        onItemClickSelected.onItemClickSelected(ThermostatScheduleAdapter.ITEM_TYPE.MODIFY_SCHEDULE, position);
 
                     }
                 });
@@ -137,9 +148,6 @@ public class SwitchScheduleAdapter extends RecyclerView.Adapter<SwitchScheduleAd
     @Override
     public int getItemCount() {
 
-
-
-
         if (listSchedule != null) {
             if (listSchedule.size() == 0) {
                 return 1;
@@ -150,27 +158,22 @@ public class SwitchScheduleAdapter extends RecyclerView.Adapter<SwitchScheduleAd
             return 1;
         }
 
-
-
-
-
-
-
     }
 
-    public class SwitchScheduleAdapterViewHolder extends RecyclerView.ViewHolder {
 
-        private ListSwitchScheduleBinding mbinding;
+
+    public class ThermostatScheduleAdapterViewHolder extends RecyclerView.ViewHolder {
+
+        private ListThermostatScheduleBinding mbinding;
         private ListScheduleEmptyBinding mEmptyBinding;
-
         private ArrayList<AppCompatTextView> listWeek;
 
-        public SwitchScheduleAdapterViewHolder(ListScheduleEmptyBinding mEmptyBinding) {
+        public ThermostatScheduleAdapterViewHolder(ListScheduleEmptyBinding mEmptyBinding) {
             super(mEmptyBinding.getRoot());
             this.mEmptyBinding = mEmptyBinding;
         }
 
-        public SwitchScheduleAdapterViewHolder(@NonNull ListSwitchScheduleBinding mbinding) {
+        public ThermostatScheduleAdapterViewHolder(@NonNull ListThermostatScheduleBinding mbinding) {
             super(mbinding.getRoot());
             this.mbinding = mbinding;
             listWeek = new ArrayList<>();
@@ -180,7 +183,8 @@ public class SwitchScheduleAdapter extends RecyclerView.Adapter<SwitchScheduleAd
 
     }
 
-    private void paintItemSchedule(SwitchScheduleAdapterViewHolder holder, int position) {
+
+    private void paintItemSchedule(ThermostatScheduleAdapter.ThermostatScheduleAdapterViewHolder holder, int position) {
 
         MyHomeIotTools tool;
         tool = new MyHomeIotTools();
@@ -192,14 +196,27 @@ public class SwitchScheduleAdapter extends RecyclerView.Adapter<SwitchScheduleAd
         paintStatusSchedule(holder, position);
         paintWeekSchedule(holder, position);
         paintActiveSchedule(holder, position);
-        //paintWeekSchedule(holder, position);
+        paintThresholdSchedule(holder, position);
         holder.mbinding.progressComandSchedule.setVisibility(View.INVISIBLE);
 
     }
 
+    private void paintThresholdSchedule(ThermostatScheduleAdapterViewHolder holder, int position) {
+
+        MyHomeIotTools tool;
+        tool = new MyHomeIotTools();
+        String dat;
+        double threshold;
+        threshold = listSchedule.get(position).getThresholdTemperature();
+        dat = String.valueOf(threshold);
+        //dat = tool.formatTemperature(dat);
+
+        holder.mbinding.textThresholdTemperature.setText(dat);
+
+    }
 
 
-    private void paintActiveSchedule(SwitchScheduleAdapterViewHolder holder, int position) {
+    private void paintActiveSchedule(ThermostatScheduleAdapter.ThermostatScheduleAdapterViewHolder holder, int position) {
 
         if (listSchedule.get(position).getActiveSchedule()) {
             holder.mbinding.imageCurrentSchedule.setVisibility(View.VISIBLE);
@@ -208,12 +225,12 @@ public class SwitchScheduleAdapter extends RecyclerView.Adapter<SwitchScheduleAd
         }
     }
 
-    private void paintWeekSchedule(SwitchScheduleAdapterViewHolder holder, int position) {
+    private void paintWeekSchedule(ThermostatScheduleAdapter.ThermostatScheduleAdapterViewHolder holder, int position) {
 
         int mask;
         MyHomeIotTools tool;
         tool = new MyHomeIotTools();
-        IotScheduleDeviceSwitch schedule;
+        IotScheduleDeviceThermostat schedule;
         schedule = listSchedule.get(position);
         mask = schedule.getMask();
         switch (schedule.getScheduleType()) {
@@ -231,7 +248,8 @@ public class SwitchScheduleAdapter extends RecyclerView.Adapter<SwitchScheduleAd
     }
 
 
-    private void paintStatusSchedule(SwitchScheduleAdapterViewHolder holder, int position) {
+
+    private void paintStatusSchedule(ThermostatScheduleAdapter.ThermostatScheduleAdapterViewHolder holder, int position) {
 
         switch (listSchedule.get(position).getScheduleState()) {
 
@@ -254,11 +272,6 @@ public class SwitchScheduleAdapter extends RecyclerView.Adapter<SwitchScheduleAd
         }
 
     }
-
-
-
-
-
 
 
 
