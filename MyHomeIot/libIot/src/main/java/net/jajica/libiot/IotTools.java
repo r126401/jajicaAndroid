@@ -1,6 +1,8 @@
 package net.jajica.libiot;
 
 
+import android.app.AlertDialog;
+import android.content.Context;
 import android.util.Log;
 
 import org.json.JSONException;
@@ -9,6 +11,7 @@ import org.json.JSONObject;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.ConcurrentModificationException;
 import java.util.UUID;
 
 /**
@@ -329,6 +332,8 @@ public class IotTools implements Serializable {
         stream = api.getJsonString(message, field.getValorTextoJson());
         return stream;
     }
+
+
 
 
 }

@@ -472,6 +472,22 @@ public class IotUsersDevices {
 
     }
 
+    public IotDevice searchDeviceObject(String deviceId) {
+
+        int i;
+        int j;
+        IotDevice device;
+        ArrayList<IotRoomsDevices> roomList;
+        for (i=0;i<getSiteList().size();i++) {
+            roomList = getSiteList().get(i).getRoomList();
+            for (j=0;j<roomList.size(); j++) {
+                if ((device = roomList.get(j).searchDeviceObject(deviceId)) != null) {
+                    return device;
+                }
+            }
+        }
+         return null;
+    }
 
 
 

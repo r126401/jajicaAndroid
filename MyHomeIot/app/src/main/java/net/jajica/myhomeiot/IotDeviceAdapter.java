@@ -51,12 +51,13 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     public interface OnDeleteDevice {
 
-        public void onDeleteDevice(int position);
+        public void onDeleteDevice(String deviceId, int position);
     }
 
     public interface OnSelectedDevice {
         public void onSelectedDevice(IotDevice device);
     }
+
 
     public void setOnSelectedDeviceListener(OnSelectedDevice onSelectedDeviceListener) {
         this.onSelectedDeviceListener = onSelectedDeviceListener;
@@ -68,6 +69,7 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         this.deviceList = deviceList;
         this.siteName = siteName;
         this.roomName = roomName;
+        if (this.deviceList == null) this.deviceList = new ArrayList<>();
     }
 
     public void setDeviceList(ArrayList<IotDevice> deviceList) {
@@ -192,6 +194,11 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         if (deviceList == null) {
             return 0;
         }
+        int i;
+        for (i=0;i<deviceList.size();i++) {
+            Log.i(TAG, "FragmentDevices, el tamaño del adapter es " + deviceList.size() + " hash: " + deviceList.get(i).hashCode());
+        }
+        Log.i(TAG, "FragmentDevices, el tamaño del adapter es " + deviceList.size());
         return deviceList.size();
     }
 
@@ -431,23 +438,33 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     private void deleteDevice(int position) {
 
+        String deviceId = deviceList.get(position).getDeviceId();
+        //deviceList.remove(position);
+
+
+        if (onDeleteDeviceListener != null) {
+            onDeleteDeviceListener.onDeleteDevice(deviceId, position);
+        }
+        notifyItemRemoved(position);
+
+        /*
         IotDevice device;
         IotUsersDevices configuration;
-        IotRoomsDevices rooms;
-        IotSitesDevices site;
         configuration = new IotUsersDevices(context);
         configuration.loadConfiguration();
-        site = configuration.searchSiteObject(siteName);
-        device = configuration.getIotDeviceObject(siteName, roomName, deviceList.get(position).getDeviceId());
+        device = configuration.searchDeviceObject(deviceList.get(position).getDeviceId());
 
-        if(device.getDeviceId().equals(deviceList.get(position).getDeviceId())) {
-            configuration.deleteIotDevice(device.getDeviceId(), siteName, roomName);
-            configuration.saveConfiguration(context);
-            //deviceList.remove(position);
-            //notifyItemRemoved(position);
+
+        if (device != null) {
+            //configuration.deleteIotDevice(device.getDeviceId(), siteName, roomName);
+            //configuration.saveConfiguration(context);
             onDeleteDeviceListener.onDeleteDevice(position);
         }
+
+         */
+
     }
+
     private void processMenuDevice(AppCompatImageView imageMenu , TextInputEditText editText, int position) {
         PopupMenu menu;
         menu = new PopupMenu(context, imageMenu);

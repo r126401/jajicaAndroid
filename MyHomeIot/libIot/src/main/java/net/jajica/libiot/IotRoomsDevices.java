@@ -222,7 +222,12 @@ public class IotRoomsDevices {
         int index;
         IotDevice device;
         index = searchDevice(idDevice);
-        return getDeviceList().get(index);
+        if (index >= 0) {
+            return getDeviceList().get(index);
+        } else {
+            return null;
+        }
+
 
     }
 

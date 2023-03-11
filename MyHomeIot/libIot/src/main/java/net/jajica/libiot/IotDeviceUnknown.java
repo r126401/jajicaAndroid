@@ -16,6 +16,7 @@ public class IotDeviceUnknown extends IotDevice implements Serializable {
         device.setPublishTopic(this.getPublishTopic());
         device.setDeviceStatus(this.getDeviceStatus());
         device.setDeviceType(IOT_DEVICE_TYPE.INTERRUPTOR);
+        device.object2Json();
         return device;
     }
 
@@ -30,6 +31,7 @@ public class IotDeviceUnknown extends IotDevice implements Serializable {
         device.setPublishTopic(this.getPublishTopic());
         device.setDeviceStatus(this.getDeviceStatus());
         device.setDeviceType(IOT_DEVICE_TYPE.THERMOMETER);
+        device.object2Json();
         return device;
     }
 
@@ -38,11 +40,12 @@ public class IotDeviceUnknown extends IotDevice implements Serializable {
         device = new IotDeviceThermostat();
         device.setDeviceId(this.getDeviceId());
         device.setCnx(this.getCnx());
-        device.setDeviceId(this.getDeviceId());
+        device.setDeviceName(this.getDeviceName());
         device.setSubscriptionTopic(this.getSubscriptionTopic());
         device.setPublishTopic(this.getPublishTopic());
         device.setDeviceStatus(this.getDeviceStatus());
         device.setDeviceType(IOT_DEVICE_TYPE.CRONOTERMOSTATO);
+        device.object2Json();
         return device;
     }
 

@@ -33,6 +33,11 @@ public class ViewPagerAdapter extends FragmentStateAdapter {
 
     }
 
+    public Fragment getFragment(int i) {
+
+        return arrayList.get(i);
+    }
+
 
 
 }

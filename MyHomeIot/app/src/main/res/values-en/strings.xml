@@ -113,6 +113,8 @@
     <string name="new_version_available">New version available</string>
     <string name="error_dates">Error in dates configure</string>
     <string name="error">Error!</string>
+    <string name="error_new_device">Error create device</string>
+    <string name="error_device_exits">Device exist!</string>
 
 
 </resources>

@@ -1,5 +1,7 @@
 package net.jajica.myhomeiot;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.util.Log;
 import android.view.inputmethod.InputMethodManager;
@@ -36,23 +38,7 @@ public class MyHomeIotTools {
 
     }
 
-    public String formatTemperature(String dat) {
 
-        DecimalFormat decimalFormat = new DecimalFormat("##.#");
-        String dato;
-        dato = String.valueOf(decimalFormat.format(dat));
-
-        dat = dato.substring(0,2);
-        if (dato.length() > 2) {
-            dat += ".";
-            dat += dato.substring(3);
-        } else {
-            dat += ".0";
-        }
-
-        return dato;
-
-    }
 
     protected double roundData(double valor, int decimales) {
 
@@ -280,7 +266,18 @@ public class MyHomeIotTools {
 
     }
 
+    public void errorMessage(int icon, int title, int message, Context context) {
 
+        AlertDialog.Builder builder;
+        builder = new AlertDialog.Builder(context);
+        builder.setIcon(icon);
+        builder.setTitle(title);
+        builder.setMessage(message);
+        AlertDialog alert;
+        alert = builder.create();
+        alert.show();
+
+    }
 
 
 }

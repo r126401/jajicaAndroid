@@ -11,6 +11,7 @@ import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -54,7 +55,7 @@ import net.jajica.myhomeiot.databinding.ActivityMainBinding;
 //import org.eclipse.paho.client.mqttv3.IMqttToken;
 
 
-public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener, Serializable, View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener, Serializable, View.OnClickListener, FragmentDevices.OnOperationDevice, FragmentDevices.OnCreateDevice {
 
     private final String TAG = "MainActivity";
     private IotUsersDevices configuration;
@@ -62,7 +63,6 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     private APPLICATION_STATUS appStatus;
     private ActivityMainBinding mbinding;
     private ViewPagerAdapter viewPagerAdapter;
-    
 
 
 
@@ -262,11 +262,14 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                     devices.get(j).setCnx(cnx);
                 }
             }
-
-            ArrayList<IotDevice> finalDevices = devices;
-            viewPagerAdapter.addFragment(new FragmentDevices(finalDevices, getApplicationContext(), configuration.getCurrentSite(), rooms.get(i).getNameRoom() ));
+            FragmentDevices fragmentDevices = new FragmentDevices(devices, getApplicationContext(), configuration.getCurrentSite(), rooms.get(i).getNameRoom() );
+            viewPagerAdapter.addFragment(fragmentDevices);
+            fragmentDevices.setOnOperationDevice(this);
+            fragmentDevices.setOnCreateDevice(this);
 
         }
+
+
         mbinding.pager.setAdapter(viewPagerAdapter);
         ArrayList<IotRoomsDevices> finalRooms = rooms;
         new TabLayoutMediator(mbinding.tabs, mbinding.pager, new TabLayoutMediator.TabConfigurationStrategy() {
@@ -399,8 +402,14 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                 public void onActivityResult(ActivityResult result) {
 
                     if (result.getResultCode() == RESULT_OK) {
-                        String dato = result.getData().getDataString();
-                        Log.i(getLocalClassName(), "Recibimos datos " + dato);
+                        String data = result.getData().getDataString();
+                        Log.i(getLocalClassName(), "Recibimos datos " + data);
+                        String deviceId;
+                        deviceId = insertDeviceIntoConfiguration(data);
+                        if (deviceId != null) {
+                            //notifyNewDevice(deviceId);
+                            notifyAddDevice(deviceId);
+                        }
 
                     } else {
                         Log.w(getLocalClassName(), "Error al instalar el dispositivo");
@@ -500,13 +509,8 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                     if (result.getResultCode() == RESULT_OK) {
                         String data = result.getData().getDataString();
                         Log.i(getLocalClassName(), "Recibimos datos " + data);
-                        String deviceId;
-                        deviceId = insertDeviceIntoConfiguration(data);
-                        if (deviceId != null) {
-                            notifyNewDevice(deviceId);
-                        }
+                        notifyAddDevice(data);
 
-                        //localeFragment(data);
 
                     } else {
                         Log.w(getLocalClassName(), "Error al instalar el dispositivo");
@@ -516,30 +520,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
             }
     );
 
-    private void localeFragment(String data) {
 
-        FragmentManager fragmentManager;
-        Fragment fragment;
-        List<Fragment> list;
-        FragmentDevices a;
-        fragmentManager = getSupportFragmentManager();
-        list = fragmentManager.getFragments();
-        int i;
-        ArrayList<IotDevice> deviceList;
-        TextInputEditText editText;
-        for (i=0;i<list.size();i++) {
-            a = (FragmentDevices) list.get(i);
-            deviceList = a.getDeviceList();
-            Log.i(TAG, "kk");
-
-
-        }
-
-
-
-
-
-    }
 
     private String  insertDeviceIntoConfiguration(String data) {
         String roomName;
@@ -552,6 +533,16 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         int indexSite;
         int indexRoom;
         TabLayout.Tab tab;
+        String deviceId;
+
+        tools = new IotTools();
+        deviceId = tools.getJsonString(data, IOT_LABELS_JSON.DEVICE_ID.getValorTextoJson());
+        device = configuration.searchDeviceObject(deviceId);
+        if (device != null) {
+            Log.w(TAG, "Dispositivo con id " + deviceId + " ya existente");
+            return null;
+        }
+
         tab = mbinding.tabs.getTabAt(mbinding.tabs.getSelectedTabPosition());
         roomName = tab.getText().toString();
         siteName = mbinding.textHome.getText().toString();
@@ -562,17 +553,13 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         }
 
         device = new IotDeviceUnknown();
-        tools = new IotTools();
+
         device.setDeviceId(tools.getJsonString(data, IOT_LABELS_JSON.DEVICE_ID.getValorTextoJson()));
         device.setDeviceName(tools.getJsonString(data, IOT_LABELS_JSON.DEVICE_NAME.getValorTextoJson()));
         device.setDeviceType(IOT_DEVICE_TYPE.UNKNOWN);
         device.setCnx(cnx);
         configuration.insertIotDevice(device, siteName, roomName);
-        configuration.saveConfiguration(getApplicationContext());
         return device.getDeviceId();
-
-        //configuration.reloadConfiguration();
-        //createStructure();
 
 
     }
@@ -624,6 +611,33 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         }
     }
 
+
+    private void notifyAddDevice(String data) {
+
+        FragmentManager fragmentManager;
+        Fragment fragment;
+        int i, j;
+        FragmentDevices fragmentDevices;
+        List<Fragment> listFragments;
+        ArrayList<IotDevice> devices;
+        IotDevice device;
+        IotTools tools;
+        String deviceId;
+        String deviceName;
+        tools = new IotTools();
+        deviceId = tools.getJsonString(data, IOT_LABELS_JSON.DEVICE_ID.getValorTextoJson());
+        deviceName = tools.getJsonString(data, IOT_LABELS_JSON.DEVICE_NAME.getValorTextoJson());
+        int index = mbinding.tabs.getSelectedTabPosition();
+        fragmentManager = getSupportFragmentManager();
+        listFragments = fragmentManager.getFragments();
+        fragmentDevices = (FragmentDevices) listFragments.get(index);
+        fragmentDevices.addNewDevice(deviceId, deviceName, cnx);
+
+
+
+
+    }
+
     private void notifyNewDevice(String deviceId) {
 
         FragmentManager fragmentManager;
@@ -640,27 +654,70 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         fragmentManager = getSupportFragmentManager();
         listFragments = fragmentManager.getFragments();
         fragmentDevices = (FragmentDevices) listFragments.get(index);
-        //fragmentDevices = (FragmentDevices) fragmentManager.findFragmentById(index);
-        fragmentDevices.addNewDevice(device);
-        if (fragmentDevices.getDeviceList() == null) {
-            fragmentDevices.connectUnknownDevice((IotDeviceUnknown) device, 0);
-            device.commandGetStatusDevice();
-        } else {
-            for (j = 0; j < listFragments.size(); j++) {
-                fragmentDevices = (FragmentDevices) listFragments.get(j);
-                devices = fragmentDevices.getDeviceList();
-                if (devices != null) {
-                    for (i = 0; i < devices.size(); i++) {
-                        if ((device = devices.get(i)).getDeviceId().equals(deviceId)) {
-                            fragmentDevices.connectUnknownDevice((IotDeviceUnknown) device, i);
-                            device.commandGetStatusDevice();
-                        }
-                    }
-                }
-
-            }
+        if (fragmentDevices.getDeviceList().size() == 0) {
+            fragmentDevices.addNewDevice(device);
         }
+
+        for (i=0; i < fragmentDevices.getDeviceList().size();i++) {
+            if (fragmentDevices.getDeviceList().get(i).getDeviceId().equals(device.getDeviceId())) {
+                fragmentDevices.adapter.notifyItemInserted(i);
+                fragmentDevices.connectUnknownDevice((IotDeviceUnknown) device, i);
+                device.commandGetStatusDevice();
+                break;
+            }
+
+
+        }
+
+
+        Log.i(TAG, "kk");
+
     }
 
+    @Override
+    public void onOperationDevice(FragmentDevices.OPERATION_DEVICE operationDevice, String deviceId, IOT_DEVICE_TYPE type) {
 
+        IotDevice device;
+        String room;
+
+        switch (operationDevice) {
+
+            case CREATE_DEVICE:
+                break;
+            case DELETE_DEVICE:
+
+                int index = mbinding.tabs.getSelectedTabPosition();
+                mbinding.tabs.getTabAt(index);
+                room = mbinding.tabs.getTabAt(index).getText().toString();
+                device = configuration.searchDeviceObject(deviceId);
+                if (device != null) {
+                    configuration.deleteIotDevice(deviceId, configuration.getCurrentSite(), room);
+                }
+                Log.i(TAG, "kk");
+                break;
+            case MODIFY_DEVICE:
+                device = configuration.searchDeviceObject(deviceId);
+                if (device != null) {
+                    device.setDeviceType(type);
+                    configuration.saveConfiguration(getApplicationContext());
+                }
+                break;
+            case SELECTED_DEVICE:
+                break;
+        }
+
+
+
+
+    }
+
+    @Override
+    public IOT_OPERATION_CONFIGURATION_DEVICES onCreateDevice(IotDevice device) {
+
+        String room;
+        int index = mbinding.tabs.getSelectedTabPosition();
+        mbinding.tabs.getTabAt(index);
+        room = mbinding.tabs.getTabAt(index).getText().toString();
+        return configuration.insertIotDevice(device, configuration.getCurrentSite(), room);
+    }
 }
