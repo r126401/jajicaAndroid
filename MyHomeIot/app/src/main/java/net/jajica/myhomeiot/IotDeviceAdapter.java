@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.textfield.TextInputEditText;
 
 import net.jajica.libiot.IOT_DEVICE_TYPE;
+import net.jajica.libiot.IOT_OPERATION_CONFIGURATION_DEVICES;
 import net.jajica.libiot.IotDevice;
 import net.jajica.libiot.IotDeviceSwitch;
 import net.jajica.libiot.IotDeviceThermometer;
@@ -44,6 +45,16 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     private OnDeleteDevice onDeleteDeviceListener;
     private OnSelectedDevice onSelectedDeviceListener;
+
+    private OnAdapterOperationDeviceListener onAdapterOperationDeviceListener;
+
+ public interface OnAdapterOperationDeviceListener {
+     IOT_OPERATION_CONFIGURATION_DEVICES onAdapterOperationDeviceListener(FragmentDevices.OPERATION_DEVICE operationDevice, IotDevice device, IOT_DEVICE_TYPE deviceType, int position);
+ }
+
+    public void setOnAdapterOperationDeviceListener(OnAdapterOperationDeviceListener onAdapterOperationDeviceListener) {
+        this.onAdapterOperationDeviceListener = onAdapterOperationDeviceListener;
+    }
 
     public void setOnDeleteDeviceListener(OnDeleteDevice onDeleteDeviceListener) {
         this.onDeleteDeviceListener = onDeleteDeviceListener;
@@ -74,6 +85,8 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     public void setDeviceList(ArrayList<IotDevice> deviceList) {
         this.deviceList = deviceList;
+        notifyDataSetChanged();
+        Log.i(TAG, "FragmentDevices insertado un nuevo dispositivo en el adapter");
     }
 
     public ArrayList<IotDevice> getDeviceList() {
@@ -91,11 +104,13 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         IotDeviceSwitchAdapterViewHolder holderSwitch;
         IotDeviceThermometerAdapterViewHolder holderThermometer;
         IotDeviceThermostatAdapterViewHolder holderThermostat;
+        IotUnknownDeviceAdapterViewHolder holderUnknown;
         switch (type) {
 
             case UNKNOWN:
                 view = LayoutInflater.from(context).inflate(R.layout.unknown_device, parent, false);;
-                return new IotUnknownDeviceAdapterViewHolder(view);
+                holderUnknown = new IotUnknownDeviceAdapterViewHolder(view);
+                return holderUnknown;
             case INTERRUPTOR:
                 view = LayoutInflater.from(context).inflate(R.layout.switch_device, parent, false);
 
@@ -159,6 +174,7 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
 
+        Log.i(TAG, "Pintamos " + deviceList.get(position).getDeviceId() + " hash:" + deviceList.get(position).hashCode());
         switch(deviceList.get(position).getDeviceType()) {
 
             case UNKNOWN:
@@ -439,30 +455,22 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private void deleteDevice(int position) {
 
         String deviceId = deviceList.get(position).getDeviceId();
-        //deviceList.remove(position);
 
+        if (onAdapterOperationDeviceListener != null) {
+            if (onAdapterOperationDeviceListener.onAdapterOperationDeviceListener
+                    (FragmentDevices.OPERATION_DEVICE.DELETE_DEVICE, deviceList.get(position),
+                            deviceList.get(position).getDeviceType(), position) == IOT_OPERATION_CONFIGURATION_DEVICES.DEVICE_REMOVED) {
+                notifyItemRemoved(position);
+            }
 
+        }
+        /*
         if (onDeleteDeviceListener != null) {
             onDeleteDeviceListener.onDeleteDevice(deviceId, position);
         }
         notifyItemRemoved(position);
 
-        /*
-        IotDevice device;
-        IotUsersDevices configuration;
-        configuration = new IotUsersDevices(context);
-        configuration.loadConfiguration();
-        device = configuration.searchDeviceObject(deviceList.get(position).getDeviceId());
-
-
-        if (device != null) {
-            //configuration.deleteIotDevice(device.getDeviceId(), siteName, roomName);
-            //configuration.saveConfiguration(context);
-            onDeleteDeviceListener.onDeleteDevice(position);
-        }
-
          */
-
     }
 
     private void processMenuDevice(AppCompatImageView imageMenu , TextInputEditText editText, int position) {
@@ -650,6 +658,7 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
 
     }
+
 
 
 }

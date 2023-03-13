@@ -401,8 +401,8 @@ public class IotUsersDevices {
         }
         room = site.getRoomList().get(nRoom);
 
-        if((nDevice = room.searchDevice(device.getDeviceId())) > 0) {
-            return IOT_OPERATION_CONFIGURATION_DEVICES.DEVICE_EXITS;
+        if((nDevice = room.searchDevice(device.getDeviceId())) < 0) {
+            return IOT_OPERATION_CONFIGURATION_DEVICES.DEVICE_NOT_FOUND;
         }
 
 

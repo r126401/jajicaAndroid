@@ -104,7 +104,7 @@ public class IotRoomsDevices {
         return IOT_DEVICE_USERS_RESULT.RESULT_OK;
     }
 
-    protected int searchDevice(String idDevice) {
+    public int searchDevice(String idDevice) {
 
         int i;
         if (deviceList == null) {

@@ -116,5 +116,6 @@
     <string name="error">Error!</string>
     <string name="error_new_device">Error creando nuevo dispositivo</string>
     <string name="error_device_exits">El dispositivo ya existe!</string>
+    <string name="none_home">Ninguna estancia</string>
 
 </resources>

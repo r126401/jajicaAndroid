@@ -5,6 +5,7 @@ import java.io.Serializable;
 public class IotDeviceUnknown extends IotDevice implements Serializable {
 
 
+
     public IotDeviceSwitch unknown2Switch() {
 
         IotDeviceSwitch device;
@@ -38,9 +39,9 @@ public class IotDeviceUnknown extends IotDevice implements Serializable {
     public IotDeviceThermostat unknown2Thermostat() {
         IotDeviceThermostat device;
         device = new IotDeviceThermostat();
-        device.setDeviceId(this.getDeviceId());
-        device.setCnx(this.getCnx());
         device.setDeviceName(this.getDeviceName());
+        device.setCnx(this.getCnx());
+        device.setDeviceId(this.getDeviceId());
         device.setSubscriptionTopic(this.getSubscriptionTopic());
         device.setPublishTopic(this.getPublishTopic());
         device.setDeviceStatus(this.getDeviceStatus());

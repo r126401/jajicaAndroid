@@ -4,11 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultCaller;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -32,12 +27,11 @@ import net.jajica.libiot.IotDeviceThermometer;
 import net.jajica.libiot.IotDeviceThermostat;
 import net.jajica.libiot.IotDeviceUnknown;
 import net.jajica.libiot.IotMqttConnection;
-import net.jajica.libiot.IotUsersDevices;
 
 import java.util.ArrayList;
 
 
-public class FragmentDevices extends Fragment implements SwipeRefreshLayout.OnRefreshListener, IotDeviceAdapter.OnDeleteDevice, IotDeviceAdapter.OnSelectedDevice {
+public class FragmentDevices extends Fragment implements SwipeRefreshLayout.OnRefreshListener, IotDeviceAdapter.OnSelectedDevice, IotDeviceAdapter.OnAdapterOperationDeviceListener {
 
     private final String TAG = "FragmentDevices";
     RecyclerView recyclerView;
@@ -53,8 +47,10 @@ public class FragmentDevices extends Fragment implements SwipeRefreshLayout.OnRe
     private ArrayList<IotDevice> deviceList;
     private Context context;
 
-    private OnOperationDevice onOperationDevice;
-    private OnCreateDevice onCreateDevice;
+
+
+    private OnOperationDeviceListener onOperationDeviceListener;
+
 
     enum OPERATION_DEVICE {
         CREATE_DEVICE,
@@ -62,23 +58,17 @@ public class FragmentDevices extends Fragment implements SwipeRefreshLayout.OnRe
         MODIFY_DEVICE,
         SELECTED_DEVICE
     }
-    public interface OnOperationDevice{
 
-        void onOperationDevice(OPERATION_DEVICE operationDevice, String deviceId, IOT_DEVICE_TYPE type);
+    public interface OnOperationDeviceListener {
+        IOT_OPERATION_CONFIGURATION_DEVICES onOperationDeviceListener(OPERATION_DEVICE operationDevice, IotDevice device, IOT_DEVICE_TYPE deviceType, int position);
     }
 
-    public void setOnOperationDevice(OnOperationDevice onOperationDevice) {
-        this.onOperationDevice = onOperationDevice;
+    public void setOnOperationDeviceListener(OnOperationDeviceListener onOperationDeviceListener) {
+        this.onOperationDeviceListener = onOperationDeviceListener;
     }
 
-    public interface OnCreateDevice {
 
-        IOT_OPERATION_CONFIGURATION_DEVICES onCreateDevice(IotDevice device);
-    }
 
-    public void setOnCreateDevice(OnCreateDevice onCreateDevice) {
-        this.onCreateDevice = onCreateDevice;
-    }
 
     public FragmentDevices(ArrayList<IotDevice> deviceList, Context context, String siteName, String roomName) {
         this.deviceList = deviceList;
@@ -96,6 +86,13 @@ public class FragmentDevices extends Fragment implements SwipeRefreshLayout.OnRe
         // Required empty public constructor
     }
 
+    public void setDeviceList(ArrayList<IotDevice> deviceList, OPERATION_DEVICE operationDevice, int position) {
+        this.deviceList = deviceList;
+        adapter.setDeviceList(deviceList);
+        adapter.notifyDataSetChanged();
+
+    }
+
     public int addNewDevice(IotDevice device) {
 
 
@@ -104,19 +101,23 @@ public class FragmentDevices extends Fragment implements SwipeRefreshLayout.OnRe
         position = deviceList.indexOf(device);
         Log.i(TAG, "device " + device.getDeviceId() + " añadido en posicion " + position);
 
+        Log.i(TAG, "Se añade el dispositivo " + device.getDeviceId() + " hash: " + device.hashCode());
+        adapter.setDeviceList(deviceList);
         return position;
 
 
 
     }
 
-    public void addNewDevice(String deviceId, String deviceName, IotMqttConnection cnx) {
+    public void connectNewDevice(String deviceId, String deviceName, IotMqttConnection cnx) {
 
         IotDeviceUnknown device;
         device = new IotDeviceUnknown();
         device.setCnx(cnx);
         device.setDeviceId(deviceId);
         device.setDeviceName(deviceName);
+        device.setDeviceType(IOT_DEVICE_TYPE.UNKNOWN);
+        convertUnknownDevice(device);
         connectUnknownDevice(device);
         device.commandGetStatusDevice();
 
@@ -125,12 +126,17 @@ public class FragmentDevices extends Fragment implements SwipeRefreshLayout.OnRe
 
     }
 
-    private void connectUnknownDevice(IotDeviceUnknown device) {
+
+
+    public void connectUnknownDevice(IotDeviceUnknown device) {
 
         device.subscribeDevice();
+
         device.setOnReceivedTimeoutCommand(new IotDevice.OnReceivedTimeoutCommand() {
             @Override
             public void onReceivedTimeoutCommand(String token) {
+                //device.unSubscribeDevice();
+                notifyTimeoutUnknownDevice(device);
 
             }
         });
@@ -144,75 +150,88 @@ public class FragmentDevices extends Fragment implements SwipeRefreshLayout.OnRe
 
             }
         });
+
+        device.setOnReceivedSpontaneousStartDevice(new IotDevice.OnReceivedSpontaneousStartDevice() {
+            @Override
+            public void onReceivedSpontaneousStartDevice(IOT_CODE_RESULT resultCode) {
+                Log.i(TAG, "Recibido Start de " + device.getDeviceId() + " como unknown" );
+                device.unSubscribeDevice();
+                convertUnknownDevice(device);
+            }
+        });
+
+
     }
 
     private void convertUnknownDevice(IotDeviceUnknown device) {
 
         Log.i(TAG, "recibido convert " + device.getDeviceName() + "-- hash: " + device.hashCode());
         IOT_DEVICE_TYPE type;
+        IOT_OPERATION_CONFIGURATION_DEVICES result;
         int position;
-        type = device.getDeviceType();
-        switch (type) {
-            case UNKNOWN:
+        if (deviceList != null) {
+            position = deviceList.size();
+        } else {
+            position = -1;
+        }
+        if (onOperationDeviceListener != null) {
+            type = device.getDeviceType();
+            switch (type) {
 
-                break;
-            case INTERRUPTOR:
-                IotDeviceSwitch deviceSwitch;
-                deviceSwitch = device.unknown2Switch();
-
-                if (onCreateDevice != null) {
-                    if (onCreateDevice.onCreateDevice(deviceSwitch) == IOT_OPERATION_CONFIGURATION_DEVICES.DEVICE_INSERTED) {
-                        position = addNewDevice(deviceSwitch);
+                case UNKNOWN:
+                    if ((onOperationDeviceListener.onOperationDeviceListener(OPERATION_DEVICE.CREATE_DEVICE,
+                            device, device.getDeviceType(), -1) == IOT_OPERATION_CONFIGURATION_DEVICES.DEVICE_INSERTED)) {
                         adapter.notifyItemInserted(position);
-                        connectSwitchDevice(deviceSwitch, position);
-                        deviceSwitch.commandGetStatusDevice();
-                        Log.i(TAG, "Convertido status de " + deviceSwitch.getDeviceId() + " como interruptor" );
+                            //adapter.setDeviceList(deviceList);
                     } else {
-                        Log.e(TAG, "Error");
+                        Log.i(TAG, "ahora ya esta creado");
                     }
+                    break;
 
-
+                case INTERRUPTOR:
+                    IotDeviceSwitch deviceSwitch = device.unknown2Switch();
+                    if (((result = onOperationDeviceListener.onOperationDeviceListener(OPERATION_DEVICE.MODIFY_DEVICE,
+                            deviceSwitch, deviceSwitch.getDeviceType(), -1)) == IOT_OPERATION_CONFIGURATION_DEVICES.DEVICE_MODIFIED)) {
+                        Log.i(TAG, "convertUnknownDevice: Se ha insertado un dispositivo interruptor");
+                        adapter.setDeviceList(deviceList);
+                        connectSwitchDevice(deviceSwitch);
+                        deviceSwitch.commandGetStatusDevice();
+                    } else {
+                    Log.e(TAG, "Error resultado: " + result.toString());
                 }
-                Log.i(TAG, "ff");
-
-
-                break;
-            case THERMOMETER:
-                IotDeviceThermometer deviceThermometer = device.unknown2Thermometer();
-
-                if (onCreateDevice != null) {
-                    if (onCreateDevice.onCreateDevice(deviceThermometer) == IOT_OPERATION_CONFIGURATION_DEVICES.DEVICE_INSERTED) {
-                        position = addNewDevice(deviceThermometer);
-                        adapter.notifyItemInserted(position);
-                        connectThemometerDevice(deviceThermometer, position);
+                    break;
+                case THERMOMETER:
+                    IotDeviceThermometer deviceThermometer = device.unknown2Thermometer();
+                    if ((onOperationDeviceListener.onOperationDeviceListener(OPERATION_DEVICE.MODIFY_DEVICE,
+                            deviceThermometer, deviceThermometer.getDeviceType(), -1) == IOT_OPERATION_CONFIGURATION_DEVICES.DEVICE_MODIFIED)) {
+                        connectThemometerDevice(deviceThermometer);
+                        adapter.setDeviceList(deviceList);
                         deviceThermometer.commandGetStatusDevice();
                         Log.i(TAG, "Convertido status de " + deviceThermometer.getDeviceId() + " como termometro" );
                     } else {
                         Log.e(TAG, "Error");
-
                     }
-                }
-
-                break;
-            case CRONOTERMOSTATO:
-                IotDeviceThermostat deviceThermostat = device.unknown2Thermostat();
-                if (onCreateDevice != null) {
-                    IOT_OPERATION_CONFIGURATION_DEVICES op;
-                    if ((op= onCreateDevice.onCreateDevice(deviceThermostat)) == IOT_OPERATION_CONFIGURATION_DEVICES.DEVICE_INSERTED) {
-                        position = addNewDevice(deviceThermostat);
-                        adapter.notifyItemInserted(position);
-                        connectThermostatDevice(deviceThermostat, position);
+                    break;
+                case CRONOTERMOSTATO:
+                    IotDeviceThermostat deviceThermostat = device.unknown2Thermostat();
+                    if ((onOperationDeviceListener.onOperationDeviceListener(OPERATION_DEVICE.MODIFY_DEVICE,
+                            deviceThermostat, deviceThermostat.getDeviceType(), -1) == IOT_OPERATION_CONFIGURATION_DEVICES.DEVICE_MODIFIED)) {
+                        connectThermostatDevice(deviceThermostat);
+                        adapter.setDeviceList(deviceList);
                         deviceThermostat.commandGetStatusDevice();
                         Log.i(TAG, "Convertido status de " + deviceThermostat.getDeviceId() + " como cronotermostato" );
 
                     } else {
                         Log.e(TAG, "Error");
                     }
-                }
-                break;
-            default:
+
+                    break;
+                default:
+
+            }
 
         }
+
 
 
     }
@@ -221,7 +240,7 @@ public class FragmentDevices extends Fragment implements SwipeRefreshLayout.OnRe
     private void createListDevices() {
 
         adapter = new IotDeviceAdapter(getActivity(), R.id.recyclerDevices, deviceList, siteName, roomName);
-        adapter.setOnDeleteDeviceListener(this);
+        adapter.setOnAdapterOperationDeviceListener(this);
         recyclerView.setAdapter(adapter);
         adapter.setOnSelectedDeviceListener(this);
         if (deviceList != null) {
@@ -256,17 +275,17 @@ public class FragmentDevices extends Fragment implements SwipeRefreshLayout.OnRe
             device = deviceList.get(i);
             switch (type) {
                 case UNKNOWN:
-                    connectUnknownDevice((IotDeviceUnknown) device, i);
+                    connectUnknownDevice((IotDeviceUnknown) device);
 
                     break;
                 case INTERRUPTOR:
-                    connectSwitchDevice((IotDeviceSwitch) device, i);
+                    connectSwitchDevice((IotDeviceSwitch) device);
                     break;
                 case THERMOMETER:
-                    connectThemometerDevice((IotDeviceThermometer) device, i);
+                    connectThemometerDevice((IotDeviceThermometer) device);
                     break;
                 case CRONOTERMOSTATO:
-                    connectThermostatDevice((IotDeviceThermostat) device, i);
+                    connectThermostatDevice((IotDeviceThermostat) device);
                     break;
             }
             Log.i(TAG, "dispositivo a conectar: " + device.hashCode());
@@ -275,81 +294,15 @@ public class FragmentDevices extends Fragment implements SwipeRefreshLayout.OnRe
         }
     }
 
-    public void connectUnknownDevice(IotDeviceUnknown device, int position) {
-
-
-        //Recepcion de los timeouts a los comandos
-        Log.i(TAG, "conectando unknown device: " + device.getDeviceName() + "-- hash: " + device.hashCode());
-        device.subscribeDevice();
-        device.setOnReceivedTimeoutCommand(new IotDevice.OnReceivedTimeoutCommand() {
-            @Override
-            public void onReceivedTimeoutCommand(String token) {
-                Log.i("hh", "hh");
-                notifyTimeoutCommand(position);
-
-            }
-        });
-        //Error en comando
-        device.setOnErrorReportDevice(new IotDevice.OnReceivedErrorReportDevice() {
-            @Override
-            public void onReceivedErrorReportDevice(IOT_CODE_RESULT resultCode) {
-                adapter.notifyItemChanged(position);
-
-            }
-        });
-        //Recepcion del comando satus
-        device.setOnReceivedStatus(new IotDevice.OnReceivedStatus() {
-            @Override
-            public void onReceivedStatus(IOT_CODE_RESULT resultCode) {
-
-                Log.i(TAG, "recibido status unknown " + device.getDeviceName() + "-- hash: " + device.hashCode());
-                device.unSubscribeDevice();
-                convertUnknownDevice(device, position);
-                adapter.notifyItemChanged(position);
-
-           }
-        });
-
-        //Comienzo del dispositivo
-        device.setOnReceivedSpontaneousStartDevice(new IotDevice.OnReceivedSpontaneousStartDevice() {
-            @Override
-            public void onReceivedSpontaneousStartDevice(IOT_CODE_RESULT resultCode) {
-                device.unSubscribeDevice();
-                convertUnknownDevice(device, position);
-                adapter.notifyItemChanged(position);
-
-            }
-        });
-
-        // comienzo de un programa
-        device.setOnReceivedSpontaneousStartSchedule(new IotDevice.OnReceivedSpontaneousStartSchedule() {
-            @Override
-            public void onReceivesSpontaneousStartSchedule(IOT_CODE_RESULT resultCode) {
-                device.unSubscribeDevice();
-                convertUnknownDevice(device, position);
-                adapter.notifyItemChanged(position);
-
-            }
-        });
 
 
 
-        //Fin de un programa
-device.setOnReceivedSpontaneousEndSchedule(new IotDevice.OnReceivedSpontaneousEndSchedule() {
-    @Override
-    public void onReceivesSpontaneousEndSchedule(IOT_CODE_RESULT resultCode) {
-        device.unSubscribeDevice();
-        convertUnknownDevice(device, position);
-        adapter.notifyItemChanged(position);
-    }
-});
 
 
+    private void connectSwitchDevice(@NonNull IotDeviceSwitch device) {
 
-    }
-
-    private void connectSwitchDevice(@NonNull IotDeviceSwitch device, int position) {
-
+        int position;
+        position = deviceList.indexOf(device);
         Log.i(TAG, "conectando switch device: " + device.getDeviceName() + "-- hash: " + device.hashCode());
         device.subscribeDevice();
         device.setOnErrorReportDevice(new IotDevice.OnReceivedErrorReportDevice() {
@@ -372,11 +325,13 @@ device.setOnReceivedSpontaneousEndSchedule(new IotDevice.OnReceivedSpontaneousEn
             @Override
             public void onReceivedStatus(IOT_CODE_RESULT resultCode) {
                 Log.i(TAG, "recibido status switch " + device.getDeviceName() + "-- hash: " + device.hashCode());
+                if (position == -1) {
+                    //addNewDevice(device);
+                } else {
+                    adapter.notifyItemChanged(position);
+                }
 
-                adapter.notifyItemChanged(position);
                 Log.i(TAG, "modificado status switch " + device.getDeviceName() + "-- hash: " + device.hashCode());
-
-
             }
         });
 
@@ -429,8 +384,10 @@ device.setOnReceivedSpontaneousEndSchedule(new IotDevice.OnReceivedSpontaneousEn
 
 
 
-    private void connectThemometerDevice(IotDeviceThermometer device, int position) {
+    private void connectThemometerDevice(IotDeviceThermometer device) {
 
+        int position;
+        position = deviceList.indexOf(device);
         device.subscribeDevice();
         device.setOnErrorReportDevice(new IotDevice.OnReceivedErrorReportDevice() {
             @Override
@@ -451,7 +408,11 @@ device.setOnReceivedSpontaneousEndSchedule(new IotDevice.OnReceivedSpontaneousEn
             @Override
             public void onReceivedStatus(IOT_CODE_RESULT resultCode) {
                 Log.i(TAG, "recibido estatus en el termometro " + device.getDeviceName() + " hash: " + device.hashCode()) ;
-                adapter.notifyItemChanged(position);
+                if (position == -1) {
+                   //addNewDevice(device);
+                } else {
+                    adapter.notifyItemChanged(position);
+                }
 
             }
         });
@@ -496,8 +457,10 @@ device.setOnReceivedSpontaneousEndSchedule(new IotDevice.OnReceivedSpontaneousEn
 
     }
 
-    private void connectThermostatDevice(IotDeviceThermostat device, int position) {
+    private void connectThermostatDevice(IotDeviceThermostat device) {
 
+        int position;
+        position = deviceList.indexOf(device);
         device.subscribeDevice();
         device.setOnErrorReportDevice(new IotDevice.OnReceivedErrorReportDevice() {
             @Override
@@ -523,7 +486,11 @@ device.setOnReceivedSpontaneousEndSchedule(new IotDevice.OnReceivedSpontaneousEn
             @Override
             public void onReceivedStatus(IOT_CODE_RESULT resultCode) {
                 Log.i(TAG, "recibido estatus en el termostato" + device.getDeviceName()) ;
-                adapter.notifyItemChanged(position);
+                if (position == -1) {
+                    //addNewDevice(device);
+                } else {
+                    adapter.notifyItemChanged(position);
+                }
 
             }
         });
@@ -570,84 +537,8 @@ device.setOnReceivedSpontaneousEndSchedule(new IotDevice.OnReceivedSpontaneousEn
     }
 
 
-    private void modifyConfiguration(String deviceId, int position, IOT_DEVICE_TYPE type) {
-
-        if (onOperationDevice != null) {
-            onOperationDevice.onOperationDevice(OPERATION_DEVICE.MODIFY_DEVICE, deviceId, type);
-        }
-        /*
-        IotUsersDevices configuration;
-        configuration = new IotUsersDevices(context);
-        IotDevice dev;
-        configuration.loadConfiguration();
 
 
-
-        dev = configuration.getIotDeviceObject(siteName, roomName, deviceList.get(position).getDeviceId());
-        dev.setDeviceType(type);
-        configuration.saveConfiguration(context);
-        configuration.reloadConfiguration();
-
-
-        Log.i(TAG, "cambiado");
-
-         */
-    }
-
-
-    private void convertUnknownDevice(IotDeviceUnknown device, int position) {
-
-        Log.i(TAG, "recibido convert " + device.getDeviceName() + "-- hash: " + device.hashCode());
-        IOT_DEVICE_TYPE type;
-        type = device.getDeviceType();
-        switch (type) {
-            case UNKNOWN:
-
-                break;
-            case INTERRUPTOR:
-                IotDeviceSwitch deviceSwitch;
-                deviceSwitch = device.unknown2Switch();
-                modifyConfiguration(device.getDeviceId(), position, IOT_DEVICE_TYPE.INTERRUPTOR);
-                deviceList.set(position, (IotDevice) deviceSwitch);
-                if (adapter.getDeviceList() == null) {
-                    adapter.setDeviceList(deviceList);
-                }
-                adapter.notifyItemChanged(position);
-                connectSwitchDevice((IotDeviceSwitch) deviceList.get(position), position);
-                deviceSwitch.commandGetStatusDevice();
-
-                Log.i(TAG, "ff");
-
-
-                break;
-            case THERMOMETER:
-                IotDeviceThermometer deviceThermometer = device.unknown2Thermometer();
-                modifyConfiguration(device.getDeviceId(), position, IOT_DEVICE_TYPE.THERMOMETER);
-                deviceList.set(position, (IotDevice) deviceThermometer);
-                if (adapter.getDeviceList() == null) {
-                    adapter.setDeviceList(deviceList);
-                }
-                adapter.notifyItemChanged(position);
-                connectThemometerDevice(deviceThermometer, position);
-                device.commandGetStatusDevice();
-                break;
-            case CRONOTERMOSTATO:
-                IotDeviceThermostat deviceThermostat = device.unknown2Thermostat();
-                modifyConfiguration(device.getDeviceId(), position, IOT_DEVICE_TYPE.CRONOTERMOSTATO);
-                deviceList.set(position, (IotDevice) deviceThermostat);
-                if (adapter.getDeviceList() == null) {
-                    adapter.setDeviceList(deviceList);
-                }
-                adapter.notifyItemChanged(position);
-                connectThermostatDevice(deviceThermostat, position);
-                device.commandGetStatusDevice();
-                break;
-            default:
-
-        }
-
-
-    }
 
     @Override
     public void onRefresh() {
@@ -686,15 +577,24 @@ device.setOnReceivedSpontaneousEndSchedule(new IotDevice.OnReceivedSpontaneousEn
 
     }
 
-    @Override
-    public void onDeleteDevice(String deviceId, int position) {
 
-        Log.i(TAG, "Borrando device: " + deviceId);
+    private void notifyTimeoutUnknownDevice(IotDeviceUnknown device) {
 
-        if (onOperationDevice != null) {
-            onOperationDevice.onOperationDevice(OPERATION_DEVICE.DELETE_DEVICE, deviceId, IOT_DEVICE_TYPE.UNKNOWN);
+        try {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    convertUnknownDevice(device);
+                    adapter.notifyDataSetChanged();
+                }
+            });
+        } catch (NullPointerException exception) {
+            Log.e(TAG, "La tarea para cancelar es erronea");
         }
+
+
     }
+
 
     @Override
     public void onSelectedDevice(IotDevice device) {
@@ -728,7 +628,51 @@ device.setOnReceivedSpontaneousEndSchedule(new IotDevice.OnReceivedSpontaneousEn
     }
 
 
+    /**
+     * La implementacion de este interface recibe la informacion de la operacion del dispositivo que se realiza desde el adapter
+     * @param operationDevice Operacion sobre el dispositibo
+     * @param device dispositivo implicado en la operacion
+     * @param deviceType tipo de dispositivo implicado en la operacion
+     * @param position posicion del dispositivo dentro del adapter
+     * @return
+     */
 
+    @Override
+    public IOT_OPERATION_CONFIGURATION_DEVICES onAdapterOperationDeviceListener(OPERATION_DEVICE operationDevice, IotDevice device, IOT_DEVICE_TYPE deviceType, int position) {
+
+        IOT_OPERATION_CONFIGURATION_DEVICES result = IOT_OPERATION_CONFIGURATION_DEVICES.NO_CONFIGURATION;
+
+        if (onOperationDeviceListener != null) {
+
+            switch (operationDevice) {
+
+                case CREATE_DEVICE:
+                    result = onOperationDeviceListener.onOperationDeviceListener(
+                            OPERATION_DEVICE.CREATE_DEVICE,
+                            device,
+                            deviceType,
+                            position);
+                    break;
+                case DELETE_DEVICE:
+                    result = onOperationDeviceListener.onOperationDeviceListener(
+                            OPERATION_DEVICE.DELETE_DEVICE,
+                            device,
+                            deviceType, position);
+                    break;
+                case MODIFY_DEVICE:
+                    result = onOperationDeviceListener.onOperationDeviceListener(
+                            OPERATION_DEVICE.MODIFY_DEVICE,
+                            device,
+                            deviceType,
+                            position);
+                    break;
+                case SELECTED_DEVICE:
+                    break;
+            }
+
+        }
+        return result;
+    }
 
 
 }
