@@ -460,7 +460,6 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             if (onAdapterOperationDeviceListener.onAdapterOperationDeviceListener
                     (FragmentDevices.OPERATION_DEVICE.DELETE_DEVICE, deviceList.get(position),
                             deviceList.get(position).getDeviceType(), position) == IOT_OPERATION_CONFIGURATION_DEVICES.DEVICE_REMOVED) {
-                notifyItemRemoved(position);
             }
 
         }

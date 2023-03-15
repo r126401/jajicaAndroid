@@ -328,7 +328,7 @@ public class IotUsersDevices {
         }
         room = site.getRoomList().get(nRoom);
 
-        if((nDevice = room.searchDevice(device.getDeviceId())) > 0) {
+        if((nDevice = room.searchDevice(device.getDeviceId())) >= 0) {
             return IOT_OPERATION_CONFIGURATION_DEVICES.DEVICE_EXITS;
         }
 
@@ -488,6 +488,24 @@ public class IotUsersDevices {
         }
          return null;
     }
+
+    public IotDevice searchDeviceObjectByName(String deviceName) {
+        int i;
+        int j;
+        IotDevice device;
+        ArrayList<IotRoomsDevices> roomList;
+        for (i=0;i<getSiteList().size();i++) {
+            roomList = getSiteList().get(i).getRoomList();
+            for (j=0;j<roomList.size(); j++) {
+                if ((device = roomList.get(j).searchDeviceObjectByName(deviceName)) != null) {
+                    return device;
+                }
+            }
+        }
+        return null;
+    }
+
+
 
 
 

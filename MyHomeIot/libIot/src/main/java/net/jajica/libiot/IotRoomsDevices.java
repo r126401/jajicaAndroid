@@ -100,6 +100,7 @@ public class IotRoomsDevices {
         if ((i = searchDevice(idDevice)) < 0) {
             return IOT_DEVICE_USERS_RESULT.DEVICE_NOT_EXITS;
         }
+        deviceList.get(i).unSubscribeDevice();
         deviceList.remove(i);
         return IOT_DEVICE_USERS_RESULT.RESULT_OK;
     }
@@ -115,6 +116,23 @@ public class IotRoomsDevices {
                 return i;
             }
             if(idDevice.equals(deviceList.get(i).getDeviceId())) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public int searchDeviceByName(String deviceName) {
+
+        int i;
+        if (deviceList == null) {
+            return -2;
+        }
+        for (i=0;i<deviceList.size();i++) {
+            if (deviceList.get(i).getDeviceName() == null) {
+                return i;
+            }
+            if(deviceName.equals(deviceList.get(i).getDeviceName())) {
                 return i;
             }
         }
@@ -222,6 +240,20 @@ public class IotRoomsDevices {
         int index;
         IotDevice device;
         index = searchDevice(idDevice);
+        if (index >= 0) {
+            return getDeviceList().get(index);
+        } else {
+            return null;
+        }
+
+
+    }
+
+    public IotDevice searchDeviceObjectByName(String deviceName) {
+
+        int index;
+        IotDevice device;
+        index = searchDeviceByName(deviceName);
         if (index >= 0) {
             return getDeviceList().get(index);
         } else {

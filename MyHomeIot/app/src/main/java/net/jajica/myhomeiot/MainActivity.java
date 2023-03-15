@@ -578,14 +578,23 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     private void notifyNewDevice(String data) {
 
         IotTools tools;
-        tools = new IotTools();
+        MyHomeIotTools myHome;
         String deviceId;
         String deviceName;
         FragmentDevices fragmentDevices;
+        tools = new IotTools();
         fragmentDevices = identifyActiveFragment();
         deviceId = tools.getJsonString(data, IOT_LABELS_JSON.DEVICE_ID.getValorTextoJson());
         deviceName = tools.getJsonString(data, IOT_LABELS_JSON.DEVICE_NAME.getValorTextoJson());
-        fragmentDevices.connectNewDevice(deviceId, deviceName, cnx);
+
+        if ((configuration.searchDeviceObject(deviceId) != null) || (configuration.searchDeviceObjectByName(deviceName) != null)){
+
+            myHome = new MyHomeIotTools();
+            myHome.errorMessage(R.drawable.ic_action_error, R.string.error_new_device, R.string.error_device_exits, this);
+        } else {
+            fragmentDevices.connectNewDevice(deviceId, deviceName, cnx);
+        }
+
 
 
 
