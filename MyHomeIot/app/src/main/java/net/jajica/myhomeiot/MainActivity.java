@@ -552,9 +552,9 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                         if (!configuration.getCurrentSite().equals(data)) {
                             configuration.setCurrentSite(data);
                             configuration.saveConfiguration(getApplicationContext());
-                            mbinding.textHome.setText(data);
+                            mbinding.textHome.setText(configuration.getCurrentSite());
                             configuration.reloadConfiguration();
-                            createStructure();
+                            makeConnect();
                         }
                     }
 
@@ -565,12 +565,6 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 
     private void launchHomesActivity() {
         Intent launcherActivity = new Intent(MainActivity.this, HomesActivity.class);
-        if (configuration.getJsonObject() != null) {
-            launcherActivity.putExtra(IOT_LABELS_JSON.NAME_SITE.getValorTextoJson(), configuration.getCurrentSite());
-        } else {
-            launcherActivity.putExtra(IOT_LABELS_JSON.NAME_SITE.getValorTextoJson(), "null");
-        }
-
         launcherHomesActivity.launch(launcherActivity);
 
 

@@ -44,16 +44,13 @@ public class HomesActivity extends AppCompatActivity implements Serializable, Vi
         super.onCreate(savedInstanceState);
         mbinding = ActivityHomesBinding.inflate(getLayoutInflater());
         setContentView(mbinding.getRoot());
-        Intent intent;
-        intent = getIntent();
-        Bundle bundle;
-        bundle = intent.getExtras();
+
         configuration = new IotUsersDevices(getApplicationContext());
-        currentSite = (String) bundle.getString(IOT_LABELS_JSON.NAME_SITE.getValorTextoJson());
         configuration.loadConfiguration();
+        currentSite = configuration.getCurrentSite();
 
         if (savedInstanceState == null) {
-            launchParentHomesFragment(bundle);
+            launchParentHomesFragment();
              }
     }
 
@@ -68,14 +65,13 @@ public class HomesActivity extends AppCompatActivity implements Serializable, Vi
 
     }
 
-    private void launchParentHomesFragment(Bundle bundle) {
+    private void launchParentHomesFragment() {
 
         mainAdminHomeFragment = new ParentHomesFragment(configuration);
         adminHomeFragment = new AdminHomeFragment();
         fragmentManager = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.add(R.id.containerAdminHomes, mainAdminHomeFragment, "ParentHomesAdapter");
-        //fragmentTransaction.add(R.id.containerAdminHomes, ParentHomesFragment.class, bundle, "ParentHomesAdapter");
         fragmentTransaction.setReorderingAllowed(true);
         fragmentTransaction.addToBackStack("ParentHomesAdapter");
         fragmentTransaction.commit();

@@ -55,6 +55,8 @@ public ParentHomesFragment(IotUsersDevices configuration) {
         super.onCreate(savedInstanceState);
         // Recibimos los datos del fragment_admin_home para actualizar currentSite y actualizar la vista.
         if (savedInstanceState == null) {
+            currentSite = configuration.getCurrentSite();
+            /*
             getParentFragmentManager().setFragmentResultListener(IOT_LABELS_JSON.NAME_SITE.getValorTextoJson(),
                     this, new FragmentResultListener() {
                         @Override
@@ -63,6 +65,9 @@ public ParentHomesFragment(IotUsersDevices configuration) {
                             initFragment(getActivity().getApplicationContext());
                         }
                     });
+
+             */
+
         }
     }
 
@@ -74,11 +79,7 @@ public ParentHomesFragment(IotUsersDevices configuration) {
         //Se capturan los controles para no tener que hacer el find
         mbinding = FragmentParentHomesBinding.inflate(inflater, container, false);
         rootView = mbinding.getRoot();
-        mbinding.buttonAddHome.setOnClickListener(this);
-        mbinding.buttonNewHome.setOnClickListener(this);
         currentSite = configuration.getCurrentSite();
-        //Recuperamos el site que le pasamos desde la actividad
-        //currentSite = requireArguments().getString(IOT_LABELS_JSON.NAME_SITE.getValorTextoJson());
         initFragment(container.getContext());
         return rootView;
     }
@@ -88,8 +89,9 @@ public ParentHomesFragment(IotUsersDevices configuration) {
         configuration = new IotUsersDevices(context);
         configuration.loadConfiguration();
         listSites = configuration.getSiteList();
-
         //Llenamos el fragment con los sites que leemos desde la configuracion
+        mbinding.buttonAddHome.setOnClickListener(this);
+        mbinding.buttonNewHome.setOnClickListener(this);
         mbinding.recyclerAdminHomes2.setLayoutManager(new LinearLayoutManager(context));
         adapter = new ListHomesAdapter(currentSite, listSites, getActivity().getApplicationContext());
         mbinding.recyclerAdminHomes2.setAdapter(adapter);
@@ -108,14 +110,6 @@ public ParentHomesFragment(IotUsersDevices configuration) {
     @Override
     public void onRowSelectedData(String siteName, int position) {
 
-/*
-        Log.i(TAG, "data");
-        Bundle bundle;
-        bundle = new Bundle();
-        this.currentSite = siteName;
-        bundle.putString(IOT_LABELS_JSON.NAME_SITE.getValorTextoJson(), currentSite);
-
- */
         configuration.setCurrentSite(siteName);
         configuration.saveConfiguration(getActivity().getApplicationContext());
         onPassCurrentSite.onPassCurrentSite(siteName);
