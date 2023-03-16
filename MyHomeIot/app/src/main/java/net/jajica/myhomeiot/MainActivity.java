@@ -10,8 +10,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.versionedparcelable.VersionedParcel;
-import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -30,7 +28,6 @@ import net.jajica.libiot.IOT_DEVICE_TYPE;
 import net.jajica.libiot.IOT_LABELS_JSON;
 import net.jajica.libiot.IOT_MQTT_STATUS_CONNECTION;
 import net.jajica.libiot.IOT_OPERATION_CONFIGURATION_DEVICES;
-import net.jajica.libiot.IotDeviceUnknown;
 import net.jajica.libiot.IotMqttConnection;
 import net.jajica.libiot.IotRoomsDevices;
 import net.jajica.libiot.IotDevice;
@@ -43,7 +40,6 @@ import net.jajica.libiot.IotUsersDevices;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -64,6 +60,10 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 
     private String currentSite;
     private String currentRoom;
+
+    private IotDevice deviceCut;
+    private String cutRoom;
+    private String cutSite;
 
 
 
@@ -130,6 +130,8 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         setToolbar(getResources().getResourceName(R.string.app_name), android.R.drawable.ic_delete);
         mbinding.bottomNavigationMenu.setOnItemSelectedListener(this);
         mbinding.textHome.setOnClickListener(this);
+        mbinding.buttonViewGrid.setOnClickListener(this);
+        mbinding.imageMoveDevice.setOnClickListener(this);
 
         if (mbinding.navView!= null) {
             prepararDrawer(mbinding.navView);
@@ -156,7 +158,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 
         }
 
-        makeConnect();
+        createEnvironment();
         mbinding.tabs.setTabMode(TabLayout.MODE_SCROLLABLE);
         return APPLICATION_STATUS.APPLICATION_OK;
     }
@@ -208,7 +210,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 
     }
 
-    private IOT_MQTT_STATUS_CONNECTION makeConnect() {
+    private IOT_MQTT_STATUS_CONNECTION createEnvironment() {
 
         IOT_MQTT_STATUS_CONNECTION state;
         cnx = new IotMqttConnection(getApplicationContext());
@@ -298,7 +300,23 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         mbinding.tabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
+
                 currentRoom = tab.getText().toString();
+
+                // Si estamos en la fase de pegado
+                if ((Boolean) mbinding.imageMoveDevice.getTag()) {
+                    //Si estamos en el mismo site y room donde cortamos, imageMoveDevice es invisible
+                    if ((currentSite.equals(cutSite)) && (currentRoom.equals(cutRoom))) {
+                        mbinding.imageMoveDevice.setVisibility(View.INVISIBLE);
+                    } else {
+                        mbinding.imageMoveDevice.setVisibility(View.VISIBLE);
+                        mbinding.imageMoveDevice.setImageResource(R.drawable.ic_action_paste);
+                    }
+                } else {
+                    mbinding.imageMoveDevice.setVisibility(View.INVISIBLE);
+                }
+
+
 
             }
 
@@ -554,7 +572,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                             configuration.saveConfiguration(getApplicationContext());
                             mbinding.textHome.setText(configuration.getCurrentSite());
                             configuration.reloadConfiguration();
-                            makeConnect();
+                            createEnvironment();
                         }
                     }
 
@@ -578,6 +596,21 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
             case (R.id.textHome):
                 launchHomesActivity();
                 break;
+            case (R.id.buttonViewGrid):
+                FragmentDevices fragmentDevices;
+                fragmentDevices = identifyActiveFragment();
+                int gridcount;
+                gridcount = fragmentDevices.getGrid().getSpanCount();
+                if (gridcount == 1) {
+                    fragmentDevices.getGrid().setSpanCount(2);
+                } else {
+                    fragmentDevices.getGrid().setSpanCount(1);
+                }
+                break;
+            case (R.id.imageMoveDevice):
+                configuration.moveDevice(deviceCut.getDeviceId(), currentSite, currentRoom);
+                break;
+
         }
     }
 
@@ -681,10 +714,42 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                 break;
             case SELECTED_DEVICE:
                 break;
+
+            case MOVE_DEVICE:
+                deviceCut = device;
+                cutRoom = currentRoom;
+                cutSite = currentSite;
+                mbinding.imageMoveDevice.setImageResource(R.drawable.ic_action_cut);
+                mbinding.imageMoveDevice.setVisibility(View.VISIBLE);
+                mbinding.imageMoveDevice.setTag(true);
+                break;
         }
 
         return result;
     }
+
+    private void manageMoveDevice(IotDevice device, Boolean paste) {
+
+
+        if (!(Boolean) mbinding.imageMoveDevice.getTag()) {
+            deviceCut = device;
+            cutRoom = currentRoom;
+            cutSite = currentSite;
+            mbinding.imageMoveDevice.setImageResource(R.drawable.ic_action_cut);
+            mbinding.imageMoveDevice.setVisibility(View.VISIBLE);
+            mbinding.imageMoveDevice.setTag(true);
+        } else {
+            deviceCut = null;
+            cutRoom = null;
+            cutSite = null;
+            mbinding.imageMoveDevice.setImageResource(R.drawable.ic_action_paste);
+            mbinding.imageMoveDevice.setTag(false);
+
+
+        }
+
+    }
+
 
 
 

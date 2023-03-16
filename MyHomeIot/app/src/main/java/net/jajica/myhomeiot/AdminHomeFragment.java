@@ -301,7 +301,7 @@ public class AdminHomeFragment extends Fragment implements View.OnClickListener{
                         site.setStreet(datString);
                     }
                     if ((datString = mbinding.editNumberAddress.getText().toString()) != null) {
-                        site.setStreetNumber(Integer.parseInt(datString));
+                        if (!datString.equals("")) site.setStreetNumber(Integer.parseInt(datString));
                     }
                     if ((datString = mbinding.editCP.getText().toString()) != null) {
                         site.setPoBox(Integer.parseInt(datString));

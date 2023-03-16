@@ -105,7 +105,9 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         IotDeviceThermometerAdapterViewHolder holderThermometer;
         IotDeviceThermostatAdapterViewHolder holderThermostat;
         IotUnknownDeviceAdapterViewHolder holderUnknown;
+
         switch (type) {
+
 
             case UNKNOWN:
                 view = LayoutInflater.from(context).inflate(R.layout.unknown_device, parent, false);;
@@ -123,6 +125,18 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                             onSelectedDeviceListener.onSelectedDevice(deviceList.get(position));
                         }
                         Log.i(TAG, "iii");
+                    }
+                });
+                view.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        int position = holderSwitch.getLayoutPosition();
+                        if (onAdapterOperationDeviceListener != null) {
+                            onAdapterOperationDeviceListener.onAdapterOperationDeviceListener(FragmentDevices.OPERATION_DEVICE.MOVE_DEVICE,
+                                    deviceList.get(position), deviceList.get(position).getDeviceType(), position);
+                        }
+                        Log.i(TAG, "kk");
+                        return true;
                     }
                 });
                 //return new IotDeviceSwitchAdapterViewHolder(view);

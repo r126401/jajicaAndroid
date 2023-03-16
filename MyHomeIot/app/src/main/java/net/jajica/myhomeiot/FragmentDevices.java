@@ -35,6 +35,7 @@ public class FragmentDevices extends Fragment implements SwipeRefreshLayout.OnRe
 
     private final String TAG = "FragmentDevices";
     RecyclerView recyclerView;
+    GridLayoutManager grid;
     SwipeRefreshLayout swipeDeviceList;
     IotDeviceAdapter adapter;
     String siteName;
@@ -48,6 +49,9 @@ public class FragmentDevices extends Fragment implements SwipeRefreshLayout.OnRe
     private Context context;
 
 
+    public GridLayoutManager getGrid() {
+        return grid;
+    }
 
     private OnOperationDeviceListener onOperationDeviceListener;
 
@@ -56,7 +60,8 @@ public class FragmentDevices extends Fragment implements SwipeRefreshLayout.OnRe
         CREATE_DEVICE,
         DELETE_DEVICE,
         MODIFY_DEVICE,
-        SELECTED_DEVICE
+        SELECTED_DEVICE,
+        MOVE_DEVICE
     }
 
     public interface OnOperationDeviceListener {
@@ -257,7 +262,7 @@ public class FragmentDevices extends Fragment implements SwipeRefreshLayout.OnRe
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerDevices);
         swipeDeviceList = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeDeviceList);
         swipeDeviceList.setOnRefreshListener(this);
-        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        recyclerView.setLayoutManager( grid = new GridLayoutManager(getActivity(), 2));
         createListDevices();
 
         return rootView;
@@ -667,6 +672,13 @@ public class FragmentDevices extends Fragment implements SwipeRefreshLayout.OnRe
                             position);
                     break;
                 case SELECTED_DEVICE:
+                    break;
+                case MOVE_DEVICE:
+                    onOperationDeviceListener.onOperationDeviceListener(
+                            OPERATION_DEVICE.MOVE_DEVICE,
+                            device,
+                            deviceType,
+                            position);
                     break;
             }
 

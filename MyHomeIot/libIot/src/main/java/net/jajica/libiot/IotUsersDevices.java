@@ -507,7 +507,40 @@ public class IotUsersDevices implements Serializable {
     }
 
 
+    public IOT_OPERATION_CONFIGURATION_DEVICES moveDevice(String deviceId, String site, String room) {
 
+        int i = -1;
+        int j = -1;
+        IotRoomsDevices roomDevice;
+        ArrayList<IotDevice> deviceList;
+        IotDevice dev;
+        IotDevice device = null;
+        ArrayList<IotRoomsDevices> roomList;
+        for (i=0;i<getSiteList().size();i++) {
+            roomList = getSiteList().get(i).getRoomList();
+            for (j=0;j<roomList.size(); j++) {
+                if ((device = roomList.get(j).searchDeviceObject(deviceId)) != null) {
+                    break;
+                }
+            }
+            if (device != null) {
+                break;
+            }
+
+        }
+
+        if (device != null) {
+
+            deviceList = siteList.get(i).getRoomList().get(j).getDeviceList();
+            if (deviceList.remove(device)) {
+                insertIotDevice(device, siteList.get(i).getSiteName(), siteList.get(i).getRoomList().get(j).getNameRoom());
+            }
+
+        }
+
+        return IOT_OPERATION_CONFIGURATION_DEVICES.DEVICE_NOT_FOUND;
+
+    }
 
 
 }
