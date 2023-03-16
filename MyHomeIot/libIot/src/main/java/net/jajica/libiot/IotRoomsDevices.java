@@ -4,9 +4,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class IotRoomsDevices {
+public class IotRoomsDevices implements Serializable {
 
     protected String nameRoom;
     protected int idRoom;

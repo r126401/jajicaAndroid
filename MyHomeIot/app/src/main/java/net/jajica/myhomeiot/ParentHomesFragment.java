@@ -1,11 +1,9 @@
 package net.jajica.myhomeiot;
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
-import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentResultListener;
@@ -24,7 +22,6 @@ import net.jajica.libiot.IotSitesDevices;
 import net.jajica.libiot.IotUsersDevices;
 import net.jajica.myhomeiot.databinding.FragmentParentHomesBinding;
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class ParentHomesFragment extends Fragment implements ListHomesAdapter.OnRowSelectedData, View.OnClickListener {
@@ -34,14 +31,11 @@ public class ParentHomesFragment extends Fragment implements ListHomesAdapter.On
     private ArrayList<IotSitesDevices> listSites;
     private ListHomesAdapter adapter;
     private String currentSite;
-    private IotUsersDevices user;
+    private IotUsersDevices configuration;
     FragmentTransaction fragmentTransaction;
 
     private OnPassCurrentSite onPassCurrentSite;
 
-    public void setOnPassCurrentSite(OnPassCurrentSite onPassCurrentSite) {
-        this.onPassCurrentSite = onPassCurrentSite;
-    }
 
     public interface OnPassCurrentSite {
         void onPassCurrentSite(String currentSite);
@@ -50,6 +44,11 @@ public class ParentHomesFragment extends Fragment implements ListHomesAdapter.On
     public ParentHomesFragment() {
         // Required empty public constructor
     }
+
+public ParentHomesFragment(IotUsersDevices configuration) {
+        this.configuration = configuration;
+}
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -77,17 +76,18 @@ public class ParentHomesFragment extends Fragment implements ListHomesAdapter.On
         rootView = mbinding.getRoot();
         mbinding.buttonAddHome.setOnClickListener(this);
         mbinding.buttonNewHome.setOnClickListener(this);
+        currentSite = configuration.getCurrentSite();
         //Recuperamos el site que le pasamos desde la actividad
-        currentSite = requireArguments().getString(IOT_LABELS_JSON.NAME_SITE.getValorTextoJson());
+        //currentSite = requireArguments().getString(IOT_LABELS_JSON.NAME_SITE.getValorTextoJson());
         initFragment(container.getContext());
         return rootView;
     }
 
     private void initFragment(Context context) {
 
-        user = new IotUsersDevices(context);
-        user.loadConfiguration();
-        listSites = user.getSiteList();
+        configuration = new IotUsersDevices(context);
+        configuration.loadConfiguration();
+        listSites = configuration.getSiteList();
 
         //Llenamos el fragment con los sites que leemos desde la configuracion
         mbinding.recyclerAdminHomes2.setLayoutManager(new LinearLayoutManager(context));
@@ -116,8 +116,8 @@ public class ParentHomesFragment extends Fragment implements ListHomesAdapter.On
         bundle.putString(IOT_LABELS_JSON.NAME_SITE.getValorTextoJson(), currentSite);
 
  */
-        user.setCurrentSite(siteName);
-        user.saveConfiguration(getActivity().getApplicationContext());
+        configuration.setCurrentSite(siteName);
+        configuration.saveConfiguration(getActivity().getApplicationContext());
         onPassCurrentSite.onPassCurrentSite(siteName);
     }
 
@@ -192,10 +192,10 @@ public class ParentHomesFragment extends Fragment implements ListHomesAdapter.On
         room.setIdRoom(1);
         site.insertRoomForSite(room);
 
-        result = user.insertSiteForUser(site);
+        result = configuration.insertSiteForUser(site);
         if (result == IOT_DEVICE_USERS_RESULT.RESULT_OK) {
             Log.i(TAG, "jj");
-            user.saveConfiguration(getActivity().getApplicationContext());
+            configuration.saveConfiguration(getActivity().getApplicationContext());
             adapter.notifyItemInserted(listSites.size());
             return IOT_DEVICE_USERS_RESULT.RESULT_OK;
         }
@@ -212,13 +212,13 @@ public class ParentHomesFragment extends Fragment implements ListHomesAdapter.On
         AlertDialog.Builder builder;
         int index;
 
-        if (user.getSiteList().size() == 1) {
+        if (configuration.getSiteList().size() == 1) {
             onPassCurrentSite.onPassCurrentSite(currentSite);
             return;
         }
 
-        index = user.searchSiteOfUser(siteName);
-        IotSitesDevices site = user.getSiteList().get(index);
+        index = configuration.searchSiteOfUser(siteName);
+        IotSitesDevices site = configuration.getSiteList().get(index);
         if (site.getRoomList() != null) {
             builder = new AlertDialog.Builder(getActivity());
             builder.setIcon(R.drawable.ic_warning);
@@ -228,8 +228,8 @@ public class ParentHomesFragment extends Fragment implements ListHomesAdapter.On
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     listSites.remove(position);
-                    user.deleteSiteForUser(siteName, true);
-                    user.saveConfiguration(getActivity().getApplicationContext());
+                    configuration.deleteSiteForUser(siteName, true);
+                    configuration.saveConfiguration(getActivity().getApplicationContext());
 
                     adapter.notifyItemRemoved(position);
                 }
@@ -244,8 +244,8 @@ public class ParentHomesFragment extends Fragment implements ListHomesAdapter.On
 
             dialog.show();
         } else {
-            if (user.deleteSiteForUser(siteName, true) == IOT_DEVICE_USERS_RESULT.RESULT_OK){
-                user.saveConfiguration(getActivity().getApplicationContext());
+            if (configuration.deleteSiteForUser(siteName, true) == IOT_DEVICE_USERS_RESULT.RESULT_OK){
+                configuration.saveConfiguration(getActivity().getApplicationContext());
                 adapter.notifyItemRemoved(position);
             }
         }

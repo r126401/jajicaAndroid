@@ -6,10 +6,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 
-public class IotDeviceConfiguration {
+public class IotDeviceConfiguration implements Serializable {
 
     private String ficheroDispositivos = "/home/t126401/jajicaAndroid/libIot/out/artifacts/libIot_jar/datosDispositivos.conf";
     private JSONObject datosDispositivos;

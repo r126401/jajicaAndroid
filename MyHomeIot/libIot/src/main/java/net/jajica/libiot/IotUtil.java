@@ -1,8 +1,9 @@
 package net.jajica.libiot;
 
+import java.io.Serializable;
 import java.util.Formatter;
 
-public class IotUtil {
+public class IotUtil implements Serializable {
 
     private String formatearHora(int hora, int minuto) {
 

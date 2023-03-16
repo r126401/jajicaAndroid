@@ -16,12 +16,14 @@ import android.view.View;
 
 import net.jajica.libiot.IOT_LABELS_JSON;
 import net.jajica.libiot.IotSitesDevices;
+import net.jajica.libiot.IotUsersDevices;
 import net.jajica.myhomeiot.databinding.ActivityHomesBinding;
 
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class HomesActivity extends AppCompatActivity implements View.OnClickListener, ParentHomesFragment.OnPassCurrentSite {
+public class HomesActivity extends AppCompatActivity implements Serializable, View.OnClickListener, ParentHomesFragment.OnPassCurrentSite {
 
     private final String TAG = "HomesActivity";
     ActivityHomesBinding mbinding;
@@ -30,6 +32,7 @@ public class HomesActivity extends AppCompatActivity implements View.OnClickList
     ParentHomesFragment mainAdminHomeFragment;
     Fragment adminHomeFragment;
     String currentSite;
+    IotUsersDevices configuration;
 
 
 
@@ -39,14 +42,16 @@ public class HomesActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_admin_homes);
         mbinding = ActivityHomesBinding.inflate(getLayoutInflater());
         setContentView(mbinding.getRoot());
         Intent intent;
         intent = getIntent();
         Bundle bundle;
         bundle = intent.getExtras();
-        currentSite = (String) bundle.getString(IOT_LABELS_JSON.SITE.getValorTextoJson());
+        configuration = new IotUsersDevices(getApplicationContext());
+        currentSite = (String) bundle.getString(IOT_LABELS_JSON.NAME_SITE.getValorTextoJson());
+        configuration.loadConfiguration();
+
         if (savedInstanceState == null) {
             launchParentHomesFragment(bundle);
              }
@@ -65,11 +70,12 @@ public class HomesActivity extends AppCompatActivity implements View.OnClickList
 
     private void launchParentHomesFragment(Bundle bundle) {
 
-        mainAdminHomeFragment = new ParentHomesFragment();
+        mainAdminHomeFragment = new ParentHomesFragment(configuration);
         adminHomeFragment = new AdminHomeFragment();
         fragmentManager = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.containerAdminHomes, ParentHomesFragment.class, bundle, "ParentHomesAdapter");
+        fragmentTransaction.add(R.id.containerAdminHomes, mainAdminHomeFragment, "ParentHomesAdapter");
+        //fragmentTransaction.add(R.id.containerAdminHomes, ParentHomesFragment.class, bundle, "ParentHomesAdapter");
         fragmentTransaction.setReorderingAllowed(true);
         fragmentTransaction.addToBackStack("ParentHomesAdapter");
         fragmentTransaction.commit();

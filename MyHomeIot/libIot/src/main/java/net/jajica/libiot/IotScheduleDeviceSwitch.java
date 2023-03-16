@@ -5,7 +5,9 @@ import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class IotScheduleDeviceSwitch extends IotScheduleDevice {
+import java.io.Serializable;
+
+public class IotScheduleDeviceSwitch extends IotScheduleDevice implements Serializable {
 
     private final String TAG = "IotScheduleDeviceSwitch";
     private IOT_SWITCH_RELAY relay;

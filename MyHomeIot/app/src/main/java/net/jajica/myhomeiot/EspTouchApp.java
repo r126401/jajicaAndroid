@@ -13,10 +13,11 @@ import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class EspTouchApp extends Application {
+public class EspTouchApp extends Application implements Serializable {
     private static EspTouchApp app;
 
     private MutableLiveData<String> mBroadcastData;

@@ -4,6 +4,7 @@ import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.security.KeyManagementException;
@@ -26,7 +27,7 @@ import javax.security.cert.CertificateException;
  * Original SocketFactory file taken from https://github.com/owntracks/android
  */
 
-public class SocketFactory extends javax.net.ssl.SSLSocketFactory{
+public class SocketFactory extends javax.net.ssl.SSLSocketFactory implements Serializable {
     private javax.net.ssl.SSLSocketFactory factory;
     private final String TAG = "SocketFactory";
 

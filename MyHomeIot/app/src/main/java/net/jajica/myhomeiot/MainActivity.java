@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.versionedparcelable.VersionedParcel;
 import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
@@ -42,6 +43,7 @@ import net.jajica.libiot.IotUsersDevices;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -242,6 +244,11 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 
         if (configuration.getSiteList() != null) {
             indexSite = configuration.searchSiteOfUser(configuration.getCurrentSite());
+            if (indexSite == -1) {
+                configuration.setCurrentSite(configuration.getSiteList().get(0).getSiteName());
+                indexSite = 0;
+                configuration.saveConfiguration(getApplicationContext());
+            }
             rooms = configuration.getSiteList().get(indexSite).getRoomList();
             currentSite = configuration.getSiteList().get(indexSite).getSiteName();
             mbinding.textHome.setText(currentSite);
@@ -540,12 +547,17 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                 @Override
                 public void onActivityResult(ActivityResult result) {
 
-                    String data = result.getData().getDataString();
-                    if (!configuration.getCurrentSite().equals(data)) {
-                        configuration.setCurrentSite(data);
-                        mbinding.textHome.setText(data);
-                        createStructure();
+                    if (result.getData() != null) {
+                        String data = result.getData().getDataString();
+                        if (!configuration.getCurrentSite().equals(data)) {
+                            configuration.setCurrentSite(data);
+                            configuration.saveConfiguration(getApplicationContext());
+                            mbinding.textHome.setText(data);
+                            configuration.reloadConfiguration();
+                            createStructure();
+                        }
                     }
+
 
                 }
             }
@@ -554,12 +566,13 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     private void launchHomesActivity() {
         Intent launcherActivity = new Intent(MainActivity.this, HomesActivity.class);
         if (configuration.getJsonObject() != null) {
-            launcherActivity.putExtra(IOT_LABELS_JSON.NAME_SITE.getValorTextoJson(), mbinding.textHome.getText().toString());
+            launcherActivity.putExtra(IOT_LABELS_JSON.NAME_SITE.getValorTextoJson(), configuration.getCurrentSite());
         } else {
             launcherActivity.putExtra(IOT_LABELS_JSON.NAME_SITE.getValorTextoJson(), "null");
         }
 
         launcherHomesActivity.launch(launcherActivity);
+
 
     }
 
@@ -678,6 +691,8 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 
         return result;
     }
+
+
 
 
 }
