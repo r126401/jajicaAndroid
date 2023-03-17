@@ -238,16 +238,16 @@ public class IotDeviceSwitch extends IotDevice implements Serializable {
 
     }
 
-    public IOT_DEVICE_STATE_CONNECTION commandSetRelay(IOT_SWITCH_RELAY action) {
+    public IOT_DEVICE_STATUS_CONNECTION commandSetRelay(IOT_SWITCH_RELAY action) {
 
         JSONObject parameters;
         parameters = new JSONObject();
-        IOT_DEVICE_STATE_CONNECTION state = IOT_DEVICE_STATE_CONNECTION.UNKNOWN;
+        IOT_DEVICE_STATUS_CONNECTION state = IOT_DEVICE_STATUS_CONNECTION.UNKNOWN;
         try {
             parameters.put(IOT_LABELS_JSON.ACTION_RELAY.getValorTextoJson(), action.getEstadoRele());
         } catch (JSONException e) {
             e.printStackTrace();
-            return IOT_DEVICE_STATE_CONNECTION.DEVICE_ERROR_COMMUNICATION;
+            return IOT_DEVICE_STATUS_CONNECTION.DEVICE_ERROR_COMMUNICATION;
         }
 
         return commandwithParameters(IOT_COMMANDS.SET_RELAY, IOT_LABELS_JSON.RELAY.getValorTextoJson(), parameters);

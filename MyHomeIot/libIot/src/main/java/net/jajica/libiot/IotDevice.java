@@ -83,12 +83,12 @@ public abstract class IotDevice implements Serializable {
     /**
      * Estado del dispositivo
      */
-    protected IOT_DEVICE_STATE deviceStatus;
+    protected IOT_DEVICE_STATUS deviceStatus;
 
     /**
      * Estado de la conexion al dispositivo
      */
-    protected IOT_DEVICE_STATE_CONNECTION connectionState;
+    protected IOT_DEVICE_STATUS_CONNECTION connectionState;
 
     /**
      * identidad de la conexion mqtt
@@ -595,7 +595,7 @@ public abstract class IotDevice implements Serializable {
      * Obtiene el estado del dispositivo
      * @return Retorna el estado del dispositivo
      */
-    public IOT_DEVICE_STATE getDeviceStatus() {
+    public IOT_DEVICE_STATUS getDeviceStatus() {
         return deviceStatus;
     }
 
@@ -603,7 +603,7 @@ public abstract class IotDevice implements Serializable {
      * Pone el estado del dispositivo
      * @param deviceStatus Es el nuevo estado del dispositivo
      */
-    public void setDeviceStatus(IOT_DEVICE_STATE deviceStatus) {
+    public void setDeviceStatus(IOT_DEVICE_STATUS deviceStatus) {
         this.deviceStatus = deviceStatus;
     }
 
@@ -611,7 +611,7 @@ public abstract class IotDevice implements Serializable {
      * Obtiene el estado de la conexion
      * @return
      */
-    public IOT_DEVICE_STATE_CONNECTION getConnectionState() {
+    public IOT_DEVICE_STATUS_CONNECTION getConnectionState() {
         return connectionState;
     }
 
@@ -619,7 +619,7 @@ public abstract class IotDevice implements Serializable {
      * Actualiza el estado de la conexion
      * @param connectionState Es el nuevo estado de la conexion
      */
-    public void setConnectionState(IOT_DEVICE_STATE_CONNECTION connectionState) {
+    public void setConnectionState(IOT_DEVICE_STATUS_CONNECTION connectionState) {
         this.connectionState = connectionState;
     }
 
@@ -675,8 +675,8 @@ public abstract class IotDevice implements Serializable {
         subscriptionTopic = null;
         publishTopic = null;
         dataOta = null;
-        deviceStatus = IOT_DEVICE_STATE.INDETERMINADO;
-        connectionState = IOT_DEVICE_STATE_CONNECTION.UNKNOWN;
+        deviceStatus = IOT_DEVICE_STATUS.INDETERMINADO;
+        connectionState = IOT_DEVICE_STATUS_CONNECTION.UNKNOWN;
         finUpgrade = 0;
         activeSchedule = null;
         dispositivoJson = new JSONObject();
@@ -703,8 +703,8 @@ public abstract class IotDevice implements Serializable {
         subscriptionTopic = null;
         publishTopic = null;
         dataOta = null;
-        deviceStatus = IOT_DEVICE_STATE.INDETERMINADO;
-        connectionState = IOT_DEVICE_STATE_CONNECTION.UNKNOWN;
+        deviceStatus = IOT_DEVICE_STATUS.INDETERMINADO;
+        connectionState = IOT_DEVICE_STATUS_CONNECTION.UNKNOWN;
         finUpgrade = 0;
         activeSchedule = null;
         dispositivoJson = new JSONObject();
@@ -730,8 +730,8 @@ public abstract class IotDevice implements Serializable {
         subscriptionTopic = null;
         publishTopic = null;
         dataOta = null;
-        deviceStatus = IOT_DEVICE_STATE.INDETERMINADO;
-        connectionState = IOT_DEVICE_STATE_CONNECTION.UNKNOWN;
+        deviceStatus = IOT_DEVICE_STATUS.INDETERMINADO;
+        connectionState = IOT_DEVICE_STATUS_CONNECTION.UNKNOWN;
         finUpgrade = 0;
         activeSchedule = null;
         dispositivoJson = new JSONObject();
@@ -777,8 +777,8 @@ public abstract class IotDevice implements Serializable {
         subscriptionTopic = null;
         publishTopic = null;
         dataOta = null;
-        deviceStatus = IOT_DEVICE_STATE.INDETERMINADO;
-        connectionState = IOT_DEVICE_STATE_CONNECTION.UNKNOWN;
+        deviceStatus = IOT_DEVICE_STATUS.INDETERMINADO;
+        connectionState = IOT_DEVICE_STATUS_CONNECTION.UNKNOWN;
         finUpgrade = 0;
         activeSchedule = null;
         dispositivoJson = new JSONObject();
@@ -943,7 +943,7 @@ public abstract class IotDevice implements Serializable {
      * Metodo para subscribir la aplicacion a un topic
      * @return Se retorna el estado de la operacion
      */
-    public IOT_DEVICE_STATE_CONNECTION subscribeDevice() {
+    public IOT_DEVICE_STATUS_CONNECTION subscribeDevice() {
         return subscribeDevice(this.subscriptionTopic);
     }
 
@@ -952,7 +952,7 @@ public abstract class IotDevice implements Serializable {
      * @return
      */
 
-    public IOT_DEVICE_STATE_CONNECTION subscribeOtaServer() {
+    public IOT_DEVICE_STATUS_CONNECTION subscribeOtaServer() {
         if (dataOta == null) {
             dataOta = new IotOtaVersionAvailable(getPublishOtaTopic(), getSubscribeOtaTopic());
         }
@@ -964,17 +964,17 @@ public abstract class IotDevice implements Serializable {
      * @param topicDevice Es el topic
      * @return Se retorna el resultado de la operacion
      */
-    public IOT_DEVICE_STATE_CONNECTION subscribeDevice(String topicDevice) {
+    public IOT_DEVICE_STATUS_CONNECTION subscribeDevice(String topicDevice) {
 
         if (cnx == null) {
             Log.e(TAG, "La conexion es nula para el topic " + topicDevice);
-            return IOT_DEVICE_STATE_CONNECTION.DEVICE_ERROR_SUBSCRIPTION;
+            return IOT_DEVICE_STATUS_CONNECTION.DEVICE_ERROR_SUBSCRIPTION;
         }
         if (listenerArrivedMessages == null) {
             listenerArrivedMessages = cnx.setOnListenerArrivedMessaged(topicDevice, new IotMqttConnection.OnArrivedMessage() {
                 @Override
                 public void arrivedMessage(String topic, MqttMessage message) {
-                    setConnectionState(IOT_DEVICE_STATE_CONNECTION.DEVICE_CONNECTED);
+                    setConnectionState(IOT_DEVICE_STATUS_CONNECTION.DEVICE_CONNECTED);
                     processMessages(topic, message);
                 }
             });
@@ -997,7 +997,7 @@ public abstract class IotDevice implements Serializable {
 
             }
         });
-        return IOT_DEVICE_STATE_CONNECTION.DEVICE_CONNECTED;
+        return IOT_DEVICE_STATUS_CONNECTION.DEVICE_CONNECTED;
     }
 
     /**
@@ -1278,18 +1278,18 @@ public abstract class IotDevice implements Serializable {
      * @param command Es la identidad del comando
      * @return Se retorna el estado de conexion del dispositivo despues de lanzar la operacion
      */
-    protected IOT_DEVICE_STATE_CONNECTION simpleCommand(IOT_COMMANDS command) {
+    protected IOT_DEVICE_STATUS_CONNECTION simpleCommand(IOT_COMMANDS command) {
 
         String textoComando;
         IotTools api;
-        IOT_DEVICE_STATE_CONNECTION estado;
+        IOT_DEVICE_STATUS_CONNECTION estado;
         api = new IotTools();
         textoComando = api.createSimpleCommand(command);
-        if ((estado = sendCommand(textoComando)) != IOT_DEVICE_STATE_CONNECTION.DEVICE_WAITING_RESPONSE) {
+        if ((estado = sendCommand(textoComando)) != IOT_DEVICE_STATUS_CONNECTION.DEVICE_WAITING_RESPONSE) {
             return estado;
         }
 
-        return IOT_DEVICE_STATE_CONNECTION.DEVICE_WAITING_RESPONSE;
+        return IOT_DEVICE_STATUS_CONNECTION.DEVICE_WAITING_RESPONSE;
     }
 
     /**
@@ -1298,18 +1298,18 @@ public abstract class IotDevice implements Serializable {
      * @param topic es el topic de publicacion
      * @return Se devuelve el estado de conexion del dispositivo despues de lanzar la peticion
      */
-    protected IOT_DEVICE_STATE_CONNECTION simpleCommand(IOT_COMMANDS command, String topic) {
+    protected IOT_DEVICE_STATUS_CONNECTION simpleCommand(IOT_COMMANDS command, String topic) {
 
         String textoComando;
         IotTools api;
-        IOT_DEVICE_STATE_CONNECTION estado;
+        IOT_DEVICE_STATUS_CONNECTION estado;
         api = new IotTools();
         textoComando = api.createSimpleCommand(command);
-        if ((estado = sendCommand(textoComando, topic)) != IOT_DEVICE_STATE_CONNECTION.DEVICE_WAITING_RESPONSE) {
+        if ((estado = sendCommand(textoComando, topic)) != IOT_DEVICE_STATUS_CONNECTION.DEVICE_WAITING_RESPONSE) {
             return estado;
         }
 
-        return IOT_DEVICE_STATE_CONNECTION.DEVICE_WAITING_RESPONSE;
+        return IOT_DEVICE_STATUS_CONNECTION.DEVICE_WAITING_RESPONSE;
     }
 
 
@@ -1317,7 +1317,7 @@ public abstract class IotDevice implements Serializable {
      * metodo para invocar el comando status al dispositivo
      * @return Se devuelve el estado de la conexion del dispositivo despues de lanzar la peticion.
      */
-    public IOT_DEVICE_STATE_CONNECTION commandGetStatusDevice() {
+    public IOT_DEVICE_STATUS_CONNECTION commandGetStatusDevice() {
 
         return simpleCommand(IOT_COMMANDS.STATUS_DEVICE);
 
@@ -1328,7 +1328,7 @@ public abstract class IotDevice implements Serializable {
      * @return
      */
 
-    public IOT_DEVICE_STATE_CONNECTION commandResetDevice() {
+    public IOT_DEVICE_STATUS_CONNECTION commandResetDevice() {
 
         return simpleCommand(IOT_COMMANDS.RESET);
     }
@@ -1337,16 +1337,16 @@ public abstract class IotDevice implements Serializable {
      * Metodo para invocar un factory reset al dispositivo
      * @return
      */
-    public IOT_DEVICE_STATE_CONNECTION commandFactoryReset() {
+    public IOT_DEVICE_STATUS_CONNECTION commandFactoryReset() {
 
         return simpleCommand(IOT_COMMANDS.FACTORY_RESET);
     }
 
 
-    public IOT_DEVICE_STATE_CONNECTION commandUpgradeFirmware() {
+    public IOT_DEVICE_STATUS_CONNECTION commandUpgradeFirmware() {
 
         JSONObject parameters;
-        IOT_DEVICE_STATE_CONNECTION state = IOT_DEVICE_STATE_CONNECTION.UNKNOWN;
+        IOT_DEVICE_STATUS_CONNECTION state = IOT_DEVICE_STATUS_CONNECTION.UNKNOWN;
         parameters =dataOta.otaData2Json();
         if (parameters != null) {
             state = commandwithParameters(IOT_COMMANDS.UPGRADE_FIRMWARE, IOT_LABELS_JSON.DLG_UPGDRADE_FIRMWARE.getValorTextoJson(), parameters);
@@ -1361,7 +1361,7 @@ public abstract class IotDevice implements Serializable {
      * @param textoComando Es el texto del comando json
      * @return Se devuelve el estado de la conexion del dispositivo despues de lanzar la peticion
      */
-    protected IOT_DEVICE_STATE_CONNECTION sendCommand(String textoComando) {
+    protected IOT_DEVICE_STATUS_CONNECTION sendCommand(String textoComando) {
         return sendCommand(textoComando, getPublishTopic());
     }
 
@@ -1371,9 +1371,9 @@ public abstract class IotDevice implements Serializable {
      * @param topic es el topic especifico
      * @return Se devuelve el estado de la conexion del dispositivo despues de lanzar la peticion
      */
-    protected IOT_DEVICE_STATE_CONNECTION sendCommand(String textoComando, String topic) {
+    protected IOT_DEVICE_STATUS_CONNECTION sendCommand(String textoComando, String topic) {
         Timer timerCommand = null;
-        IOT_DEVICE_STATE_CONNECTION status;
+        IOT_DEVICE_STATUS_CONNECTION status;
         if (topic == null) {
             Log.w(TAG, "topic vacio. Comando : " + textoComando);
         }
@@ -1382,28 +1382,28 @@ public abstract class IotDevice implements Serializable {
         }
         if (cnx == null) {
             Log.e(TAG, "No hay conexion mqtt en el dispositivo");
-            return IOT_DEVICE_STATE_CONNECTION.DEVICE_ERROR_COMMUNICATION;
+            return IOT_DEVICE_STATUS_CONNECTION.DEVICE_ERROR_COMMUNICATION;
         }
-        if ((status = cnx.publishTopic(topic, textoComando)) != IOT_DEVICE_STATE_CONNECTION.DEVICE_WAITING_RESPONSE) {
+        if ((status = cnx.publishTopic(topic, textoComando)) != IOT_DEVICE_STATUS_CONNECTION.DEVICE_WAITING_RESPONSE) {
             setConnectionState(status);
             return status;
         }
-        setConnectionState(IOT_DEVICE_STATE_CONNECTION.DEVICE_WAITING_RESPONSE);
+        setConnectionState(IOT_DEVICE_STATUS_CONNECTION.DEVICE_WAITING_RESPONSE);
         timerCommand = new Timer();
 
         timerCommand.schedule(new TimerTask() {
             @Override
             public void run() {
-                if (getConnectionState() != IOT_DEVICE_STATE_CONNECTION.DEVICE_CONNECTED) {
+                if (getConnectionState() != IOT_DEVICE_STATUS_CONNECTION.DEVICE_CONNECTED) {
                     if (onReceivedTimeoutCommand != null) {
                         //Log.i(TAG, "Enviamos timeout: " + getTokenFromReport(textoComando));
-                        setConnectionState(IOT_DEVICE_STATE_CONNECTION.DEVICE_DISCONNECTED);
+                        setConnectionState(IOT_DEVICE_STATUS_CONNECTION.DEVICE_DISCONNECTED);
                         onReceivedTimeoutCommand.onReceivedTimeoutCommand(getTokenFromReport(textoComando));
                     }
                 }
             }
         }, 10000);
-        return IOT_DEVICE_STATE_CONNECTION.DEVICE_WAITING_RESPONSE;
+        return IOT_DEVICE_STATUS_CONNECTION.DEVICE_WAITING_RESPONSE;
     }
 
 
@@ -1430,9 +1430,9 @@ public abstract class IotDevice implements Serializable {
         IotTools api;
         api = new IotTools();
         int estado;
-        IOT_DEVICE_STATE estadoDispositivo = IOT_DEVICE_STATE.INDETERMINADO;
+        IOT_DEVICE_STATUS estadoDispositivo = IOT_DEVICE_STATUS.INDETERMINADO;
         estado = api.getJsonInt(respuesta, IOT_LABELS_JSON.STATUS_DEVICE.getValorTextoJson());
-        if (estado > IOT_DEVICE_STATE.INDETERMINADO.getDeviceState()) {
+        if (estado > IOT_DEVICE_STATUS.INDETERMINADO.getDeviceState()) {
             setDeviceStatus(estadoDispositivo.fromId(estado));
             return IOT_CODE_RESULT.RESUT_CODE_OK;
         } else {
@@ -1447,7 +1447,7 @@ public abstract class IotDevice implements Serializable {
      * Metodo para invocar el comando info sobre el dispositivo
      * @return Se devuelve el estado de la conexion del dispositivo despues de lanzar la peticion
      */
-    public IOT_DEVICE_STATE_CONNECTION commandGetInfoDevice() {
+    public IOT_DEVICE_STATUS_CONNECTION commandGetInfoDevice() {
 
         return simpleCommand(IOT_COMMANDS.INFO_DEVICE);
 
@@ -1497,7 +1497,7 @@ public abstract class IotDevice implements Serializable {
 
 
         setCurrentOtaVersionFromReport(message);
-        setConnectionState(IOT_DEVICE_STATE_CONNECTION.DEVICE_CONNECTED);
+        setConnectionState(IOT_DEVICE_STATUS_CONNECTION.DEVICE_CONNECTED);
         setDeviceStateFromReport(message);
         setProgrammerStateFromReport(message);
         setDeviceTypeFromReport(message);
@@ -1564,7 +1564,7 @@ public abstract class IotDevice implements Serializable {
 
 
     }
-    public IOT_DEVICE_STATE_CONNECTION commandGetScheduleDevice() {
+    public IOT_DEVICE_STATUS_CONNECTION commandGetScheduleDevice() {
 
         return simpleCommand(IOT_COMMANDS.GET_SCHEDULE);
     }
@@ -1659,7 +1659,7 @@ public abstract class IotDevice implements Serializable {
      * @param ScheduleId Es el idSchedule a borrar
      * @return Se retorna el estado de conexion del dispositivo despues de lanzar la peticion
      */
-    public IOT_DEVICE_STATE_CONNECTION commandDeleteScheduleDevice(String ScheduleId) {
+    public IOT_DEVICE_STATUS_CONNECTION commandDeleteScheduleDevice(String ScheduleId) {
 
 
         JSONObject parameters = new JSONObject();
@@ -1667,7 +1667,7 @@ public abstract class IotDevice implements Serializable {
             parameters.put(IOT_LABELS_JSON.SCHEDULE_ID.getValorTextoJson(), ScheduleId);
         } catch (JSONException e) {
             e.printStackTrace();
-            return IOT_DEVICE_STATE_CONNECTION.DEVICE_ERROR_COMMUNICATION;
+            return IOT_DEVICE_STATUS_CONNECTION.DEVICE_ERROR_COMMUNICATION;
         }
 
 
@@ -1683,11 +1683,11 @@ public abstract class IotDevice implements Serializable {
      * @param parameters Es el conjunto de parametros de la etiqueta
      * @return Se retorna el estado de conexion del dispositivo despues de lanzar la peticion
      */
-    public IOT_DEVICE_STATE_CONNECTION commandwithParameters(IOT_COMMANDS command, String labelParameter, JSONObject parameters) {
+    public IOT_DEVICE_STATUS_CONNECTION commandwithParameters(IOT_COMMANDS command, String labelParameter, JSONObject parameters) {
 
         String textoComando;
         IotTools api;
-        IOT_DEVICE_STATE_CONNECTION estado;
+        IOT_DEVICE_STATUS_CONNECTION estado;
         api = new IotTools();
         JSONObject jsonCommand;
         textoComando = api.createSimpleCommand(command);
@@ -1697,13 +1697,13 @@ public abstract class IotDevice implements Serializable {
             textoComando = jsonCommand.toString();
         } catch (JSONException e) {
             e.printStackTrace();
-            return IOT_DEVICE_STATE_CONNECTION.DEVICE_ERROR_COMMUNICATION;
+            return IOT_DEVICE_STATUS_CONNECTION.DEVICE_ERROR_COMMUNICATION;
         }
-            if ((estado = sendCommand(textoComando)) != IOT_DEVICE_STATE_CONNECTION.DEVICE_WAITING_RESPONSE) {
+            if ((estado = sendCommand(textoComando)) != IOT_DEVICE_STATUS_CONNECTION.DEVICE_WAITING_RESPONSE) {
             return estado;
         }
 
-        return IOT_DEVICE_STATE_CONNECTION.DEVICE_WAITING_RESPONSE;
+        return IOT_DEVICE_STATUS_CONNECTION.DEVICE_WAITING_RESPONSE;
     }
 
     /**
@@ -1741,10 +1741,10 @@ public abstract class IotDevice implements Serializable {
      * @param schedule Es un objeto Schedule que contiene los parametros a modificar
      * @return Se retorna el estado de conexion del dispositivo despues de lanzar la peticion
      */
-    public IOT_DEVICE_STATE_CONNECTION commandModifyScheduleDevice(IotScheduleDevice schedule) {
+    public IOT_DEVICE_STATUS_CONNECTION commandModifyScheduleDevice(IotScheduleDevice schedule) {
 
         JSONObject parameters;
-        IOT_DEVICE_STATE_CONNECTION state = IOT_DEVICE_STATE_CONNECTION.UNKNOWN;
+        IOT_DEVICE_STATUS_CONNECTION state = IOT_DEVICE_STATUS_CONNECTION.UNKNOWN;
         parameters = schedule.schedule2Json(schedule);
         if (parameters != null) {
             state = commandwithParameters(IOT_COMMANDS.MODIFY_SCHEDULE, IOT_LABELS_JSON.SCHEDULE.getValorTextoJson(), parameters);
@@ -1832,10 +1832,10 @@ public abstract class IotDevice implements Serializable {
 
 
 
-    public IOT_DEVICE_STATE_CONNECTION commandNewScheduleDevice(IotScheduleDevice schedule) {
+    public IOT_DEVICE_STATUS_CONNECTION commandNewScheduleDevice(IotScheduleDevice schedule) {
 
         JSONObject parameters;
-        IOT_DEVICE_STATE_CONNECTION state = IOT_DEVICE_STATE_CONNECTION.UNKNOWN;
+        IOT_DEVICE_STATUS_CONNECTION state = IOT_DEVICE_STATUS_CONNECTION.UNKNOWN;
         parameters = schedule.schedule2Json(schedule);
         if (parameters != null) {
             state = commandwithParameters(IOT_COMMANDS.NEW_SCHEDULE, IOT_LABELS_JSON.SCHEDULE.getValorTextoJson(), parameters);
@@ -1950,7 +1950,7 @@ public abstract class IotDevice implements Serializable {
         }
 */
         setCurrentOtaVersionFromReport(message);
-        setConnectionState(IOT_DEVICE_STATE_CONNECTION.DEVICE_CONNECTED);
+        setConnectionState(IOT_DEVICE_STATUS_CONNECTION.DEVICE_CONNECTED);
         setDeviceStateFromReport(message);
         setProgrammerStateFromReport(message);
         setDeviceTypeFromReport(message);
@@ -2002,7 +2002,7 @@ public abstract class IotDevice implements Serializable {
 
     }
 
-    public IOT_DEVICE_STATE_CONNECTION getOtaVersionAvailableCommand() {
+    public IOT_DEVICE_STATUS_CONNECTION getOtaVersionAvailableCommand() {
         JSONObject parameter;
         JSONObject command;
 
@@ -2014,7 +2014,7 @@ public abstract class IotDevice implements Serializable {
             command.put(IOT_LABELS_JSON.DLG_UPGDRADE_FIRMWARE.getValorTextoJson(), parameter);
         } catch (JSONException e) {
             e.printStackTrace();
-            return IOT_DEVICE_STATE_CONNECTION.DEVICE_ERROR_COMMUNICATION;
+            return IOT_DEVICE_STATUS_CONNECTION.DEVICE_ERROR_COMMUNICATION;
         }
 
         return cnx.publishTopic(dataOta.getTopicPublicacion(), command.toString());
@@ -2022,11 +2022,11 @@ public abstract class IotDevice implements Serializable {
 
     }
 
-    protected IOT_DEVICE_STATE_CONNECTION setParametersDevicesCommand() {
+    protected IOT_DEVICE_STATUS_CONNECTION setParametersDevicesCommand() {
 
 
 
-        return IOT_DEVICE_STATE_CONNECTION.DEVICE_CONNECTED;
+        return IOT_DEVICE_STATUS_CONNECTION.DEVICE_CONNECTED;
 
     }
 
@@ -2047,14 +2047,14 @@ public abstract class IotDevice implements Serializable {
 
     }
 
-    public IOT_DEVICE_STATE_CONNECTION unSubscribeDevice(String topic) {
+    public IOT_DEVICE_STATUS_CONNECTION unSubscribeDevice(String topic) {
 
         int i;
         if (listenerArrivedMessages == null) {
-            return IOT_DEVICE_STATE_CONNECTION.DEVICE_ERROR_SUBSCRIPTION;
+            return IOT_DEVICE_STATUS_CONNECTION.DEVICE_ERROR_SUBSCRIPTION;
         }
         if (listenerArrivedMessages.listTopics == null) {
-            return IOT_DEVICE_STATE_CONNECTION.DEVICE_ERROR_SUBSCRIPTION;
+            return IOT_DEVICE_STATUS_CONNECTION.DEVICE_ERROR_SUBSCRIPTION;
         }
         for (i=0;i<listenerArrivedMessages.listTopics.size(); i++) {
             if(listenerArrivedMessages.listTopics.get(i).equals(topic)) {
@@ -2062,16 +2062,16 @@ public abstract class IotDevice implements Serializable {
                 listenerArrivedMessages.listTopics.remove(i);
                 if (listenerArrivedMessages.listTopics.size() == 0) {
                     listenerArrivedMessages = null;
-                    return IOT_DEVICE_STATE_CONNECTION.DEVICE_NO_SUBSCRIPT;
+                    return IOT_DEVICE_STATUS_CONNECTION.DEVICE_NO_SUBSCRIPT;
                 }
             }
         }
-        return IOT_DEVICE_STATE_CONNECTION.DEVICE_ERROR_SUBSCRIPTION;
+        return IOT_DEVICE_STATUS_CONNECTION.DEVICE_ERROR_SUBSCRIPTION;
 
 
     }
 
-    public IOT_DEVICE_STATE_CONNECTION unSubscribeDevice() {
+    public IOT_DEVICE_STATUS_CONNECTION unSubscribeDevice() {
 
         return unSubscribeDevice(getSubscriptionTopic());
     }

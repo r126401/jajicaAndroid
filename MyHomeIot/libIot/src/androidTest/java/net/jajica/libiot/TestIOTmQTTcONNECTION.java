@@ -1,7 +1,7 @@
 package net.jajica.libiot;
 
 
-import static net.jajica.libiot.IOT_DEVICE_STATE_CONNECTION.DEVICE_WAITING_RESPONSE;
+import static net.jajica.libiot.IOT_DEVICE_STATUS_CONNECTION.DEVICE_WAITING_RESPONSE;
 import static org.junit.Assert.assertEquals;
 
 import android.content.Context;

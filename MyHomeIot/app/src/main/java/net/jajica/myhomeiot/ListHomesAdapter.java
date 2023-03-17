@@ -58,6 +58,11 @@ public class ListHomesAdapter extends RecyclerView.Adapter<ListHomesAdapter.List
     @Override
     public void onBindViewHolder(@NonNull ListHomesAdapter.ListHomesAdapterViewHolder holder, int position) {
 
+        if (listSites.size() == 1) {
+            holder.imageDelete.setVisibility(View.INVISIBLE);
+        } else {
+            holder.imageDelete.setVisibility(View.VISIBLE);
+        }
         holder.imageEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

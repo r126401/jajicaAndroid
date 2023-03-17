@@ -40,7 +40,7 @@ public class ExampleInstrumentedTest {
     public void pruebaInsertarDispositivo() {
 
         IotDevice dispositivo;
-        IOT_DEVICE_STATE a;
+        IOT_DEVICE_STATUS a;
         IOT_OPERATION_CONFIGURATION_DEVICES op;
         dispositivo = new IotDeviceUnknown();
         dispositivo.setDeviceName("mmajGH");

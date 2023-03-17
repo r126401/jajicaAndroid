@@ -105,7 +105,9 @@
                 android:hint="@string/street_number"
                 android:maxLength="9"
                 android:maxLines="1"
-                android:textColor="?colorOnPrimaryContainer">
+                android:textColor="?colorOnPrimaryContainer"
+                android:inputType="number"
+                android:text="0">
 
             </com.google.android.material.textfield.TextInputEditText>
 
@@ -132,8 +134,9 @@
                 android:layout_height="wrap_content"
                 android:enabled="false"
                 android:hint="@string/district_postal"
-                android:inputType="textEmailAddress"
-                android:maxLines="2">
+                android:inputType="number"
+                android:maxLines="1"
+                android:text="0">
 
             </com.google.android.material.textfield.TextInputEditText>
 
@@ -253,7 +256,9 @@
                 android:layout_height="wrap_content"
                 android:enabled="false"
                 android:hint="@string/longitude"
-                android:maxLines="15">
+                android:maxLines="15"
+                android:inputType="numberDecimal"
+                android:text="0">
 
             </com.google.android.material.textfield.TextInputEditText>
 
@@ -282,7 +287,9 @@
                 android:layout_height="wrap_content"
                 android:enabled="false"
                 android:hint="@string/latitude"
-                android:maxLines="15"/>
+                android:maxLines="15"
+                android:inputType="numberDecimal"
+                android:text="0"/>
 
 
             <androidx.appcompat.widget.AppCompatImageView

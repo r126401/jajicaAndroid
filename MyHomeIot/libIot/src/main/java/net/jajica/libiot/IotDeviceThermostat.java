@@ -416,7 +416,7 @@ public class IotDeviceThermostat extends IotDeviceThermometer implements Seriali
         return -1;
     }
 
-    public IOT_DEVICE_STATE_CONNECTION commandSetThresholdTemperarture(Double thresholdTemperature) {
+    public IOT_DEVICE_STATUS_CONNECTION commandSetThresholdTemperarture(Double thresholdTemperature) {
 
         JSONObject parameter;
         parameter = new JSONObject();
@@ -425,7 +425,7 @@ public class IotDeviceThermostat extends IotDeviceThermometer implements Seriali
             parameter.put(IOT_LABELS_JSON.THRESHOLD_TEMPERATURE.getValorTextoJson(), thresholdTemperature);
         } catch (JSONException e) {
             e.printStackTrace();
-            return IOT_DEVICE_STATE_CONNECTION.DEVICE_ERROR_COMMUNICATION;
+            return IOT_DEVICE_STATUS_CONNECTION.DEVICE_ERROR_COMMUNICATION;
         }
 
         return commandwithParameters(IOT_COMMANDS.MODIFY_THRESHOLD_TEMPERATURE, IOT_LABELS_JSON.MODIFY_APP.getValorTextoJson(), parameter);

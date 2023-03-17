@@ -114,4 +114,6 @@
     <string name="error_new_device">Error creando nuevo dispositivo</string>
     <string name="error_device_exits">El dispositivo ya existe!</string>
     <string name="none_home">Ninguna estancia</string>
+    <string name="error_message_uniq_home">No se puede borrar la ultima casa</string>
+    <string name="error_home">Error en casa</string>
 </resources>

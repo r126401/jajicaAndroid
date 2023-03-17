@@ -24,6 +24,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
+import net.jajica.libiot.IOT_DEVICE_STATUS;
 import net.jajica.libiot.IOT_DEVICE_TYPE;
 import net.jajica.libiot.IOT_LABELS_JSON;
 import net.jajica.libiot.IOT_MQTT_STATUS_CONNECTION;
@@ -64,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     private IotDevice deviceCut;
     private String cutRoom;
     private String cutSite;
+    private int cutPosition;
 
 
 
@@ -75,23 +77,23 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 
         IOT_OPERATION_CONFIGURATION_DEVICES res;
         super.onCreate(savedInstanceState);
-        
+
         if (initApplication() == APPLICATION_STATUS.APPLICATION_OK) {
             connectAllDevices();
         }
-        
+
     }
 
     private void connectAllDevices() {
-        
+
         int i;
         connectUnknownDevices();
         connectSwitchDevices();
         connectThermometerDevices();
         connectThermostatDevices();
-        
-        
-        
+
+
+
     }
 
     private void collectDeviceList() {
@@ -125,6 +127,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 
         IOT_OPERATION_CONFIGURATION_DEVICES result;
         // capturamos los controles
+        currentRoom = null;
         mbinding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(mbinding.getRoot());
         setToolbar(getResources().getResourceName(R.string.app_name), android.R.drawable.ic_delete);
@@ -132,6 +135,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         mbinding.textHome.setOnClickListener(this);
         mbinding.buttonViewGrid.setOnClickListener(this);
         mbinding.imageMoveDevice.setOnClickListener(this);
+        mbinding.imageMoveDevice.setTag(false);
 
         if (mbinding.navView!= null) {
             prepararDrawer(mbinding.navView);
@@ -158,7 +162,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 
         }
 
-        createEnvironment();
+        createEnvironment(-1);
         mbinding.tabs.setTabMode(TabLayout.MODE_SCROLLABLE);
         return APPLICATION_STATUS.APPLICATION_OK;
     }
@@ -210,7 +214,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 
     }
 
-    private IOT_MQTT_STATUS_CONNECTION createEnvironment() {
+    private IOT_MQTT_STATUS_CONNECTION createEnvironment(int position) {
 
         IOT_MQTT_STATUS_CONNECTION state;
         cnx = new IotMqttConnection(getApplicationContext());
@@ -218,7 +222,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
             @Override
             public void connectionEstablished(boolean reconnect, String serverURI) {
                 Log.i(TAG, "Conexion estabilizada");
-                createStructure();
+                createStructure(position);
                 notifConnectOk();
 
             }
@@ -236,7 +240,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 
 
 
-    private APPLICATION_STATUS createStructure() {
+    private APPLICATION_STATUS createStructure(int position) {
 
         int i;
         int indexSite;
@@ -296,6 +300,9 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         }).attach();
 
         currentRoom = mbinding.tabs.getTabAt(mbinding.tabs.getSelectedTabPosition()).getText().toString();
+        if (position >= 0) {
+            mbinding.tabs.getTabAt(position).select();
+        }
 
         mbinding.tabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -327,6 +334,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
+                Log.i(TAG, "me han reseleccionado");
                 currentRoom = tab.getText().toString();
             }
         });
@@ -354,8 +362,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 
 
     private void seleccionarItem(@NonNull MenuItem itemDrawer) {
-        Fragment fragmentoGenerico = null;
-        FragmentManager fragmentManager = getSupportFragmentManager();
+
 
         switch (itemDrawer.getItemId()) {
             case (R.id.item_user_profile):
@@ -372,15 +379,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                 Log.i(TAG, "notifications");
                 break;
         }
-        if (fragmentoGenerico != null) {
-            /*
-            fragmentManager
-                    .beginTransaction()
-                    .replace(R.id.contenedor_principal, fragmentoGenerico)
-                    .commit();
 
-             */
-        }
 
 
         // Setear título actual
@@ -571,11 +570,12 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                             configuration.setCurrentSite(data);
                             configuration.saveConfiguration(getApplicationContext());
                             mbinding.textHome.setText(configuration.getCurrentSite());
-                            configuration.reloadConfiguration();
-                            createEnvironment();
+
+
                         }
                     }
-
+                    configuration.reloadConfiguration();
+                    createEnvironment(-1);
 
                 }
             }
@@ -608,11 +608,16 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                 }
                 break;
             case (R.id.imageMoveDevice):
-                configuration.moveDevice(deviceCut.getDeviceId(), currentSite, currentRoom);
+                pasteDevice();
+
+
+
                 break;
 
         }
     }
+
+
 
 
     private void notifyNewDevice(String data) {
@@ -715,42 +720,40 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
             case SELECTED_DEVICE:
                 break;
 
-            case MOVE_DEVICE:
+            case CUT_DEVICE:
                 deviceCut = device;
+                deviceCut.setDeviceStatus(IOT_DEVICE_STATUS.CUTTING_DEVICE);
+                fragmentDevices.adapter.notifyItemChanged(position);
                 cutRoom = currentRoom;
                 cutSite = currentSite;
+                cutPosition = mbinding.tabs.getSelectedTabPosition();
                 mbinding.imageMoveDevice.setImageResource(R.drawable.ic_action_cut);
                 mbinding.imageMoveDevice.setVisibility(View.VISIBLE);
                 mbinding.imageMoveDevice.setTag(true);
+                fragmentDevices.adapter.notifyItemChanged(position);
                 break;
         }
 
         return result;
     }
 
-    private void manageMoveDevice(IotDevice device, Boolean paste) {
 
 
-        if (!(Boolean) mbinding.imageMoveDevice.getTag()) {
-            deviceCut = device;
-            cutRoom = currentRoom;
-            cutSite = currentSite;
-            mbinding.imageMoveDevice.setImageResource(R.drawable.ic_action_cut);
-            mbinding.imageMoveDevice.setVisibility(View.VISIBLE);
-            mbinding.imageMoveDevice.setTag(true);
-        } else {
-            deviceCut = null;
-            cutRoom = null;
-            cutSite = null;
-            mbinding.imageMoveDevice.setImageResource(R.drawable.ic_action_paste);
+    private void pasteDevice() {
+
+        int pos;
+        FragmentDevices fragmentDevices;
+        deviceCut.setDeviceStatus(IOT_DEVICE_STATUS.INDETERMINADO);
+        if (configuration.moveDevice(deviceCut.getDeviceId(), currentSite, currentRoom) == IOT_OPERATION_CONFIGURATION_DEVICES.DEVICE_INSERTED) {
+            fragmentDevices = identifyActiveFragment();
+            fragmentDevices.setDeviceList(getCurrentDeviceList(), FragmentDevices.OPERATION_DEVICE.CUT_DEVICE, -1);
+            cutPosition = mbinding.tabs.getSelectedTabPosition();
+            createEnvironment(cutPosition);
             mbinding.imageMoveDevice.setTag(false);
-
-
+            mbinding.tabs.selectTab(mbinding.tabs.getTabAt(cutPosition));
+            Log.i(TAG, "kk");
         }
-
     }
-
-
 
 
 

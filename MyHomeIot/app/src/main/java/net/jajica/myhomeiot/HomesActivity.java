@@ -68,12 +68,11 @@ public class HomesActivity extends AppCompatActivity implements Serializable, Vi
     private void launchParentHomesFragment() {
 
         mainAdminHomeFragment = new ParentHomesFragment(configuration);
-        adminHomeFragment = new AdminHomeFragment();
         fragmentManager = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.containerAdminHomes, mainAdminHomeFragment, "ParentHomesAdapter");
+        fragmentTransaction.add(R.id.containerAdminHomes, mainAdminHomeFragment, "ParentHomeFragment");
         fragmentTransaction.setReorderingAllowed(true);
-        fragmentTransaction.addToBackStack("ParentHomesAdapter");
+        fragmentTransaction.addToBackStack("AdminHomeFragment");
         fragmentTransaction.commit();
 
 
@@ -101,7 +100,7 @@ public class HomesActivity extends AppCompatActivity implements Serializable, Vi
         super.onBackPressed();
 
         //fragmentManager.executePendingTransactions();
-        Fragment fragment = fragmentManager.findFragmentByTag("ParentHomesAdapter");
+        Fragment fragment = fragmentManager.findFragmentByTag("ParentHomeFragment");
         if (fragment == null) {
             finish();
         }

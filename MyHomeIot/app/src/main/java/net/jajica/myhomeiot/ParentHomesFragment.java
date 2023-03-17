@@ -56,17 +56,6 @@ public ParentHomesFragment(IotUsersDevices configuration) {
         // Recibimos los datos del fragment_admin_home para actualizar currentSite y actualizar la vista.
         if (savedInstanceState == null) {
             currentSite = configuration.getCurrentSite();
-            /*
-            getParentFragmentManager().setFragmentResultListener(IOT_LABELS_JSON.NAME_SITE.getValorTextoJson(),
-                    this, new FragmentResultListener() {
-                        @Override
-                        public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                            currentSite = result.getString(IOT_LABELS_JSON.NAME_SITE.getValorTextoJson());
-                            initFragment(getActivity().getApplicationContext());
-                        }
-                    });
-
-             */
 
         }
     }
@@ -86,8 +75,8 @@ public ParentHomesFragment(IotUsersDevices configuration) {
 
     private void initFragment(Context context) {
 
-        configuration = new IotUsersDevices(context);
-        configuration.loadConfiguration();
+        //configuration = new IotUsersDevices(context);
+        //configuration.loadConfiguration();
         listSites = configuration.getSiteList();
         //Llenamos el fragment con los sites que leemos desde la configuracion
         mbinding.buttonAddHome.setOnClickListener(this);
@@ -137,15 +126,13 @@ public ParentHomesFragment(IotUsersDevices configuration) {
 
 
     private void openSiteData(String siteName) {
-        Fragment fragment;
-        Bundle bundle;
-        bundle = new Bundle();
-        bundle.putString(IOT_LABELS_JSON.NAME_SITE.getValorTextoJson(), siteName);
-        fragment = new AdminHomeFragment();
+        AdminHomeFragment adminHomeFragment;
+        adminHomeFragment = new AdminHomeFragment(configuration, siteName);
+        fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
 
-        fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.containerAdminHomes, AdminHomeFragment.class, bundle);
+        fragmentTransaction.replace(R.id.containerAdminHomes, adminHomeFragment, "AdminHomeFragment");
         fragmentTransaction.setReorderingAllowed(true);
-        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.addToBackStack("ParentHomesFragment");
         fragmentTransaction.commit();
     }
 
@@ -191,6 +178,9 @@ public ParentHomesFragment(IotUsersDevices configuration) {
             Log.i(TAG, "jj");
             configuration.saveConfiguration(getActivity().getApplicationContext());
             adapter.notifyItemInserted(listSites.size());
+            adapter.notifyItemChanged(0);
+            mbinding.editAddHome.setVisibility(View.INVISIBLE);
+            mbinding.buttonNewHome.setVisibility(View.INVISIBLE);
             return IOT_DEVICE_USERS_RESULT.RESULT_OK;
         }
 
@@ -206,6 +196,7 @@ public ParentHomesFragment(IotUsersDevices configuration) {
         AlertDialog.Builder builder;
         int index;
 
+        //Esto en teoria nunca ocurre porque se borra el icono de deleteSite
         if (configuration.getSiteList().size() == 1) {
             onPassCurrentSite.onPassCurrentSite(currentSite);
             return;
@@ -223,9 +214,9 @@ public ParentHomesFragment(IotUsersDevices configuration) {
                 public void onClick(DialogInterface dialog, int which) {
                     listSites.remove(position);
                     configuration.deleteSiteForUser(siteName, true);
-                    configuration.saveConfiguration(getActivity().getApplicationContext());
-
+                    //configuration.saveConfiguration(getActivity().getApplicationContext());
                     adapter.notifyItemRemoved(position);
+                    if (listSites.size()== 1) adapter.notifyItemChanged(0);
                 }
             });
             builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -239,7 +230,7 @@ public ParentHomesFragment(IotUsersDevices configuration) {
             dialog.show();
         } else {
             if (configuration.deleteSiteForUser(siteName, true) == IOT_DEVICE_USERS_RESULT.RESULT_OK){
-                configuration.saveConfiguration(getActivity().getApplicationContext());
+                //configuration.saveConfiguration(getActivity().getApplicationContext());
                 adapter.notifyItemRemoved(position);
             }
         }
@@ -260,6 +251,8 @@ public ParentHomesFragment(IotUsersDevices configuration) {
         }
 
     }
+
+
 
 
 

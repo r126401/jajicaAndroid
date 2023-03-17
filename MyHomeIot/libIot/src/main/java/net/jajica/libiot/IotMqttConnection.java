@@ -294,13 +294,13 @@ public class IotMqttConnection implements Serializable {
      * @param topic sobre el que enviar el mensaje
      * @param texto es el mensaje a enviar
      */
-    public IOT_DEVICE_STATE_CONNECTION publishTopic(String topic, String texto) {
+    public IOT_DEVICE_STATUS_CONNECTION publishTopic(String topic, String texto) {
 
         MqttMessage mensaje;
 
         if ((client == null) || (topic == null)){
             Log.e(TAG, "el cliente mqtt o el topic es nulo");
-            return IOT_DEVICE_STATE_CONNECTION.DEVICE_ERROR_COMMUNICATION;
+            return IOT_DEVICE_STATUS_CONNECTION.DEVICE_ERROR_COMMUNICATION;
         }
         if (stateConnection == IOT_MQTT_STATUS_CONNECTION.CONEXION_MQTT_ACTIVE) {
             mensaje = new MqttMessage();
@@ -310,9 +310,9 @@ public class IotMqttConnection implements Serializable {
 
         } else {
             Log.w(TAG, "no estoy conectado y no puedo publica");
-            return IOT_DEVICE_STATE_CONNECTION.DEVICE_ERROR_COMMUNICATION;
+            return IOT_DEVICE_STATUS_CONNECTION.DEVICE_ERROR_COMMUNICATION;
         }
-        return IOT_DEVICE_STATE_CONNECTION.DEVICE_WAITING_RESPONSE;
+        return IOT_DEVICE_STATUS_CONNECTION.DEVICE_WAITING_RESPONSE;
     }
 
 

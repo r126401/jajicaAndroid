@@ -240,6 +240,7 @@ public class IotUsersDevices implements Serializable {
         }
 
         siteList.remove(i);
+        saveConfiguration(context);
         return IOT_DEVICE_USERS_RESULT.RESULT_OK;
     }
 
@@ -533,7 +534,7 @@ public class IotUsersDevices implements Serializable {
 
             deviceList = siteList.get(i).getRoomList().get(j).getDeviceList();
             if (deviceList.remove(device)) {
-                insertIotDevice(device, siteList.get(i).getSiteName(), siteList.get(i).getRoomList().get(j).getNameRoom());
+                return insertIotDevice(device, site, room);
             }
 
         }

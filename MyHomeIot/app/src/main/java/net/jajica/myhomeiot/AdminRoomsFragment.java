@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 
+import net.jajica.libiot.IOT_DEVICE_USERS_RESULT;
 import net.jajica.libiot.IOT_LABELS_JSON;
 import net.jajica.libiot.IotRoomsDevices;
 import net.jajica.libiot.IotSitesDevices;
@@ -31,7 +32,9 @@ public class AdminRoomsFragment extends Fragment  implements View.OnClickListene
     private IotUsersDevices configuration;
 
 
-    public AdminRoomsFragment() {
+    public AdminRoomsFragment(IotUsersDevices configuration, String siteName) {
+        this.configuration = configuration;
+        this.siteName = siteName;
         // Required empty public constructor
     }
 
@@ -49,7 +52,6 @@ public class AdminRoomsFragment extends Fragment  implements View.OnClickListene
         View rootView;
         mbinding = FragmentAdminRoomsBinding.inflate(getLayoutInflater());
         rootView = mbinding.getRoot();
-        siteName = requireArguments().getString(IOT_LABELS_JSON.NAME_SITE.getValorTextoJson());
         initDataAdminRooms();
 
 
@@ -64,8 +66,6 @@ public class AdminRoomsFragment extends Fragment  implements View.OnClickListene
         IotRoomsDevices room;
 
         context = getActivity().getApplicationContext();
-        configuration = new IotUsersDevices(context);
-        configuration.loadConfiguration();
         indexSite = configuration.searchSiteOfUser(siteName);
         site = configuration.getSiteList().get(indexSite);
         mbinding.recyclerAdminRoom.setLayoutManager(new LinearLayoutManager(context));
@@ -97,11 +97,12 @@ public class AdminRoomsFragment extends Fragment  implements View.OnClickListene
 
     private void addRoom() {
 
+        IOT_DEVICE_USERS_RESULT result;
         IotRoomsDevices room;
         room = new IotRoomsDevices();
         room.setNameRoom(mbinding.editAddRoom.getText().toString());
         room.setIdRoom(site.getRoomList().size()-1);
-        site.insertRoomForSite(room);
+        result = site.insertRoomForSite(room);
         configuration.saveConfiguration(context);
         adapter.notifyItemInserted(site.getRoomList().size());
 

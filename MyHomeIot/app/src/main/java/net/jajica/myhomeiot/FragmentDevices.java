@@ -16,7 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import net.jajica.libiot.IOT_CODE_RESULT;
-import net.jajica.libiot.IOT_DEVICE_STATE_CONNECTION;
+import net.jajica.libiot.IOT_DEVICE_STATUS_CONNECTION;
 import net.jajica.libiot.IOT_DEVICE_TYPE;
 import net.jajica.libiot.IOT_LABELS_JSON;
 import net.jajica.libiot.IOT_OPERATION_CONFIGURATION_DEVICES;
@@ -61,7 +61,7 @@ public class FragmentDevices extends Fragment implements SwipeRefreshLayout.OnRe
         DELETE_DEVICE,
         MODIFY_DEVICE,
         SELECTED_DEVICE,
-        MOVE_DEVICE
+        CUT_DEVICE
     }
 
     public interface OnOperationDeviceListener {
@@ -608,7 +608,7 @@ public class FragmentDevices extends Fragment implements SwipeRefreshLayout.OnRe
         switch (device.getDeviceType()) {
 
             case INTERRUPTOR:
-                if (device.getConnectionState() == IOT_DEVICE_STATE_CONNECTION.DEVICE_CONNECTED) {
+                if (device.getConnectionState() == IOT_DEVICE_STATUS_CONNECTION.DEVICE_CONNECTED) {
                     Intent launcherSwitch = new Intent(context, SwitchActivity.class);
                     device.object2Json();
 
@@ -673,9 +673,9 @@ public class FragmentDevices extends Fragment implements SwipeRefreshLayout.OnRe
                     break;
                 case SELECTED_DEVICE:
                     break;
-                case MOVE_DEVICE:
+                case CUT_DEVICE:
                     onOperationDeviceListener.onOperationDeviceListener(
-                            OPERATION_DEVICE.MOVE_DEVICE,
+                            OPERATION_DEVICE.CUT_DEVICE,
                             device,
                             deviceType,
                             position);

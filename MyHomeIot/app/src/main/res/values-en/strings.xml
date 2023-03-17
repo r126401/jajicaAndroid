@@ -116,6 +116,8 @@
     <string name="error_new_device">Error create device</string>
     <string name="error_device_exits">Device exist!</string>
     <string name="none_home">None home</string>
+    <string name="error_message_uniq_home">You cant delete the last home</string>
+    <string name="error_home">Error in home</string>
 
 
 </resources>

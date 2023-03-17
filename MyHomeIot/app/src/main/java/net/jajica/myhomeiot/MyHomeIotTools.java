@@ -275,6 +275,8 @@ public class MyHomeIotTools {
         builder.setMessage(message);
         AlertDialog alert;
         alert = builder.create();
+        alert.setCancelable(false);
+        builder.setCancelable(false);
         alert.show();
 
     }

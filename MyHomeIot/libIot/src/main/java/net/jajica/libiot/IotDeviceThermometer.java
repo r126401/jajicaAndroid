@@ -319,21 +319,21 @@ public class IotDeviceThermometer extends IotDevice implements Serializable {
         return code;
     }
 
-    public IOT_DEVICE_STATE_CONNECTION commandSetParametersDevice(JSONObject parameters) {
+    public IOT_DEVICE_STATUS_CONNECTION commandSetParametersDevice(JSONObject parameters) {
 
         JSONObject parameter;
-        IOT_DEVICE_STATE_CONNECTION state;
+        IOT_DEVICE_STATUS_CONNECTION state;
         parameter = new JSONObject();
         if (parameters != null) {
             state = commandwithParameters(IOT_COMMANDS.MODIFY_PARAMETER_DEVICE, IOT_LABELS_JSON.CONFIGURE_APP.getValorTextoJson(), parameters);
-            if (state != IOT_DEVICE_STATE_CONNECTION.DEVICE_WAITING_RESPONSE) {
+            if (state != IOT_DEVICE_STATUS_CONNECTION.DEVICE_WAITING_RESPONSE) {
                 return state;
             } else {
-                return IOT_DEVICE_STATE_CONNECTION.DEVICE_WAITING_RESPONSE;
+                return IOT_DEVICE_STATUS_CONNECTION.DEVICE_WAITING_RESPONSE;
             }
 
         } else {
-            return IOT_DEVICE_STATE_CONNECTION.DEVICE_ERROR_COMMUNICATION;
+            return IOT_DEVICE_STATUS_CONNECTION.DEVICE_ERROR_COMMUNICATION;
         }
 
     }

@@ -20,8 +20,8 @@ import com.google.android.material.navigation.NavigationBarView;
 
 import net.jajica.libiot.IOT_CODE_RESULT;
 import net.jajica.libiot.IOT_COMMANDS;
-import net.jajica.libiot.IOT_DEVICE_STATE;
-import net.jajica.libiot.IOT_DEVICE_STATE_CONNECTION;
+import net.jajica.libiot.IOT_DEVICE_STATUS;
+import net.jajica.libiot.IOT_DEVICE_STATUS_CONNECTION;
 import net.jajica.libiot.IOT_LABELS_JSON;
 import net.jajica.libiot.IOT_MQTT_STATUS_CONNECTION;
 import net.jajica.libiot.IOT_SWITCH_RELAY;
@@ -234,7 +234,7 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
             @Override
             public void onReceivedFactoryResetDevice(IOT_CODE_RESULT resultCode) {
 
-                device.setConnectionState(IOT_DEVICE_STATE_CONNECTION.DEVICE_DISCONNECTED);
+                device.setConnectionState(IOT_DEVICE_STATUS_CONNECTION.DEVICE_DISCONNECTED);
                 updateDevice();
 
             }
@@ -341,7 +341,7 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
             mBinding.imageBrokerConnected.setImageResource(R.drawable.ic_wifi_on);
         } else {
             mBinding.imageBrokerConnected.setImageResource(R.drawable.ic_wifi_off);
-            device.setConnectionState(IOT_DEVICE_STATE_CONNECTION.DEVICE_DISCONNECTED);
+            device.setConnectionState(IOT_DEVICE_STATUS_CONNECTION.DEVICE_DISCONNECTED);
         }
 
 
@@ -354,7 +354,7 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
      */
     private void paintDeviceStatus() {
 
-        IOT_DEVICE_STATE status;
+        IOT_DEVICE_STATUS status;
 
         status = device.getDeviceStatus();
 
@@ -497,7 +497,7 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
 
     }
 
-    if (device.getConnectionState() == IOT_DEVICE_STATE_CONNECTION.DEVICE_WAITING_RESPONSE) {
+    if (device.getConnectionState() == IOT_DEVICE_STATUS_CONNECTION.DEVICE_WAITING_RESPONSE) {
         mBinding.progressOperationSwitch.setVisibility(View.VISIBLE);
     } else {
         mBinding.progressOperationSwitch.setVisibility(View.INVISIBLE);

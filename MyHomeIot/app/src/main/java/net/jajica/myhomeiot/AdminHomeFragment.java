@@ -6,10 +6,13 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+
+import com.google.android.material.textfield.TextInputEditText;
 
 import net.jajica.libiot.IOT_LABELS_JSON;
 import net.jajica.libiot.IOT_OPERATION_CONFIGURATION_DEVICES;
@@ -30,7 +33,9 @@ public class AdminHomeFragment extends Fragment implements View.OnClickListener{
 
 
 
-    public AdminHomeFragment() {
+    public AdminHomeFragment(IotUsersDevices configuration, String currentSite) {
+        this.configuration = configuration;
+        this.currentSite = currentSite;
         // Required empty public constructor
     }
 
@@ -63,7 +68,8 @@ public class AdminHomeFragment extends Fragment implements View.OnClickListener{
         mbinding.buttonSaveSite.setOnClickListener(this);
         mbinding.imageEditRooms.setOnClickListener(this);
         mbinding.editRooms.setOnClickListener(this);
-        currentSite = requireArguments().getString(IOT_LABELS_JSON.NAME_SITE.getValorTextoJson());
+        //currentSite = configuration.getCurrentSite();
+        //currentSite = requireArguments().getString(IOT_LABELS_JSON.NAME_SITE.getValorTextoJson());
         paintData();
 
 
@@ -225,11 +231,13 @@ public class AdminHomeFragment extends Fragment implements View.OnClickListener{
             case (R.id.editRooms):
             case(R.id.imageEditRooms):
                 // Lanzar el fragment AdminRooms_Fragment
+                AdminRoomsFragment adminRoomsFragment = new AdminRoomsFragment(configuration, currentSite);
                 bundle.putString(IOT_LABELS_JSON.NAME_SITE.getValorTextoJson(), mbinding.editNameHome.getText().toString());
                 fragmentManager = getParentFragmentManager();
                 fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.containerAdminHomes, AdminRoomsFragment.class, bundle);
-                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.replace(R.id.containerAdminHomes, adminRoomsFragment, "AdminRoomsFragment");
+                //fragmentTransaction.replace(R.id.containerAdminHomes, configuration, "AdminRommsFragment");
+                fragmentTransaction.addToBackStack("AdminHomeFragment");
                 fragmentTransaction.setReorderingAllowed(true);
                 fragmentTransaction.commit();
                 break;
@@ -241,8 +249,8 @@ public class AdminHomeFragment extends Fragment implements View.OnClickListener{
         int i;
         ArrayList<IotSitesDevices> devicesList;
         IotSitesDevices site;
-        configuration = new IotUsersDevices(getActivity().getApplicationContext());
-        configuration.loadConfiguration();
+        //configuration = new IotUsersDevices(getActivity().getApplicationContext());
+        //configuration.loadConfiguration();
         devicesList = configuration.getSiteList();
         for (i=0;i<devicesList.size();i++) {
             if (currentSite.equals(devicesList.get(i).getSiteName())) {
@@ -287,12 +295,15 @@ public class AdminHomeFragment extends Fragment implements View.OnClickListener{
         int i;
         String datString;
         int datInt;
+        Double datDouble;
 
         siteList = configuration.getSiteList();
         if (siteList != null) {
             for (i=0;i<siteList.size();i++) {
                 if (currentSite.equals(siteList.get(i).getSiteName())) {
                     site = siteList.get(i);
+
+
                     if ((datString = mbinding.editNameHome.getText().toString()) != null) {
                         site.setSiteName(mbinding.editNameHome.getText().toString());
                         currentSite = datString;
@@ -300,12 +311,14 @@ public class AdminHomeFragment extends Fragment implements View.OnClickListener{
                     if ((datString = mbinding.editAdress.getText().toString()) != null) {
                         site.setStreet(datString);
                     }
-                    if ((datString = mbinding.editNumberAddress.getText().toString()) != null) {
-                        if (!datString.equals("")) site.setStreetNumber(Integer.parseInt(datString));
+                    if ((datInt = isValidfieldInt(mbinding.editNumberAddress)) >= 0) {
+                        site.setStreetNumber(datInt);
                     }
-                    if ((datString = mbinding.editCP.getText().toString()) != null) {
-                        site.setPoBox(Integer.parseInt(datString));
+
+                    if ((datInt = isValidfieldInt(mbinding.editCP)) >= 0) {
+                        site.setPoBox(datInt);
                     }
+
                     if ((datString = mbinding.editCity.getText().toString()) != null) {
                         site.setCity(datString);
                     }
@@ -315,14 +328,13 @@ public class AdminHomeFragment extends Fragment implements View.OnClickListener{
                     if ((datString = mbinding.editCountry.getText().toString()) != null) {
                         site.setCountry(datString);
                     }
-                    if ((datString = mbinding.editLatitude.getText().toString()) != null) {
-                        site.setLatitude(Double.parseDouble(datString));
-                    }
-                    if ((datString = mbinding.editLongitude.getText().toString()) != null) {
-                        site.setLongitude(Double.parseDouble(datString));
-                    }
 
-
+                    if ((datDouble = isValidfieldDouble(mbinding.editLatitude)) >= 0 ) {
+                        site.setLatitude(datDouble);
+                    }
+                    if ((datDouble = isValidfieldDouble(mbinding.editLongitude)) >= 0 ) {
+                        site.setLongitude(datDouble);
+                    }
 
                 }
             }
@@ -334,5 +346,34 @@ public class AdminHomeFragment extends Fragment implements View.OnClickListener{
 
     }
 
+    private int isValidfieldInt(TextInputEditText control) {
+
+        String dat;
+
+
+        Log.i(TAG, " El control vale : " + control.toString());
+        if ((control.getText() != null) && (!control.getText().toString().equals(""))) {
+
+            dat = control.getText().toString();
+            return Integer.parseInt(dat);
+        } else {
+            return -1;
+        }
+    }
+
+
+    private double isValidfieldDouble(TextInputEditText control) {
+
+        String dat;
+
+
+        if (control.getText() != null) {
+
+            dat = control.getText().toString();
+            return Double.parseDouble(dat);
+        } else {
+            return -1;
+        }
+    }
 
 }
