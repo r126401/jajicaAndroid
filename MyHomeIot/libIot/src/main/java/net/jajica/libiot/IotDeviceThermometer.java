@@ -348,6 +348,7 @@ public class IotDeviceThermometer extends IotDevice implements Serializable {
         return super.processStartDevice(message);
     }
 
+    /*
     @Override
     protected IOT_CODE_RESULT processInfoDeviceFromReport(String message) {
 
@@ -368,17 +369,9 @@ public class IotDeviceThermometer extends IotDevice implements Serializable {
     }
 
 
-    protected IOT_CODE_RESULT setNumberProgramsFromReport(String message) {
-        int dat;
-        dat = getFieldIntFromReport(message, IOT_LABELS_JSON.NUMBER_PROGRAMS);
-        if (dat <= 0) {
-            Log.e(TAG, "No se encuentra el valor de programas");
-            return IOT_CODE_RESULT.RESULT_CODE_ERROR;
-        }
+     */
 
-        setNumberSchedules(dat);
-        return IOT_CODE_RESULT.RESUT_CODE_OK;
-    }
+
 
 
 }

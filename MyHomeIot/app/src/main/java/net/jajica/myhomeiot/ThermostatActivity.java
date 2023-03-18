@@ -269,6 +269,14 @@ public class ThermostatActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void launchInfoDeviceFragment() {
+
+        InfoDeviceFragment infoDeviceFragment = new InfoDeviceFragment(device.getListInfoDevice());
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.containerThermostat, infoDeviceFragment, "infoDeviceFragment");
+        fragmentTransaction.setReorderingAllowed(true);
+        fragmentTransaction.addToBackStack("scheduleThermostat");
+        fragmentTransaction.commit();
+
     }
 
 

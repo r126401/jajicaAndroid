@@ -133,9 +133,34 @@ public class IotDeviceThermostat extends IotDeviceThermometer implements Seriali
 
     @Override
     protected IOT_CODE_RESULT processInfoDeviceFromReport(String message) {
+        setNumberProgramsFromReport(message);
+        setProgrammerStateFromReport(message);
+
+        try {
+            dispositivoJson.put(IOT_LABELS_JSON.STATUS_PROGRAMMER.getValorTextoJson(), getProgrammerState());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            dispositivoJson.put(IOT_LABELS_JSON.NUMBER_PROGRAMS.getValorTextoJson(), getNumberSchedules());
+        }  catch (JSONException e) {
+            e.printStackTrace();
+        }
+
         return super.processInfoDeviceFromReport(message);
     }
 
+    protected IOT_CODE_RESULT setNumberProgramsFromReport(String message) {
+        int dat;
+        dat = getFieldIntFromReport(message, IOT_LABELS_JSON.NUMBER_PROGRAMS);
+        if (dat <= 0) {
+            Log.e(TAG, "No se encuentra el valor de programas");
+            return IOT_CODE_RESULT.RESULT_CODE_ERROR;
+        }
+
+        setNumberSchedules(dat);
+        return IOT_CODE_RESULT.RESUT_CODE_OK;
+    }
     @Override
     protected IOT_CODE_RESULT processStatusFromReport(String respuesta) {
         processCommonParameters(respuesta);
@@ -442,6 +467,7 @@ public class IotDeviceThermostat extends IotDeviceThermometer implements Seriali
         return IOT_CODE_RESULT.RESUT_CODE_OK;
 
     }
+
 
 
 
