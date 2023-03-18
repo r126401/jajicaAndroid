@@ -3,7 +3,6 @@ package net.jajica.myhomeiot;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -17,16 +16,15 @@ import android.view.LayoutInflater;
 
 
 import net.jajica.libiot.IOT_CODE_RESULT;
+import net.jajica.libiot.IOT_COMMANDS;
+import net.jajica.libiot.IOT_SPONTANEOUS_TYPE;
 import net.jajica.libiot.IotDevice;
 
-
-import java.util.Timer;
-import java.util.TimerTask;
 
 import net.jajica.myhomeiot.databinding.FragmentUpgradeBinding;
 
 
-public class UpgradeFragment extends DialogFragment {
+public class InteractiveFragment extends DialogFragment {
 
     final String TAG = "UpgradeFragment";
     AlertDialog.Builder alertDialog;
@@ -43,6 +41,7 @@ public class UpgradeFragment extends DialogFragment {
     private FragmentUpgradeBinding mBinding;
 
     private CountDownTimer timer;
+    private IOT_COMMANDS command;
 
     public CountDownTimer getTimer() {
         return timer;
@@ -76,19 +75,21 @@ public class UpgradeFragment extends DialogFragment {
         this.endUpgrade = endUpgrade;
     }
 
-    public UpgradeFragment(Context context, IotDevice device, int delay) {
+    public InteractiveFragment(Context context, IotDevice device, int delay, IOT_COMMANDS command) {
         this.context = context;
         this.device = device;
         this.delay = delay;
         this.interval = 1000;
         this.endUpgrade = false;
+        this.command = command;
+
 
         device.setOnReceivedSpontaneousStartDevice(new IotDevice.OnReceivedSpontaneousStartDevice() {
             @Override
             public void onReceivedSpontaneousStartDevice(IOT_CODE_RESULT resultCode) {
                 if (device.getEndUpgradeFlag() == 1) {
                     Log.i(TAG, "Se ha recibido el fin de upgrade");
-                    mBinding.textUpgradeDevice.setText(R.string.upgrade_succesfully);
+                    mBinding.textInteractiveStatus.setText(R.string.upgrade_succesfully);
                     endUpgrade = true;
                     mBinding.textPorcentage.setText("100 %");
 
@@ -99,7 +100,7 @@ public class UpgradeFragment extends DialogFragment {
                 }
                 timer.cancel();
                 setCancelable(true);
-                mBinding.textUpgradeDevice.setText(R.string.upgrade_unsucessfully);
+                mBinding.textInteractiveStatus.setText(R.string.upgrade_unsucessfully);
             }
         });
     }
@@ -116,7 +117,19 @@ public class UpgradeFragment extends DialogFragment {
         mBinding = FragmentUpgradeBinding.inflate(inflater);
         alertDialog.setView(mBinding.getRoot());
         mBinding.textPorcentage.setText("0 %");
-        waitingUpgrade();
+
+        switch (command) {
+            case UPGRADE_FIRMWARE:
+                waitingUpgrade();
+                break;
+            case RESET:
+                waitingAction(15000);
+                break;
+            case FACTORY_RESET:
+                waitingAction(14000);
+                break;
+        }
+
         return alertDialog.create();
     }
 
@@ -124,28 +137,28 @@ public class UpgradeFragment extends DialogFragment {
 
 
 
-        mBinding.progressUpgrade.setMin(0);
-        mBinding.progressUpgrade.setMax((int) delay/1000);
-        mBinding.textUpgradeDevice.setText(R.string.upgrading);
+        mBinding.progressAction.setMin(0);
+        mBinding.progressAction.setMax((int) delay/1000);
+        mBinding.textInteractiveStatus.setText(R.string.upgrading);
 
         timer = new CountDownTimer(delay, interval) {
             @Override
             public void onTick(long millisUntilFinished) {
                 int progress;
                 String porcentage;
-                progress = mBinding.progressUpgrade.getProgress();
-                progress = (progress * 100) / mBinding.progressUpgrade.getMax();
+                progress = mBinding.progressAction.getProgress();
+                progress = (progress * 100) / mBinding.progressAction.getMax();
                 porcentage = String.valueOf(progress);
                 porcentage += " %";
                 mBinding.textPorcentage.setText(porcentage);
-                mBinding.progressUpgrade.setProgress(mBinding.progressUpgrade.getProgress()+1);
+                mBinding.progressAction.setProgress(mBinding.progressAction.getProgress()+1);
             }
 
             @Override
             public void onFinish() {
 
                 if (!endUpgrade) {
-                    mBinding.textUpgradeDevice.setText(R.string.upgrade_unsucessfully);
+                    mBinding.textInteractiveStatus.setText(R.string.upgrade_unsucessfully);
                     setCancelable(true);
                 }
 
@@ -155,6 +168,39 @@ public class UpgradeFragment extends DialogFragment {
         timer.start();
 
 
+
+    }
+
+    private void waitingAction(int delay) {
+
+        mBinding.progressAction.setMin(0);
+        mBinding.progressAction.setMax((int) delay/1000);
+        mBinding.textInteractiveStatus.setText(R.string.upgrading);
+        timer = new CountDownTimer(delay, interval) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                int progress;
+                String porcentage;
+                progress = mBinding.progressAction.getProgress();
+                progress = (progress * 100) / mBinding.progressAction.getMax();
+                porcentage = String.valueOf(progress);
+                porcentage += " %";
+                mBinding.textPorcentage.setText(porcentage);
+                mBinding.progressAction.setProgress(mBinding.progressAction.getProgress()+1);
+            }
+
+            @Override
+            public void onFinish() {
+
+                if (!endUpgrade) {
+                    mBinding.textInteractiveStatus.setText(R.string.upgrade_unsucessfully);
+                    setCancelable(true);
+                }
+
+            }
+        };
+
+        timer.start();
 
     }
 

@@ -837,9 +837,9 @@ public class ThermostatActivity extends AppCompatActivity implements View.OnClic
 
     private void sceneUpgradeFirmware() {
 
-        UpgradeFragment scene;
+        InteractiveFragment scene;
         device.commandUpgradeFirmware();
-        scene = new UpgradeFragment(this, device, 120000);
+        scene = new InteractiveFragment(this, device, 120000, IOT_COMMANDS.UPGRADE_FIRMWARE);
         scene.show(fragmentManager.beginTransaction(), "upgrade device");
 
     }

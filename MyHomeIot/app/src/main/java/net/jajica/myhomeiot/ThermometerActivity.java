@@ -5,15 +5,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.PopupMenu;
 
 import com.google.android.material.navigation.NavigationBarView;
 
 import net.jajica.libiot.IOT_CODE_RESULT;
+import net.jajica.libiot.IOT_COMMANDS;
 import net.jajica.libiot.IOT_DEVICE_STATUS;
 import net.jajica.libiot.IOT_DEVICE_STATUS_CONNECTION;
 import net.jajica.libiot.IOT_LABELS_JSON;
@@ -170,11 +175,119 @@ public class ThermometerActivity extends AppCompatActivity implements Navigation
     }
 
     private void launchInfoDeviceFragment() {
+
+        InfoDeviceFragment infoDeviceFragment = new InfoDeviceFragment(device.getListInfoDevice());
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.containerThermometer, infoDeviceFragment, "infoDeviceFragment");
+        fragmentTransaction.setReorderingAllowed(true);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+
+
     }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+
+        switch (item.getItemId()) {
+
+            case (R.id.item_info_thermostat):
+                launchInfoThermometer();
+                break;
+            case (R.id.item_settings_thermostat):
+                launchSettingsThermometer();
+                break;
+
+            case (R.id.item_commands_thermostat):
+                launchMenucommandsThermometer();
+                break;
+
+        }
+
+
+
         return false;
+    }
+
+    private void launchMenucommandsThermometer() {
+
+        PopupMenu menu;
+        menu = new PopupMenu(getApplicationContext(), binding.bottomActionThermometer);
+        menu.inflate(R.menu.menu_action_device_switch);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            menu.setForceShowIcon(true);
+        }
+        menu.show();
+        menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+
+                switch (item.getItemId()) {
+                    case (R.id.item_reset_device):
+                        confirmCommand(R.drawable.ic_action_reset, R.string.reset_device, R.string.confirm_reset, IOT_COMMANDS.RESET);
+                        break;
+                    case (R.id.item_factory_reset_device):
+                        confirmCommand(R.drawable.ic_action_factory_reset, R.string.factory_reset_device, R.string.confirm_factory_reset, IOT_COMMANDS.FACTORY_RESET);
+                        break;
+                    case (R.id.item_upgrade_firmware_device):
+                        confirmCommand(R.drawable.ic_action_upgrade, R.string.upgrade_device, R.string.confirm_upgrade_firmware, IOT_COMMANDS.UPGRADE_FIRMWARE);
+                        break;
+                }
+
+                return false;
+            }
+        });
+    }
+
+    private void confirmCommand(int icon, int title, int message, IOT_COMMANDS command) {
+
+        AlertDialog.Builder alert;
+        alert = new AlertDialog.Builder(this);
+        alert.setIcon(icon);
+        alert.setTitle(title);
+        alert.setMessage(message);
+
+        alert.setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                switch (command) {
+
+
+                    case RESET:
+                        device.commandResetDevice();
+                        break;
+                    case FACTORY_RESET:
+                        device.commandFactoryReset();
+                        break;
+                    case UPGRADE_FIRMWARE:
+                        //device.commandUpgradeFirmware();
+                        sceneUpgradeFirmware();
+
+                }
+
+            }
+        });
+
+        alert.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
+        alert.show();
+
+    }
+
+
+    private void launchSettingsThermometer() {
+    }
+
+    private void launchInfoThermometer() {
+
+        device.commandGetInfoDevice();
     }
 
     private IOT_MQTT_STATUS_CONNECTION createConnectionMqtt() {
@@ -334,6 +447,15 @@ public class ThermometerActivity extends AppCompatActivity implements Navigation
             device.setConnectionState(IOT_DEVICE_STATUS_CONNECTION.DEVICE_DISCONNECTED);
         }
 
+    }
+
+    private void sceneUpgradeFirmware() {
+
+        InteractiveFragment scene;
+        device.commandUpgradeFirmware();
+        scene = new InteractiveFragment(this, device, 120000, IOT_COMMANDS.UPGRADE_FIRMWARE);
+        scene.show(fragmentManager.beginTransaction(), "upgrade device");
 
     }
+
 }

@@ -676,6 +676,7 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
 
                     case RESET:
                         device.commandResetDevice();
+                        sceneUpgradeResetDevice();
                         break;
                     case FACTORY_RESET:
                         device.commandFactoryReset();
@@ -702,15 +703,22 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
 
     private void sceneUpgradeFirmware() {
 
-        UpgradeFragment scene;
+        InteractiveFragment scene;
         device.commandUpgradeFirmware();
-        scene = new UpgradeFragment(this, device, 120000);
+        scene = new InteractiveFragment(this, device, 120000, IOT_COMMANDS.UPGRADE_FIRMWARE);
         scene.show(fragmentManager.beginTransaction(), "upgrade device");
 
     }
 
 
+    private void sceneUpgradeResetDevice() {
 
+        InteractiveFragment scene;
+        device.commandResetDevice();
+        scene = new InteractiveFragment(this, device, 10000, IOT_COMMANDS.RESET);
+        scene.show(fragmentManager.beginTransaction(), "ResetDevice");
+
+    }
 
 
 }

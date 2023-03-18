@@ -5,7 +5,7 @@
     android:id="@+id/frameLayout"
     android:layout_width="300dp"
     android:layout_height="200dp"
-    tools:context=".UpgradeFragment">
+    tools:context=".InteractiveFragment">
 
 
     <androidx.appcompat.widget.AppCompatImageView
@@ -14,12 +14,12 @@
         android:layout_height="wrap_content"
         android:src="@drawable/ic_action_upgrade"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/textUpgradeDevice"
+        app:layout_constraintEnd_toStartOf="@+id/textInteractiveStatus"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/textUpgradeDevice"
+        android:id="@+id/textInteractiveStatus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/upgrading"
@@ -30,13 +30,13 @@
         style="@style/textThresholdTemperature"/>
 
     <com.google.android.material.progressindicator.LinearProgressIndicator
-        android:id="@+id/progressUpgrade"
+        android:id="@+id/progressAction"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textUpgradeDevice">
+        app:layout_constraintTop_toBottomOf="@+id/textInteractiveStatus">
 
     </com.google.android.material.progressindicator.LinearProgressIndicator>
 
@@ -46,10 +46,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="25%"
-        app:layout_constraintBottom_toTopOf="@+id/progressUpgrade"
-        app:layout_constraintEnd_toEndOf="@+id/progressUpgrade"
-        app:layout_constraintStart_toStartOf="@+id/progressUpgrade"
-        app:layout_constraintTop_toBottomOf="@+id/textUpgradeDevice">
+        app:layout_constraintBottom_toTopOf="@+id/progressAction"
+        app:layout_constraintEnd_toEndOf="@+id/progressAction"
+        app:layout_constraintStart_toStartOf="@+id/progressAction"
+        app:layout_constraintTop_toBottomOf="@+id/textInteractiveStatus">
 
     </androidx.appcompat.widget.AppCompatTextView>
 
