@@ -252,6 +252,9 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         }
 
 
+
+
+
     }
 
 
@@ -564,7 +567,7 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     private void paintStatusConnectionDevice(ProgressBar progressBar, AppCompatImageView imageConnection, AppCompatImageView imageDevice, int position) {
 
-        switch (deviceList.get(position).getConnectionState()) {
+        switch (deviceList.get(position).getStatusConnection()) {
 
             case UNKNOWN:
                 break;
@@ -592,7 +595,7 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     private void paintStatusIconUnknownDevice(ProgressBar progressBar, AppCompatImageView imageConnection, AppCompatImageView imageDevice, int position) {
 
-        switch (deviceList.get(position).getConnectionState()) {
+        switch (deviceList.get(position).getStatusConnection()) {
 
             case UNKNOWN:
                 break;
@@ -621,7 +624,7 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     private void paintStatusConnectionSwitchDevice(IotDeviceSwitchAdapterViewHolder holder, int position) {
 
-        switch (deviceList.get(position).getConnectionState()) {
+        switch (deviceList.get(position).getStatusConnection()) {
 
             case UNKNOWN:
                 break;
@@ -649,7 +652,7 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     private void paintStatusConnectionThermometerDevice(IotDeviceThermometerAdapterViewHolder holder, int position) {
 
-        switch (deviceList.get(position).getConnectionState()) {
+        switch (deviceList.get(position).getStatusConnection()) {
 
             case UNKNOWN:
                 break;
@@ -679,7 +682,7 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         IotDeviceThermostat device;
         device = (IotDeviceThermostat) deviceList.get(position);
 
-        switch (device.getConnectionState()) {
+        switch (device.getStatusConnection()) {
 
             case UNKNOWN:
                 break;
@@ -749,6 +752,7 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
          holder.imageDeviceOperation.setImageResource(R.drawable.ic_switch_unknown);
      }
     }
+
 
 
 }

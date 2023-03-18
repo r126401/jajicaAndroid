@@ -1,9 +1,133 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ThermometerActivity">
+    tools:context=".ThermometerActivity"
+    android:orientation="vertical"
+    android:weightSum="100">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="40">
+
+
+        <GridLayout
+            android:id="@+id/gridLayoutStatusDevice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:columnCount="5"
+            android:layoutDirection="rtl"
+            android:padding="10dp"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/imageBrokerConnected"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:src="@drawable/ic_wifi_on" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/imageConnectedDevicethermometer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:src="@drawable/ic_action_connect_ok" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/imageUpgradeFirmwarethermometer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:src="@drawable/ic_action_upgrade"
+                android:visibility="invisible"/>
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/imageAlarmDevice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:src="@drawable/ic_action_alarm"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/textDeviceInfothermometer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginEnd="10dp"
+                android:drawableLeft="@drawable/ic_action_thermometer"
+                android:text="@string/move_device" />
+
+        </GridLayout>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textTemperature"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/themometer"
+            android:text="25.5"
+            android:textSize="40sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/gridLayoutStatusDevice" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textUnity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ºC"
+            android:textSize="40dp"
+            app:layout_constraintBottom_toBottomOf="@+id/textTemperature"
+            app:layout_constraintStart_toEndOf="@+id/textTemperature"
+            app:layout_constraintTop_toTopOf="@+id/textTemperature">
+
+        </androidx.appcompat.widget.AppCompatTextView>
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottomActionThermometer"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            app:menu="@menu/menu_thermometer"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:labelVisibilityMode="unlabeled"/>
+
+        <ProgressBar
+            android:id="@+id/progressOperationThermometer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/textTemperature">
+
+        </ProgressBar>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textStatusThermometer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/auto"
+            app:layout_constraintBottom_toTopOf="@+id/textTemperature"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/gridLayoutStatusDevice" />
+
+        
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <FrameLayout
+        android:id="@+id/containerThermometer"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="60">
+
+    </FrameLayout>
+
+
+
+
+</LinearLayout>

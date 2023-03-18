@@ -48,12 +48,6 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
 
-    private SwitchScheduleFragment switchScheduleFragment;
-    private ActionSwitchScheduleFragment actionSwitchScheduleFragment;
-
-    private InfoDeviceFragment infoDeviceFragment;
-
-
 
     /**
      * Este metodo inicializa y recibe los datos desde mainActivity
@@ -61,32 +55,31 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
      * Configura los listeners y pinta el dispositivo
      */
     private void initActivity() {
-        JSONObject jsonObject = null;
+        JSONObject jsonObject;
 
+        mBinding.imagePanelSwitch.setOnClickListener(this);
         mBinding.bottomActionsSwitch.setOnItemSelectedListener(this);
         fragmentManager = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         String data = bundle.getString(IOT_LABELS_JSON.DEVICES.getValorTextoJson());
+        device = new IotDeviceSwitch();
         try {
             jsonObject = new JSONObject(data);
+            if (!data.equals("")) {
+
+                device.json2Object(jsonObject);
+            }
         } catch (JSONException exception) {
             Log.e(TAG, "Error al recibir el json desde MainActivity");
         }
-        mBinding.imagePanelSwitch.setOnClickListener(this);
 
-        device = new IotDeviceSwitch();
-        if (data != null) {
-
-            device.json2Object(jsonObject);
+        if (createConnectionMqtt() == IOT_MQTT_STATUS_CONNECTION.CONEXION_MQTT_CON_EXITO) {
+            device.setCnx(cnx);
+            configureListenersDeviceSwitch();
+            updateDevice();
         }
-        createConnectionMqtt();
-        device.setCnx(cnx);
-        configureListenersDeviceSwitch();
-        updateDevice();
-
-
     }
 
 
@@ -113,9 +106,6 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
 
         //Configuramos los listeners de comandos.
 
-        /**
-         * Recepcion del comando status
-         */
         device.setOnReceivedStatus(new IotDevice.OnReceivedStatus() {
             @Override
             public void onReceivedStatus(IOT_CODE_RESULT resultCode) {
@@ -127,9 +117,7 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
             }
         });
 
-        /**
-         * Recepcion del comando infoDevice
-         */
+
         device.setOnReceivedInfoDevice(new IotDevice.OnReceivedInfoDevice() {
             @Override
             public void onReceivedInfoDevice(IOT_CODE_RESULT resultCode) {
@@ -141,9 +129,7 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
             }
         });
 
-        /**
-         * Recepcion de la informacion de OTA disponible
-         */
+
         device.setOnReceivedOtaVersionAvailableDevice(new IotDevice.OnReceivedOtaVersionAvailableDevice() {
             @Override
             public void onReceivedOtaVersionAvailableDevice(IOT_CODE_RESULT resultCode) {
@@ -152,9 +138,7 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
             }
         });
 
-        /**
-         * Recepcion del comando de visualizacion de programas
-         */
+
         device.setOnReceivedScheduleDevice(new IotDevice.OnReceivedScheduleDevice() {
             @Override
             public void onReceivedScheduleDevice(IOT_CODE_RESULT resultCode) {
@@ -173,9 +157,7 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
             }
         });
 
-        /**
-         * Recepcion de espontaneo de inicio del dispositivo
-         */
+
         device.setOnReceivedSpontaneousStartDevice(new IotDevice.OnReceivedSpontaneousStartDevice() {
             @Override
             public void onReceivedSpontaneousStartDevice(IOT_CODE_RESULT resultCode) {
@@ -185,9 +167,7 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
             }
         });
 
-        /**
-         * Recepcion de espontaneo de cambio de estado en el switch
-         */
+
         device.setOnReceivedSpontaneousActionRelay(new IotDeviceSwitch.OnReceivedSpontaneousActionRelay() {
             @Override
             public void onReceivedSpontaneousActionRelay(IOT_CODE_RESULT resultCode) {
@@ -197,9 +177,7 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
             }
         });
 
-        /**
-         * Recepcion de comienzo de un programa
-         */
+
         device.setOnReceivedSpontaneousStartSchedule(new IotDevice.OnReceivedSpontaneousStartSchedule() {
             @Override
             public void onReceivesSpontaneousStartSchedule(IOT_CODE_RESULT resultCode) {
@@ -209,9 +187,7 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
             }
         });
 
-        /**
-         * Recepcion de fin de un programa
-         */
+
         device.setOnReceivedSpontaneousEndSchedule(new IotDevice.OnReceivedSpontaneousEndSchedule() {
             @Override
             public void onReceivesSpontaneousEndSchedule(IOT_CODE_RESULT resultCode) {
@@ -252,7 +228,7 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
 
     private void launchInfoDeviceFragment() {
 
-        infoDeviceFragment = new InfoDeviceFragment(device.getListInfoDevice());
+        InfoDeviceFragment infoDeviceFragment = new InfoDeviceFragment(device.getListInfoDevice());
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.containerSwitch, infoDeviceFragment, "infoDeviceFragment");
         fragmentTransaction.setReorderingAllowed(true);
@@ -302,12 +278,6 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
      * Se refresca la vista del dispositivo en funcion de los mensajes recibidos
      */
     private void updateDevice() {
-
-        IOT_SWITCH_RELAY statusRelay;
-
-
-
-
 
         //Pintamos si el dispositivo esta conectado o no
         paintStatusCommunication();
@@ -474,7 +444,7 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
 
         paintBrokerStatus();
 
-    switch (device.getConnectionState()) {
+    switch (device.getStatusConnection()) {
 
         case UNKNOWN:
             mBinding.progressOperationSwitch.setVisibility(View.INVISIBLE);
@@ -497,7 +467,7 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
 
     }
 
-    if (device.getConnectionState() == IOT_DEVICE_STATUS_CONNECTION.DEVICE_WAITING_RESPONSE) {
+    if (device.getStatusConnection() == IOT_DEVICE_STATUS_CONNECTION.DEVICE_WAITING_RESPONSE) {
         mBinding.progressOperationSwitch.setVisibility(View.VISIBLE);
     } else {
         mBinding.progressOperationSwitch.setVisibility(View.INVISIBLE);
@@ -533,7 +503,7 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
      */
     private void paintScheduleFragment() {
         Log.i(TAG, "device es : switch" + device.hashCode());
-        switchScheduleFragment = new SwitchScheduleFragment(device);
+        SwitchScheduleFragment switchScheduleFragment = new SwitchScheduleFragment(device);
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.add(R.id.containerSwitch, switchScheduleFragment, "ScheduleSwitch");
         fragmentTransaction.setReorderingAllowed(true);
@@ -576,7 +546,7 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
 
             case (R.id.item_new_schedule_thermostat):
                 fragmentTransaction = fragmentManager.beginTransaction();
-                actionSwitchScheduleFragment = new ActionSwitchScheduleFragment(null);
+                ActionSwitchScheduleFragment actionSwitchScheduleFragment = new ActionSwitchScheduleFragment(null);
                 actionSwitchScheduleFragment.setOnActionSchedule(this);
                 fragmentTransaction.replace(R.id.containerSwitch, actionSwitchScheduleFragment, "NewScheduleSwitch");
                 fragmentTransaction.setReorderingAllowed(true);

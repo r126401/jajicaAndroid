@@ -23,6 +23,7 @@ import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
+import com.google.android.material.textfield.TextInputEditText;
 
 import net.jajica.libiot.IOT_DEVICE_STATUS;
 import net.jajica.libiot.IOT_DEVICE_TYPE;
@@ -303,6 +304,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         if (position >= 0) {
             mbinding.tabs.getTabAt(position).select();
         }
+
 
         mbinding.tabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -732,6 +734,8 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                 mbinding.imageMoveDevice.setTag(true);
                 fragmentDevices.adapter.notifyItemChanged(position);
                 break;
+
+
         }
 
         return result;
@@ -753,6 +757,36 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
             mbinding.tabs.selectTab(mbinding.tabs.getTabAt(cutPosition));
             Log.i(TAG, "kk");
         }
+    }
+
+
+    private void updateNumberDeviceOnTab() {
+
+        int i;
+        int j;
+        int nDevices = 0;
+        String text;
+        FragmentManager fragmentManager;
+        List<Fragment> listFragments;
+        FragmentDevices fragmentDevices;
+        fragmentManager = getSupportFragmentManager();
+        listFragments = fragmentManager.getFragments();
+
+        for (i=0;i<mbinding.tabs.getTabCount(); i++) {
+            for (j=0;j<listFragments.size();i++) {
+                fragmentDevices = (FragmentDevices) listFragments.get(j);
+                nDevices = fragmentDevices.getDeviceList().size();
+            }
+            text = mbinding.tabs.getTabAt(i).getText().toString();
+            text = text + "(" + String.valueOf(nDevices) + ")";
+            mbinding.tabs.getTabAt(i).setText(text);
+
+        }
+
+
+
+
+
     }
 
 

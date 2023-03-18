@@ -436,7 +436,7 @@ public class ThermostatActivity extends AppCompatActivity implements View.OnClic
 
         paintBrokerStatus();
 
-        switch (device.getConnectionState()) {
+        switch (device.getStatusConnection()) {
 
             case UNKNOWN:
                 mBinding.progressOperationThermostat.setVisibility(View.INVISIBLE);
@@ -459,7 +459,7 @@ public class ThermostatActivity extends AppCompatActivity implements View.OnClic
 
         }
 
-        if (device.getConnectionState() == IOT_DEVICE_STATUS_CONNECTION.DEVICE_WAITING_RESPONSE) {
+        if (device.getStatusConnection() == IOT_DEVICE_STATUS_CONNECTION.DEVICE_WAITING_RESPONSE) {
             mBinding.progressOperationThermostat.setVisibility(View.VISIBLE);
         } else {
             mBinding.progressOperationThermostat.setVisibility(View.INVISIBLE);

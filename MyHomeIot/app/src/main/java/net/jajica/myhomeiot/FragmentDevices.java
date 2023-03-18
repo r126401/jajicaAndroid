@@ -57,6 +57,7 @@ public class FragmentDevices extends Fragment implements SwipeRefreshLayout.OnRe
 
 
     enum OPERATION_DEVICE {
+        REFRESH_DEVICE,
         CREATE_DEVICE,
         DELETE_DEVICE,
         MODIFY_DEVICE,
@@ -608,7 +609,7 @@ public class FragmentDevices extends Fragment implements SwipeRefreshLayout.OnRe
         switch (device.getDeviceType()) {
 
             case INTERRUPTOR:
-                if (device.getConnectionState() == IOT_DEVICE_STATUS_CONNECTION.DEVICE_CONNECTED) {
+                if (device.getStatusConnection() == IOT_DEVICE_STATUS_CONNECTION.DEVICE_CONNECTED) {
                     Intent launcherSwitch = new Intent(context, SwitchActivity.class);
                     device.object2Json();
 
@@ -619,14 +620,20 @@ public class FragmentDevices extends Fragment implements SwipeRefreshLayout.OnRe
 
                 break;
             case THERMOMETER:
-                Intent launcherThermometer = new Intent(context, ThermometerActivity.class);
-                launcherThermometer.putExtra(IOT_LABELS_JSON.DEVICES.getValorTextoJson(), device.getDispositivoJson().toString());
-                startActivity(launcherThermometer);
+                if (device.getStatusConnection() == IOT_DEVICE_STATUS_CONNECTION.DEVICE_CONNECTED) {
+                    Intent launcherThermometer = new Intent(context, ThermometerActivity.class);
+                    launcherThermometer.putExtra(IOT_LABELS_JSON.DEVICES.getValorTextoJson(), device.getDispositivoJson().toString());
+                    startActivity(launcherThermometer);
+                }
+
                 break;
             case CRONOTERMOSTATO:
-                Intent launcherThermostat = new Intent(context, ThermostatActivity.class);
-                launcherThermostat.putExtra(IOT_LABELS_JSON.DEVICES.getValorTextoJson(), device.getDispositivoJson().toString());
-                startActivity(launcherThermostat);
+                if(device.getStatusConnection() == IOT_DEVICE_STATUS_CONNECTION.DEVICE_CONNECTED) {
+                    Intent launcherThermostat = new Intent(context, ThermostatActivity.class);
+                    launcherThermostat.putExtra(IOT_LABELS_JSON.DEVICES.getValorTextoJson(), device.getDispositivoJson().toString());
+                    startActivity(launcherThermostat);
+                }
+
                 break;
         }
 

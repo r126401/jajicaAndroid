@@ -611,7 +611,7 @@ public abstract class IotDevice implements Serializable {
      * Obtiene el estado de la conexion
      * @return
      */
-    public IOT_DEVICE_STATUS_CONNECTION getConnectionState() {
+    public IOT_DEVICE_STATUS_CONNECTION getStatusConnection() {
         return connectionState;
     }
 
@@ -1394,7 +1394,7 @@ public abstract class IotDevice implements Serializable {
         timerCommand.schedule(new TimerTask() {
             @Override
             public void run() {
-                if (getConnectionState() != IOT_DEVICE_STATUS_CONNECTION.DEVICE_CONNECTED) {
+                if (getStatusConnection() != IOT_DEVICE_STATUS_CONNECTION.DEVICE_CONNECTED) {
                     if (onReceivedTimeoutCommand != null) {
                         //Log.i(TAG, "Enviamos timeout: " + getTokenFromReport(textoComando));
                         setConnectionState(IOT_DEVICE_STATUS_CONNECTION.DEVICE_DISCONNECTED);
