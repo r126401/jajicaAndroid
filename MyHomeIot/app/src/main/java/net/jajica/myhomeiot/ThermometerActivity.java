@@ -114,6 +114,11 @@ public class ThermometerActivity extends AppCompatActivity implements Navigation
             @Override
             public void onReceivedResetDevice(IOT_CODE_RESULT resultCode) {
 
+                MyHomeIotTools tools;
+                tools = new MyHomeIotTools();
+                tools.sceneResetDevice(fragmentManager, device, ThermometerActivity.this);
+
+
             }
         });
 
@@ -121,12 +126,20 @@ public class ThermometerActivity extends AppCompatActivity implements Navigation
             @Override
             public void onReceivedFactoryResetDevice(IOT_CODE_RESULT resultCode) {
 
+                MyHomeIotTools tools;
+                tools = new MyHomeIotTools();
+                tools.sceneFactoryResetDevice(fragmentManager, device, ThermometerActivity.this);
+
             }
         });
 
         device.setOnReceivedUpgradeFirmwareDevice(new IotDevice.OnReceivedUpgradeFirmwareDevice() {
             @Override
             public void onReceivedUpgradeFirmwareDevice(IOT_CODE_RESULT codeResult) {
+                MyHomeIotTools tools;
+                tools = new MyHomeIotTools();
+                tools.sceneUpgradeFirmware(fragmentManager, device, ThermometerActivity.this);
+
 
             }
         });
@@ -263,7 +276,8 @@ public class ThermometerActivity extends AppCompatActivity implements Navigation
                         break;
                     case UPGRADE_FIRMWARE:
                         //device.commandUpgradeFirmware();
-                        sceneUpgradeFirmware();
+                        device.commandUpgradeFirmware();
+
 
                 }
 
@@ -449,13 +463,6 @@ public class ThermometerActivity extends AppCompatActivity implements Navigation
 
     }
 
-    private void sceneUpgradeFirmware() {
 
-        InteractiveFragment scene;
-        device.commandUpgradeFirmware();
-        scene = new InteractiveFragment(this, device, 120000, IOT_COMMANDS.UPGRADE_FIRMWARE);
-        scene.show(fragmentManager.beginTransaction(), "upgrade device");
-
-    }
 
 }

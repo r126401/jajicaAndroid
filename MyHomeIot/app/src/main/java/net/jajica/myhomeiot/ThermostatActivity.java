@@ -219,6 +219,10 @@ public class ThermostatActivity extends AppCompatActivity implements View.OnClic
         device.setOnReceivedResetDevice(new IotDevice.OnReceivedResetDevice() {
             @Override
             public void onReceivedResetDevice(IOT_CODE_RESULT resultCode) {
+                MyHomeIotTools tools;
+                tools = new MyHomeIotTools();
+                tools.sceneResetDevice(fragmentManager, device, ThermostatActivity.this);
+
 
                 Log.i(TAG, "Recibido reset al dispositivo");
 
@@ -229,8 +233,10 @@ public class ThermostatActivity extends AppCompatActivity implements View.OnClic
             @Override
             public void onReceivedFactoryResetDevice(IOT_CODE_RESULT resultCode) {
 
-                device.setConnectionState(IOT_DEVICE_STATUS_CONNECTION.DEVICE_DISCONNECTED);
-                updateDevice();
+                MyHomeIotTools tools;
+                tools = new MyHomeIotTools();
+                tools.sceneFactoryResetDevice(fragmentManager, device, ThermostatActivity.this);
+
 
             }
         });
@@ -238,6 +244,10 @@ public class ThermostatActivity extends AppCompatActivity implements View.OnClic
         device.setOnReceivedUpgradeFirmwareDevice(new IotDevice.OnReceivedUpgradeFirmwareDevice() {
             @Override
             public void onReceivedUpgradeFirmwareDevice(IOT_CODE_RESULT codeResult) {
+                MyHomeIotTools tools;
+                tools = new MyHomeIotTools();
+                tools.sceneUpgradeFirmware(fragmentManager, device, ThermostatActivity.this);
+
 
             }
         });
@@ -817,7 +827,8 @@ public class ThermostatActivity extends AppCompatActivity implements View.OnClic
                         break;
                     case UPGRADE_FIRMWARE:
                         //device.commandUpgradeFirmware();
-                        sceneUpgradeFirmware();
+                        device.commandUpgradeFirmware();
+
 
                 }
 
@@ -835,14 +846,6 @@ public class ThermostatActivity extends AppCompatActivity implements View.OnClic
 
     }
 
-    private void sceneUpgradeFirmware() {
-
-        InteractiveFragment scene;
-        device.commandUpgradeFirmware();
-        scene = new InteractiveFragment(this, device, 120000, IOT_COMMANDS.UPGRADE_FIRMWARE);
-        scene.show(fragmentManager.beginTransaction(), "upgrade device");
-
-    }
 
 
 }

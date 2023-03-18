@@ -1,17 +1,19 @@
 package net.jajica.myhomeiot;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.util.Log;
 import android.view.inputmethod.InputMethodManager;
 
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.fragment.app.FragmentManager;
+
+import net.jajica.libiot.IOT_COMMANDS;
+import net.jajica.libiot.IotDevice;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DateFormat;
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -276,6 +278,36 @@ public class MyHomeIotTools {
         AlertDialog alert;
         alert = builder.create();
         alert.show();
+
+    }
+
+
+    public void sceneUpgradeFirmware(FragmentManager fragmentManager, IotDevice device, Context context) {
+
+        InteractiveFragment scene;
+        //device.commandUpgradeFirmware();
+        scene = new InteractiveFragment(context, device, 120000, IOT_COMMANDS.UPGRADE_FIRMWARE);
+        scene.show(fragmentManager.beginTransaction(), "upgrade device");
+
+    }
+
+
+    public void sceneResetDevice(FragmentManager fragmentManager, IotDevice device, Context context) {
+
+        InteractiveFragment scene;
+        //device.commandResetDevice();
+        scene = new InteractiveFragment(context, device, 20000, IOT_COMMANDS.RESET);
+        scene.show(fragmentManager.beginTransaction(), "ResetDevice");
+
+    }
+
+
+    public void sceneFactoryResetDevice(FragmentManager fragmentManager, IotDevice device, Context context) {
+
+        InteractiveFragment scene;
+        //device.commandResetDevice();
+        scene = new InteractiveFragment(context, device, 20000, IOT_COMMANDS.FACTORY_RESET);
+        scene.show(fragmentManager.beginTransaction(), "FactoryResetDevice");
 
     }
 

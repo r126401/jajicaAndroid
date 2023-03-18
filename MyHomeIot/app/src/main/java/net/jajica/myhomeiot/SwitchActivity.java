@@ -200,6 +200,10 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
         device.setOnReceivedResetDevice(new IotDevice.OnReceivedResetDevice() {
             @Override
             public void onReceivedResetDevice(IOT_CODE_RESULT resultCode) {
+                MyHomeIotTools tool;
+                tool = new MyHomeIotTools();
+                tool.sceneResetDevice(fragmentManager, device, SwitchActivity.this);
+                //sceneResetDevice();
 
                 Log.i(TAG, "Recibido reset al dispositivo");
 
@@ -209,9 +213,9 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
         device.setOnReceivedFactoryResetDevice(new IotDevice.OnReceivedFactoryResetDevice() {
             @Override
             public void onReceivedFactoryResetDevice(IOT_CODE_RESULT resultCode) {
-
-                device.setConnectionState(IOT_DEVICE_STATUS_CONNECTION.DEVICE_DISCONNECTED);
-                updateDevice();
+                MyHomeIotTools tool;
+                tool = new MyHomeIotTools();
+                tool.sceneFactoryResetDevice(fragmentManager, device, SwitchActivity.this);
 
             }
         });
@@ -219,6 +223,10 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
         device.setOnReceivedUpgradeFirmwareDevice(new IotDevice.OnReceivedUpgradeFirmwareDevice() {
             @Override
             public void onReceivedUpgradeFirmwareDevice(IOT_CODE_RESULT codeResult) {
+
+                MyHomeIotTools tool;
+                tool = new MyHomeIotTools();
+                tool.sceneUpgradeFirmware(fragmentManager, device, SwitchActivity.this);
 
             }
         });
@@ -676,14 +684,12 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
 
                     case RESET:
                         device.commandResetDevice();
-                        sceneUpgradeResetDevice();
                         break;
                     case FACTORY_RESET:
                         device.commandFactoryReset();
                         break;
                     case UPGRADE_FIRMWARE:
-                        //device.commandUpgradeFirmware();
-                        sceneUpgradeFirmware();
+                        device.commandUpgradeFirmware();
 
                 }
 
@@ -701,24 +707,7 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
 
     }
 
-    private void sceneUpgradeFirmware() {
 
-        InteractiveFragment scene;
-        device.commandUpgradeFirmware();
-        scene = new InteractiveFragment(this, device, 120000, IOT_COMMANDS.UPGRADE_FIRMWARE);
-        scene.show(fragmentManager.beginTransaction(), "upgrade device");
-
-    }
-
-
-    private void sceneUpgradeResetDevice() {
-
-        InteractiveFragment scene;
-        device.commandResetDevice();
-        scene = new InteractiveFragment(this, device, 10000, IOT_COMMANDS.RESET);
-        scene.show(fragmentManager.beginTransaction(), "ResetDevice");
-
-    }
 
 
 }

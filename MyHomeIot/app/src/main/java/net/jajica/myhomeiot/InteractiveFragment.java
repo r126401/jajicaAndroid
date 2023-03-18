@@ -87,20 +87,35 @@ public class InteractiveFragment extends DialogFragment {
         device.setOnReceivedSpontaneousStartDevice(new IotDevice.OnReceivedSpontaneousStartDevice() {
             @Override
             public void onReceivedSpontaneousStartDevice(IOT_CODE_RESULT resultCode) {
-                if (device.getEndUpgradeFlag() == 1) {
-                    Log.i(TAG, "Se ha recibido el fin de upgrade");
-                    mBinding.textInteractiveStatus.setText(R.string.upgrade_succesfully);
-                    endUpgrade = true;
-                    mBinding.textPorcentage.setText("100 %");
 
-                } else {
-                    Log.i(TAG, "upgrade abortado");
-                    endUpgrade = false;
+                switch (command) {
+                    case UPGRADE_FIRMWARE:
+                        if (device.getEndUpgradeFlag() == 1) {
+                            Log.i(TAG, "Se ha recibido el fin de upgrade");
+                            mBinding.textInteractiveStatus.setText(R.string.upgrade_succesfully);
+                            endUpgrade = true;
+                            mBinding.textPorcentage.setText("100 %");
+
+                        } else {
+                            Log.i(TAG, "upgrade abortado");
+                            endUpgrade = false;
+
+                        }
+                        timer.cancel();
+                        setCancelable(true);
+                        mBinding.textInteractiveStatus.setText(R.string.upgrade_unsucessfully);
+                        break;
+                    case RESET:
+                    case FACTORY_RESET:
+                        mBinding.textPorcentage.setText("100 %");
+                        mBinding.textInteractiveStatus.setText(R.string.succesfull);
+                        device.commandGetStatusDevice();
+                        timer.cancel();
+                        setCancelable(true);
 
                 }
-                timer.cancel();
-                setCancelable(true);
-                mBinding.textInteractiveStatus.setText(R.string.upgrade_unsucessfully);
+
+
             }
         });
     }
@@ -117,18 +132,23 @@ public class InteractiveFragment extends DialogFragment {
         mBinding = FragmentUpgradeBinding.inflate(inflater);
         alertDialog.setView(mBinding.getRoot());
         mBinding.textPorcentage.setText("0 %");
-
+        waitingAction((int) delay);
+/*
         switch (command) {
             case UPGRADE_FIRMWARE:
                 waitingUpgrade();
                 break;
             case RESET:
-                waitingAction(15000);
+                waitingAction((int) delay);
                 break;
             case FACTORY_RESET:
-                waitingAction(14000);
+                waitingAction((int) delay);
                 break;
         }
+
+
+ */
+
 
         return alertDialog.create();
     }
@@ -157,10 +177,23 @@ public class InteractiveFragment extends DialogFragment {
             @Override
             public void onFinish() {
 
-                if (!endUpgrade) {
-                    mBinding.textInteractiveStatus.setText(R.string.upgrade_unsucessfully);
-                    setCancelable(true);
+                switch (command) {
+                    case UPGRADE_FIRMWARE:
+                        if (!endUpgrade) {
+                            mBinding.textInteractiveStatus.setText(R.string.upgrade_unsucessfully);
+                            setCancelable(true);
+                        }
+                        break;
+                    case RESET:
+                    case FACTORY_RESET:
+                        mBinding.textInteractiveStatus.setText(R.string.unsucessfull);
+                        break;
+
                 }
+
+
+
+
 
             }
         };
@@ -173,9 +206,23 @@ public class InteractiveFragment extends DialogFragment {
 
     private void waitingAction(int delay) {
 
+
+        switch (command) {
+
+            case UPGRADE_FIRMWARE:
+                mBinding.textInteractiveStatus.setText(R.string.upgrading);
+                break;
+            case RESET:
+                mBinding.textInteractiveStatus.setText(R.string.reseting);
+                break;
+            case FACTORY_RESET:
+                mBinding.textInteractiveStatus.setText(R.string.factoring);
+                break;
+
+        }
         mBinding.progressAction.setMin(0);
         mBinding.progressAction.setMax((int) delay/1000);
-        mBinding.textInteractiveStatus.setText(R.string.upgrading);
+
         timer = new CountDownTimer(delay, interval) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -185,6 +232,7 @@ public class InteractiveFragment extends DialogFragment {
                 progress = (progress * 100) / mBinding.progressAction.getMax();
                 porcentage = String.valueOf(progress);
                 porcentage += " %";
+                Log.i(TAG, "min: 0, max: " + delay/1000 + "progress: " + progress + "porcentaje: " + porcentage);
                 mBinding.textPorcentage.setText(porcentage);
                 mBinding.progressAction.setProgress(mBinding.progressAction.getProgress()+1);
             }

@@ -118,6 +118,10 @@
     <string name="none_home">None home</string>
     <string name="error_message_uniq_home">You cant delete the last home</string>
     <string name="error_home">Error in home</string>
+    <string name="reseting">Reseting...</string>
+    <string name="factoring">making Factory Reset</string>
+    <string name="succesfull">Succesfull</string>
+    <string name="unsucessfull">Unsucessfull</string>
 
 
 </resources>
