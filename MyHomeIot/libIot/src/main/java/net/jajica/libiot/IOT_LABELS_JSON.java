@@ -31,6 +31,8 @@ public enum IOT_LABELS_JSON {
     ACTION_RELAY("opRele"),
     STATUS_CONNECTION("estadoConexion"),
     STATUS_PROGRAMMER("programmerState"),
+
+    NUMBER_PROGRAMS("programNumbers"),
     STATUS_SCHEDULE("programState"),
     STATUS_DEVICE("deviceState"),
     OTA_SERVER("otaServer"),

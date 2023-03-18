@@ -141,6 +141,8 @@ public abstract class IotDevice implements Serializable {
      */
     private ArrayList<IotScheduleDevice> schedules;
 
+    private int numberSchedules;
+
     protected int finUpgrade;
     /**
      * Mantiene la estructura del dispositivo en formato json
@@ -221,8 +223,9 @@ public abstract class IotDevice implements Serializable {
         this.uptime = uptime;
     }
 
-
-
+    public Double getUptime() {
+        return uptime;
+    }
 
     /**
      * Metodo que devuelve el estado global de programacion del dispositivo
@@ -265,6 +268,13 @@ public abstract class IotDevice implements Serializable {
         this.currentOtaVersion = currentOtaVersion;
     }
 
+    public int getNumberSchedules() {
+        return numberSchedules;
+    }
+
+    public void setNumberSchedules(int numberSchedules) {
+        this.numberSchedules = numberSchedules;
+    }
 
     /**
      * Interface que la aplicacion utiliza para recibir el estado del dispositivo
@@ -885,6 +895,21 @@ public abstract class IotDevice implements Serializable {
             }
 
         }
+
+        try {
+            dispositivoJson.put(IOT_LABELS_JSON.FREE_MEM.getValorTextoJson(), getFreeMem());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            dispositivoJson.put(IOT_LABELS_JSON.UPTIME.getValorTextoJson(), getUptime());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+
 
 
 

@@ -3,6 +3,7 @@ package net.jajica.libiot;
 import android.util.Log;
 
 import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
@@ -346,4 +347,38 @@ public class IotDeviceThermometer extends IotDevice implements Serializable {
 
         return super.processStartDevice(message);
     }
+
+    @Override
+    protected IOT_CODE_RESULT processInfoDeviceFromReport(String message) {
+
+        setNumberProgramsFromReport(message);
+        setProgrammerStateFromReport(message);
+
+        try {
+            dispositivoJson.put(IOT_LABELS_JSON.STATUS_PROGRAMMER.getValorTextoJson(), getProgrammerState());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            dispositivoJson.put(IOT_LABELS_JSON.NUMBER_PROGRAMS.getValorTextoJson(), getNumberSchedules());
+        }  catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return super.processInfoDeviceFromReport(message);
+    }
+
+
+    protected IOT_CODE_RESULT setNumberProgramsFromReport(String message) {
+        int dat;
+        dat = getFieldIntFromReport(message, IOT_LABELS_JSON.NUMBER_PROGRAMS);
+        if (dat <= 0) {
+            Log.e(TAG, "No se encuentra el valor de programas");
+            return IOT_CODE_RESULT.RESULT_CODE_ERROR;
+        }
+
+        setNumberSchedules(dat);
+        return IOT_CODE_RESULT.RESUT_CODE_OK;
+    }
+
+
 }
