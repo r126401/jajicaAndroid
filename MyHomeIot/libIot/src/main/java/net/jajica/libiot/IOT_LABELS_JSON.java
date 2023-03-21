@@ -1,5 +1,6 @@
 package net.jajica.libiot;
 
+
 public enum IOT_LABELS_JSON {
 
     JSON_COMMAND("comando", false),
