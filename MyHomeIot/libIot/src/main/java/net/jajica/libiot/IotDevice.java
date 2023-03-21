@@ -1852,6 +1852,15 @@ public abstract class IotDevice implements Serializable {
         return stream;
     }
 
+    protected Boolean getFieldBooleanFromReport(String message, IOT_LABELS_JSON field) {
+
+        IotTools api;
+        Boolean dat;
+        api = new IotTools();
+        dat = api.getJsonboolean(message, field.getValorTextoJson());
+        return dat;
+    }
+
 
 
 

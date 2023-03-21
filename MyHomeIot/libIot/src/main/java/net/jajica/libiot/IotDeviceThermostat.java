@@ -19,7 +19,27 @@ public class IotDeviceThermostat extends IotDeviceThermometer implements Seriali
     protected String RemoteSensor;
     protected Double thresholdTemperature;
     protected IOT_SWITCH_RELAY relay;
+
+    protected double marginTemperature;
+    protected double defaultThresholdTemperature;
+
     private ArrayList<IotScheduleDeviceThermostat> schedules;
+
+    public double getMarginTemperature() {
+        return marginTemperature;
+    }
+
+    public void setMarginTemperature(double marginTemperature) {
+        this.marginTemperature = marginTemperature;
+    }
+
+    public Double getDefaultThresholdTemperature() {
+        return defaultThresholdTemperature;
+    }
+
+    public void setDefaultThresholdTemperature(Double defaultThresholdTemperature) {
+        this.defaultThresholdTemperature = defaultThresholdTemperature;
+    }
 
     OnReceivedSetThresholdTemperature onReceivedSetThresholdTemperature;
     public interface OnReceivedSetThresholdTemperature {
@@ -147,6 +167,33 @@ public class IotDeviceThermostat extends IotDeviceThermometer implements Seriali
             e.printStackTrace();
         }
 
+        try {
+            dispositivoJson.put(IOT_LABELS_JSON.MARGIN_TEMPERATURE.getValorTextoJson(), getMarginTemperature());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            dispositivoJson.put(IOT_LABELS_JSON.DEFAULT_THRESHOLD_TEMPERATURE.getValorTextoJson(), getDefaultThresholdTemperature());
+        }  catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            dispositivoJson.put(IOT_LABELS_JSON.TYPE_SENSOR.getValorTextoJson(), getMasterSensor());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        if (!getMasterSensor()) {
+             try {
+                 dispositivoJson.put(IOT_LABELS_JSON.SENSOR_ID.getValorTextoJson(), getRemoteSensor());
+             } catch (JSONException e) {
+                 e.printStackTrace();
+             }
+
+        }
+
+
         return super.processInfoDeviceFromReport(message);
     }
 
@@ -242,7 +289,7 @@ public class IotDeviceThermostat extends IotDeviceThermometer implements Seriali
         String remoteSensor;
         api = new IotTools();
         localSensor = api.getJsonboolean(message, IOT_LABELS_JSON.TYPE_SENSOR.getValorTextoJson());
-        if (localSensor == true) {
+        if (!localSensor) {
 
             setMasterSensor(true);
             remoteSensor = api.getJsonString(message, IOT_LABELS_JSON.SENSOR_ID.getValorTextoJson());
@@ -362,6 +409,8 @@ public class IotDeviceThermostat extends IotDeviceThermometer implements Seriali
         setThresholdTemperatureFromReport(message);
         setSensorFromReport(message);
         setStateRelayFromReport(message);
+        setMarginTemperatureFromReport(message);
+        setDefaultThresholdTemperatureFromReport(message);
         return super.processCommonParameters(message);
     }
 
@@ -468,7 +517,31 @@ public class IotDeviceThermostat extends IotDeviceThermometer implements Seriali
 
     }
 
+    private IOT_CODE_RESULT setMarginTemperatureFromReport(String message) {
 
+        double dat;
+        dat = getFieldDoubleFromReport(message, IOT_LABELS_JSON.MARGIN_TEMPERATURE);
+        if (dat <= -1000) {
+            Log.e(TAG, "No se encuentra el valor de temperatura");
+            return IOT_CODE_RESULT.RESULT_CODE_ERROR;
+        }
+
+        setMarginTemperature(dat);
+        return IOT_CODE_RESULT.RESUT_CODE_OK;
+    }
+
+    private IOT_CODE_RESULT setDefaultThresholdTemperatureFromReport(String message) {
+
+        double dat;
+        dat = getFieldDoubleFromReport(message, IOT_LABELS_JSON.DEFAULT_THRESHOLD_TEMPERATURE);
+        if (dat <= -1000) {
+            Log.e(TAG, "No se encuentra el valor de temperatura");
+            return IOT_CODE_RESULT.RESULT_CODE_ERROR;
+        }
+
+        setDefaultThresholdTemperature(dat);
+        return IOT_CODE_RESULT.RESUT_CODE_OK;
+    }
 
 
 

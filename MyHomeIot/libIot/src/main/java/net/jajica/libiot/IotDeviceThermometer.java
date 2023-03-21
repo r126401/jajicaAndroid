@@ -10,13 +10,19 @@ import java.io.Serializable;
 
 public class IotDeviceThermometer extends IotDevice implements Serializable {
 
+
+
+
+
     protected double temperature;
     protected double humidity;
-    protected double marginTemperature;
     protected int readInterval;
     protected int retryInterval;
     protected int readRetry;
     protected double calibrateValue;
+
+
+
 
 
     public double getTemperature() {
@@ -35,13 +41,9 @@ public class IotDeviceThermometer extends IotDevice implements Serializable {
         this.humidity = humidity;
     }
 
-    public double getMarginTemperature() {
-        return marginTemperature;
-    }
 
-    public void setMarginTemperature(double marginTemperature) {
-        this.marginTemperature = marginTemperature;
-    }
+
+
 
     public int getReadInterval() {
         return readInterval;
@@ -206,7 +208,6 @@ public class IotDeviceThermometer extends IotDevice implements Serializable {
 
         setTemperatureFromReport(respuesta);
         setHumidityFromReport(respuesta);
-        setMarginTemperatureFromReport(respuesta);
         setReadIntervalFromReport(respuesta);
         setRetryIntervalFromReport(respuesta);
         setReadRetry(respuesta);
@@ -242,18 +243,7 @@ public class IotDeviceThermometer extends IotDevice implements Serializable {
 
     }
 
-    protected IOT_CODE_RESULT setMarginTemperatureFromReport(String message) {
-        double dat;
-        dat = getFieldDoubleFromReport(message, IOT_LABELS_JSON.MARGIN_TEMPERATURE);
-        if (dat <= -1000) {
-            Log.e(TAG, "No se encuentra el valor de temperatura");
-            return IOT_CODE_RESULT.RESULT_CODE_ERROR;
-        }
 
-        setMarginTemperature(dat);
-        return IOT_CODE_RESULT.RESUT_CODE_OK;
-
-    }
 
     protected IOT_CODE_RESULT setReadIntervalFromReport(String message) {
         int dat;
@@ -311,7 +301,6 @@ public class IotDeviceThermometer extends IotDevice implements Serializable {
 
         if ((code =getCommandCodeResultFromReport(message)) != IOT_CODE_RESULT.RESUT_CODE_OK) {
 
-            setMarginTemperatureFromReport(message);
             setReadIntervalFromReport(message);
             setRetryIntervalFromReport(message);
             setReadRetry(message);
@@ -348,6 +337,89 @@ public class IotDeviceThermometer extends IotDevice implements Serializable {
         return super.processStartDevice(message);
     }
 
+    private IOT_CODE_RESULT processReadIntervalTemperatureFromReport(String message) {
+
+
+        int dat;
+        dat = getFieldIntFromReport(message, IOT_LABELS_JSON.READ_INTERVAL);
+        if (dat <= -1000) {
+            Log.e(TAG, "No se encuentra el valor de temperatura");
+            return IOT_CODE_RESULT.RESULT_CODE_ERROR;
+        }
+
+        setReadInterval(dat);
+        return IOT_CODE_RESULT.RESUT_CODE_OK;
+
+    }
+
+    private IOT_CODE_RESULT processIntervalRetryFromReport(String message) {
+
+        int dat;
+        dat = getFieldIntFromReport(message, IOT_LABELS_JSON.RETRY_INTERVAL);
+        if (dat <= -1000) {
+            Log.e(TAG, "No se encuentra el valor de temperatura");
+            return IOT_CODE_RESULT.RESULT_CODE_ERROR;
+        }
+
+        setRetryInterval(dat);
+        return IOT_CODE_RESULT.RESUT_CODE_OK;
+    }
+
+    private IOT_CODE_RESULT processNumberRetryFromReport(String message) {
+
+        int dat;
+        dat = getFieldIntFromReport(message, IOT_LABELS_JSON.READ_NUMBER_RETRY);
+        if (dat <= -1000) {
+            Log.e(TAG, "No se encuentra el valor de temperatura");
+            return IOT_CODE_RESULT.RESULT_CODE_ERROR;
+        }
+
+        setReadRetry(dat);
+        return IOT_CODE_RESULT.RESUT_CODE_OK;
+    }
+
+    private IOT_CODE_RESULT processCalibrateFromReport(String message) {
+
+        Double dat;
+        dat = getFieldDoubleFromReport(message, IOT_LABELS_JSON.CALIBRATE_VALUE);
+        if (dat <= -1000) {
+            Log.e(TAG, "No se encuentra el valor de temperatura");
+            return IOT_CODE_RESULT.RESULT_CODE_ERROR;
+        }
+
+        setCalibrateValue(dat);
+        return IOT_CODE_RESULT.RESUT_CODE_OK;
+    }
+
+    @Override
+    protected IOT_CODE_RESULT processInfoDeviceFromReport(String message) {
+
+        try {
+            dispositivoJson.put(IOT_LABELS_JSON.READ_INTERVAL.getValorTextoJson(), getReadInterval());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            dispositivoJson.put(IOT_LABELS_JSON.READ_NUMBER_RETRY.getValorTextoJson(), getReadRetry());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            dispositivoJson.put(IOT_LABELS_JSON.RETRY_INTERVAL.getValorTextoJson(), getRetryInterval());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            dispositivoJson.put(IOT_LABELS_JSON.CALIBRATE_VALUE.getValorTextoJson(), getCalibrateValue());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return super.processInfoDeviceFromReport(message);
+    }
+
     /*
     @Override
     protected IOT_CODE_RESULT processInfoDeviceFromReport(String message) {
@@ -371,7 +443,14 @@ public class IotDeviceThermometer extends IotDevice implements Serializable {
 
      */
 
+    @Override
+    protected IOT_CODE_RESULT processCommonParameters(String message) {
 
-
+        processReadIntervalTemperatureFromReport(message);
+        processIntervalRetryFromReport(message);
+        processNumberRetryFromReport(message);
+        processCalibrateFromReport(message);
+        return super.processCommonParameters(message);
+    }
 
 }
