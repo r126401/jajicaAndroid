@@ -48,9 +48,9 @@ public class InfoDeviceAdapter extends RecyclerView.Adapter<InfoDeviceAdapter.In
     private void paintItem(InfoDeviceAdapterViewHolder holder, int position) {
 
         if (infoDevice.get(position).getItemConfigurableInfoDevice()) {
-            holder.imageItemExtendInfoDevice.setVisibility(View.VISIBLE);
+            holder.imageItemExtendInfoDevice.setImageResource(R.drawable.ic_action_edit);
         } else {
-            holder.imageItemExtendInfoDevice.setVisibility(View.INVISIBLE);
+            holder.imageItemExtendInfoDevice.setImageResource(R.drawable.ic_action_colon);
         }
 
         holder.textLabelInfoDevice.setText(infoDevice.get(position).getItemLabelInfoDevice());

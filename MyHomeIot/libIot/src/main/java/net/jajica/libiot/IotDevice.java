@@ -1498,7 +1498,7 @@ public abstract class IotDevice implements Serializable {
                 value = dispositivoJson.getString(name);
                 info.setItemLabelInfoDevice(name);
                 info.setItemValueInfoDevice(value);
-                info.setItemConfigurableInfoDevice(false);
+                info.setItemConfigurableInfoDevice(isConfigurableField(name));
                 listInfoDevice.add(info);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -2205,9 +2205,14 @@ public abstract class IotDevice implements Serializable {
     }
 
 
-    protected Boolean isConfigurableField(IOT_LABELS_JSON field) {
+    protected Boolean isConfigurableField(String field) {
 
-        return false;
+        IOT_LABELS_JSON label  = IOT_LABELS_JSON.COMMAND;
+        Boolean conf;
+
+        label = label.fromlabel(field);
+        return label.isConfigurable();
+
     }
 
 

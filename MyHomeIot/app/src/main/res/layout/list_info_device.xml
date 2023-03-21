@@ -26,13 +26,14 @@
         </androidx.appcompat.widget.AppCompatTextView>
 
         <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imageItemExtendInfoDevice"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="10"
-            android:textSize="15sp"
             android:layout_gravity="center"
+            android:layout_weight="10"
             android:gravity="center"
-            android:src="@drawable/ic_action_colon">
+            android:src="@drawable/ic_action_colon"
+            android:textSize="15sp">
 
         </androidx.appcompat.widget.AppCompatImageView>
 
@@ -50,15 +51,6 @@
 
         </androidx.appcompat.widget.AppCompatTextView>
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/imageItemExtendInfoDevice"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:foregroundGravity="right"
-            android:src="@drawable/ic_right_arrow"
-            android:layout_weight="0">
-
-        </androidx.appcompat.widget.AppCompatImageView>
     </LinearLayout>
 
 </LinearLayout>
