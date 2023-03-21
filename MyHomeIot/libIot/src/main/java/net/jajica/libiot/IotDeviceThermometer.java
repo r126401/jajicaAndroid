@@ -420,28 +420,7 @@ public class IotDeviceThermometer extends IotDevice implements Serializable {
         return super.processInfoDeviceFromReport(message);
     }
 
-    /*
-    @Override
-    protected IOT_CODE_RESULT processInfoDeviceFromReport(String message) {
 
-        setNumberProgramsFromReport(message);
-        setProgrammerStateFromReport(message);
-
-        try {
-            dispositivoJson.put(IOT_LABELS_JSON.STATUS_PROGRAMMER.getValorTextoJson(), getProgrammerState());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        try {
-            dispositivoJson.put(IOT_LABELS_JSON.NUMBER_PROGRAMS.getValorTextoJson(), getNumberSchedules());
-        }  catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return super.processInfoDeviceFromReport(message);
-    }
-
-
-     */
 
     @Override
     protected IOT_CODE_RESULT processCommonParameters(String message) {

@@ -2205,5 +2205,10 @@ public abstract class IotDevice implements Serializable {
     }
 
 
+    protected Boolean isConfigurableField(IOT_LABELS_JSON field) {
+
+        return false;
+    }
+
 
 }
