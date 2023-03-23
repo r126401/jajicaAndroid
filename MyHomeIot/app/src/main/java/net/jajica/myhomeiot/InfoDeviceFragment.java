@@ -1,5 +1,6 @@
 package net.jajica.myhomeiot;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -72,33 +73,82 @@ public class InfoDeviceFragment extends Fragment {
         mBinding.recyclerInfoDevice.setAdapter(adapter);
         adapter.setOnSelectedParameterListener(new InfoDeviceAdapter.OnSelectedParameterListener() {
 
-            FragmentManager fragmentManager = getParentFragmentManager();
+            FragmentManager fragmentManager = getChildFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             @Override
             public void onSelectedIntParameter(IOT_LABELS_JSON parameter, int value) {
+                FragmentManager fragmentManager = getChildFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 SettingsFragment settingsFragment = new SettingsFragment(parameter, value, getContext());
                 settingsFragment.show(fragmentTransaction, "SettingsInt");
-                Log.i(TAG, "kk");
+                settingsFragment.alertDialog.setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        settingsFragment.intParameter = Integer.parseInt(settingsFragment.mBinding.textValueParameter.getText().toString());
+                        Log.i(TAG, "positivo " + settingsFragment.intParameter);
+
+                    }
+                });
+
+                settingsFragment.alertDialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+
+
             }
 
             @Override
             public void onSelectedDoubleParameter(IOT_LABELS_JSON parameter, double value) {
+                FragmentManager fragmentManager = getChildFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 SettingsFragment settingsFragment = new SettingsFragment(parameter, value, getContext());
                 settingsFragment.show(fragmentTransaction, "SettingsDouble");
+                createFragment(parameter, value);
+                settingsFragment.alertDialog.setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+                settingsFragment.alertDialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
                 Log.i(TAG, "kk");
             }
 
             @Override
             public void onSelectedBooleanParameter(IOT_LABELS_JSON parameter, Boolean value) {
+                FragmentManager fragmentManager = getChildFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 SettingsFragment settingsFragment = new SettingsFragment(parameter, value, getContext());
                 settingsFragment.show(fragmentTransaction, "SettingsBoolean");
                 Log.i(TAG, "kk");
+                settingsFragment.alertDialog.setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+                settingsFragment.alertDialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
             }
 
             @Override
             public void onSelectedStringParameter(IOT_LABELS_JSON parameter, String value) {
+                FragmentManager fragmentManager = getChildFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 SettingsFragment settingsFragment = new SettingsFragment(parameter, value, getContext());
                 settingsFragment.show(fragmentTransaction, "SettingsString");
+
 
 
 
@@ -108,6 +158,21 @@ public class InfoDeviceFragment extends Fragment {
 
     }
 
+
+    private SettingsFragment createFragment(IOT_LABELS_JSON parameter, Object value) {
+
+        FragmentManager fragmentManager = getChildFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        String data = value.getClass().getSimpleName();
+        if (data.equals("Integer")) {
+            SettingsFragment settingsFragment = new SettingsFragment(parameter, (int) value, getContext());
+            settingsFragment.show(fragmentTransaction, "SettingsInt");
+
+        }
+
+
+        return null;
+    }
 
 
 

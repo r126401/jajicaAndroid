@@ -3,6 +3,7 @@ package net.jajica.myhomeiot;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,6 +15,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
 import android.print.PageRange;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,9 +28,10 @@ import net.jajica.myhomeiot.databinding.FragmentUpgradeBinding;
 import java.util.Set;
 
 import net.jajica.myhomeiot.databinding.FragmentSettingsBinding;
-public class SettingsFragment extends DialogFragment {
+public class SettingsFragment extends DialogFragment implements View.OnClickListener{
 
 
+    private final String TAG = "SettingsFragment";
     double doubleParameter;
 
     int intParameter;
@@ -37,7 +40,7 @@ public class SettingsFragment extends DialogFragment {
 
     String stringParameter;
 
-    private FragmentSettingsBinding mBinding;
+    public FragmentSettingsBinding mBinding;
 
     private Context context;
 
@@ -55,6 +58,7 @@ public class SettingsFragment extends DialogFragment {
         doubleParameter = -1;
         booleanParameter = false;
         stringParameter = null;
+        alertDialog = new AlertDialog.Builder(context);
 
 
         // Required empty public constructor
@@ -64,6 +68,7 @@ public class SettingsFragment extends DialogFragment {
         this.intParameter = intParameter;
         this.context = context;
         label = parameter;
+        alertDialog = new AlertDialog.Builder(context);
 
     }
 
@@ -72,6 +77,7 @@ public class SettingsFragment extends DialogFragment {
         this.booleanParameter = booleanparameter;
         this.context = context;
         label = parameter;
+        alertDialog = new AlertDialog.Builder(context);
 
     }
 
@@ -80,6 +86,7 @@ public class SettingsFragment extends DialogFragment {
         this.stringParameter = stringParameter;
         this.context = context;
         label = parameter;
+        alertDialog = new AlertDialog.Builder(context);
     }
 
 
@@ -95,11 +102,12 @@ public class SettingsFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
 
-        alertDialog = new AlertDialog.Builder(context);
+
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         mBinding = FragmentSettingsBinding.inflate(inflater);
         alertDialog.setView(mBinding.getRoot());
         mBinding.textNameParameter.setText(label.getValorTextoJson());
+        mBinding.buttonOk.setOnClickListener(this);
         switch (label) {
             case DEVICE_NAME:
                 mBinding.textValueParameter.setText(stringParameter);
@@ -122,7 +130,23 @@ public class SettingsFragment extends DialogFragment {
                 break;
         }
 
+        alertDialog.setCancelable(false);
+        setCancelable(false);
+
         return alertDialog.create();
+
+    }
+
+
+    @Override
+    public void onClick(View v) {
+
+        switch (v.getId()) {
+            case (R.id.buttonOk):
+                dismiss();
+                break;
+
+        }
 
     }
 
