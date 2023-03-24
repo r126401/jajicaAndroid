@@ -423,6 +423,7 @@ public abstract class IotDevice implements Serializable {
     }
 
 
+
     /*****************Interface spontaneous***************************************************/
 
     protected OnReceivedSpontaneousStartDevice onReceivedSpontaneousStartDevice;
@@ -2214,6 +2215,21 @@ public abstract class IotDevice implements Serializable {
         return label.isConfigurable();
 
     }
+
+    public IOT_DEVICE_STATUS_CONNECTION commandModifyAppParameter(JSONObject parameters) {
+
+
+
+        IOT_DEVICE_STATUS_CONNECTION state = IOT_DEVICE_STATUS_CONNECTION.UNKNOWN;
+
+        if (parameters != null) {
+            state = commandwithParameters(IOT_COMMANDS.MODIFY_PARAMETER_DEVICE, IOT_LABELS_JSON.CONFIGURE_APP.getValorTextoJson(), parameters);
+            return state;
+        }
+
+        return IOT_DEVICE_STATUS_CONNECTION.DEVICE_WAITING_RESPONSE;
+    }
+
 
 
 }

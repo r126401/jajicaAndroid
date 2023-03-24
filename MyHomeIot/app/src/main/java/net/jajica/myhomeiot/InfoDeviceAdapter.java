@@ -22,7 +22,7 @@ import net.jajica.libiot.IotInfoDevice;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-public class InfoDeviceAdapter extends RecyclerView.Adapter<InfoDeviceAdapter.InfoDeviceAdapterViewHolder> {
+public class InfoDeviceAdapter extends RecyclerView.Adapter<InfoDeviceAdapter.InfoDeviceAdapterViewHolder>  {
 
     private final String TAG = "InfoDeviceAdapter";
     private ArrayList<IotInfoDevice> infoDevice;
@@ -30,12 +30,14 @@ public class InfoDeviceAdapter extends RecyclerView.Adapter<InfoDeviceAdapter.In
 
     private OnSelectedParameterListener onSelectedParameterListener;
 
+
+
     public interface OnSelectedParameterListener {
 
-        void onSelectedIntParameter(IOT_LABELS_JSON parameter, int value);
-        void onSelectedDoubleParameter(IOT_LABELS_JSON parameter, double value);
-        void onSelectedBooleanParameter(IOT_LABELS_JSON parameter, Boolean value);
-        void onSelectedStringParameter(IOT_LABELS_JSON parameter, String value);
+
+        void onSelectedParameter(IOT_LABELS_JSON parameter, String value);
+
+
     }
 
 
@@ -79,35 +81,25 @@ public class InfoDeviceAdapter extends RecyclerView.Adapter<InfoDeviceAdapter.In
     private void launchModifyparameter(InfoDeviceAdapterViewHolder holder, int position) {
 
         IOT_LABELS_JSON label = IOT_LABELS_JSON.COMMAND;
-        int valueInt = 0;
-        double valueDouble = 0;
-        Boolean valueBoolean = true;
-        String valueString;
+        String value;
 
 
 
         if (onSelectedParameterListener != null) {
 
-            valueString = holder.textValueInfoDevice.getText().toString();
+            value = holder.textValueInfoDevice.getText().toString();
             label = label.fromlabel(holder.textLabelInfoDevice.getText().toString());
             if (label != null) {
                 switch (label) {
                     case DEVICE_NAME:
-                        onSelectedParameterListener.onSelectedStringParameter(label, valueString);
-                        break;
-                    case DEFAULT_THRESHOLD_TEMPERATURE:
-                    case MARGIN_TEMPERATURE:
-                    case CALIBRATE_VALUE:
-                        valueDouble = Double.parseDouble(valueString);
-                        onSelectedParameterListener.onSelectedDoubleParameter(label, valueDouble);
-                        break;
                     case READ_INTERVAL:
                     case RETRY_INTERVAL:
                     case READ_NUMBER_RETRY:
-                        valueInt = Integer.parseInt(valueString);
-                        onSelectedParameterListener.onSelectedIntParameter(label, valueInt);
-                        break;
+                    case DEFAULT_THRESHOLD_TEMPERATURE:
+                    case MARGIN_TEMPERATURE:
+                    case CALIBRATE_VALUE:
                     case TYPE_SENSOR:
+                        onSelectedParameterListener.onSelectedParameter(label, value);
                         break;
                     case SENSOR_ID:
                         break;

@@ -144,6 +144,19 @@ public class ThermometerActivity extends AppCompatActivity implements Navigation
             }
         });
 
+        device.setOnReceivedModifyParametersDevice(new IotDevice.OnReceivedModifyParametersDevice() {
+            @Override
+            public void onReceivedMofifyParametersDevice(IOT_CODE_RESULT resultCode) {
+
+                if (resultCode == IOT_CODE_RESULT.RESUT_CODE_OK) {
+                    Log.i(TAG, "Recibido modificacion");
+                    device.commandGetStatusDevice();
+                    device.commandGetInfoDevice();
+                }
+
+            }
+        });
+
         device.setOnReceivedSpontaneousStartDevice(new IotDevice.OnReceivedSpontaneousStartDevice() {
             @Override
             public void onReceivedSpontaneousStartDevice(IOT_CODE_RESULT resultCode) {
@@ -189,7 +202,7 @@ public class ThermometerActivity extends AppCompatActivity implements Navigation
 
     private void launchInfoDeviceFragment() {
 
-        InfoDeviceFragment infoDeviceFragment = new InfoDeviceFragment(device.getListInfoDevice());
+        InfoDeviceFragment infoDeviceFragment = new InfoDeviceFragment(device);
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.containerThermometer, infoDeviceFragment, "infoDeviceFragment");
         fragmentTransaction.setReorderingAllowed(true);

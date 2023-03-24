@@ -120,4 +120,6 @@
     <string name="factoring">Haciendo Factory Reset</string>
     <string name="succesfull">Operacion realizada con exito</string>
     <string name="unsucessfull">Operación realizada sin éxito</string>
+    <string name="local">local</string>
+    <string name="remote">remoto</string>
 </resources>

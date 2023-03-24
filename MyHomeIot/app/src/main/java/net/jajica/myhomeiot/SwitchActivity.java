@@ -236,7 +236,7 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
 
     private void launchInfoDeviceFragment() {
 
-        InfoDeviceFragment infoDeviceFragment = new InfoDeviceFragment(device.getListInfoDevice());
+        InfoDeviceFragment infoDeviceFragment = new InfoDeviceFragment(device);
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.containerSwitch, infoDeviceFragment, "infoDeviceFragment");
         fragmentTransaction.setReorderingAllowed(true);

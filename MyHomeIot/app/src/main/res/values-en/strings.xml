@@ -122,6 +122,8 @@
     <string name="factoring">making Factory Reset</string>
     <string name="succesfull">Succesfull</string>
     <string name="unsucessfull">Unsucessfull</string>
+    <string name="local">local</string>
+    <string name="remote">remote</string>
 
 
 </resources>
