@@ -191,6 +191,9 @@ public class IotDeviceThermostat extends IotDeviceThermometer implements Seriali
                  e.printStackTrace();
              }
 
+        } else {
+            dispositivoJson.remove(IOT_LABELS_JSON.SENSOR_ID.getValorTextoJson());
+
         }
 
 
@@ -211,6 +214,7 @@ public class IotDeviceThermostat extends IotDeviceThermometer implements Seriali
     @Override
     protected IOT_CODE_RESULT processStatusFromReport(String respuesta) {
         processCommonParameters(respuesta);
+        setSensorFromReport(respuesta);
         return super.processStatusFromReport(respuesta);
     }
 
@@ -289,20 +293,15 @@ public class IotDeviceThermostat extends IotDeviceThermometer implements Seriali
         String remoteSensor;
         api = new IotTools();
         localSensor = api.getJsonboolean(message, IOT_LABELS_JSON.TYPE_SENSOR.getValorTextoJson());
-        if (!localSensor) {
+        setMasterSensor(localSensor);
+        if (getMasterSensor()) {
 
-            setMasterSensor(true);
-            remoteSensor = api.getJsonString(message, IOT_LABELS_JSON.SENSOR_ID.getValorTextoJson());
-            if(remoteSensor == null) {
-                setMasterSensor(false);
-                return IOT_CODE_RESULT.RESULT_CODE_ERROR;
-            }
-            setRemoteSensor(remoteSensor);
-
+            setRemoteSensor("");
         } else {
-            setMasterSensor(false);
-            setRemoteSensor(null);
+            setRemoteSensor(api.getJsonString(message, IOT_LABELS_JSON.SENSOR_ID.getValorTextoJson()));
         }
+
+
 
         return IOT_CODE_RESULT.RESUT_CODE_OK;
 
@@ -407,7 +406,6 @@ public class IotDeviceThermostat extends IotDeviceThermometer implements Seriali
         setTemperatureFromReport(message);
         setHumidityFromReport(message);
         setThresholdTemperatureFromReport(message);
-        setSensorFromReport(message);
         setStateRelayFromReport(message);
         setMarginTemperatureFromReport(message);
         setDefaultThresholdTemperatureFromReport(message);

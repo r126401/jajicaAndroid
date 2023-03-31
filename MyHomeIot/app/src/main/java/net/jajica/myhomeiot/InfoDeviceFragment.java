@@ -100,8 +100,7 @@ public class InfoDeviceFragment extends Fragment {
                 settingsDialogFragment.setOnScanDeviceListener(new SettingsDialogFragment.OnScanDeviceListener() {
                     @Override
                     public void onScanDevice(IOT_LABELS_JSON parameter) {
-
-                        scanDevice();
+                        //settingsDialogFragment.mBinding.textValueParameter.setText(settingsDialogFragment.stringParameter);
                     }
                 });
 
@@ -125,8 +124,10 @@ public class InfoDeviceFragment extends Fragment {
                                 modifyIntValue(parameter, settingsDialogFragment.mBinding.textValueParameter.getText().toString());
                                 break;
                             case TYPE_SENSOR:
-                                break;
                             case SENSOR_ID:
+                                modifySensorValue(parameter,
+                                        settingsDialogFragment.mBinding.textSensor.getText().toString(),
+                                        settingsDialogFragment.mBinding.switchSensor.isChecked());
                                 break;
                             default:
                                 break;
@@ -148,6 +149,26 @@ public class InfoDeviceFragment extends Fragment {
             }
         });
 
+
+
+    }
+
+    private void modifySensorValue(IOT_LABELS_JSON parameter, String sensorId, Boolean isChecked) {
+
+        JSONObject object = null;
+
+        try {
+            object = new JSONObject();
+            object.put(IOT_LABELS_JSON.TYPE_SENSOR.getValorTextoJson(), !isChecked);
+            if (isChecked) {
+                object.put(IOT_LABELS_JSON.SENSOR_ID.getValorTextoJson(), sensorId);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        device.commandModifyAppParameter(object);
 
 
     }
@@ -190,20 +211,31 @@ public class InfoDeviceFragment extends Fragment {
                 if(result.getContents() == null) {
                     Intent originalIntent = result.getOriginalIntent();
                     if (originalIntent == null) {
-                        Log.d("MainActivity", "Cancelled scan");
+                        Log.d(TAG, "Cancelled scan");
                         Toast.makeText(getContext(), "Cancelled", Toast.LENGTH_LONG).show();
                     } else if(originalIntent.hasExtra(Intents.Scan.MISSING_CAMERA_PERMISSION)) {
-                        Log.d("MainActivity", "Cancelled scan due to missing camera permission");
+                        Log.d(TAG, "Cancelled scan due to missing camera permission");
                         Toast.makeText(getContext(), "Cancelled due to missing camera permission", Toast.LENGTH_LONG).show();
                     }
                 } else {
-                    Log.d("MainActivity", "Scanned");
+                    Log.d(TAG, "Scanned");
                     Toast.makeText(getContext(), "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
                     scanResult(result.getContents());
                 }
             });
 
     private void scanResult(String contents) {
+
+        JSONObject object;
+        String deviceId;
+        try {
+            object = new JSONObject(contents);
+            deviceId = object.getString(IOT_LABELS_JSON.DEVICE_ID.getValorTextoJson());
+
+
+        } catch (JSONException e) {
+
+        }
 
         Log.i(TAG, contents);
     }

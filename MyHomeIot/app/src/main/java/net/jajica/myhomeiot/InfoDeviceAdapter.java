@@ -3,11 +3,14 @@ package net.jajica.myhomeiot;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
@@ -16,8 +19,15 @@ import androidx.databinding.adapters.ImageViewBindingAdapter;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.zxing.client.android.Intents;
+import com.journeyapps.barcodescanner.ScanContract;
+import com.journeyapps.barcodescanner.ScanOptions;
+
 import net.jajica.libiot.IOT_LABELS_JSON;
 import net.jajica.libiot.IotInfoDevice;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -165,4 +175,7 @@ public class InfoDeviceAdapter extends RecyclerView.Adapter<InfoDeviceAdapter.In
 
         }
     }
+
+
+
 }
