@@ -11,6 +11,7 @@ import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,7 +24,6 @@ import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
-import com.google.android.material.textfield.TextInputEditText;
 
 import net.jajica.libiot.IOT_DEVICE_STATUS;
 import net.jajica.libiot.IOT_DEVICE_TYPE;
@@ -45,10 +45,11 @@ import org.json.JSONObject;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import net.jajica.myhomeiot.databinding.ActivityMainBinding;
 
-//import org.eclipse.paho.client.mqttv3.IMqttToken;
+
 
 
 public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener, Serializable, View.OnClickListener, FragmentDevices.OnOperationDeviceListener {
@@ -56,9 +57,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     private final String TAG = "MainActivity";
     private IotUsersDevices configuration;
     private IotMqttConnection cnx;
-    private APPLICATION_STATUS appStatus;
-    private ActivityMainBinding mbinding;
-    private ViewPagerAdapter viewPagerAdapter;
+    private ActivityMainBinding binding;
 
     private String currentSite;
     private String currentRoom;
@@ -76,7 +75,6 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        IOT_OPERATION_CONFIGURATION_DEVICES res;
         super.onCreate(savedInstanceState);
 
         if (initApplication() == APPLICATION_STATUS.APPLICATION_OK) {
@@ -87,7 +85,6 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 
     private void connectAllDevices() {
 
-        int i;
         connectUnknownDevices();
         connectSwitchDevices();
         connectThermometerDevices();
@@ -97,16 +94,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 
     }
 
-    private void collectDeviceList() {
 
-        ArrayList<IotDevice> deviceList;
-
-        //deviceList = configuration.getAllDevices();
-        deviceList = configuration.getDeviceListFotDeviceType(IOT_DEVICE_TYPE.INTERRUPTOR);
-
-        Log.i(TAG, "jjj");
-
-    }
 
     private void connectThermometerDevices() {
 
@@ -127,23 +115,19 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     private APPLICATION_STATUS initApplication() {
 
         IOT_OPERATION_CONFIGURATION_DEVICES result;
-        // capturamos los controles
+        APPLICATION_STATUS appStatus = APPLICATION_STATUS.APPLICATION_OK;
+        // capture controls
         currentRoom = null;
-        mbinding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(mbinding.getRoot());
-        setToolbar(getResources().getResourceName(R.string.app_name), android.R.drawable.ic_delete);
-        mbinding.bottomNavigationMenu.setOnItemSelectedListener(this);
-        mbinding.textHome.setOnClickListener(this);
-        mbinding.buttonViewGrid.setOnClickListener(this);
-        mbinding.imageMoveDevice.setOnClickListener(this);
-        mbinding.imageMoveDevice.setTag(false);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        setToolbar();
+        binding.bottomNavigationMenu.setOnItemSelectedListener(this);
+        binding.textHome.setOnClickListener(this);
+        binding.buttonViewGrid.setOnClickListener(this);
+        binding.imageMoveDevice.setOnClickListener(this);
+        binding.imageMoveDevice.setTag(false);
 
-        if (mbinding.navView!= null) {
-            prepararDrawer(mbinding.navView);
-            // Seleccionar item por defecto
-            //seleccionarItem(mbinding.navView.getMenu().getItem(0));
-        }
-
+        prepararDrawer(binding.navView);
 
         result = loadConfiguration();
 
@@ -153,7 +137,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                 if (configuration.getSiteList() == null) {
                     createDefaultSiteRoomConfiguration();
                 }
-                appStatus = APPLICATION_STATUS.APPLICATION_OK;
+
                 break;
             case CORRUPTED_CONFIGURATION:
             case NO_CONFIGURATION:
@@ -163,18 +147,18 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 
         }
 
-        createEnvironment(-1);
-        mbinding.tabs.setTabMode(TabLayout.MODE_SCROLLABLE);
-        return APPLICATION_STATUS.APPLICATION_OK;
+        if (createEnvironment(-1) != IOT_MQTT_STATUS_CONNECTION.CONEXION_MQTT_CON_EXITO) {
+            appStatus = APPLICATION_STATUS.APPLICATION_NOK;
+            return appStatus;
+        }
+        binding.tabs.setTabMode(TabLayout.MODE_SCROLLABLE);
+        return appStatus;
     }
 
     private void createDefaultSiteRoomConfiguration() {
 
         IotSitesDevices site;
         IotRoomsDevices room;
-        ArrayList<IotSitesDevices> listSites;
-        ArrayList<IotRoomsDevices> listRooms;
-
         site = new IotSitesDevices();
         site.setSiteName(getResources().getString(R.string.default_home));
         room = new IotRoomsDevices();
@@ -184,7 +168,6 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         configuration.insertSiteForUser(site);
         configuration.object2json();
         configuration.saveConfiguration(getApplicationContext());
-        Log.i(TAG, "hola");
 
 
 
@@ -195,23 +178,22 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 
     private IOT_OPERATION_CONFIGURATION_DEVICES loadConfiguration() {
 
-        IOT_OPERATION_CONFIGURATION_DEVICES result;
         configuration = new IotUsersDevices(getApplicationContext());
         return configuration.loadConfiguration();
 
     }
 
-    private void notifConnectOk() {
+    private void notifyConnectOk() {
 
-        mbinding.toolbar.getMenu().getItem(0).setTitle(cnx.getIotMqttConfiguration().getBrokerId());
-        mbinding.toolbar.getMenu().getItem(1).setIcon(R.drawable.ic_connect_ok);
+        binding.toolbar.getMenu().getItem(0).setTitle(cnx.getIotMqttConfiguration().getBrokerId());
+        binding.toolbar.getMenu().getItem(1).setIcon(R.drawable.ic_connect_ok);
 
 
     }
 
-    private void notifConnectNok() {
-        mbinding.toolbar.getMenu().getItem(0).setTitle(cnx.getIotMqttConfiguration().getBrokerId());
-        mbinding.toolbar.getMenu().getItem(1).setIcon(R.drawable.ic_connect_nok);
+    private void notifyConnectNok() {
+        binding.toolbar.getMenu().getItem(0).setTitle(cnx.getIotMqttConfiguration().getBrokerId());
+        binding.toolbar.getMenu().getItem(1).setIcon(R.drawable.ic_connect_nok);
 
     }
 
@@ -223,14 +205,16 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
             @Override
             public void connectionEstablished(boolean reconnect, String serverURI) {
                 Log.i(TAG, "Conexion estabilizada");
-                createStructure(position);
-                notifConnectOk();
+                if (createStructure(position) != APPLICATION_STATUS.APPLICATION_NOK) {
+                    notifyConnectOk();
+                }
+
 
             }
 
             @Override
             public void connectionLost(Throwable cause) {
-                notifConnectNok();
+                notifyConnectNok();
 
             }
         });
@@ -258,17 +242,17 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
             }
             rooms = configuration.getSiteList().get(indexSite).getRoomList();
             currentSite = configuration.getSiteList().get(indexSite).getSiteName();
-            mbinding.textHome.setText(currentSite);
+            binding.textHome.setText(currentSite);
         } else {
             currentSite = getResources().getString(R.string.none_home);
-            mbinding.textHome.setText(currentSite);
+            binding.textHome.setText(currentSite);
         }
 
         if (rooms == null)  {
 
             return APPLICATION_STATUS.NO_DEVICES_CONFIGURATION;
         }
-        viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), getLifecycle());
+        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), getLifecycle());
         int j;
         for (i=0;i < rooms.size();i++) {
             devices = rooms.get(i).getDeviceList();
@@ -284,45 +268,43 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         }
 
 
-        mbinding.pager.setAdapter(viewPagerAdapter);
+        binding.pager.setAdapter(viewPagerAdapter);
         ArrayList<IotRoomsDevices> finalRooms = rooms;
-        new TabLayoutMediator(mbinding.tabs, mbinding.pager, new TabLayoutMediator.TabConfigurationStrategy() {
-            @Override
-            public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
-                int i;
-                for(i=0; i< finalRooms.size(); i++) {
-                    if (i==position) {
-                        tab.setText(finalRooms.get(i).getNameRoom());
-                    }
-
+        new TabLayoutMediator(binding.tabs, binding.pager, (tab, position1) -> {
+            int i1;
+            for(i1 =0; i1 < finalRooms.size(); i1++) {
+                if (i1 == position1) {
+                    tab.setText(finalRooms.get(i1).getNameRoom());
                 }
 
             }
+
         }).attach();
 
-        currentRoom = mbinding.tabs.getTabAt(mbinding.tabs.getSelectedTabPosition()).getText().toString();
+
+        currentRoom = Objects.requireNonNull(Objects.requireNonNull(binding.tabs.getTabAt(binding.tabs.getSelectedTabPosition())).getText()).toString();
         if (position >= 0) {
-            mbinding.tabs.getTabAt(position).select();
+            Objects.requireNonNull(binding.tabs.getTabAt(position)).select();
         }
 
 
-        mbinding.tabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        binding.tabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
 
-                currentRoom = tab.getText().toString();
+                currentRoom = Objects.requireNonNull(tab.getText()).toString();
 
                 // Si estamos en la fase de pegado
-                if ((Boolean) mbinding.imageMoveDevice.getTag()) {
+                if ((Boolean) binding.imageMoveDevice.getTag()) {
                     //Si estamos en el mismo site y room donde cortamos, imageMoveDevice es invisible
                     if ((currentSite.equals(cutSite)) && (currentRoom.equals(cutRoom))) {
-                        mbinding.imageMoveDevice.setVisibility(View.INVISIBLE);
+                        binding.imageMoveDevice.setVisibility(View.INVISIBLE);
                     } else {
-                        mbinding.imageMoveDevice.setVisibility(View.VISIBLE);
-                        mbinding.imageMoveDevice.setImageResource(R.drawable.ic_action_paste);
+                        binding.imageMoveDevice.setVisibility(View.VISIBLE);
+                        binding.imageMoveDevice.setImageResource(R.drawable.ic_action_paste);
                     }
                 } else {
-                    mbinding.imageMoveDevice.setVisibility(View.INVISIBLE);
+                    binding.imageMoveDevice.setVisibility(View.INVISIBLE);
                 }
 
 
@@ -337,7 +319,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
                 Log.i(TAG, "me han reseleccionado");
-                currentRoom = tab.getText().toString();
+                currentRoom = Objects.requireNonNull(tab.getText()).toString();
             }
         });
 
@@ -350,19 +332,17 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 
     private void prepararDrawer(@NonNull NavigationView navigationView) {
         navigationView.setNavigationItemSelectedListener(
-                new NavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(MenuItem menuItem) {
-                        menuItem.setChecked(true);
-                        seleccionarItem(menuItem);
-                        mbinding.drawerLayout.closeDrawers();
-                        return true;
-                    }
+                menuItem -> {
+                    menuItem.setChecked(true);
+                    seleccionarItem(menuItem);
+                    binding.drawerLayout.closeDrawers();
+                    return true;
                 });
 
     }
 
 
+    @SuppressLint("NonConstantResourceId")
     private void seleccionarItem(@NonNull MenuItem itemDrawer) {
 
 
@@ -391,10 +371,9 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                mbinding.drawerLayout.openDrawer(GravityCompat.START);
-                return true;
+        if (item.getItemId() == android.R.id.home) {
+            binding.drawerLayout.openDrawer(GravityCompat.START);
+            return true;
         }
 
 
@@ -404,8 +383,8 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     /**
      * Establece la toolbar como action bar
      */
-    private void setToolbar(String server, int statusServer) {
-        setSupportActionBar(mbinding.toolbar);
+    private void setToolbar() {
+        setSupportActionBar(binding.toolbar);
         final ActionBar ab = getSupportActionBar();
         if (ab != null) {
             // Poner ícono del drawer toggle
@@ -423,7 +402,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main_toolbar, mbinding.toolbar.getMenu());
+        getMenuInflater().inflate(R.menu.menu_main_toolbar, binding.toolbar.getMenu());
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -440,19 +419,18 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 
     ActivityResultLauncher<Intent>lanzadorActivityInstalarDispositivo = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
-            new ActivityResultCallback<ActivityResult>() {
-                @Override
-                public void onActivityResult(ActivityResult result) {
+            result -> {
 
-                    if (result.getResultCode() == RESULT_OK) {
-                        String data = result.getData().getDataString();
-                        notifyNewDevice(data);
-                    }
+                if (result.getResultCode() == RESULT_OK) {
+                    assert result.getData() != null;
+                    String data = result.getData().getDataString();
+                    notifyNewDevice(data);
                 }
             }
     );
 
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
@@ -479,21 +457,19 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 
     ActivityResultLauncher<Intent> lanzadorActivitySettings = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
-            new ActivityResultCallback<ActivityResult>() {
-                @Override
-                public void onActivityResult(ActivityResult result) {
+            result -> {
 
-                    if (result.getResultCode() == RESULT_OK) {
-                        String data = result.getData().getDataString();
-                        Log.i(getLocalClassName(), "Recibimos datos " + data);
-                        insertSettingsIntoConfiguration(data);
+                if (result.getResultCode() == RESULT_OK) {
+                    assert result.getData() != null;
+                    String data = result.getData().getDataString();
+                    Log.i(getLocalClassName(), "Recibimos datos " + data);
+                    insertSettingsIntoConfiguration(data);
 
 
-                    } else {
-                        Log.w(getLocalClassName(), "Error al instalar el dispositivo");
-                    }
-
+                } else {
+                    Log.w(getLocalClassName(), "Error al instalar el dispositivo");
                 }
+
             }
     );
 
@@ -525,27 +501,26 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
             configuration.object2json();
             configuration.saveConfiguration(getApplicationContext());
         } catch (JSONException e) {
+            e.printStackTrace();
 
         }
     }
 
     ActivityResultLauncher<Intent> launcherActivityNewDevice = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
-            new ActivityResultCallback<ActivityResult>() {
-                @Override
-                public void onActivityResult(ActivityResult result) {
+            result -> {
 
-                    if (result.getResultCode() == RESULT_OK) {
-                        String data = result.getData().getDataString();
-                        Log.i(getLocalClassName(), "Recibimos datos " + data);
-                        notifyNewDevice(data);
+                if (result.getResultCode() == RESULT_OK) {
+                    assert result.getData() != null;
+                    String data = result.getData().getDataString();
+                    Log.i(getLocalClassName(), "Recibimos datos " + data);
+                    notifyNewDevice(data);
 
 
-                    } else {
-                        Log.w(getLocalClassName(), "Error al instalar el dispositivo");
-                    }
-
+                } else {
+                    Log.w(getLocalClassName(), "Error al instalar el dispositivo");
                 }
+
             }
     );
 
@@ -562,7 +537,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 
     ActivityResultLauncher<Intent> launcherHomesActivity = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
-            new ActivityResultCallback<ActivityResult>() {
+            new ActivityResultCallback<>() {
                 @Override
                 public void onActivityResult(ActivityResult result) {
 
@@ -571,7 +546,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                         if (!configuration.getCurrentSite().equals(data)) {
                             configuration.setCurrentSite(data);
                             configuration.saveConfiguration(getApplicationContext());
-                            mbinding.textHome.setText(configuration.getCurrentSite());
+                            binding.textHome.setText(configuration.getCurrentSite());
 
 
                         }
@@ -654,11 +629,10 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 
         FragmentManager fragmentManager;
         List<Fragment> listFragments;
-        FragmentDevices fragmentDevices;
         fragmentManager = getSupportFragmentManager();
         listFragments = fragmentManager.getFragments();
-        int index = mbinding.tabs.getSelectedTabPosition();
-        return fragmentDevices = (FragmentDevices) listFragments.get(index);
+        int index = binding.tabs.getSelectedTabPosition();
+        return (FragmentDevices) listFragments.get(index);
 
     }
 
@@ -687,7 +661,6 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 
         FragmentDevices fragmentDevices;
         ArrayList<IotDevice> deviceList;
-        IotRoomsDevices room;
         IOT_OPERATION_CONFIGURATION_DEVICES result = IOT_OPERATION_CONFIGURATION_DEVICES.DEVICE_ERROR;
 
         if ((fragmentDevices = identifyActiveFragment()) == null) {
@@ -728,10 +701,10 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                 fragmentDevices.adapter.notifyItemChanged(position);
                 cutRoom = currentRoom;
                 cutSite = currentSite;
-                cutPosition = mbinding.tabs.getSelectedTabPosition();
-                mbinding.imageMoveDevice.setImageResource(R.drawable.ic_action_cut);
-                mbinding.imageMoveDevice.setVisibility(View.VISIBLE);
-                mbinding.imageMoveDevice.setTag(true);
+                cutPosition = binding.tabs.getSelectedTabPosition();
+                binding.imageMoveDevice.setImageResource(R.drawable.ic_action_cut);
+                binding.imageMoveDevice.setVisibility(View.VISIBLE);
+                binding.imageMoveDevice.setTag(true);
                 fragmentDevices.adapter.notifyItemChanged(position);
                 break;
 
@@ -745,16 +718,15 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 
     private void pasteDevice() {
 
-        int pos;
         FragmentDevices fragmentDevices;
         deviceCut.setDeviceStatus(IOT_DEVICE_STATUS.INDETERMINADO);
         if (configuration.moveDevice(deviceCut.getDeviceId(), currentSite, currentRoom) == IOT_OPERATION_CONFIGURATION_DEVICES.DEVICE_INSERTED) {
             fragmentDevices = identifyActiveFragment();
             fragmentDevices.setDeviceList(getCurrentDeviceList(), FragmentDevices.OPERATION_DEVICE.CUT_DEVICE, -1);
-            cutPosition = mbinding.tabs.getSelectedTabPosition();
+            cutPosition = binding.tabs.getSelectedTabPosition();
             createEnvironment(cutPosition);
-            mbinding.imageMoveDevice.setTag(false);
-            mbinding.tabs.selectTab(mbinding.tabs.getTabAt(cutPosition));
+            binding.imageMoveDevice.setTag(false);
+            binding.tabs.selectTab(binding.tabs.getTabAt(cutPosition));
             Log.i(TAG, "kk");
         }
     }
@@ -772,19 +744,20 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         fragmentManager = getSupportFragmentManager();
         listFragments = fragmentManager.getFragments();
 
-        for (i=0;i<mbinding.tabs.getTabCount(); i++) {
+        for (i=0; i< binding.tabs.getTabCount(); i++) {
             for (j=0;j<listFragments.size();i++) {
                 fragmentDevices = (FragmentDevices) listFragments.get(j);
                 nDevices = fragmentDevices.getDeviceList().size();
             }
-            text = mbinding.tabs.getTabAt(i).getText().toString();
-            text = text + "(" + String.valueOf(nDevices) + ")";
-            mbinding.tabs.getTabAt(i).setText(text);
+            text = Objects.requireNonNull(Objects.requireNonNull(binding.tabs.getTabAt(i)).getText()).toString();
+            text = text + "(" + nDevices + ")";
+            Objects.requireNonNull(binding.tabs.getTabAt(i)).setText(text);
 
         }
 
+    }
 
-
+    private void errorApplication() {
 
 
     }

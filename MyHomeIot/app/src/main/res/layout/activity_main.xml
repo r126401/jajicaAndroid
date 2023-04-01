@@ -31,10 +31,11 @@
             android:background="?attr/colorPrimaryContainer">
         </androidx.appcompat.widget.Toolbar>
 
+
+
         <androidx.appcompat.widget.AppCompatImageView
             android:layout_width="match_parent"
-            android:layout_height="300px"
-            android:background="@drawable/fondo">
+            android:layout_height="300px">
 
         </androidx.appcompat.widget.AppCompatImageView>
 
@@ -45,6 +46,16 @@
             android:drawableStart="@drawable/ic_home_admin"
             android:layout_marginTop="15dp"
             android:textColor="?colorOnPrimaryContainer"/>
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottomNavigationMenu"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            app:layout_anchor="@+id/nested"
+            app:layout_anchorGravity="bottom|center"
+            android:background="?attr/colorPrimaryContainer"
+            app:menu="@menu/connections_devices_menu"
+            app:labelVisibilityMode="unlabeled"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -129,15 +140,7 @@
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
         />
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNavigationMenu"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        app:layout_anchor="@+id/nested"
-        app:layout_anchorGravity="bottom|center"
-        android:background="?attr/colorPrimaryContainer"
-        app:menu="@menu/connections_devices_menu"
-        app:labelVisibilityMode="unlabeled"/>
+
 
 
 
