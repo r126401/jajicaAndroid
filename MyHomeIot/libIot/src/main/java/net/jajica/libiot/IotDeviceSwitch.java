@@ -385,5 +385,20 @@ public class IotDeviceSwitch extends IotDevice implements Serializable {
         return super.json2Object(jsonDevice);
     }
 
+    @Override
+    public void setConnectionState(IOT_DEVICE_STATUS_CONNECTION connectionState) {
+        switch (connectionState) {
 
+            case UNKNOWN:
+            case DEVICE_DISCONNECTED:
+            case DEVICE_WAITING_RESPONSE:
+            case DEVICE_ERROR_COMMUNICATION:
+            case DEVICE_ERROR_SUBSCRIPTION:
+            case DEVICE_ERROR_NO_SUBSCRIPT:
+            case DEVICE_NO_SUBSCRIPT:
+                setRelay(IOT_SWITCH_RELAY.UNKNOWN);
+                break;
+        }
+        super.setConnectionState(connectionState);
+    }
 }

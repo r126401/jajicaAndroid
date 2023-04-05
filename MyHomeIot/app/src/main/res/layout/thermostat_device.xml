@@ -9,7 +9,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="@drawable/round_item_devices">
 
 
         <ImageView
@@ -52,17 +53,15 @@
 
         </androidx.appcompat.widget.AppCompatTextView>
 
-        <com.google.android.material.textfield.TextInputEditText
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/textDeviceThermostat"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:text="Termostato"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/textThresholdThermostat"
-            app:layout_constraintStart_toStartOf="@+id/imageThermometer"
-            android:background="@null">
+            app:layout_constraintStart_toStartOf="@+id/imageThermometerLabel"/>
 
-        </com.google.android.material.textfield.TextInputEditText>
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/imageMenuThermostat"
@@ -83,9 +82,9 @@
             android:paddingRight="5sp"
             android:src="@drawable/ic_connect_nok"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/imageMenuThermostat">
+            app:layout_constraintTop_toTopOf="@+id/imageMenuThermostat"/>
 
-        </androidx.appcompat.widget.AppCompatImageView>
+
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/imageHeating"
@@ -99,7 +98,7 @@
         </androidx.appcompat.widget.AppCompatImageView>
 
         <ImageView
-            android:id="@+id/imageThermometer"
+            android:id="@+id/imageThermometerLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/threshold_termperature"

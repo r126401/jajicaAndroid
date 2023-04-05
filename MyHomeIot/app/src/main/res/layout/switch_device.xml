@@ -9,7 +9,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="@drawable/round_item_devices">
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/imageSwitch"
             android:layout_width="wrap_content"
@@ -21,7 +22,7 @@
             app:layout_constraintTop_toTopOf="parent">
         </androidx.appcompat.widget.AppCompatImageView>
 
-        <com.google.android.material.textfield.TextInputEditText
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/textdeviceSwitch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -29,8 +30,9 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageSwitch"
-            android:background="@null">
-        </com.google.android.material.textfield.TextInputEditText>
+            android:text="@string/about_app_version"
+            style="@style/textItem"/>
+
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/imageMenuSwitch"
             android:layout_width="wrap_content"
@@ -54,12 +56,13 @@
 
         <ProgressBar
             android:id="@+id/progressBarSwitchDevice"
-            style="?android:attr/progressBarStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:visibility="invisible"/>
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:indeterminateDrawable="@drawable/style_progress_bar"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toStartOf="@+id/imageConnectedDeviceSwitch"
+            app:layout_constraintStart_toEndOf="@+id/imageSwitch"
+            app:layout_constraintTop_toTopOf="@+id/imageSwitch" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

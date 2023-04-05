@@ -126,6 +126,7 @@ public class FragmentDevices extends Fragment implements SwipeRefreshLayout.OnRe
         convertUnknownDevice(device);
         connectUnknownDevice(device);
         device.commandGetStatusDevice();
+        adapter.notifyDataSetChanged();
 
 
 
@@ -202,6 +203,7 @@ public class FragmentDevices extends Fragment implements SwipeRefreshLayout.OnRe
                         adapter.setDeviceList(deviceList);
                         connectSwitchDevice(deviceSwitch);
                         deviceSwitch.commandGetStatusDevice();
+                        adapter.notifyDataSetChanged();
                     } else {
                     Log.e(TAG, "Error resultado: " + result.toString());
                 }
@@ -213,6 +215,7 @@ public class FragmentDevices extends Fragment implements SwipeRefreshLayout.OnRe
                         connectThemometerDevice(deviceThermometer);
                         adapter.setDeviceList(deviceList);
                         deviceThermometer.commandGetStatusDevice();
+                        adapter.notifyDataSetChanged();
                         Log.i(TAG, "Convertido status de " + deviceThermometer.getDeviceId() + " como termometro" );
                     } else {
                         Log.e(TAG, "Error");
@@ -225,6 +228,7 @@ public class FragmentDevices extends Fragment implements SwipeRefreshLayout.OnRe
                         connectThermostatDevice(deviceThermostat);
                         adapter.setDeviceList(deviceList);
                         deviceThermostat.commandGetStatusDevice();
+                        adapter.notifyDataSetChanged();
                         Log.i(TAG, "Convertido status de " + deviceThermostat.getDeviceId() + " como cronotermostato" );
 
                     } else {
@@ -573,7 +577,9 @@ public class FragmentDevices extends Fragment implements SwipeRefreshLayout.OnRe
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+
                     adapter.notifyItemChanged(position);
+                    Log.d(TAG,"send update to disconnect");
                 }
             });
         } catch (NullPointerException exception) {

@@ -631,6 +631,7 @@ public abstract class IotDevice implements Serializable {
      * @param connectionState Es el nuevo estado de la conexion
      */
     public void setConnectionState(IOT_DEVICE_STATUS_CONNECTION connectionState) {
+        Log.d(TAG, "device " + getDeviceName() + " : " + getDeviceId() + " " + connectionState.toString());
         this.connectionState = connectionState;
     }
 
@@ -1312,8 +1313,10 @@ public abstract class IotDevice implements Serializable {
         api = new IotTools();
         textoComando = api.createSimpleCommand(command);
         if ((estado = sendCommand(textoComando)) != IOT_DEVICE_STATUS_CONNECTION.DEVICE_WAITING_RESPONSE) {
+            setConnectionState(estado);
             return estado;
         }
+        setConnectionState(estado);
 
         return IOT_DEVICE_STATUS_CONNECTION.DEVICE_WAITING_RESPONSE;
     }
@@ -1726,8 +1729,10 @@ public abstract class IotDevice implements Serializable {
             return IOT_DEVICE_STATUS_CONNECTION.DEVICE_ERROR_COMMUNICATION;
         }
             if ((estado = sendCommand(textoComando)) != IOT_DEVICE_STATUS_CONNECTION.DEVICE_WAITING_RESPONSE) {
-            return estado;
+                setConnectionState(estado);
+                return estado;
         }
+            setConnectionState(estado);
 
         return IOT_DEVICE_STATUS_CONNECTION.DEVICE_WAITING_RESPONSE;
     }

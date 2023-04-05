@@ -52,7 +52,7 @@
 
         <TextView
             android:id="@+id/textFrom"
-            style="@style/textThresholdTemperature"
+            style="@style/textItem"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/from"
@@ -60,7 +60,7 @@
 
         <TextView
             android:id="@+id/textFromHour"
-            style="@style/textThresholdTemperature"
+            style="@style/textItem"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="--:--"
@@ -68,7 +68,7 @@
 
         <TextView
             android:id="@+id/textTo"
-            style="@style/textThresholdTemperature"
+            style="@style/textItem"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/to"
@@ -76,7 +76,7 @@
 
         <TextView
             android:id="@+id/textToHour"
-            style="@style/textThresholdTemperature"
+            style="@style/textItem"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="--:--"

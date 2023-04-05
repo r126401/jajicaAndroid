@@ -492,11 +492,11 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
     switch (device.getRelay()) {
 
         case OFF:
-            mBinding.imagePanelSwitch.setImageResource(R.drawable.ic_switch_off);
+            mBinding.imagePanelSwitch.setImageResource(R.drawable.ic_switch_off_96);
             mBinding.imagePanelSwitch.setTag(IOT_SWITCH_RELAY.OFF);
             break;
         case ON:
-            mBinding.imagePanelSwitch.setImageResource(R.drawable.ic_switch_on);
+            mBinding.imagePanelSwitch.setImageResource(R.drawable.ic_switch_on_96);
             mBinding.imagePanelSwitch.setTag(IOT_SWITCH_RELAY.ON);
             break;
         case UNKNOWN:

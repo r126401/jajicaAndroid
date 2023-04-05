@@ -67,46 +67,27 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="23d00115-d3af-48c2-a0e5-936070caa06f" name="Default Changelist" comment="se hace el ubgrade de gradel a 7.1.0">
-      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/java/net/jajica/myhomeiot/SwitchActivity.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/java/net/jajica/myhomeiot/ThermometerActivity.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/java/net/jajica/myhomeiot/ThermostatActivity.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/drawable-anydpi/ic_action_connect_nok.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/drawable-anydpi/ic_action_connect_ok.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/drawable-anydpi/ic_ntp_off.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/drawable-anydpi/ic_ntp_on.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/drawable-anydpi/ic_wifi_off.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/drawable-anydpi/ic_wifi_on.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/drawable-hdpi/ic_action_connect_nok.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/drawable-hdpi/ic_action_connect_ok.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/drawable-hdpi/ic_ntp_off.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/drawable-hdpi/ic_ntp_on.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/drawable-hdpi/ic_wifi_off.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/drawable-hdpi/ic_wifi_on.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/drawable-mdpi/ic_action_connect_nok.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/drawable-mdpi/ic_action_connect_ok.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/drawable-mdpi/ic_ntp_off.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/drawable-mdpi/ic_ntp_on.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/drawable-mdpi/ic_wifi_off.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/drawable-mdpi/ic_wifi_on.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/drawable-xhdpi/ic_action_connect_nok.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/drawable-xhdpi/ic_action_connect_ok.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/drawable-xhdpi/ic_ntp_off.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/drawable-xhdpi/ic_ntp_on.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/drawable-xhdpi/ic_wifi_off.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/drawable-xhdpi/ic_wifi_on.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/drawable-xxhdpi/ic_action_connect_nok.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/drawable-xxhdpi/ic_action_connect_ok.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/drawable-xxhdpi/ic_ntp_off.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/drawable-xxhdpi/ic_ntp_on.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/drawable-xxhdpi/ic_wifi_off.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/drawable-xxhdpi/ic_wifi_on.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/drawable/ic_alarm.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/layout/activity_switch.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/layout/activity_thermometer.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/layout/activity_thermostat.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.2/fileHashes/fileHashes.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.2/fileHashes/fileHashes.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/checksums/checksums.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/checksums/md5-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/checksums/md5-checksums.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/checksums/sha1-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/checksums/sha1-checksums.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_ycuwq_widgets_datepicker_1_0_1_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_ycuwq_widgets_datepicker_1_0_1_aar.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../MyHomeIot/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../MyHomeIot/app/src/main/java/net/jajica/myhomeiot/FragmentDevices.java" beforeDir="false" afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/java/net/jajica/myhomeiot/FragmentDevices.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MyHomeIot/app/src/main/java/net/jajica/myhomeiot/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/java/net/jajica/myhomeiot/MainActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/layout/activity_main.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/layout/activity_main.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/layout/switch_device.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/layout/switch_device.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/layout/thermometer_device.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/layout/thermometer_device.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/layout/thermostat_device.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/layout/thermostat_device.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/layout/unknown_device.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/layout/unknown_device.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/menu/connections_devices_menu.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/menu/connections_devices_menu.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/values-night/themes.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/values-night/themes.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/values/colors.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/values/colors.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/values/styles.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/values/styles.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/values/themes.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../MyHomeIot/app/src/main/res/values/themes.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -116,7 +97,7 @@
   <component name="Cvs2Configuration">
     <option name="OVERRIDE_EXISTING_TAG_FOR_PROJECT" value="false" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[adb-5ab456a8-YZ0yyK._adb-tls-connect._tcp]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[/home/t126401/.android/avd/Nexus_6_API_31.avd]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -174,8 +155,11 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;cidr.known.project.marker&quot;: &quot;true&quot;
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/t126401/jajicaAndroid/IotControl&quot;
   }
 }</component>
   <component name="PsdUISettings">

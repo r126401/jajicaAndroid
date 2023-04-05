@@ -1,17 +1,14 @@
-<androidx.drawerlayout.widget.DrawerLayout
+
+
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/drawer_layout"
+    android:id="@+id/main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:theme="@style/Theme.MyHomeIot">
-
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-
-
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
 
 
     <com.google.android.material.appbar.AppBarLayout
@@ -19,7 +16,7 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:animateLayoutChanges="true"
-        android:background="?attr/colorPrimaryContainer">
+        android:background="?attr/colorSurface">
 
 
 
@@ -28,16 +25,9 @@
             android:layout_height="?attr/actionBarSize"
             android:layout_width="match_parent"
             app:layout_scrollFlags="scroll|enterAlways"
-            android:background="?attr/colorPrimaryContainer">
+            android:background="?attr/colorSurface">
         </androidx.appcompat.widget.Toolbar>
 
-
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:layout_width="match_parent"
-            android:layout_height="300px">
-
-        </androidx.appcompat.widget.AppCompatImageView>
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/textHome"
@@ -45,21 +35,17 @@
             android:layout_height="wrap_content"
             android:drawableStart="@drawable/ic_home_admin"
             android:layout_marginTop="15dp"
-            android:textColor="?colorOnPrimaryContainer"/>
+            android:textColor="?colorOnPrimaryContainer"
+            android:textSize="20sp"
+            android:drawablePadding="20dp"
+            android:layout_marginBottom="15dp"/>
 
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bottomNavigationMenu"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            app:layout_anchor="@+id/nested"
-            app:layout_anchorGravity="bottom|center"
-            android:background="?attr/colorPrimaryContainer"
-            app:menu="@menu/connections_devices_menu"
-            app:labelVisibilityMode="unlabeled"/>
+
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tabs"
@@ -68,7 +54,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:tabMode="scrollable"
                 app:layout_constraintStart_toStartOf="parent"
-                android:background="?colorPrimaryContainer">
+                android:background="?colorSurface">
 
             </com.google.android.material.tabs.TabLayout>
 
@@ -94,7 +80,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/buttonAdminRoom"
                 app:layout_constraintTop_toTopOf="parent"
-                android:background="?colorPrimaryContainer">
+                android:background="?colorSurface">
 
             </androidx.appcompat.widget.AppCompatImageView>
 
@@ -106,7 +92,8 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:background="?colorPrimaryContainer">
+                android:background="?colorSurface"
+                android:visibility="invisible">
 
             </androidx.appcompat.widget.AppCompatImageView>
 
@@ -125,10 +112,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:contentDescription="@string/installDevice"
-
+        android:background="?attr/colorSurface"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
-
-
 
     </androidx.core.widget.NestedScrollView>
 
@@ -140,21 +125,21 @@
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
         />
 
-
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationMenu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_anchor="@+id/nested"
+        app:layout_anchorGravity="bottom|center"
+        android:layout_alignParentBottom="true"
+        android:background="?attr/colorSurface"
+        app:menu="@menu/connections_devices_menu"
+        app:labelVisibilityMode="unlabeled"/>
 
 
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-    <!-- Menú Deslizante -->
-    <com.google.android.material.navigation.NavigationView
-        android:id="@+id/nav_view"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:fitsSystemWindows="true"
-        app:headerLayout="@layout/header_drawer"
-        app:menu="@menu/menu_drawer" />
 
-</androidx.drawerlayout.widget.DrawerLayout>
+

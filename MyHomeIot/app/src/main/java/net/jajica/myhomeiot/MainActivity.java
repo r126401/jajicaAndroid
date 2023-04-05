@@ -7,7 +7,6 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
@@ -21,7 +20,6 @@ import android.view.View;
 
 
 import com.google.android.material.navigation.NavigationBarView;
-import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
@@ -127,7 +125,6 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         binding.imageMoveDevice.setOnClickListener(this);
         binding.imageMoveDevice.setTag(false);
 
-        prepararDrawer(binding.navView);
 
         result = loadConfiguration();
 
@@ -330,55 +327,6 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     }
 
 
-    private void prepararDrawer(@NonNull NavigationView navigationView) {
-        navigationView.setNavigationItemSelectedListener(
-                menuItem -> {
-                    menuItem.setChecked(true);
-                    seleccionarItem(menuItem);
-                    binding.drawerLayout.closeDrawers();
-                    return true;
-                });
-
-    }
-
-
-    @SuppressLint("NonConstantResourceId")
-    private void seleccionarItem(@NonNull MenuItem itemDrawer) {
-
-
-        switch (itemDrawer.getItemId()) {
-            case (R.id.item_user_profile):
-                Log.i(TAG, "user_profile");
-                break;
-            case R.id.item_connection:
-                Log.i(TAG, "connection");
-                break;
-            case R.id.item_home_admin:
-                Log.i(TAG, "home_admin");
-                launchHomesActivity();
-                break;
-            case R.id.item_notifications:
-                Log.i(TAG, "notifications");
-                break;
-        }
-
-
-
-        // Setear título actual
-        setTitle(itemDrawer.getTitle());
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-
-        if (item.getItemId() == android.R.id.home) {
-            binding.drawerLayout.openDrawer(GravityCompat.START);
-            return true;
-        }
-
-
-        return super.onOptionsItemSelected(item);
-    }
 
     /**
      * Establece la toolbar como action bar

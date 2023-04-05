@@ -58,14 +58,14 @@
             android:layout_height="wrap_content"
             android:text="@string/from"
             app:layout_constraintTop_toTopOf="parent"
-            style="@style/textThresholdTemperature"/>
+            style="@style/textItem"/>
 
         <TextView
             android:id="@+id/textFromHour"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="--:--"
-            style="@style/textThresholdTemperature"
+            style="@style/textItem"
             app:layout_constraintStart_toEndOf="@+id/textFrom"/>
 
         <TextView
@@ -74,7 +74,7 @@
             android:layout_height="wrap_content"
             android:text="@string/to"
             app:layout_constraintStart_toEndOf="@+id/textFromHour"
-            style="@style/textThresholdTemperature"/>
+            style="@style/textItem"/>
 
         <TextView
             android:id="@+id/textToHour"
@@ -82,7 +82,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintStart_toEndOf="@+id/textFromHour"
             android:text="--:--"
-            style="@style/textThresholdTemperature"/>
+            style="@style/textItem"/>
     </LinearLayout>
 
 
