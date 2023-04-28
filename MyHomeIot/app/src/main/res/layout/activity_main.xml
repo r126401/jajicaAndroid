@@ -25,36 +25,52 @@
             android:layout_height="?attr/actionBarSize"
             android:layout_width="match_parent"
             app:layout_scrollFlags="scroll|enterAlways"
-            android:background="?attr/colorSurface">
+            android:theme="@style/toolbarApp">
         </androidx.appcompat.widget.Toolbar>
+
+
 
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/textHome"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:drawableStart="@drawable/ic_home_admin"
-            android:layout_marginTop="15dp"
-            android:textColor="?colorOnPrimaryContainer"
+            android:textColor="?attr/colorOnSecondaryContainer"
             android:textSize="20sp"
-            android:drawablePadding="20dp"
-            android:layout_marginBottom="15dp"/>
+            android:drawablePadding="15dp"
+            android:paddingEnd="20dp"
+            android:paddingStart="20dp"
+            android:background="@drawable/round_corners_buttons"
+            android:gravity="center"/>
 
 
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:background="@drawable/fondo">
+
+        </androidx.appcompat.widget.AppCompatImageView>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="?attr/colorSurface">
 
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tabs"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:tabMode="scrollable"
                 app:layout_constraintStart_toStartOf="parent"
-                android:background="?colorSurface">
+                app:tabTextAppearance="@style/tabApp"
+                app:tabTextColor="?attr/colorOnSurfaceVariant"
+                style="@style/tabApp"
+
+                android:background="?attr/colorSurfaceVariant"
+                android:contentDescription="@string/item_devicetabs">
 
             </com.google.android.material.tabs.TabLayout>
 
@@ -62,13 +78,12 @@
                 android:id="@+id/imageMoveDevice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="invisible"
+                android:layout_marginEnd="10dp"
                 android:src="@drawable/ic_action_cut"
-                app:layout_constraintBottom_toBottomOf="@+id/buttonViewGrid"
+                android:tag="false"
+                android:visibility="invisible"
                 app:layout_constraintEnd_toStartOf="@+id/buttonViewGrid"
-                app:layout_constraintTop_toTopOf="@+id/buttonViewGrid"
-                android:layout_marginRight="10dp"
-                android:tag="false">
+                app:layout_constraintTop_toTopOf="@+id/buttonViewGrid">
 
             </androidx.appcompat.widget.AppCompatImageView>
 
@@ -80,7 +95,8 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/buttonAdminRoom"
                 app:layout_constraintTop_toTopOf="parent"
-                android:background="?colorSurface">
+                android:background="?colorSurface"
+                android:layout_marginTop="40dp">
 
             </androidx.appcompat.widget.AppCompatImageView>
 
@@ -128,13 +144,13 @@
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationMenu"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         app:layout_anchor="@+id/nested"
         app:layout_anchorGravity="bottom|center"
         android:layout_alignParentBottom="true"
-        android:background="?attr/colorSurface"
         app:menu="@menu/connections_devices_menu"
-        app:labelVisibilityMode="unlabeled"/>
+        app:labelVisibilityMode="unlabeled"
+        android:background="?attr/colorSurfaceVariant"/>
 
 
 

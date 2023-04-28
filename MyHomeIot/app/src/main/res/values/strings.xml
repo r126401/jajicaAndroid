@@ -125,6 +125,7 @@
     <string name="unsucessfull">Operación realizada sin éxito</string>
     <string name="local">local</string>
     <string name="remote">remoto</string>
+    <string name="item_devicetabs">item deviceTavs</string>
 
 
 </resources>

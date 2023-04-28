@@ -56,4 +56,37 @@
         <item name="android:maxHeight">10dp</item>
     </style>
 
+
+
+    <style name="tabApp" parent="Widget.MaterialComponents.TabLayout">
+
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+        
+    </style>
+    <style name="textDevice" parent="Widget.AppCompat.TextView">
+        
+        <item name="android:textSize">24sp</item>
+        <item name="android:maxLength">10</item>
+
+
+    </style>
+
+    <style name="textTemperature" parent="Widget.AppCompat.TextView">
+
+        <item name="android:textSize">40sp</item>
+
+    </style>
+
+    <style name="toolbarApp" parent="Theme.AppCompat">
+        <item name="android:background">?attr/colorPrimary</item>
+        <item name="popupMenuBackground">?attr/colorSurface</item>
+        <item name="actionMenuTextColor">?attr/colorOnPrimary</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="titleCentered">true</item>
+        <item name="android:textSize">15sp</item>
+
+    </style>
+    
 </resources>

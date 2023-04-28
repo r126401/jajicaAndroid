@@ -2,7 +2,6 @@
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="170dp">
 
@@ -13,17 +12,6 @@
         android:background="@drawable/round_item_devices">
 
 
-        <ImageView
-            android:id="@+id/imageThermostat"
-            android:layout_width="30sp"
-            android:layout_height="wrap_content"
-            android:src="@drawable/themometer"
-            app:layout_constraintBottom_toBottomOf="@+id/textTemperatureThermostat"
-            app:layout_constraintEnd_toStartOf="@+id/textTemperatureThermostat"
-            app:layout_constraintTop_toTopOf="@+id/textTemperatureThermostat"
-            app:layout_constraintVertical_bias="0.0">
-
-        </ImageView>
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/textTemperatureThermostat"
@@ -31,7 +19,8 @@
             android:layout_height="wrap_content"
             android:fontFamily="times"
             android:text="21.5 ºC"
-            android:textSize="30dp"
+            style="@style/textTemperature"
+            android:drawableStart="@drawable/themometer"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageHeating">
@@ -42,10 +31,11 @@
             android:id="@+id/textThresholdThermostat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
             android:fontFamily="times"
             android:text="20.5 ºC"
-            android:textSize="20dp"
+            android:textSize="25sp"
+            android:drawableLeft="@drawable/threshold_termperature"
+            android:drawablePadding="10sp"
             app:layout_constraintBottom_toTopOf="@+id/textDeviceThermostat"
             app:layout_constraintEnd_toEndOf="@+id/textTemperatureThermostat"
             app:layout_constraintStart_toStartOf="@+id/textTemperatureThermostat"
@@ -55,12 +45,13 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/textDeviceThermostat"
+            style="@style/textDevice"
             android:layout_width="wrap_content"
-            android:layout_height="48dp"
+            android:layout_height="wrap_content"
             android:text="Termostato"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/textThresholdThermostat"
-            app:layout_constraintStart_toStartOf="@+id/imageThermometerLabel"/>
+            app:layout_constraintEnd_toEndOf="@+id/textTemperatureThermostat"
+            app:layout_constraintStart_toStartOf="@+id/textTemperatureThermostat" />
 
 
         <androidx.appcompat.widget.AppCompatImageView
@@ -71,7 +62,7 @@
             android:src="@drawable/ic_action_options"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_margin="5dp">
+            android:layout_margin="10dp">
 
         </androidx.appcompat.widget.AppCompatImageView>
 
@@ -97,23 +88,15 @@
 
         </androidx.appcompat.widget.AppCompatImageView>
 
-        <ImageView
-            android:id="@+id/imageThermometerLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/threshold_termperature"
-            app:layout_constraintBottom_toBottomOf="@+id/textThresholdThermostat"
-            app:layout_constraintEnd_toStartOf="@+id/textThresholdThermostat"
-            app:layout_constraintTop_toTopOf="@+id/textThresholdThermostat">
 
-        </ImageView>
         <ProgressBar
             android:id="@+id/progressBarThermostatDevice"
             style="?android:attr/progressBarStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:visibility="invisible"/>
+            android:visibility="invisible"
+            android:indeterminateDrawable="@drawable/style_progress_bar"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

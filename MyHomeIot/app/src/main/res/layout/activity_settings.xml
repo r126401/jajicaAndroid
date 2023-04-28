@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".SettingsActivity"
     android:padding="16dp"
-    android:background="?colorPrimaryContainer"
+    android:background="?attr/colorSurface"
     >
 
     <androidx.appcompat.widget.AppCompatTextView
@@ -16,8 +16,7 @@
         android:text="@string/user_profile"
         android:textColor="?colorOnPrimaryContainer"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textMessageAdminHomes"
-        android:layout_marginTop="20dp"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <GridLayout
         android:id="@+id/gridLayout"
@@ -41,7 +40,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editUser"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:enabled="false"
             android:maxLength="15"
             android:maxLines="1"
@@ -71,7 +70,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editPassword"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:enabled="false"
             android:inputType="textPassword"
             android:maxLength="15"
@@ -99,12 +98,12 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editDni"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="140dp"
+            android:layout_height="50dp"
             android:enabled="false"
+            android:hint="@string/settingsDni"
             android:maxLength="9"
             android:maxLines="1"
-            android:hint="@string/settingsDni"
             android:textColor="?colorOnPrimaryContainer">
 
         </com.google.android.material.textfield.TextInputEditText>
@@ -112,7 +111,7 @@
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/imageEditDni"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_gravity="end"
             android:src="@drawable/ic_action_edit">
 
@@ -128,19 +127,19 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editMail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="123dp"
+            android:layout_height="50dp"
             android:enabled="false"
+            android:hint="@string/settingsMail"
             android:inputType="textEmailAddress"
-            android:maxLines="2"
-            android:hint="@string/settingsMail">
+            android:maxLines="1">
 
         </com.google.android.material.textfield.TextInputEditText>
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/imageEditMail"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_gravity="end"
             android:src="@drawable/ic_action_edit"
             android:textColor="?colorOnPrimaryContainer">
@@ -157,7 +156,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editTelephone"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:enabled="false"
             android:inputType="text"
             android:maxLines="15"

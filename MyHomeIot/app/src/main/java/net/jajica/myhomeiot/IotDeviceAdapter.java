@@ -651,6 +651,7 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 holder.progressBarThermometerDevice.setVisibility(View.INVISIBLE);
                 holder.imageConnectedDeviceThermometer.setImageResource(R.drawable.ic_connect_ok);
                 holder.textDeviceThermometer.setText(deviceList.get(position).getDeviceName());
+                holder.imageThermometer.setVisibility(View.INVISIBLE);
                 String dato;
                 MyHomeIotTools tools;
                 Double temp;
@@ -664,6 +665,7 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 holder.imageConnectedDeviceThermometer.setImageResource(R.drawable.ic_connect_nok);
                 holder.imageThermometer.setImageResource(R.drawable.ic_unknown_device);
                 holder.textTemperatureThermometer.setText("--.-");
+                holder.imageThermometer.setVisibility(View.VISIBLE);
                 break;
             case DEVICE_WAITING_RESPONSE:
             case DEVICE_ERROR_SUBSCRIPTION:
@@ -672,6 +674,7 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 holder.imageConnectedDeviceThermometer.setImageResource(R.drawable.ic_connect_nok);
                 holder.imageThermometer.setImageResource(R.drawable.ic_unknown_device);
                 holder.textTemperatureThermometer.setText("--.-");
+                holder.imageThermometer.setVisibility(View.VISIBLE);
                 break;
 
 
@@ -698,9 +701,9 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 holder.textDeviceThermostat.setText(device.getDeviceName());
                 double data;
                 data = tool.roundData(device.getTemperature(), 1);
-                holder.textTemperatureThermostat.setText(String.valueOf(data));
+                holder.textTemperatureThermostat.setText(String.valueOf(data) + " ºC");
                 data = tool.roundData(device.getThresholdTemperature(), 1);
-                holder.textThresholdThermostat.setText(String.valueOf(data));
+                holder.textThresholdThermostat.setText(String.valueOf(data) + " ºC");
                 break;
             case DEVICE_DISCONNECTED:
                 holder.progressBarThermostatDevice.setVisibility(View.INVISIBLE);
