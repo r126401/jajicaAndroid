@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:animateLayoutChanges="true"
-        android:background="?attr/colorSurface">
+        android:background="?attr/colorSurfaceVariant">
 
 
 
@@ -47,7 +47,7 @@
 
         <androidx.appcompat.widget.AppCompatImageView
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="200dp"
             android:background="@drawable/fondo">
 
         </androidx.appcompat.widget.AppCompatImageView>

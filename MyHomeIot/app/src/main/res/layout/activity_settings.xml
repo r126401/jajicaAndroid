@@ -9,20 +9,35 @@
     android:background="?attr/colorSurface"
     >
 
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/appCompatImageView"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:background="@drawable/fondo"
+        android:src="@drawable/profile"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </androidx.appcompat.widget.AppCompatImageView>
+
+
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/textAdminHomes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/user_profile"
         android:textColor="?colorOnPrimaryContainer"
+        android:layout_marginTop="50dp"
+        style="@style/textItem"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/appCompatImageView" />
 
     <GridLayout
         android:id="@+id/gridLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:columnCount="3"
+        android:columnCount="4"
         android:rowCount="4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -45,19 +60,31 @@
             android:maxLength="15"
             android:maxLines="1"
             android:singleLine="true"
+            style="@style/textItem"
             android:hint="@string/settingsUser"
             android:textColor="?colorOnPrimaryContainer">
 
         </com.google.android.material.textfield.TextInputEditText>
 
         <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imageErrorEdituser"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_action_error">
+
+        </androidx.appcompat.widget.AppCompatImageView>
+
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/imageEdituser"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
+            android:layout_gravity="center_vertical"
             android:src="@drawable/ic_action_edit">
 
         </androidx.appcompat.widget.AppCompatImageView>
+
+
 
         <androidx.appcompat.widget.AppCompatImageView
             android:layout_width="wrap_content"
@@ -75,15 +102,24 @@
             android:inputType="textPassword"
             android:maxLength="15"
             android:hint="@string/settingsPassword"
+            style="@style/textItem"
             android:textColor="?colorOnPrimaryContainer">
 
         </com.google.android.material.textfield.TextInputEditText>
 
         <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imageErrorEditPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_action_error">
+
+        </androidx.appcompat.widget.AppCompatImageView>
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/imageEditPassword"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
+            android:layout_gravity="center_vertical"
             android:src="@drawable/ic_action_edit">
 
         </androidx.appcompat.widget.AppCompatImageView>
@@ -104,15 +140,25 @@
             android:hint="@string/settingsDni"
             android:maxLength="9"
             android:maxLines="1"
+            style="@style/textItem"
             android:textColor="?colorOnPrimaryContainer">
 
         </com.google.android.material.textfield.TextInputEditText>
 
         <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imageErrorEditDni"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_action_error">
+
+        </androidx.appcompat.widget.AppCompatImageView>
+
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/imageEditDni"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
-            android:layout_gravity="end"
+            android:layout_gravity="center_vertical"
             android:src="@drawable/ic_action_edit">
 
         </androidx.appcompat.widget.AppCompatImageView>
@@ -127,20 +173,30 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editMail"
-            android:layout_width="123dp"
+            android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:enabled="false"
             android:hint="@string/settingsMail"
             android:inputType="textEmailAddress"
-            android:maxLines="1">
+            android:maxLines="2"
+            style="@style/textItem">
 
         </com.google.android.material.textfield.TextInputEditText>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imageErrorEditMail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_action_error">
+
+        </androidx.appcompat.widget.AppCompatImageView>
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/imageEditMail"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
-            android:layout_gravity="end"
+            android:layout_gravity="center_vertical"
             android:src="@drawable/ic_action_edit"
             android:textColor="?colorOnPrimaryContainer">
         </androidx.appcompat.widget.AppCompatImageView>
@@ -160,15 +216,25 @@
             android:enabled="false"
             android:inputType="text"
             android:maxLines="15"
-            android:hint="@string/settingsTelephone">
+            android:hint="@string/settingsTelephone"
+            style="@style/textItem">
 
         </com.google.android.material.textfield.TextInputEditText>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imageErrorEditTelephone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_action_error">
+
+        </androidx.appcompat.widget.AppCompatImageView>
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/imageEditTelephone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
+            android:layout_gravity="center_vertical"
             android:src="@drawable/ic_action_edit"
             android:textColor="?colorOnPrimaryContainer">
         </androidx.appcompat.widget.AppCompatImageView>
@@ -189,12 +255,12 @@
         android:id="@+id/buttonSettingSave"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?colorSecondaryContainer"
         android:text="@string/settingsSave"
-        android:textColor="?colorOnPrimaryContainer"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        style="@style/botones"
+        android:background="@drawable/round_corners_buttons">
 
     </androidx.appcompat.widget.AppCompatButton>
 
