@@ -312,14 +312,30 @@ public class MyHomeIotTools {
 
     }
 
-    public void showSoftKeyboard(View view) {
+    public void showHideSoftKeyboard(View view, Boolean show) {
         if (view.requestFocus()) {
             InputMethodManager imm = (InputMethodManager)
                    context.getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
+
+            if (show) {
+                imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
+            } else {
+                imm.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
+            }
+
 
         }
     }
+
+    public void hideSoftKeyboard(View view) {
+        if (view.requestFocus()) {
+            InputMethodManager imm = (InputMethodManager)
+                    context.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
+
+        }
+    }
+
 
 
 }

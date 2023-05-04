@@ -71,7 +71,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:src="@drawable/ic_action_error">
+            android:src="@drawable/ic_action_error"
+            android:visibility="invisible">
 
         </androidx.appcompat.widget.AppCompatImageView>
 
@@ -112,7 +113,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:src="@drawable/ic_action_error">
+            android:src="@drawable/ic_action_error"
+            android:visibility="invisible">
 
         </androidx.appcompat.widget.AppCompatImageView>
         <androidx.appcompat.widget.AppCompatImageView
@@ -120,7 +122,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:src="@drawable/ic_action_edit">
+            android:src="@drawable/ic_action_edit"
+            >
 
         </androidx.appcompat.widget.AppCompatImageView>
 
@@ -132,14 +135,18 @@
 
         </androidx.appcompat.widget.AppCompatImageView>
 
+
+
+
+
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editDni"
-            android:layout_width="140dp"
+            android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:enabled="false"
+            android:maxLength="15"
+            android:inputType="text"
             android:hint="@string/settingsDni"
-            android:maxLength="9"
-            android:maxLines="1"
             style="@style/textItem"
             android:textColor="?colorOnPrimaryContainer">
 
@@ -150,7 +157,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:src="@drawable/ic_action_error">
+            android:src="@drawable/ic_action_error"
+            android:visibility="invisible">
 
         </androidx.appcompat.widget.AppCompatImageView>
 
@@ -188,7 +196,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:src="@drawable/ic_action_error">
+            android:src="@drawable/ic_action_error"
+            android:visibility="invisible">
 
         </androidx.appcompat.widget.AppCompatImageView>
 
@@ -214,7 +223,7 @@
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:enabled="false"
-            android:inputType="text"
+            android:inputType="number"
             android:maxLines="15"
             android:hint="@string/settingsTelephone"
             style="@style/textItem">
@@ -226,7 +235,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:src="@drawable/ic_action_error">
+            android:src="@drawable/ic_action_error"
+            android:visibility="invisible">
 
         </androidx.appcompat.widget.AppCompatImageView>
 

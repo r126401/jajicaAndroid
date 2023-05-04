@@ -3,22 +3,22 @@ package net.jajica.myhomeiot;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
+import android.view.inputmethod.EditorInfo;
+import android.widget.TextView;
 
 import com.google.android.material.textfield.TextInputEditText;
 
 import net.jajica.libiot.IOT_LABELS_JSON;
 
-import org.eclipse.paho.client.mqttv3.internal.wire.MultiByteInteger;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import net.jajica.myhomeiot.databinding.ActivitySettingsBinding;
 
 public class SettingsActivity extends AppCompatActivity implements View.OnKeyListener, View.OnClickListener {
@@ -27,13 +27,37 @@ public class SettingsActivity extends AppCompatActivity implements View.OnKeyLis
     private final String TAG = "SettingsActivity";
     private String configuration;
 
+
+    private void createEventEditor(TextInputEditText textView) {
+
+
+        textView.setOnEditorActionListener(new TextInputEditText.OnEditorActionListener() {
+
+            MyHomeIotTools tool = new MyHomeIotTools(getApplicationContext());
+
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if(actionId == EditorInfo.IME_ACTION_DONE
+                        || event.getAction() == KeyEvent.ACTION_DOWN
+                        || event.getAction() == KeyEvent.KEYCODE_ENTER) {
+                    Log.i(TAG, "hola");
+                    tool.showHideSoftKeyboard(textView, false);
+                    return true;
+
+                }
+                return false;
+            }
+
+        });
+
+
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_settings);
         mbinding = ActivitySettingsBinding.inflate(getLayoutInflater());
         setContentView(mbinding.getRoot());
-
         mbinding.imageEdituser.setOnClickListener(this);
         mbinding.imageEditPassword.setOnClickListener(this);
         mbinding.imageEditDni.setOnClickListener(this);
@@ -41,6 +65,10 @@ public class SettingsActivity extends AppCompatActivity implements View.OnKeyLis
         mbinding.imageEditTelephone.setOnClickListener(this);
         mbinding.editUser.setOnKeyListener(this);
         mbinding.editPassword.setOnKeyListener(this);
+        mbinding.editDni.setOnKeyListener(this);
+        //createEventEditor(mbinding.editUser);
+        //createEventEditor(mbinding.editPassword);
+        //createEventEditor(mbinding.editDni);
         mbinding.buttonSettingSave.setOnClickListener(this);
         configuration = null;
 
@@ -79,11 +107,8 @@ public class SettingsActivity extends AppCompatActivity implements View.OnKeyLis
 
         String value;
         if ((value = jsonObject.optString(label)) != null) {
-
             editText.setText(value);
         }
-
-
     }
 
 
@@ -102,7 +127,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnKeyLis
                 mbinding.editMail.setEnabled(false);
                 mbinding.editTelephone.setEnabled(false);
                 mbinding.editUser.requestFocus();
-                tools.showSoftKeyboard(mbinding.editUser);
+                tools.showHideSoftKeyboard(mbinding.editUser, true);
             break;
             case R.id.imageEditPassword:
                 mbinding.editUser.setEnabled(false);
@@ -111,7 +136,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnKeyLis
                 mbinding.editDni.setEnabled(false);
                 mbinding.editMail.setEnabled(false);
                 mbinding.editTelephone.setEnabled(false);
-                tools.showSoftKeyboard(mbinding.editPassword);
+                tools.showHideSoftKeyboard(mbinding.editPassword,true);
                 break;
             case R.id.imageEditDni:
                 mbinding.editUser.setEnabled(false);
@@ -120,7 +145,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnKeyLis
                 mbinding.editDni.requestFocus();
                 mbinding.editMail.setEnabled(false);
                 mbinding.editTelephone.setEnabled(false);
-                tools.showSoftKeyboard(mbinding.editDni);
+                tools.showHideSoftKeyboard(mbinding.editDni, true);
                 break;
             case R.id.imageEditMail:
                 mbinding.editUser.setEnabled(false);
@@ -129,7 +154,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnKeyLis
                 mbinding.editMail.setEnabled(true);
                 mbinding.editMail.requestFocus();
                 mbinding.editTelephone.setEnabled(false);
-                tools.showSoftKeyboard(mbinding.editMail);
+                tools.showHideSoftKeyboard(mbinding.editMail, true);
                 break;
             case R.id.imageEditTelephone:
                 mbinding.editUser.setEnabled(false);
@@ -138,29 +163,20 @@ public class SettingsActivity extends AppCompatActivity implements View.OnKeyLis
                 mbinding.editMail.setEnabled(false);
                 mbinding.editTelephone.setEnabled(true);
                 mbinding.editTelephone.requestFocus();
-                tools.showSoftKeyboard(mbinding.editTelephone);
+                tools.showHideSoftKeyboard(mbinding.editTelephone, true);
                 break;
 
             case R.id.buttonSettingSave:
                 Log.i(TAG, "Guardar");
                 saveData();
                 break;
-
-
-
         }
-
-
-
-
-
     }
 
 
 
     @Override
     public boolean onKey(View v, int keyCode, KeyEvent event) {
-
 
 
         if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
@@ -193,16 +209,12 @@ public class SettingsActivity extends AppCompatActivity implements View.OnKeyLis
         Intent data;
         data = new Intent();
         JSONObject jsonObject = null;
-
-
-
-
         mbinding.buttonSettingSave.requestFocus();
         if ((!validateUser()) ||
         (!validatePassword()) || (!validateMail())) {
             Log.e(TAG, "Error en boton");
-            setResult(RESULT_CANCELED);
-            finish();
+            //setResult(RESULT_CANCELED);
+            //finish();
             return;
         }
 
@@ -233,8 +245,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnKeyLis
             return true;
         }
         return false;
-
-
     }
 
     private boolean validateUser() {
@@ -249,9 +259,11 @@ public class SettingsActivity extends AppCompatActivity implements View.OnKeyLis
     private boolean validatePassword() {
 
         if (isEditTextEmpty(mbinding.editPassword, R.string.settingsInvalidPassword)) {
+            mbinding.imageErrorEditPassword.setVisibility(View.VISIBLE);
             return false;
+        } else {
+            mbinding.imageErrorEditPassword.setVisibility(View.INVISIBLE);
         }
-
 
         return true;
     }
@@ -294,11 +306,13 @@ public class SettingsActivity extends AppCompatActivity implements View.OnKeyLis
     private boolean validateTelephone() {
 
 
-        isEditTextEmpty(mbinding.editTelephone, R.string.settingsInvalidTelephone);
+        if (isEditTextEmpty(mbinding.editTelephone, R.string.settingsInvalidTelephone)) {
+            mbinding.imageErrorEditTelephone.setVisibility(View.VISIBLE);
+            return false;
+        } else {
+            mbinding.imageErrorEditTelephone.setVisibility(View.INVISIBLE);
+        }
         return true;
     }
-
-
-
 
 }
