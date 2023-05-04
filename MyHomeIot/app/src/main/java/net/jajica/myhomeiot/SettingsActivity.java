@@ -66,9 +66,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnKeyLis
         mbinding.editUser.setOnKeyListener(this);
         mbinding.editPassword.setOnKeyListener(this);
         mbinding.editDni.setOnKeyListener(this);
-        //createEventEditor(mbinding.editUser);
-        //createEventEditor(mbinding.editPassword);
-        //createEventEditor(mbinding.editDni);
         mbinding.buttonSettingSave.setOnClickListener(this);
         configuration = null;
 
@@ -250,7 +247,10 @@ public class SettingsActivity extends AppCompatActivity implements View.OnKeyLis
     private boolean validateUser() {
 
         if (isEditTextEmpty(mbinding.editUser, R.string.settingsInvalidUser)) {
+            mbinding.imageErrorEditUser.setVisibility(View.VISIBLE);
             return false;
+        } else {
+            mbinding.imageErrorEditUser.setVisibility(View.INVISIBLE);
         }
 
         return true;
@@ -273,7 +273,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnKeyLis
         ValidadorDNI dni;
         dni = new ValidadorDNI(mbinding.editDni.getText().toString());
 
-        if (!dni.validar()) {
+        if (!dni.validar() || mbinding.editDni.getText().toString().isEmpty()) {
             mbinding.editDni.setText("");
             mbinding.editDni.setHint(R.string.settingsInvalidDni);
             mbinding.imageErrorEditDni.setVisibility(View.VISIBLE);
@@ -295,6 +295,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnKeyLis
              mbinding.editMail.setText("");
              mbinding.editMail.setHint(R.string.settingsInvalidMail);
              mbinding.imageErrorEditMail.setVisibility(View.VISIBLE);
+             return false;
          } else {
              mbinding.imageErrorEditMail.setVisibility(View.INVISIBLE);
          }

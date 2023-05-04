@@ -10,8 +10,21 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     android:id="@+id/content"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:visibility="visible">
+
+
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imageInstallDevice"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:background="@drawable/esptouch"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </androidx.appcompat.widget.AppCompatImageView>
 
     <androidx.appcompat.widget.AppCompatCheckedTextView
         android:id="@+id/apSsidLabel"
@@ -20,9 +33,11 @@
         android:singleLine="true"
         android:text="@string/esptouch1_ssid_title"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="@color/colorAccent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textColor="?attr/colorOnPrimaryContainer"
+        android:textSize="20dp"
+        app:layout_constraintStart_toStartOf="@id/imageInstallDevice"
+        app:layout_constraintTop_toBottomOf="@+id/imageInstallDevice"
+        android:layout_marginTop="30dp"/>
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/apSsidText"
@@ -33,7 +48,9 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         app:layout_constraintBaseline_toBaselineOf="@id/apSsidLabel"
         app:layout_constraintStart_toEndOf="@id/apSsidLabel"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:textSize="20dp"
+        android:textColor="?attr/colorOnPrimaryContainer"/>
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/apBssidLabel"
         android:layout_width="wrap_content"
@@ -42,9 +59,10 @@
         android:singleLine="true"
         android:text="@string/esptouch1_bssid_title"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="@color/colorAccent"
+        android:textColor="?attr/colorOnPrimaryContainer"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/apSsidLabel" />
+        app:layout_constraintTop_toBottomOf="@id/apSsidLabel"
+        android:textSize="20dp" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/apBssidText"
@@ -55,7 +73,9 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         app:layout_constraintBaseline_toBaselineOf="@id/apBssidLabel"
         app:layout_constraintStart_toEndOf="@id/apBssidLabel"
-        app:layout_constraintTop_toTopOf="@id/apBssidLabel" />
+        app:layout_constraintTop_toTopOf="@id/apBssidLabel"
+        android:textSize="20dp"
+        android:textColor="?attr/colorOnPrimaryContainer"/>
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/apPasswordLayout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -144,23 +164,16 @@
         android:id="@+id/confirmBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/messageView"
-        android:text="@string/esptouch1_confirm">
-
-    </androidx.appcompat.widget.AppCompatButton>
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/appCompatTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="dddddd"
+        android:background="@drawable/round_corners_buttons"
+        android:text="@string/esptouch1_confirm"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/confirmBtn"
-        app:layout_constraintVertical_bias="0.167" />
+        app:layout_constraintTop_toBottomOf="@+id/messageView">
+
+    </androidx.appcompat.widget.AppCompatButton>
+
+
 
 
 
