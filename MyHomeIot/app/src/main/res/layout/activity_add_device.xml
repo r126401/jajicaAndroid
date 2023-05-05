@@ -5,18 +5,32 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".AddDeviceActivity"
-    android:padding="16dp"
-    android:background="?colorPrimaryContainer">
+    android:background="?attr/colorSurface">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imageInstallDevice"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:background="@drawable/esptouch"
+        android:src="@drawable/ic_add_device"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </androidx.appcompat.widget.AppCompatImageView>
+
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:layout_marginTop="20dp"
         android:id="@+id/appCompatTextView3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/addDevice"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/imageInstallDevice"
+        android:layout_marginTop="10dp"
+        style="@style/textItem"
+        >
 
     </androidx.appcompat.widget.AppCompatTextView>
 
@@ -27,7 +41,8 @@
         android:text="@string/inst_add_device"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appCompatTextView3">
+        app:layout_constraintTop_toBottomOf="@+id/appCompatTextView3"
+        android:textSize="15sp">
 
     </androidx.appcompat.widget.AppCompatTextView>
 
@@ -55,7 +70,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editTextDeviceName"
             android:layout_width="300dp"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:hint="@string/nameDevice"
             android:maxLength="20"
             android:maxLines="1">
@@ -84,7 +99,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editTextDeviceId"
             android:layout_width="300dp"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:hint="@string/add_device_id_device"
             android:maxLines="1"
             android:maxLength="12">
