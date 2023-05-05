@@ -1,18 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/activity_esptouch"
-    android:layout_height="match_parent"
-    android:layout_width="match_parent">
-
-
-<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:visibility="visible">
-
 
 
     <androidx.appcompat.widget.AppCompatImageView
@@ -20,70 +14,128 @@
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:background="@drawable/esptouch"
+        android:src="@drawable/ic_install"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
     </androidx.appcompat.widget.AppCompatImageView>
 
-    <androidx.appcompat.widget.AppCompatCheckedTextView
-        android:id="@+id/apSsidLabel"
-        android:layout_width="wrap_content"
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:singleLine="true"
-        android:text="@string/esptouch1_ssid_title"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="?attr/colorOnPrimaryContainer"
-        android:textSize="20dp"
-        app:layout_constraintStart_toStartOf="@id/imageInstallDevice"
+        app:layout_constraintTop_toBottomOf="@+id/apPasswordLayout"
+        android:layout_marginTop="5dp">
+
+
+        <androidx.appcompat.widget.AppCompatCheckedTextView
+            android:id="@+id/apSsidLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:text="@string/esptouch1_ssid_title"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="?attr/colorOnPrimaryContainer"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/apSsidText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:singleLine="true"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="?attr/colorOnPrimaryContainer"
+            android:textSize="20sp"
+            app:layout_constraintBaseline_toBaselineOf="@id/apSsidLabel"
+            app:layout_constraintStart_toEndOf="@id/apSsidLabel"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/apBssidLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:text="@string/esptouch1_bssid_title"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="?attr/colorOnPrimaryContainer"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/apSsidLabel" />
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/apBssidText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:singleLine="true"
+            android:text="contra"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="?attr/colorOnPrimaryContainer"
+            android:textSize="20sp"
+            app:layout_constraintBaseline_toBaselineOf="@id/apBssidLabel"
+            app:layout_constraintStart_toEndOf="@id/apBssidLabel"
+            app:layout_constraintTop_toTopOf="@id/apBssidLabel" />
+
+        <RadioGroup
+            android:id="@+id/packageModeGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="visible"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/apBssidText">
+
+            <RadioButton
+                android:id="@+id/packageBroadcast"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="@string/esptouch1_package_broadcast" />
+
+            <RadioButton
+                android:id="@+id/packageMulticast"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="@string/esptouch1_package_multicast" />
+        </RadioGroup>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/apNombreDispositivoLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/nameDevice"
         app:layout_constraintTop_toBottomOf="@+id/imageInstallDevice"
-        android:layout_marginTop="30dp"/>
+        app:passwordToggleEnabled="true"
+        android:layout_marginTop="10dp">
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/apSsidText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:singleLine="true"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        app:layout_constraintBaseline_toBaselineOf="@id/apSsidLabel"
-        app:layout_constraintStart_toEndOf="@id/apSsidLabel"
-        app:layout_constraintTop_toTopOf="parent"
-        android:textSize="20dp"
-        android:textColor="?attr/colorOnPrimaryContainer"/>
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/apBssidLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:singleLine="true"
-        android:text="@string/esptouch1_bssid_title"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="?attr/colorOnPrimaryContainer"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/apSsidLabel"
-        android:textSize="20dp" />
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/apNombreDispositivo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:maxLength="20"
+            android:singleLine="true" />
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/apBssidText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:singleLine="true"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        app:layout_constraintBaseline_toBaselineOf="@id/apBssidLabel"
-        app:layout_constraintStart_toEndOf="@id/apBssidLabel"
-        app:layout_constraintTop_toTopOf="@id/apBssidLabel"
-        android:textSize="20dp"
-        android:textColor="?attr/colorOnPrimaryContainer"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/apPasswordLayout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:hint="@string/esptouch1_password_title"
-        app:layout_constraintTop_toBottomOf="@id/apBssidLabel"
+        app:layout_constraintTop_toBottomOf="@+id/apNombreDispositivoLayout"
         app:passwordToggleEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -95,128 +147,73 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/apNombreDispositivoLayout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:hint="@string/nameDevice"
-        app:layout_constraintTop_toBottomOf="@id/apPasswordLayout"
-        app:passwordToggleEnabled="true">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/apNombreDispositivo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="text"
-            android:singleLine="true"
-            android:maxLength="20"/>
-
-    </com.google.android.material.textfield.TextInputLayout>
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/deviceCountLayout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/esptouch1_device_count_title"
-        app:layout_constraintTop_toBottomOf="@+id/apNombreDispositivoLayout">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/deviceCountEdit"
-            android:layout_width="120dp"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:text="1" />
-    </com.google.android.material.textfield.TextInputLayout>
-    <RadioGroup
-        android:id="@+id/packageModeGroup"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/deviceCountLayout">
-
-        <RadioButton
-            android:id="@+id/packageBroadcast"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:text="@string/esptouch1_package_broadcast" />
-
-        <RadioButton
-            android:id="@+id/packageMulticast"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:text="@string/esptouch1_package_multicast" />
-    </RadioGroup>
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/messageView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="top"
-        android:textColor="@android:color/holo_red_dark"
-        app:layout_constraintTop_toBottomOf="@id/packageModeGroup"
-        app:layout_goneMarginStart="4dp" />
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/confirmBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/round_corners_buttons"
-        android:text="@string/esptouch1_confirm"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/messageView">
-
-    </androidx.appcompat.widget.AppCompatButton>
-
-
-
-
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/progessExecuting"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@+id/content">
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/testResult"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+        android:visibility="invisible"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
+        android:layout_marginTop="5dp">
 
         <ProgressBar
             android:id="@+id/progressBar"
             style="?android:attr/progressBarStyleLarge"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/testResult"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/cancel_button"
+            app:layout_constraintStart_toEndOf="@+id/progressBar"
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/cancel_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:text="@android:string/cancel"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/progressBar" />
+            app:layout_constraintTop_toTopOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/confirmBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/round_corners_buttons"
+        android:padding="5dp"
+        android:text="@string/esptouch1_confirm"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.442"
+        app:layout_constraintStart_toStartOf="parent">
 
-</FrameLayout>
+    </androidx.appcompat.widget.AppCompatButton>
+
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/messageView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/progessExecuting"
+        android:layout_marginTop="5dp">
+
+    </androidx.appcompat.widget.AppCompatTextView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+

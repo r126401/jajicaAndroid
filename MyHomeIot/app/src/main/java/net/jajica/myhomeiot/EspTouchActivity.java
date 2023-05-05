@@ -23,8 +23,12 @@ import com.espressif.iot.esptouch.util.ByteUtil;
 import com.espressif.iot.esptouch.util.TouchNetUtil;
 
 import net.jajica.libiot.IOT_DEVICE_TYPE;
+import net.jajica.libiot.IOT_LABELS_JSON;
 import net.jajica.libiot.IotDeviceUnknown;
 import net.jajica.myhomeiot.databinding.ActivityEsptouchBinding;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -62,11 +66,8 @@ public class EspTouchActivity extends EspTouchActivityAbs {
             }
         });
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION};
-            requestPermissions(permissions, REQUEST_PERMISSION);
-        }
-
+        String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION};
+        requestPermissions(permissions, REQUEST_PERMISSION);
 
 
         EspTouchApp.getInstance().observeBroadcast(this, broadcast -> {
@@ -74,10 +75,7 @@ public class EspTouchActivity extends EspTouchActivityAbs {
             onWifiChanged();
         });
 
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
+
     }
 
     @Override
@@ -103,11 +101,9 @@ public class EspTouchActivity extends EspTouchActivityAbs {
     private void showProgress(boolean show) {
         if (show) {
             mBinding.testResult.setText(R.string.esptouch1_send_data_to_device);
-            mBinding.content.setVisibility(View.INVISIBLE);
             mBinding.progessExecuting.setVisibility(View.VISIBLE);
         } else {
-            mBinding.content.setVisibility(View.VISIBLE);
-            mBinding.progessExecuting.setVisibility(View.GONE);
+            mBinding.progessExecuting.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -143,8 +139,10 @@ public class EspTouchActivity extends EspTouchActivityAbs {
             confirmEnable = true;
             if (stateResult.is5G) {
                 message = getString(R.string.esptouch1_wifi_5g_message);
+                mBinding.confirmBtn.setVisibility(View.INVISIBLE);
             }
         } else {
+            mBinding.confirmBtn.setVisibility(View.VISIBLE);
             if (mTask != null) {
                 mTask.cancelEsptouch();
                 mTask = null;
@@ -167,8 +165,8 @@ public class EspTouchActivity extends EspTouchActivityAbs {
         CharSequence pwdStr = mBinding.apPasswordEdit.getText();
         byte[] password = pwdStr == null ? null : ByteUtil.getBytesByString(pwdStr.toString());
         byte[] bssid = TouchNetUtil.parseBssid2bytes(this.mBssid);
-        CharSequence devCountStr = mBinding.deviceCountEdit.getText();
-        byte[] deviceCount = devCountStr == null ? new byte[0] : devCountStr.toString().getBytes();
+        CharSequence devCountStr = "1";
+        byte[] deviceCount = devCountStr.toString().getBytes();
         byte[] broadcast = {(byte) (mBinding.packageModeGroup.getCheckedRadioButtonId() == R.id.packageBroadcast
                 ? 1 : 0)};
 
@@ -284,6 +282,7 @@ public class EspTouchActivity extends EspTouchActivityAbs {
 
             activity.resultadoSmartConfig = true;
             activity.idDispositivo = result.get(0).getBssid();
+            activity.saveNewDevice(activity.idDispositivo);
             ArrayList<CharSequence> resultMsgList = new ArrayList<>(result.size());
             for (IEsptouchResult touchResult : result) {
                 String message = activity.getString(R.string.esptouch1_configure_result_success_item,
@@ -302,28 +301,30 @@ public class EspTouchActivity extends EspTouchActivityAbs {
         }
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        /*
-        if ((resultadoSmartConfig) && (!mBinding.apNombreDispositivo.getText().toString().isEmpty()))  {
-            IotDeviceUnknown dispositivo;
-            dispositivo = new IotDeviceUnknown(mBinding.apNombreDispositivo.getText().toString(),
-                    idDispositivo, IOT_DEVICE_TYPE.UNKNOWN);
-            if (dispositivo.guardarDispositivo(getApplicationContext())) {
-                Intent datos = new Intent();
-                datos.setData(Uri.parse(mBinding.apNombreDispositivo.getText().toString()));
-                setResult(RESULT_OK, datos);
-            } else {
-                setResult(RESULT_CANCELED);
-            }
+    private void saveNewDevice(String idDevice) {
 
-
-        } else {
+        JSONObject jsonObject;
+        try {
+            jsonObject = new JSONObject();
+            jsonObject.put(IOT_LABELS_JSON.DEVICE_NAME.getValorTextoJson(), mBinding.apNombreDispositivo.getText().toString());
+            jsonObject.put(IOT_LABELS_JSON.DEVICE_ID.getValorTextoJson(), idDevice);
+            Intent intent;
+            intent = new Intent();
+            intent.setData(Uri.parse(jsonObject.toString()));
+            setResult(RESULT_OK, intent);
+            finish();
+        } catch (JSONException e) {
             setResult(RESULT_CANCELED);
         }
 
-*/
+    }
+
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
     }
 
 

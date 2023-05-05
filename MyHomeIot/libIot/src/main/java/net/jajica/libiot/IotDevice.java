@@ -522,9 +522,9 @@ public abstract class IotDevice implements Serializable {
      * @param deviceId Es la identidad del dispositivo
      */
     public void setDeviceId(String deviceId) {
-        this.deviceId = deviceId;
-        setPublishTopic("/sub_" + deviceId);
-        setSubscriptionTopic("/pub_" + deviceId);
+        this.deviceId = deviceId.toUpperCase();
+        setPublishTopic("/sub_" + this.deviceId);
+        setSubscriptionTopic("/pub_" + this.deviceId);
     }
 
 
