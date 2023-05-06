@@ -16,7 +16,6 @@
         android:background="@drawable/round_corners_buttons"
         android:drawableStart="@drawable/ic_action_check"
         android:text="@string/add_home"
-        android:textColor="?colorOnPrimaryContainer"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:layout_editor_absoluteX="16dp"
         android:layout_gravity="end"
@@ -40,25 +39,28 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:background="?attr/colorSurface"
-    android:layout_marginTop="30dp">
+    android:layout_marginTop="10dp">
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/editAddHome"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:hint="@string/add_home"
         android:textColor="?colorOnPrimaryContainer"
-        android:layout_marginTop="10dp"
-        android:visibility="invisible"
-        android:layout_marginStart="50dp"/>
+        android:visibility="visible"
+        android:layout_marginStart="20dp"
+        android:background="@color/zxing_transparent"
+        android:layout_gravity="center_vertical"
+        android:gravity="center"
+        android:textSize="25sp"/>
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/buttonNewHome"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:drawableStart="@drawable/ic_action_check"
         android:text="@string/button_ok"
         android:background="@drawable/round_corners_buttons"
-        android:visibility="invisible"
+        android:visibility="visible"
         android:padding="10dp"
         android:paddingBottom="0dp"
         android:layout_marginStart="20dp">

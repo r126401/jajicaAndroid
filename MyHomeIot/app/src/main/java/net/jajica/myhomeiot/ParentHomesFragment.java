@@ -141,11 +141,17 @@ public ParentHomesFragment(IotUsersDevices configuration) {
 
         switch (v.getId()) {
             case (R.id.buttonAddHome):
+                DialogName dialog;
+                dialog = new DialogName(this.getContext());
+                dialog.show(getParentFragmentManager(), "hola");
+                /*
                 mbinding.editAddHome.setEnabled(true);
                 mbinding.editAddHome.setVisibility(View.VISIBLE);
                 mbinding.editAddHome.requestFocus();
                 showKeyboard(InputMethodManager.SHOW_FORCED);
                 mbinding.buttonNewHome.setVisibility(View.VISIBLE);
+
+                 */
                 break;
             case (R.id.buttonNewHome):
                 addSite();
