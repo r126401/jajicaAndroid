@@ -21,8 +21,28 @@ public class DialogName extends DialogFragment {
     DialogNameBinding mbinding;
 
     public DialogName(Context context) {
+
         this.context = context;
+        alertDialog = new AlertDialog.Builder(context);
+
     }
+
+
+
+    public void setParameterDialog(int icon, int title, int message) {
+
+        alertDialog.setIcon(icon);
+        alertDialog.setTitle(title);
+        alertDialog.setMessage(message);
+
+    }
+
+
+    public String getTextName() {
+
+        return mbinding.textIn.getText().toString();
+    }
+
 
 
 
@@ -33,10 +53,6 @@ public class DialogName extends DialogFragment {
         MyHomeIotTools tools;
         AlertDialog dialog;
         tools = new MyHomeIotTools(context);
-        alertDialog = new AlertDialog.Builder(context);
-        alertDialog.setIcon(R.drawable.ic_home_admin);
-        alertDialog.setTitle(getResources().getString(R.string.add_home));
-        alertDialog.setMessage("Escribe el nombre de la estancia que quieres añadir");
         setCancelable(false);
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         mbinding = DialogNameBinding.inflate(inflater);
@@ -44,23 +60,6 @@ public class DialogName extends DialogFragment {
         mbinding.textIn.requestFocus();
         mbinding.textIn.setHint(R.string.name_home);
         mbinding.textIn.setInputType(InputType.TYPE_CLASS_TEXT);
-
-
-
-
-        alertDialog.setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-        });
-
-        alertDialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-        });
         dialog = alertDialog.create();
         tools.showHideSoftKeyboard(mbinding.getRoot(), true);
         return dialog;

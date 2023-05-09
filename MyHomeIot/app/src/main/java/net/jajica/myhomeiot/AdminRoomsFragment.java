@@ -1,18 +1,19 @@
 package net.jajica.myhomeiot;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 
 import net.jajica.libiot.IOT_DEVICE_USERS_RESULT;
-import net.jajica.libiot.IOT_LABELS_JSON;
 import net.jajica.libiot.IotRoomsDevices;
 import net.jajica.libiot.IotSitesDevices;
 import net.jajica.libiot.IotUsersDevices;
@@ -30,6 +31,7 @@ public class AdminRoomsFragment extends Fragment  implements View.OnClickListene
     private ListRoomsAdapter adapter;
     private Context context;
     private IotUsersDevices configuration;
+    private final String TAG = "AdminRoomsFragment";
 
 
     public AdminRoomsFragment(IotUsersDevices configuration, String siteName) {
@@ -65,14 +67,13 @@ public class AdminRoomsFragment extends Fragment  implements View.OnClickListene
         int indexRoom;
         IotRoomsDevices room;
 
-        context = getActivity().getApplicationContext();
+        context = getActivity();
         indexSite = configuration.searchSiteOfUser(siteName);
         site = configuration.getSiteList().get(indexSite);
         mbinding.recyclerAdminRoom.setLayoutManager(new LinearLayoutManager(context));
         adapter = new ListRoomsAdapter(site.getRoomList(), site.getRoomList().get(0).getNameRoom(), context);
         mbinding.recyclerAdminRoom.setAdapter(adapter);
         mbinding.buttonAddRoom.setOnClickListener(this);
-        mbinding.buttonNewRoom.setOnClickListener(this);
         adapter.setOnRowSelectedData(this);
 
     }
@@ -82,25 +83,35 @@ public class AdminRoomsFragment extends Fragment  implements View.OnClickListene
 
         switch (v.getId()) {
             case (R.id.buttonAddRoom):
-                mbinding.editAddRoom.setEnabled(true);
-                mbinding.editAddRoom.setVisibility(View.VISIBLE);
-                mbinding.editAddRoom.requestFocus();
-                showKeyboard(InputMethodManager.SHOW_FORCED);
-                mbinding.buttonNewRoom.setVisibility(View.VISIBLE);
-                break;
-            case (R.id.buttonNewRoom):
-                addRoom();
+                DialogName window;
+                window = new DialogName(context);
+                window.setCancelable(false);
+                window.setParameterDialog(R.drawable.ic_action_add_room, R.string.add_room, R.string.error_message_uniq_home);
+                window.alertDialog.setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        addRoom(window.getTextName());
 
+                    }
+                });
+                window.alertDialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+
+                    }
+                });
+                window.show(getParentFragmentManager(), getResources().getString(R.string.add_room));
                 break;
         }
     }
 
-    private void addRoom() {
+    private void addRoom(String nameRoom) {
 
         IOT_DEVICE_USERS_RESULT result;
         IotRoomsDevices room;
         room = new IotRoomsDevices();
-        room.setNameRoom(mbinding.editAddRoom.getText().toString());
+        room.setNameRoom(nameRoom);
         room.setIdRoom(site.getRoomList().size()-1);
         result = site.insertRoomForSite(room);
         configuration.saveConfiguration(context);
@@ -108,10 +119,6 @@ public class AdminRoomsFragment extends Fragment  implements View.OnClickListene
 
     }
 
-    private void showKeyboard(int action) {
-        InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(getActivity().getApplicationContext().INPUT_METHOD_SERVICE);
-        inputMethodManager.toggleSoftInput(action, 0);
-    }
 
     @Override
     public void onRowSelectedData(String roomName, int position) {
@@ -135,6 +142,7 @@ public class AdminRoomsFragment extends Fragment  implements View.OnClickListene
 
     @Override
     public void onRowEditData(String rootName, int position) {
+        Log.i(TAG, "kk");
 
     }
 }

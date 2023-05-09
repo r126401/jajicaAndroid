@@ -73,7 +73,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnKeyLis
         Bundle bundle = intent.getExtras();
         configuration = (String )bundle.get(IOT_LABELS_JSON.CONFIGURE_APP.getValorTextoJson());
         if (configuration.equals("null")) {
-            mbinding.textSettings.setText(R.string.settingsNewAccount);
+            //mbinding.textSettings.setText(R.string.settingsNewAccount);
         } else {
             loadDataFromConfiguration(configuration);
 

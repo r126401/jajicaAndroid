@@ -55,7 +55,6 @@ public class AdminHomeFragment extends Fragment implements View.OnClickListener{
 
         mbinding = FragmentAdminHomeBinding.inflate(getLayoutInflater());
         rootView = mbinding.getRoot();
-        mbinding.buttonSaveSite.setOnClickListener(this);
         mbinding.imageEditNameHome.setOnClickListener(this);
         mbinding.imageEditAdress.setOnClickListener(this);
         mbinding.imageEditNumberAddress.setOnClickListener(this);
@@ -65,7 +64,7 @@ public class AdminHomeFragment extends Fragment implements View.OnClickListener{
         mbinding.imageEditCountry.setOnClickListener(this);
         mbinding.imageEditLatitude.setOnClickListener(this);
         mbinding.imageEditLongitude.setOnClickListener(this);
-        mbinding.buttonSaveSite.setOnClickListener(this);
+        mbinding.buttonSaveHome.setOnClickListener(this);
         mbinding.imageEditRooms.setOnClickListener(this);
         mbinding.editRooms.setOnClickListener(this);
         //currentSite = configuration.getCurrentSite();
@@ -92,6 +91,8 @@ public class AdminHomeFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onClick(View v) {
 
+        MyHomeIotTools tool;
+        tool = new MyHomeIotTools(getActivity().getApplicationContext());
         Bundle bundle;
         bundle = new Bundle();
         switch (v.getId()) {
@@ -105,7 +106,8 @@ public class AdminHomeFragment extends Fragment implements View.OnClickListener{
                 mbinding.editCountry.setEnabled(false);
                 mbinding.editLatitude.setEnabled(false);
                 mbinding.editLongitude.setEnabled(false);
-                showKeyboard(InputMethodManager.SHOW_FORCED);
+                //showKeyboard(InputMethodManager.SHOW_FORCED);
+                tool.showHideSoftKeyboard(mbinding.editNameHome, true);
                 mbinding.editNameHome.requestFocus();
 
                 break;
@@ -119,7 +121,8 @@ public class AdminHomeFragment extends Fragment implements View.OnClickListener{
                 mbinding.editCountry.setEnabled(false);
                 mbinding.editLatitude.setEnabled(false);
                 mbinding.editLongitude.setEnabled(false);
-                showKeyboard(InputMethodManager.SHOW_FORCED);
+                //showKeyboard(InputMethodManager.SHOW_FORCED);
+                tool.showHideSoftKeyboard(mbinding.editAdress, true);
                 mbinding.editAdress.requestFocus();
                 break;
             case (R.id.imageEditNumberAddress):
@@ -132,8 +135,9 @@ public class AdminHomeFragment extends Fragment implements View.OnClickListener{
                 mbinding.editCountry.setEnabled(false);
                 mbinding.editLatitude.setEnabled(false);
                 mbinding.editLongitude.setEnabled(false);
-                showKeyboard(InputMethodManager.SHOW_FORCED);
+                //showKeyboard(InputMethodManager.SHOW_FORCED);
                 mbinding.editNumberAddress.requestFocus();
+                tool.showHideSoftKeyboard(mbinding.editNumberAddress, true);
                 break;
             case (R.id.imageEditCP):
                 mbinding.editNameHome.setEnabled(false);
@@ -145,8 +149,9 @@ public class AdminHomeFragment extends Fragment implements View.OnClickListener{
                 mbinding.editCountry.setEnabled(false);
                 mbinding.editLatitude.setEnabled(false);
                 mbinding.editLongitude.setEnabled(false);
-                showKeyboard(InputMethodManager.SHOW_FORCED);
+                //showKeyboard(InputMethodManager.SHOW_FORCED);
                 mbinding.editCP.requestFocus();
+                tool.showHideSoftKeyboard(mbinding.editCP, true);
                 break;
             case (R.id.imageEditCity):
                 mbinding.editNameHome.setEnabled(false);
@@ -158,8 +163,9 @@ public class AdminHomeFragment extends Fragment implements View.OnClickListener{
                 mbinding.editCountry.setEnabled(false);
                 mbinding.editLatitude.setEnabled(false);
                 mbinding.editLongitude.setEnabled(false);
-                showKeyboard(InputMethodManager.SHOW_FORCED);
+                //showKeyboard(InputMethodManager.SHOW_FORCED);
                 mbinding.editCity.requestFocus();
+                tool.showHideSoftKeyboard(mbinding.editCity, true);
                 break;
             case (R.id.imageEditProvince):
                 mbinding.editNameHome.setEnabled(false);
@@ -171,8 +177,9 @@ public class AdminHomeFragment extends Fragment implements View.OnClickListener{
                 mbinding.editCountry.setEnabled(false);
                 mbinding.editLatitude.setEnabled(false);
                 mbinding.editLongitude.setEnabled(false);
-                showKeyboard(InputMethodManager.SHOW_FORCED);
+                //showKeyboard(InputMethodManager.SHOW_FORCED);
                 mbinding.editProvince.requestFocus();
+                tool.showHideSoftKeyboard(mbinding.editProvince, true);
                 break;
             case (R.id.imageEditCountry):
                 mbinding.editNameHome.setEnabled(false);
@@ -184,8 +191,9 @@ public class AdminHomeFragment extends Fragment implements View.OnClickListener{
                 mbinding.editCountry.setEnabled(true);
                 mbinding.editLatitude.setEnabled(false);
                 mbinding.editLongitude.setEnabled(false);
-                showKeyboard(InputMethodManager.SHOW_FORCED);
+                //showKeyboard(InputMethodManager.SHOW_FORCED);
                 mbinding.editCountry.requestFocus();
+                tool.showHideSoftKeyboard(mbinding.editCountry, true);
                 break;
             case (R.id.imageEditLatitude):
                 mbinding.editNameHome.setEnabled(false);
@@ -197,8 +205,9 @@ public class AdminHomeFragment extends Fragment implements View.OnClickListener{
                 mbinding.editCountry.setEnabled(false);
                 mbinding.editLatitude.setEnabled(true);
                 mbinding.editLongitude.setEnabled(false);
-                showKeyboard(InputMethodManager.SHOW_FORCED);
+                //showKeyboard(InputMethodManager.SHOW_FORCED);
                 mbinding.editLatitude.requestFocus();
+                tool.showHideSoftKeyboard(mbinding.editLatitude, true);
                 break;
             case (R.id.imageEditLongitude):
                 mbinding.editNameHome.setEnabled(false);
@@ -210,10 +219,12 @@ public class AdminHomeFragment extends Fragment implements View.OnClickListener{
                 mbinding.editCountry.setEnabled(false);
                 mbinding.editLatitude.setEnabled(false);
                 mbinding.editLongitude.setEnabled(true);
-                showKeyboard(InputMethodManager.SHOW_FORCED);
+                //showKeyboard(InputMethodManager.SHOW_FORCED);
                 mbinding.editLongitude.requestFocus();
+                tool.showHideSoftKeyboard(mbinding.editLongitude, true);
                 break;
-            case (R.id.buttonSaveSite):
+            //case (R.id.buttonSaveSite):
+            case (R.id.buttonSaveHome):
                 Fragment fragment;
                 fragment = new ParentHomesFragment();
 
@@ -284,6 +295,7 @@ public class AdminHomeFragment extends Fragment implements View.OnClickListener{
             mbinding.editCountry.setText(site.getCountry());
             mbinding.editLatitude.setText(String.valueOf(site.getLatitude()));
             mbinding.editLongitude.setText(String.valueOf(site.getLongitude()));
+            mbinding.editProvince.setText(site.getProvince());
 
         }
     }

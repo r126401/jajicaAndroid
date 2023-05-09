@@ -88,5 +88,11 @@
         <item name="android:textSize">15sp</item>
 
     </style>
+
+    <style name="floattingButton" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">0dp</item>
+        <item name="cornerSizeTopLeft">50%</item>
+    </style>
     
 </resources>

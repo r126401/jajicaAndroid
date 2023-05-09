@@ -1,6 +1,9 @@
 package net.jajica.myhomeiot;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Typeface;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -8,8 +11,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.jajica.libiot.IotRoomsDevices;
@@ -27,6 +33,7 @@ public class ListRoomsAdapter extends RecyclerView.Adapter<ListRoomsAdapter.List
     public ListRoomsAdapter(ArrayList<IotRoomsDevices> roomsList, String currentRoom, Context context) {
         this.roomsList = roomsList;
         this.context = context;
+
     }
 
     public interface OnRowSelectedData {
@@ -74,14 +81,34 @@ public class ListRoomsAdapter extends RecyclerView.Adapter<ListRoomsAdapter.List
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ListRoomsAdapter.ListRoomsAdapterViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ListRoomsAdapter.ListRoomsAdapterViewHolder holder, @SuppressLint("RecyclerView") int position) {
 
         holder.imageEdit.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
-                String data = holder.editText.getText().toString();
-                onRowSelectedData.onRowEditData(data, position);
-                Log.i(TAG, "hh");
+                FragmentManager fragmentManager = ((AppCompatActivity)context).getSupportFragmentManager();
+                DialogName window;
+                String newRoom;
+                window = new DialogName(getContext());
+                window.setParameterDialog(R.drawable.ic_home_admin, R.string.modify_name_room, R.string.modify_name_room_text);
+
+                window.show(fragmentManager, "kk");
+                window.alertDialog.setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        onRowSelectedData.onRowEditData(window.getTextName(), position);
+
+                    }
+                });
+                window.alertDialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+
             }
         });
         holder.imageDelete.setOnClickListener(new View.OnClickListener() {

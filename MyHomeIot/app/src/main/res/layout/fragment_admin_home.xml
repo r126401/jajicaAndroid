@@ -1,352 +1,267 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".AdminHomeFragment">
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".AdminHomeFragment"
+    android:background="?attr/colorSurface"
+    android:orientation="vertical">
 
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/buttonSaveHome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/add_room"
+        app:fabSize="normal"
+        android:layout_gravity="right"
+        android:tint="@color/colorAccent"
+        android:src="@drawable/ic_action_save"
+        app:backgroundTint="?attr/colorPrimaryContainer"
+        android:layout_margin="5dp"/>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="?colorPrimaryContainer"
-        android:padding="16dp"
-        android:orientation="vertical">
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/textMessageAdminHomes"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/text_messages_admin_home">
-
-        </androidx.appcompat.widget.AppCompatTextView>
-
-        <GridLayout
-            android:id="@+id/gridLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:columnCount="3"
-            android:rowCount="10">
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/imageNameHome"
-                android:layout_width="wrap_content"
+            <GridLayout
+                android:id="@+id/gridLayout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_action_user">
-
-            </androidx.appcompat.widget.AppCompatImageView>
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editNameHome"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:enabled="false"
-                android:hint="@string/name_home"
-                android:maxLength="15"
-                android:maxLines="1"
-                android:singleLine="true"
-                android:textColor="?colorOnPrimaryContainer">
-
-            </com.google.android.material.textfield.TextInputEditText>
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/imageEditNameHome"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:src="@drawable/ic_action_edit">
-
-            </androidx.appcompat.widget.AppCompatImageView>
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_action_address">
-
-            </androidx.appcompat.widget.AppCompatImageView>
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editAdress"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:enabled="false"
-                android:hint="@string/street_home"
-                android:maxLength="50"
-                android:textColor="?colorOnPrimaryContainer">
-
-            </com.google.android.material.textfield.TextInputEditText>
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/imageEditAdress"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:src="@drawable/ic_action_edit">
-
-            </androidx.appcompat.widget.AppCompatImageView>
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_action_number_address">
-
-            </androidx.appcompat.widget.AppCompatImageView>
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editNumberAddress"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:enabled="false"
-                android:hint="@string/street_number"
-                android:maxLength="9"
-                android:maxLines="1"
-                android:textColor="?colorOnPrimaryContainer"
-                android:inputType="number"
-                android:text="0">
-
-            </com.google.android.material.textfield.TextInputEditText>
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/imageEditNumberAddress"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:src="@drawable/ic_action_edit">
-
-            </androidx.appcompat.widget.AppCompatImageView>
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_action_cp">
-
-            </androidx.appcompat.widget.AppCompatImageView>
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editCP"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:enabled="false"
-                android:hint="@string/district_postal"
-                android:inputType="number"
-                android:maxLines="1"
-                android:text="0">
-
-            </com.google.android.material.textfield.TextInputEditText>
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/imageEditCP"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:src="@drawable/ic_action_edit"
-                android:textColor="?colorOnPrimaryContainer">
-
-            </androidx.appcompat.widget.AppCompatImageView>
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_action_city">
-
-            </androidx.appcompat.widget.AppCompatImageView>
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editCity"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:enabled="false"
-                android:hint="@string/city"
-                android:inputType="text"
-                android:maxLines="15">
-
-            </com.google.android.material.textfield.TextInputEditText>
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/imageEditCity"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:src="@drawable/ic_action_edit"
-                android:textColor="?colorOnPrimaryContainer">
-
-            </androidx.appcompat.widget.AppCompatImageView>
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/imageProvince"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_action_province">
-
-            </androidx.appcompat.widget.AppCompatImageView>
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editProvince"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:enabled="false"
-                android:hint="@string/province"
-                android:inputType="text"
-                android:maxLines="15">
-
-            </com.google.android.material.textfield.TextInputEditText>
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/imageEditProvince"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:src="@drawable/ic_action_edit"
-                android:textColor="?colorOnPrimaryContainer">
-
-            </androidx.appcompat.widget.AppCompatImageView>
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/imageCountry"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_action_country"
-                android:textColor="?colorOnPrimaryContainer">
-
-            </androidx.appcompat.widget.AppCompatImageView>
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editCountry"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:enabled="false"
-                android:hint="@string/country"
-                android:inputType="text"
-                android:maxLines="15">
-
-            </com.google.android.material.textfield.TextInputEditText>
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/imageEditCountry"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:src="@drawable/ic_action_edit"
-                android:textColor="?colorOnPrimaryContainer">
-
-            </androidx.appcompat.widget.AppCompatImageView>
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/imageLongitude"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_action_ubication"
-                android:textColor="?colorOnPrimaryContainer">
-
-            </androidx.appcompat.widget.AppCompatImageView>
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editLongitude"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:enabled="false"
-                android:hint="@string/longitude"
-                android:maxLines="15"
-                android:inputType="numberDecimal"
-                android:text="0">
-
-            </com.google.android.material.textfield.TextInputEditText>
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/imageEditLongitude"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:src="@drawable/ic_action_edit"
-                android:textColor="?colorOnPrimaryContainer">
-
-            </androidx.appcompat.widget.AppCompatImageView>
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/imageLatitude"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_action_ubication"
-                android:textColor="?colorOnPrimaryContainer"/>
-
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editLatitude"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:enabled="false"
-                android:hint="@string/latitude"
-                android:maxLines="15"
-                android:inputType="numberDecimal"
-                android:text="0"/>
-
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/imageEditLatitude"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:src="@drawable/ic_action_edit"
-                android:textColor="?colorOnPrimaryContainer"/>
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/imageRooms"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_home_admin"
-                android:textColor="?colorOnPrimaryContainer"/>
-
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editRooms"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:enabled="false"
-                android:hint="@string/latitude"
-                android:maxLines="15"
-                android:text="@string/edit_rooms"/>
-
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/imageEditRooms"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:src="@drawable/ic_right_arrow"
-                android:textColor="?colorOnPrimaryContainer" />
-
-
-
-
-
-        </GridLayout>
-
-
-
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/buttonSaveSite"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?colorSecondaryContainer"
-            android:text="@string/settingsSave"
-            android:textColor="?colorOnPrimaryContainer">
-
-        </androidx.appcompat.widget.AppCompatButton>
+                android:columnCount="2"
+                android:rowCount="10">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/editRooms"
+                    android:layout_width="320dp"
+                    android:layout_height="wrap_content"
+                    android:enabled="true"
+                    android:hint="@string/edit_rooms"
+                    android:maxLines="15"
+                    android:drawableStart="@drawable/ic_home_admin"
+                    android:drawablePadding="10dp"
+                    android:layout_gravity="top"
+                    android:textSize="18sp"/>
+
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/imageEditRooms"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="end"
+                    android:src="@drawable/ic_right_arrow"/>
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editNameHome"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:hint="@string/name_home"
+                    android:maxLength="15"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:drawableStart="@drawable/ic_action_user"
+                    android:layout_gravity="top"
+                    android:drawablePadding="10dp">
+
+                </com.google.android.material.textfield.TextInputEditText>
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/imageEditNameHome"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:src="@drawable/ic_action_edit">
+                </androidx.appcompat.widget.AppCompatImageView>
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editAdress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:hint="@string/street_home"
+                    android:maxLength="50"
+                    android:drawableStart="@drawable/ic_action_address"
+                    android:layout_gravity="top"
+                    android:drawablePadding="10dp">
+
+                </com.google.android.material.textfield.TextInputEditText>
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/imageEditAdress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:src="@drawable/ic_action_edit">
+
+                </androidx.appcompat.widget.AppCompatImageView>
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editNumberAddress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:hint="@string/street_number"
+                    android:maxLength="9"
+                    android:maxLines="1"
+                    android:inputType="number"
+                    android:drawableStart="@drawable/ic_action_number_address"
+                    android:layout_gravity="top"
+                    android:drawablePadding="10dp">
+                </com.google.android.material.textfield.TextInputEditText>
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/imageEditNumberAddress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:src="@drawable/ic_action_edit">
+                </androidx.appcompat.widget.AppCompatImageView>
+
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editCP"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:hint="@string/district_postal"
+                    android:inputType="number"
+                    android:maxLines="1"
+                    android:layout_gravity="top"
+                    android:drawableStart="@drawable/ic_action_cp"
+                    android:drawablePadding="10dp">
+
+                </com.google.android.material.textfield.TextInputEditText>
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/imageEditCP"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:src="@drawable/ic_action_edit"/>
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editCity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:hint="@string/city"
+                    android:inputType="text"
+                    android:maxLines="15"
+                    android:drawableStart="@drawable/ic_action_city"
+                    android:drawablePadding="10dp"
+                    android:layout_gravity="top">
+
+                </com.google.android.material.textfield.TextInputEditText>
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/imageEditCity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:src="@drawable/ic_action_edit">
+
+                </androidx.appcompat.widget.AppCompatImageView>
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editProvince"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:enabled="true"
+                    android:hint="@string/province"
+                    android:inputType="text"
+                    android:maxLines="15"
+                    android:drawableStart="@drawable/ic_action_province"
+                    android:drawablePadding="10dp"
+                    android:layout_gravity="top">
+
+                </com.google.android.material.textfield.TextInputEditText>
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/imageEditProvince"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:src="@drawable/ic_action_edit">
+
+                </androidx.appcompat.widget.AppCompatImageView>
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editCountry"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:hint="@string/country"
+                    android:inputType="text"
+                    android:maxLines="15"
+                    android:drawableStart="@drawable/ic_action_country"
+                    android:drawablePadding="10dp"
+                    android:layout_gravity="top">
+
+                </com.google.android.material.textfield.TextInputEditText>
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/imageEditCountry"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:src="@drawable/ic_action_edit">
+
+                </androidx.appcompat.widget.AppCompatImageView>
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editLongitude"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:hint="@string/longitude"
+                    android:maxLines="15"
+                    android:inputType="numberDecimal"
+                    android:drawableStart="@drawable/ic_action_ubication"
+                    android:drawablePadding="10dp"
+                    android:layout_gravity="top">
+
+                </com.google.android.material.textfield.TextInputEditText>
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/imageEditLongitude"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:src="@drawable/ic_action_edit">
+                </androidx.appcompat.widget.AppCompatImageView>
+
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editLatitude"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:hint="@string/latitude"
+                    android:maxLines="15"
+                    android:inputType="numberDecimal"
+                    android:drawableStart="@drawable/ic_action_ubication"
+                    android:drawablePadding="10dp"
+                    android:layout_gravity="top"/>
+
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/imageEditLatitude"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:src="@drawable/ic_action_edit" />
+
+
+
+            </GridLayout>
+
+
+
+
+
 
     </LinearLayout>
 
 
-</FrameLayout>
+
+
+
+

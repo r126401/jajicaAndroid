@@ -122,4 +122,9 @@
     <string name="unsucessfull">Operación realizada sin éxito</string>
     <string name="local">local</string>
     <string name="remote">remoto</string>
+    <string name="item_devicetabs">item_deviceTabs</string>
+    <string name="add_home_text">Escribe el nombre de la casa que quieres añadir</string>
+    <string name="modify_name_room">Modificar el nombre de la habitación</string>
+    <string name="modify_name_room_text">Introduce el nuevo nombre de la habitación</string>
+
 </resources>

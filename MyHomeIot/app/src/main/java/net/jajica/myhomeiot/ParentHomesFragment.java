@@ -80,7 +80,6 @@ public ParentHomesFragment(IotUsersDevices configuration) {
         listSites = configuration.getSiteList();
         //Llenamos el fragment con los sites que leemos desde la configuracion
         mbinding.buttonAddHome.setOnClickListener(this);
-        mbinding.buttonNewHome.setOnClickListener(this);
         mbinding.recyclerAdminHomes2.setLayoutManager(new LinearLayoutManager(context));
         adapter = new ListHomesAdapter(currentSite, listSites, getActivity().getApplicationContext());
         mbinding.recyclerAdminHomes2.setAdapter(adapter);
@@ -141,9 +140,24 @@ public ParentHomesFragment(IotUsersDevices configuration) {
 
         switch (v.getId()) {
             case (R.id.buttonAddHome):
-                DialogName dialog;
-                dialog = new DialogName(this.getContext());
-                dialog.show(getParentFragmentManager(), "hola");
+                DialogName window;
+                window = new DialogName(this.getContext());
+                window.setCancelable(false);
+                window.setParameterDialog(R.drawable.ic_home_admin, R.string.add_home, R.string.add_home_text);
+                window.alertDialog.setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        addSite(window.getTextName());
+
+                    }
+                });
+                window.alertDialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+                window.show(getParentFragmentManager(), "hola");
                 /*
                 mbinding.editAddHome.setEnabled(true);
                 mbinding.editAddHome.setVisibility(View.VISIBLE);
@@ -153,10 +167,7 @@ public ParentHomesFragment(IotUsersDevices configuration) {
 
                  */
                 break;
-            case (R.id.buttonNewHome):
-                addSite();
 
-                break;
         }
 
     }
@@ -166,13 +177,11 @@ public ParentHomesFragment(IotUsersDevices configuration) {
         inputMethodManager.toggleSoftInput(action, 0);
     }
 
-    private IOT_DEVICE_USERS_RESULT addSite() {
+    private IOT_DEVICE_USERS_RESULT addSite(String siteName) {
         IotSitesDevices site;
         IotRoomsDevices room;
-        String siteName;
         IOT_DEVICE_USERS_RESULT result;
         site = new IotSitesDevices();
-        siteName = mbinding.editAddHome.getText().toString();
         site.setSiteName(siteName);
         room = new IotRoomsDevices();
         room.setNameRoom(getActivity().getResources().getString(R.string.default_room));
@@ -185,12 +194,11 @@ public ParentHomesFragment(IotUsersDevices configuration) {
             configuration.saveConfiguration(getActivity().getApplicationContext());
             adapter.notifyItemInserted(listSites.size());
             adapter.notifyItemChanged(0);
-            mbinding.editAddHome.setVisibility(View.INVISIBLE);
-            mbinding.buttonNewHome.setVisibility(View.INVISIBLE);
             return IOT_DEVICE_USERS_RESULT.RESULT_OK;
         }
 
         return IOT_DEVICE_USERS_RESULT.RESULT_NOK;
+
 
     }
 
@@ -218,8 +226,8 @@ public ParentHomesFragment(IotUsersDevices configuration) {
             builder.setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    listSites.remove(position);
-                    configuration.deleteSiteForUser(siteName, true);
+                    IOT_DEVICE_USERS_RESULT a = configuration.deleteSiteForUser(siteName, true);
+                    //listSites.remove(position);
                     //configuration.saveConfiguration(getActivity().getApplicationContext());
                     adapter.notifyItemRemoved(position);
                     if (listSites.size()== 1) adapter.notifyItemChanged(0);

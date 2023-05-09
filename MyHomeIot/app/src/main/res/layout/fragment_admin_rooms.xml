@@ -8,19 +8,19 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <androidx.appcompat.widget.AppCompatButton
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/buttonAddRoom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="?colorSecondaryContainer"
-        android:drawableStart="@drawable/ic_action_check"
-        android:text="@string/add_room"
-        android:textColor="?colorOnPrimaryContainer"
-        app:layout_constraintBottom_toBottomOf="parent"
-        tools:layout_editor_absoluteX="16dp"
-        android:layout_gravity="end">
+        android:contentDescription="@string/add_room"
+        app:fabSize="normal"
+        android:layout_gravity="right"
+        android:tint="@color/colorAccent"
+        android:src="@drawable/ic_action_save"
+        app:backgroundTint="?attr/colorPrimaryContainer"
+        android:layout_margin="5dp">
 
-    </androidx.appcompat.widget.AppCompatButton>
+    </com.google.android.material.floatingactionbutton.FloatingActionButton>
 
     <androidx.recyclerview.widget.RecyclerView
 
@@ -31,32 +31,7 @@
 
     </androidx.recyclerview.widget.RecyclerView>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editAddRoom"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="@string/add_room"
-            android:textColor="?colorOnPrimaryContainer"
-            android:layout_marginTop="10dp"
-            android:visibility="invisible"/>
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/buttonNewRoom"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawableStart="@drawable/ic_action_check"
-            android:text="@string/button_ok"
-            android:background="?colorSecondaryContainer"
-            android:visibility="invisible">
-
-        </androidx.appcompat.widget.AppCompatButton>
-
-
-    </LinearLayout>
 
 
 

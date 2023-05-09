@@ -124,6 +124,10 @@
     <string name="unsucessfull">Unsucessfull</string>
     <string name="local">local</string>
     <string name="remote">remote</string>
+    <string name="item_devicetabs">item_deviceTabs</string>
+    <string name="add_home_text">Write name home to add</string>
+    <string name="modify_name_room">Modify name room</string>
+    <string name="modify_name_room_text">Write the new name of room</string>
 
 
 </resources>

@@ -235,6 +235,7 @@ public class IotUsersDevices implements Serializable {
         if (siteList.get(i).roomList != null) {
             if(siteList.get(i).roomList.size() > 0) {
                 if (mandatory) siteList.remove(i);
+                saveConfiguration(context);
                 return IOT_DEVICE_USERS_RESULT.SITE_WITH_ROOMS;
             }
         }
