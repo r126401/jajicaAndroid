@@ -16,7 +16,7 @@
         app:fabSize="normal"
         android:layout_gravity="right"
         android:tint="@color/colorAccent"
-        android:src="@drawable/ic_action_save"
+        android:src="@drawable/ic_action_add_room"
         app:backgroundTint="?attr/colorPrimaryContainer"
         android:layout_margin="5dp">
 

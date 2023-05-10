@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 
 import net.jajica.libiot.IOT_DEVICE_USERS_RESULT;
+import net.jajica.libiot.IOT_OPERATION_CONFIGURATION_DEVICES;
 import net.jajica.libiot.IotRoomsDevices;
 import net.jajica.libiot.IotSitesDevices;
 import net.jajica.libiot.IotUsersDevices;
@@ -134,6 +135,13 @@ public class AdminRoomsFragment extends Fragment  implements View.OnClickListene
     private void deleteRoom(String rootName, int position) {
 
 
+        if (adapter.getItemCount() == 1) {
+             Log.w(TAG, "No se puede eliminar la ultima room");
+            MyHomeIotTools tool;
+            tool = new MyHomeIotTools(context);
+            tool.notifyError(R.drawable.ic_action_error, R.string.error, R.string.error_message_uniq_room, getParentFragmentManager());
+             return;
+        }
         site.deleteRoomForSite(rootName, false);
         adapter.notifyItemRemoved(position);
         configuration.saveConfiguration(context);
@@ -141,8 +149,29 @@ public class AdminRoomsFragment extends Fragment  implements View.OnClickListene
     }
 
     @Override
-    public void onRowEditData(String rootName, int position) {
-        Log.i(TAG, "kk");
+    public Boolean onRowEditData(String oldNameRoom, String newNameRoom, int position) {
+        return modifyRoomName(oldNameRoom,  newNameRoom, position);
 
     }
+
+    private Boolean modifyRoomName(String oldNameRoom, String newNameRoom, int position) {
+
+        IotRoomsDevices room;
+        Log.w(TAG, oldNameRoom + " ------------- " + newNameRoom);
+        room = site.searchRoomObject(oldNameRoom);
+        if (room != null) {
+            room.setNameRoom(newNameRoom);
+            if (configuration.saveConfiguration(context) == IOT_OPERATION_CONFIGURATION_DEVICES.OK_CONFIGURATION) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
+
+
+
 }

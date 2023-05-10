@@ -39,7 +39,7 @@ public class ListRoomsAdapter extends RecyclerView.Adapter<ListRoomsAdapter.List
     public interface OnRowSelectedData {
         void onRowSelectedData(String roomName, int position);
         void onDeleteData(String rootName, int position);
-        void onRowEditData(String rootName, int position);
+        Boolean onRowEditData(String oldNameRoom, String newNameRoom,int position);
     }
     private ListRoomsAdapter.OnRowSelectedData onRowSelectedData;
 
@@ -89,16 +89,27 @@ public class ListRoomsAdapter extends RecyclerView.Adapter<ListRoomsAdapter.List
             public void onClick(View v) {
                 FragmentManager fragmentManager = ((AppCompatActivity)context).getSupportFragmentManager();
                 DialogName window;
-                String newRoom;
-                window = new DialogName(getContext());
+                String oldRoom;
+                oldRoom = holder.editText.getText().toString();
+                window = new DialogName(context);
                 window.setParameterDialog(R.drawable.ic_home_admin, R.string.modify_name_room, R.string.modify_name_room_text);
 
-                window.show(fragmentManager, "kk");
+                window.show(fragmentManager, "dasfadshadskfdsf");
                 window.alertDialog.setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        String newRoom;
 
-                        onRowSelectedData.onRowEditData(window.getTextName(), position);
+                        newRoom = window.getTextName();
+
+                        if (onRowSelectedData.onRowEditData(oldRoom, newRoom, position)) {
+                            window.mbinding.textIn.setText(newRoom);
+                            notifyItemChanged(position);
+
+                        } else {
+                            Log.e(TAG, "Error al cambiar el nombre de la room");
+
+                        }
 
                     }
                 });
@@ -161,6 +172,7 @@ public class ListRoomsAdapter extends RecyclerView.Adapter<ListRoomsAdapter.List
         @Override
         public void onClick(View v) {
 
+            /*
             int position = -1;
             String siteName;
             if (onRowSelectedData != null) {
@@ -187,13 +199,21 @@ public class ListRoomsAdapter extends RecyclerView.Adapter<ListRoomsAdapter.List
                     break;
                 case (R.id.imageEditItem):
                     siteName = editText.getText().toString();
-                    if (position >= 0) onRowSelectedData.onRowEditData(siteName, position);
+                    //if (position >= 0) onRowSelectedData.onRowEditData(siteName, "pp", position);
                     break;
 
                 default:
                     Log.i(TAG, "kk");
             }
 
+
+
+             */
+
         }
+
+
+
+
     }
 }

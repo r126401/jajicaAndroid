@@ -129,6 +129,7 @@
     <string name="add_home_text">Escribe el nombre de la casa que quieres añadir</string>
     <string name="modify_name_room">Modificar el nombre de la habitación</string>
     <string name="modify_name_room_text">Introduce el nuevo nombre de la habitación</string>
+    <string name="error_message_uniq_room">Error!, no se puede borrar la última habitación</string>
 
 
 </resources>

@@ -3,10 +3,10 @@ package net.jajica.myhomeiot;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.LayoutInflater;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,12 +20,25 @@ public class DialogName extends DialogFragment {
     AlertDialog.Builder alertDialog;
     DialogNameBinding mbinding;
 
+    Boolean showEditText;
+
+    public Boolean getShowEditText() {
+        return showEditText;
+    }
+
+    public void setShowEditText(Boolean showEditText) {
+        this.showEditText = showEditText;
+    }
+
     public DialogName(Context context) {
 
         this.context = context;
         alertDialog = new AlertDialog.Builder(context);
+        setShowEditText(true);
 
     }
+
+
 
 
 
@@ -57,11 +70,17 @@ public class DialogName extends DialogFragment {
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         mbinding = DialogNameBinding.inflate(inflater);
         alertDialog.setView(mbinding.getRoot());
-        mbinding.textIn.requestFocus();
-        mbinding.textIn.setHint(R.string.name_home);
-        mbinding.textIn.setInputType(InputType.TYPE_CLASS_TEXT);
+        if (showEditText) {
+            mbinding.textIn.requestFocus();
+            mbinding.textIn.setHint(R.string.name_home);
+            mbinding.textIn.setInputType(InputType.TYPE_CLASS_TEXT);
+            tools.showHideSoftKeyboard(mbinding.getRoot(), true);
+        } else {
+            mbinding.textIn.setVisibility(View.INVISIBLE);
+        }
+
         dialog = alertDialog.create();
-        tools.showHideSoftKeyboard(mbinding.getRoot(), true);
+
         return dialog;
 
     }

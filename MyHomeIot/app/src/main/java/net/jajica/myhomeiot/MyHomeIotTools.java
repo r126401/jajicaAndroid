@@ -2,6 +2,7 @@ package net.jajica.myhomeiot;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -334,6 +335,25 @@ public class MyHomeIotTools {
             imm.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
 
         }
+    }
+
+    public void notifyError(int icon, int title, int message, FragmentManager fragmentManager) {
+
+        DialogName window;
+        window = new DialogName(context);
+        window.setParameterDialog(icon, title, message);
+        window.setShowEditText(false);
+        window.show(fragmentManager, "Error!");
+        window.setCancelable(true);
+        window.alertDialog.setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
+
+
     }
 
 
