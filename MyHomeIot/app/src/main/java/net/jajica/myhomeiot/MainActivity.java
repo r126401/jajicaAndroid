@@ -121,7 +121,6 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         setToolbar();
         binding.bottomNavigationMenu.setOnItemSelectedListener(this);
         binding.textHome.setOnClickListener(this);
-        binding.buttonViewGrid.setOnClickListener(this);
         binding.imageMoveDevice.setOnClickListener(this);
         binding.imageMoveDevice.setTag(false);
 
@@ -521,6 +520,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
             case (R.id.textHome):
                 launchHomesActivity();
                 break;
+                /*
             case (R.id.buttonViewGrid):
                 FragmentDevices fragmentDevices;
                 fragmentDevices = identifyActiveFragment();
@@ -532,6 +532,8 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                     fragmentDevices.getGrid().setSpanCount(1);
                 }
                 break;
+
+                 */
             case (R.id.imageMoveDevice):
                 pasteDevice();
 

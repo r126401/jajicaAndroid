@@ -120,6 +120,7 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         if (onAdapterOperationDeviceListener != null) {
                             onAdapterOperationDeviceListener.onAdapterOperationDeviceListener(FragmentDevices.OPERATION_DEVICE.CUT_DEVICE,
                                     deviceList.get(position), deviceList.get(position).getDeviceType(), position);
+                            showCuttingModeUnknown(holderUnknown, position, true);
                         }
                         Log.i(TAG, "kk");
                         return true;
@@ -138,19 +139,26 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         int position = holderSwitch.getLayoutPosition();
                         if (onSelectedDeviceListener != null) {
                             onSelectedDeviceListener.onSelectedDevice(deviceList.get(position));
+
                         }
                         Log.i(TAG, "iii");
                     }
                 });
                 view.setOnLongClickListener(new View.OnLongClickListener() {
+
                     @Override
                     public boolean onLongClick(View v) {
                         int position = holderSwitch.getLayoutPosition();
+
                         if (onAdapterOperationDeviceListener != null) {
                             onAdapterOperationDeviceListener.onAdapterOperationDeviceListener(FragmentDevices.OPERATION_DEVICE.CUT_DEVICE,
                                     deviceList.get(position), deviceList.get(position).getDeviceType(), position);
-                        }
+                            View itemView = holderSwitch.itemView;
+                            holderSwitch.imageSwitch.setImageResource(R.drawable.ic_action_cut);
+                            showCuttingModeSwitch(holderSwitch, position, true);
+                            }
                         Log.i(TAG, "kk");
+                        notifyItemChanged(position);
                         return true;
                     }
                 });
@@ -165,6 +173,7 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         int position = holderThermometer.getLayoutPosition();
                         if (onSelectedDeviceListener != null) {
                             onSelectedDeviceListener.onSelectedDevice(deviceList.get(position));
+
                         }
                         Log.i(TAG, "iii");
                     }
@@ -176,6 +185,7 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         if (onAdapterOperationDeviceListener != null) {
                             onAdapterOperationDeviceListener.onAdapterOperationDeviceListener(FragmentDevices.OPERATION_DEVICE.CUT_DEVICE,
                                     deviceList.get(position), deviceList.get(position).getDeviceType(), position);
+                            showCuttingModeThermometer(holderThermometer, position, true);
                         }
                         Log.i(TAG, "kk");
                         return true;
@@ -205,6 +215,7 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         if (onAdapterOperationDeviceListener != null) {
                             onAdapterOperationDeviceListener.onAdapterOperationDeviceListener(FragmentDevices.OPERATION_DEVICE.CUT_DEVICE,
                                     deviceList.get(position), deviceList.get(position).getDeviceType(), position);
+                            showCuttingModeThermostat(holderThermostat, position, true);
                         }
                         Log.i(TAG, "kk");
                         return true;
@@ -222,6 +233,58 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     }
 
+    private void showCuttingModeThermostat(IotDeviceThermostatAdapterViewHolder holderThermostat, int position, boolean b) {
+
+     if (b) {
+         holderThermostat.textThresholdThermostat.setVisibility(View.INVISIBLE);
+         holderThermostat.textTemperatureThermostat.setVisibility(View.INVISIBLE);
+         holderThermostat.imageHeating.setVisibility(View.INVISIBLE);
+         holderThermostat.imageCut.setVisibility(View.VISIBLE);
+     } else {
+         holderThermostat.textThresholdThermostat.setVisibility(View.VISIBLE);
+         holderThermostat.textTemperatureThermostat.setVisibility(View.VISIBLE);
+         holderThermostat.imageHeating.setVisibility(View.VISIBLE);
+         holderThermostat.imageCut.setVisibility(View.INVISIBLE);
+     }
+
+    }
+
+    private void showCuttingModeThermometer(IotDeviceThermometerAdapterViewHolder holderThermometer, int position, boolean b) {
+
+     if (b) {
+         holderThermometer.textTemperatureThermometer.setVisibility(View.INVISIBLE);
+         holderThermometer.imageCut.setVisibility(View.VISIBLE);
+     } else {
+         holderThermometer.textTemperatureThermometer.setVisibility(View.VISIBLE);
+         holderThermometer.imageCut.setVisibility(View.INVISIBLE);
+     }
+    }
+
+    private void showCuttingModeSwitch(IotDeviceSwitchAdapterViewHolder holderSwitch, int position, boolean b) {
+
+     if (b) {
+         holderSwitch.imageSwitch.setVisibility(View.INVISIBLE);
+         holderSwitch.imageCut.setVisibility(View.VISIBLE);
+     } else {
+         holderSwitch.imageSwitch.setVisibility(View.VISIBLE);
+         holderSwitch.imageCut.setVisibility(View.INVISIBLE);
+
+     }
+    }
+
+    private void showCuttingModeUnknown(IotUnknownDeviceAdapterViewHolder holderUnknown, int position, boolean b) {
+
+     if (b) {
+         holderUnknown.imageDeviceOperation.setVisibility(View.INVISIBLE);
+         holderUnknown.imageCut.setVisibility(View.VISIBLE);
+     } else {
+         holderUnknown.imageDeviceOperation.setVisibility(View.VISIBLE);
+         holderUnknown.imageCut.setVisibility(View.INVISIBLE);
+     }
+
+
+
+    }
 
 
     @Override
@@ -289,6 +352,8 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         ProgressBar progressBarUnknownDevice;
 
+        AppCompatImageView imageCut;
+
 
         public IotUnknownDeviceAdapterViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -297,6 +362,8 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             imageDeviceOperation = (AppCompatImageView) itemView.findViewById(R.id.imageDeviceOperation);
             textDeviceUnknown = (AppCompatTextView) itemView.findViewById(R.id.textdeviceUnknown);
             progressBarUnknownDevice = (ProgressBar) itemView.findViewById(R.id.progressBarUnknownDevice);
+            imageCut = (AppCompatImageView) itemView.findViewById(R.id.imageCut);
+
         }
     }
 
@@ -309,6 +376,7 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         AppCompatImageView imageConnectedDeviceSwitch;
         AppCompatTextView textDeviceSwitch;
         ProgressBar progressBarSwitchDevice;
+        AppCompatImageView imageCut;
 
 
 
@@ -320,6 +388,7 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             imageConnectedDeviceSwitch = (AppCompatImageView) itemView.findViewById(R.id.imageConnectedDeviceSwitch);
             textDeviceSwitch = (AppCompatTextView) itemView.findViewById(R.id.textdeviceSwitch);
             progressBarSwitchDevice = (ProgressBar) itemView.findViewById(R.id.progressBarSwitchDevice);
+            imageCut = (AppCompatImageView) itemView.findViewById(R.id.imageCut);
         }
 
 
@@ -335,6 +404,8 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         ProgressBar progressBarThermometerDevice;
         AppCompatImageView imageThermometer;
 
+        AppCompatImageView imageCut;
+
         public IotDeviceThermometerAdapterViewHolder(@NonNull View itemView) {
             super(itemView);
             imageMenuThermometer = (AppCompatImageView) itemView.findViewById(R.id.imageMenuThermometer);
@@ -343,6 +414,8 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             textDeviceThermometer = (AppCompatTextView) itemView.findViewById(R.id.textDeviceThermometer);
             progressBarThermometerDevice = (ProgressBar) itemView.findViewById(R.id.progressBarThermometerDevice);
             imageThermometer = (AppCompatImageView) itemView.findViewById(R.id.imageThermometer);
+            imageCut = (AppCompatImageView) itemView.findViewById(R.id.imageCut);
+
         }
     }
 
@@ -356,6 +429,7 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         AppCompatImageView imageConnectedDeviceThermostat;
         ProgressBar progressBarThermostatDevice;
 
+        AppCompatImageView imageCut;
         public IotDeviceThermostatAdapterViewHolder(@NonNull View itemView) {
 
             super(itemView);
@@ -366,6 +440,7 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             imageHeating = (AppCompatImageView) itemView.findViewById(R.id.imageHeating);
             imageConnectedDeviceThermostat = (AppCompatImageView) itemView.findViewById(R.id.imageConnectedDeviceThermostat);
             progressBarThermostatDevice = (ProgressBar) itemView.findViewById(R.id.progressBarThermostatDevice);
+            imageCut = (AppCompatImageView) itemView.findViewById(R.id.imageCut);
 
         }
     }
@@ -742,7 +817,7 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private void paintStatusThermostatDevice(IotDeviceThermostatAdapterViewHolder holder, int position) {
 
      if (deviceList.get(position).getDeviceStatus() == IOT_DEVICE_STATUS.CUTTING_DEVICE) {
-         holder.imageHeating.setImageResource(R.drawable.ic_unknown_device);
+         showCuttingModeThermostat(holder, position, true);
      }
 
     }
@@ -750,7 +825,7 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private void paintStatusThermometerDevice(IotDeviceThermometerAdapterViewHolder holder, int position) {
 
      if (deviceList.get(position).getDeviceStatus() == IOT_DEVICE_STATUS.CUTTING_DEVICE) {
-         Log.i(TAG, "Falta el icono para cortar el termometro");
+         showCuttingModeThermometer(holder, position, true);
      }
 
     }
@@ -758,8 +833,7 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private void paintStatusSwitchDevice(IotDeviceSwitchAdapterViewHolder holder, int position) {
 
         if (deviceList.get(position).getDeviceStatus() == IOT_DEVICE_STATUS.CUTTING_DEVICE) {
-            holder.imageSwitch.setImageResource(R.drawable.ic_unknown_device);
-            holder.itemView.setBackgroundColor(Color.LTGRAY);
+           showCuttingModeSwitch(holder, position, true);
         }
     }
 
@@ -767,7 +841,7 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private void paintStatusDeviceUnknown(IotUnknownDeviceAdapterViewHolder holder, int position) {
 
      if (deviceList.get(position).getDeviceStatus() == IOT_DEVICE_STATUS.CUTTING_DEVICE) {
-         holder.imageDeviceOperation.setImageResource(R.drawable.ic_unknown_device);
+         showCuttingModeUnknown(holder, position, true);
      }
     }
 
