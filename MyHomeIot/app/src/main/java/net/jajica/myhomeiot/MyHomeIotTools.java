@@ -337,20 +337,16 @@ public class MyHomeIotTools {
         }
     }
 
-    public void notifyError(int icon, int title, int message, FragmentManager fragmentManager) {
+    public AlertDialog.Builder notifyError(int icon, int title, int message, FragmentManager fragmentManager, Context context) {
 
         DialogName window;
         window = new DialogName(context);
-        window.setParameterDialog(icon, title, message);
+        window.setParameterDialog(R.drawable.ic_action_error,
+                R.string.error, R.string.error_message_uniq_room);
         window.setShowEditText(false);
-        window.show(fragmentManager, "Error!");
-        window.setCancelable(true);
-        window.alertDialog.setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
+        window.show(fragmentManager, "ii");
 
-            }
-        });
+        return window.alertDialog;
 
 
 

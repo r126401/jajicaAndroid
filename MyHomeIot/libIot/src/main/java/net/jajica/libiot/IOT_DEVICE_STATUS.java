@@ -3,11 +3,11 @@ package net.jajica.libiot;
 import java.io.Serializable;
 
 public enum IOT_DEVICE_STATUS implements Serializable {
-    NORMAL_AUTO(0),
-    NORMAL_AUTOMAN(1),
-    NORMAL_MANUAL(2),
-    NORMAL_ARRANCANDO(3),
-    NORMAL_SIN_PROGRAMACION(4),
+    AUTO(0),
+    AUTOMAN(1),
+    MANUAL(2),
+    STARTING(3),
+    NO_PROGRAMS(4),
     UPGRADE_IN_PROGRESS(5),
     NORMAL_SYNCHRONIZING(6),
     WAITING_END_START(7),

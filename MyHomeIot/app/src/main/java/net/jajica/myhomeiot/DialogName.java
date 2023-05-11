@@ -11,20 +11,19 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentManager;
 
 import net.jajica.myhomeiot.databinding.DialogNameBinding;
 
 public class DialogName extends DialogFragment {
 
-    Context context;
+    static Context context;
     AlertDialog.Builder alertDialog;
     DialogNameBinding mbinding;
 
     Boolean showEditText;
 
-    public Boolean getShowEditText() {
-        return showEditText;
-    }
+
 
     public void setShowEditText(Boolean showEditText) {
         this.showEditText = showEditText;
@@ -37,6 +36,8 @@ public class DialogName extends DialogFragment {
         setShowEditText(true);
 
     }
+
+
 
 
 
@@ -84,4 +85,8 @@ public class DialogName extends DialogFragment {
         return dialog;
 
     }
+
+
+
+
 }

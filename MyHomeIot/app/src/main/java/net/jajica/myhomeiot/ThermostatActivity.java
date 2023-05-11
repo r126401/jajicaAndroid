@@ -405,8 +405,8 @@ public class ThermostatActivity extends AppCompatActivity implements View.OnClic
 
         switch (status) {
 
-            case NORMAL_AUTO:
-            case NORMAL_AUTOMAN:
+            case AUTO:
+            case AUTOMAN:
                 if (device.getSchedulesThermostat()!= null) {
                     if (device.getSchedulesThermostat().size() > 0) {
                         mBinding.textStatusThermostat.setVisibility(View.VISIBLE);
@@ -420,13 +420,13 @@ public class ThermostatActivity extends AppCompatActivity implements View.OnClic
                 }
 
                 break;
-            case NORMAL_MANUAL:
+            case MANUAL:
                 mBinding.textStatusThermostat.setText(getResources().getString(R.string.manual));
                 break;
-            case NORMAL_ARRANCANDO:
+            case STARTING:
                 mBinding.textStatusThermostat.setText(getResources().getString(R.string.arrancando));
                 break;
-            case NORMAL_SIN_PROGRAMACION:
+            case NO_PROGRAMS:
                 mBinding.textStatusThermostat.setText(getResources().getString(R.string.no_programs));
                 break;
             case UPGRADE_IN_PROGRESS:

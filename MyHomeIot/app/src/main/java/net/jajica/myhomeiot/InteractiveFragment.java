@@ -99,11 +99,12 @@ public class InteractiveFragment extends DialogFragment {
                         } else {
                             Log.i(TAG, "upgrade abortado");
                             endUpgrade = false;
+                            mBinding.textInteractiveStatus.setText(R.string.upgrade_unsucessfully);
 
                         }
                         timer.cancel();
                         setCancelable(true);
-                        mBinding.textInteractiveStatus.setText(R.string.upgrade_unsucessfully);
+
                         break;
                     case RESET:
                     case FACTORY_RESET:

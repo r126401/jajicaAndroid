@@ -139,7 +139,16 @@ public class AdminRoomsFragment extends Fragment  implements View.OnClickListene
              Log.w(TAG, "No se puede eliminar la ultima room");
             MyHomeIotTools tool;
             tool = new MyHomeIotTools(context);
-            tool.notifyError(R.drawable.ic_action_error, R.string.error, R.string.error_message_uniq_room, getParentFragmentManager());
+            tool.notifyError(R.drawable.ic_action_error,
+                    R.string.error,
+                    R.string.error_message_uniq_room,
+                    getParentFragmentManager(),
+                    context).setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });
              return;
         }
         site.deleteRoomForSite(rootName, false);

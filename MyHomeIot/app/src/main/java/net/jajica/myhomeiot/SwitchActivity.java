@@ -2,6 +2,7 @@ package net.jajica.myhomeiot;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -112,6 +113,7 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
                 Log.i(TAG, "ff");
                 updateDevice();
                 device.commandGetScheduleDevice();
+                sendError();
 
 
             }
@@ -231,8 +233,18 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
             }
         });
 
+        device.setOnReceivedTimeoutCommand(new IotDevice.OnReceivedTimeoutCommand() {
+            @Override
+            public void onReceivedTimeoutCommand(String token) {
+
+                sendError();
+             }
+        });
+
 
     }
+
+
 
     private void launchInfoDeviceFragment() {
 
@@ -338,28 +350,16 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
 
         switch (status) {
 
-            case NORMAL_AUTO:
-            case NORMAL_AUTOMAN:
-                if (device.getSchedulesSwitch()!= null) {
-                    if (device.getSchedulesSwitch().size() > 0) {
-                        mBinding.textStatusSwitch.setVisibility(View.VISIBLE);
-                        mBinding.textStatusSwitch.setText(getResources().getString(R.string.auto));
-                    } else {
-                        mBinding.textStatusSwitch.setVisibility(View.INVISIBLE);
-                    }
-
-                } else {
-                    mBinding.textStatusSwitch.setVisibility(View.INVISIBLE);
-                }
-
+            case AUTO:
+            case AUTOMAN:
+            case MANUAL:
+                mBinding.textStatusSwitch.setVisibility(View.VISIBLE);
+                mBinding.textStatusSwitch.setText(status.toString());
                 break;
-            case NORMAL_MANUAL:
-                mBinding.textStatusSwitch.setText(getResources().getString(R.string.manual));
-                break;
-            case NORMAL_ARRANCANDO:
+            case STARTING:
                 mBinding.textStatusSwitch.setText(getResources().getString(R.string.arrancando));
                 break;
-            case NORMAL_SIN_PROGRAMACION:
+            case NO_PROGRAMS:
                 mBinding.textStatusSwitch.setText(getResources().getString(R.string.no_programs));
                 break;
             case UPGRADE_IN_PROGRESS:
@@ -707,7 +707,51 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
 
     }
 
+    private void sendError() {
 
+
+        MyHomeIotTools tools;
+        AlertDialog.Builder dialog;
+        tools = new MyHomeIotTools(getApplicationContext());
+        dialog = tools.notifyError(R.drawable.ic_action_error,
+                R.string.error, R.string.error_message_uniq_room, fragmentManager, this);
+
+        dialog.setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
+/*
+        DialogName window;
+        window = new DialogName(this);
+        window.setParameterDialog(R.drawable.ic_action_error,
+                R.string.error, R.string.error_message_uniq_room);
+        window.setShowEditText(false);
+        window.show(fragmentManager, "ii");
+        window.alertDialog.setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
+
+
+ */
+
+
+
+
+
+
+
+
+
+
+
+    }
 
 
 }

@@ -384,14 +384,14 @@ public class ThermometerActivity extends AppCompatActivity implements Navigation
 
         switch (status) {
 
-            case NORMAL_AUTO:
-            case NORMAL_MANUAL:
+            case AUTO:
+            case MANUAL:
                 binding.textStatusThermometer.setText(getResources().getString(R.string.manual));
                 break;
-            case NORMAL_ARRANCANDO:
+            case STARTING:
                 binding.textStatusThermometer.setText(getResources().getString(R.string.arrancando));
                 break;
-            case NORMAL_SIN_PROGRAMACION:
+            case NO_PROGRAMS:
                 binding.textStatusThermometer.setText(getResources().getString(R.string.no_programs));
                 break;
             case UPGRADE_IN_PROGRESS:

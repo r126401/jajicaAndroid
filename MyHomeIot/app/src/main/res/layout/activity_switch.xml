@@ -70,7 +70,7 @@
             android:src="@drawable/ic_alarm"
             app:layout_constraintEnd_toStartOf="@+id/imagePanelSwitch"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/gridLayout2">
+            app:layout_constraintTop_toBottomOf="@+id/gridLayoutSwitch">
 
         </androidx.appcompat.widget.AppCompatImageView>
 
@@ -108,7 +108,7 @@
         </com.google.android.material.bottomnavigation.BottomNavigationView>
 
         <GridLayout
-            android:id="@+id/gridLayout2"
+            android:id="@+id/gridLayoutSwitch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
@@ -145,8 +145,10 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
                 android:layout_marginEnd="10dp"
-                android:drawableLeft="@drawable/ic_action_switch"
-                android:text="@string/move_device" />
+                android:minWidth="180dp"
+                android:drawableEnd="@drawable/ic_action_switch_caption"
+                android:drawablePadding="50dp"
+                style="@style/textItem"/>
 
         </GridLayout>
 
@@ -158,7 +160,7 @@
             app:layout_constraintBottom_toTopOf="@+id/imagePanelSwitch"
             app:layout_constraintEnd_toEndOf="@+id/imagePanelSwitch"
             app:layout_constraintStart_toStartOf="@+id/imagePanelSwitch"
-            app:layout_constraintTop_toBottomOf="@+id/gridLayout2"/>
+            app:layout_constraintTop_toBottomOf="@+id/gridLayoutSwitch"/>
 
 
 
