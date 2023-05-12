@@ -345,6 +345,8 @@ public class MyHomeIotTools {
                 R.string.error, R.string.error_message_uniq_room);
         window.setShowEditText(false);
         window.show(fragmentManager, "ii");
+        window.setCancelable(true);
+        window.setParameterDialog(icon, title, message);
 
         return window.alertDialog;
 

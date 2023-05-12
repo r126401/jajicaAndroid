@@ -55,7 +55,8 @@ public class ActionSwitchScheduleFragment extends Fragment implements View.OnCli
         DELETE_SCHEDULE,
         MODIFY_SCHEDULE,
         DISPLAY_SCHEDULE,
-        REFRESH_SCHEDULE
+        REFRESH_SCHEDULE,
+        TIMEOUT
     }
 
     public ActionSwitchScheduleFragment() {

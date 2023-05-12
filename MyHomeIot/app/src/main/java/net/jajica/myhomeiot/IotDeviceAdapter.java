@@ -663,11 +663,11 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 break;
             case DEVICE_CONNECTED:
                 progressBar.setVisibility(View.INVISIBLE);
-                imageConnection.setImageResource(R.drawable.ic_connect_ok);
+                imageConnection.setImageResource(R.drawable.ic_action_online);
                 break;
             case DEVICE_DISCONNECTED:
                 progressBar.setVisibility(View.INVISIBLE);
-                imageConnection.setImageResource(R.drawable.ic_connect_nok);
+                imageConnection.setImageResource(R.drawable.ic_action_offline);
                 imageDevice.setImageResource(R.drawable.ic_unknown_device);
                 Log.d(TAG, "Disconnect update in adapter");
                 break;
@@ -675,7 +675,7 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             case DEVICE_ERROR_SUBSCRIPTION:
             case DEVICE_ERROR_COMMUNICATION:
                 progressBar.setVisibility(View.VISIBLE);
-                imageConnection.setImageResource(R.drawable.ic_connect_nok);
+                imageConnection.setImageResource(R.drawable.ic_action_offline);
                 imageDevice.setImageResource(R.drawable.ic_unknown_device);
                 break;
 
@@ -693,11 +693,11 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 break;
             case DEVICE_CONNECTED:
                 holder.progressBarSwitchDevice.setVisibility(View.INVISIBLE);
-                holder.imageConnectedDeviceSwitch.setImageResource(R.drawable.ic_connect_ok);
+                holder.imageConnectedDeviceSwitch.setImageResource(R.drawable.ic_action_online);
                 break;
             case DEVICE_DISCONNECTED:
                 holder.progressBarSwitchDevice.setVisibility(View.INVISIBLE);
-                holder.imageConnectedDeviceSwitch.setImageResource(R.drawable.ic_connect_nok);
+                holder.imageConnectedDeviceSwitch.setImageResource(R.drawable.ic_action_offline);
                 holder.imageSwitch.setImageResource(R.drawable.ic_unknown_device);
                 Log.d(TAG, "Disconnect update in adapter");
                 break;
@@ -705,7 +705,7 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             case DEVICE_ERROR_SUBSCRIPTION:
             case DEVICE_ERROR_COMMUNICATION:
                 holder.progressBarSwitchDevice.setVisibility(View.VISIBLE);
-                holder.imageConnectedDeviceSwitch.setImageResource(R.drawable.ic_connect_nok);
+                holder.imageConnectedDeviceSwitch.setImageResource(R.drawable.ic_action_offline);
                 holder.imageSwitch.setImageResource(R.drawable.ic_unknown_device);
                 break;
 
@@ -724,7 +724,7 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 break;
             case DEVICE_CONNECTED:
                 holder.progressBarThermometerDevice.setVisibility(View.INVISIBLE);
-                holder.imageConnectedDeviceThermometer.setImageResource(R.drawable.ic_connect_ok);
+                holder.imageConnectedDeviceThermometer.setImageResource(R.drawable.ic_action_online);
                 holder.textDeviceThermometer.setText(deviceList.get(position).getDeviceName());
                 holder.imageThermometer.setVisibility(View.INVISIBLE);
                 String dato;
@@ -737,7 +737,7 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 break;
             case DEVICE_DISCONNECTED:
                 holder.progressBarThermometerDevice.setVisibility(View.INVISIBLE);
-                holder.imageConnectedDeviceThermometer.setImageResource(R.drawable.ic_connect_nok);
+                holder.imageConnectedDeviceThermometer.setImageResource(R.drawable.ic_action_offline);
                 holder.imageThermometer.setImageResource(R.drawable.ic_unknown_device);
                 holder.textTemperatureThermometer.setText("--.-");
                 holder.imageThermometer.setVisibility(View.VISIBLE);
@@ -746,7 +746,7 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             case DEVICE_ERROR_SUBSCRIPTION:
             case DEVICE_ERROR_COMMUNICATION:
                 holder.progressBarThermometerDevice.setVisibility(View.VISIBLE);
-                holder.imageConnectedDeviceThermometer.setImageResource(R.drawable.ic_connect_nok);
+                holder.imageConnectedDeviceThermometer.setImageResource(R.drawable.ic_action_offline);
                 holder.imageThermometer.setImageResource(R.drawable.ic_unknown_device);
                 holder.textTemperatureThermometer.setText("--.-");
                 holder.imageThermometer.setVisibility(View.VISIBLE);
@@ -771,7 +771,7 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 break;
             case DEVICE_CONNECTED:
                 holder.progressBarThermostatDevice.setVisibility(View.INVISIBLE);
-                holder.imageConnectedDeviceThermostat.setImageResource(R.drawable.ic_connect_ok);
+                holder.imageConnectedDeviceThermostat.setImageResource(R.drawable.ic_action_online);
                 holder.imageHeating.setImageResource(R.drawable.heating);
                 holder.textDeviceThermostat.setText(device.getDeviceName());
                 double data;
@@ -782,7 +782,7 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 break;
             case DEVICE_DISCONNECTED:
                 holder.progressBarThermostatDevice.setVisibility(View.INVISIBLE);
-                holder.imageConnectedDeviceThermostat.setImageResource(R.drawable.ic_connect_nok);
+                holder.imageConnectedDeviceThermostat.setImageResource(R.drawable.ic_action_offline);
                 holder.imageHeating.setImageResource(R.drawable.ic_unknown_device);
                 holder.textTemperatureThermostat.setText("--.-");
                 holder.textThresholdThermostat.setText("--.-");
@@ -791,7 +791,7 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             case DEVICE_ERROR_SUBSCRIPTION:
             case DEVICE_ERROR_COMMUNICATION:
                 holder.progressBarThermostatDevice.setVisibility(View.VISIBLE);
-                holder.imageConnectedDeviceThermostat.setImageResource(R.drawable.ic_connect_nok);
+                holder.imageConnectedDeviceThermostat.setImageResource(R.drawable.ic_action_offline);
                 holder.imageHeating.setImageResource(R.drawable.ic_unknown_device);
                 holder.textTemperatureThermostat.setText("--.-");
                 holder.textThresholdThermostat.setText("--.-");

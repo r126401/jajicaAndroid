@@ -1,5 +1,6 @@
 package net.jajica.myhomeiot;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -137,7 +138,23 @@ public class SwitchScheduleFragment extends Fragment implements SwipeRefreshLayo
         device.setOnReceivedTimeoutCommand(new IotDevice.OnReceivedTimeoutCommand() {
             @Override
             public void onReceivedTimeoutCommand(String token) {
+                Log.e(TAG, "Recibido timeout");
+                onSendEventSchedule.onSendEventSchedule(ActionSwitchScheduleFragment.OPERATION_SCHEDULE.TIMEOUT);
                 //adapter.notifyDataSetChanged();
+            }
+        });
+
+        device.setOnReceivedSpontaneousStartSchedule(new IotDevice.OnReceivedSpontaneousStartSchedule() {
+            @Override
+            public void onReceivesSpontaneousStartSchedule(IOT_CODE_RESULT resultCode) {
+                adapter.notifyDataSetChanged();
+            }
+        });
+
+        device.setOnReceivedSpontaneousEndSchedule(new IotDevice.OnReceivedSpontaneousEndSchedule() {
+            @Override
+            public void onReceivesSpontaneousEndSchedule(IOT_CODE_RESULT resultCode) {
+                adapter.notifyDataSetChanged();
             }
         });
 
@@ -251,6 +268,7 @@ public class SwitchScheduleFragment extends Fragment implements SwipeRefreshLayo
         });
 
     }
+
 
 
 

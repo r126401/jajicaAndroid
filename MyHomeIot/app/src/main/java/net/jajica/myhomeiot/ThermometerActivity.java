@@ -28,10 +28,10 @@ import net.jajica.libiot.IotDevice;
 import net.jajica.libiot.IotDeviceThermometer;
 import net.jajica.libiot.IotMqttConnection;
 import net.jajica.libiot.IotOtaVersionAvailable;
-import net.jajica.myhomeiot.databinding.ActivityThermometerBinding;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import net.jajica.myhomeiot.databinding.ActivityThermometerBinding;
 
 public class ThermometerActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener {
 
@@ -439,10 +439,10 @@ public class ThermometerActivity extends AppCompatActivity implements Navigation
                 binding.progressOperationThermometer.setVisibility(View.INVISIBLE);
                 break;
             case DEVICE_CONNECTED:
-                binding.imageConnectedDevicethermometer.setImageResource(R.drawable.ic_action_connect_ok);
+                binding.imageConnectedDevicethermometer.setImageResource(R.drawable.ic_action_online);
                 break;
             case DEVICE_DISCONNECTED:
-                binding.imageConnectedDevicethermometer.setImageResource(R.drawable.ic_action_connect_nok);
+                binding.imageConnectedDevicethermometer.setImageResource(R.drawable.ic_action_offline);
                 break;
             case DEVICE_WAITING_RESPONSE:
                 binding.imageConnectedDevicethermometer.setImageResource(R.drawable.ic_action_waiting_response);

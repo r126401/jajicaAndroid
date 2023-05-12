@@ -1335,9 +1335,10 @@ public abstract class IotDevice implements Serializable {
         api = new IotTools();
         textoComando = api.createSimpleCommand(command);
         if ((estado = sendCommand(textoComando, topic)) != IOT_DEVICE_STATUS_CONNECTION.DEVICE_WAITING_RESPONSE) {
+            Log.i(TAG, "Resultado del comando con timeout pendiente: " + estado.toString());
             return estado;
         }
-
+        Log.i(TAG, "Resultado del comando con timeout pendiente: " + estado.toString());
         return IOT_DEVICE_STATUS_CONNECTION.DEVICE_WAITING_RESPONSE;
     }
 
@@ -1391,6 +1392,7 @@ public abstract class IotDevice implements Serializable {
      * @return Se devuelve el estado de la conexion del dispositivo despues de lanzar la peticion
      */
     protected IOT_DEVICE_STATUS_CONNECTION sendCommand(String textoComando) {
+        Log.i(TAG, "Enviando comando y esperando timeout con token " + getTokenFromReport(textoComando));
         return sendCommand(textoComando, getPublishTopic());
     }
 
@@ -1425,13 +1427,16 @@ public abstract class IotDevice implements Serializable {
             public void run() {
                 if (getStatusConnection() != IOT_DEVICE_STATUS_CONNECTION.DEVICE_CONNECTED) {
                     if (onReceivedTimeoutCommand != null) {
-                        //Log.i(TAG, "Enviamos timeout: " + getTokenFromReport(textoComando));
                         setConnectionState(IOT_DEVICE_STATUS_CONNECTION.DEVICE_DISCONNECTED);
                         onReceivedTimeoutCommand.onReceivedTimeoutCommand(getTokenFromReport(textoComando));
+                        Log.e(TAG, "Enviamos timeout: " + getTokenFromReport(textoComando));
                     }
+                } else {
+                    Log.i(TAG, "cancelado timeout al comando con token. " + getTokenFromReport(textoComando));
                 }
             }
         }, 10000);
+        Log.i(TAG, "Resultado del comando con token " + getTokenFromReport(textoComando) + " con timeout pendiente: " + IOT_DEVICE_STATUS_CONNECTION.DEVICE_WAITING_RESPONSE);
         return IOT_DEVICE_STATUS_CONNECTION.DEVICE_WAITING_RESPONSE;
     }
 
@@ -1585,7 +1590,9 @@ public abstract class IotDevice implements Serializable {
         String field;
         if ((field = getFieldStringFromReport(message, IOT_LABELS_JSON.ACTIVE_SCHEDULE)) == null) {
 
+            setActiveSchedule("");
             return IOT_CODE_RESULT.RESULT_CODE_ERROR;
+
         } else {
             setActiveSchedule(field);
             return IOT_CODE_RESULT.RESUT_CODE_OK;
@@ -1610,6 +1617,7 @@ public abstract class IotDevice implements Serializable {
         setProgrammerStateFromReport(message);
         setCurrentScheduleFromReport(message);
         loadSchedulesFromReport(message);
+
 
         return IOT_CODE_RESULT.RESUT_CODE_OK;
     }
@@ -1983,12 +1991,9 @@ public abstract class IotDevice implements Serializable {
     }
 
     protected IOT_CODE_RESULT processCommonParameters(String message) {
-        /*
-        IOT_CODE_RESULT result;
-        if ((result = getCommandCodeResultFromReport(message)) != IOT_CODE_RESULT.RESUT_CODE_OK) {
-            return result;
-        }
-*/
+
+        int index;
+
         setCurrentOtaVersionFromReport(message);
         setConnectionState(IOT_DEVICE_STATUS_CONNECTION.DEVICE_CONNECTED);
         setDeviceStateFromReport(message);
@@ -1996,6 +2001,12 @@ public abstract class IotDevice implements Serializable {
         setDeviceTypeFromReport(message);
         setCurrentScheduleFromReport(message);
         setEndUpgradeFlagFromReport(message);
+        index = searchSchedule(getActiveSchedule());
+        if (index >=0) {
+            IotScheduleDevice schedule;
+            schedule = getSchedules().get(index);
+            schedule.setActiveSchedule(true);
+        }
         object2Json();
 
         return IOT_CODE_RESULT.RESUT_CODE_OK;

@@ -26,6 +26,8 @@ public class IotScheduleDeviceSwitch extends IotScheduleDevice implements Serial
         setDeviceType(IOT_DEVICE_TYPE.INTERRUPTOR);
         setScheduleState(IOT_STATE_SCHEDULE.INACTIVE_SCHEDULE);
         setStateSwitchFromScheduleId();
+        setStateScheduleFromScheduleId();
+
     }
 
     public IotScheduleDeviceSwitch() {

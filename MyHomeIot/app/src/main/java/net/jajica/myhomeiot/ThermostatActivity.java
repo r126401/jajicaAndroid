@@ -473,10 +473,10 @@ public class ThermostatActivity extends AppCompatActivity implements View.OnClic
                 mBinding.progressOperationThermostat.setVisibility(View.INVISIBLE);
                 break;
             case DEVICE_CONNECTED:
-                mBinding.imageConnectedDeviceThermostat.setImageResource(R.drawable.ic_action_connect_ok);
+                mBinding.imageConnectedDeviceThermostat.setImageResource(R.drawable.ic_action_online);
                 break;
             case DEVICE_DISCONNECTED:
-                mBinding.imageConnectedDeviceThermostat.setImageResource(R.drawable.ic_action_connect_nok);
+                mBinding.imageConnectedDeviceThermostat.setImageResource(R.drawable.ic_action_offline);
                 break;
             case DEVICE_WAITING_RESPONSE:
                 mBinding.imageConnectedDeviceThermostat.setImageResource(R.drawable.ic_action_waiting_response);

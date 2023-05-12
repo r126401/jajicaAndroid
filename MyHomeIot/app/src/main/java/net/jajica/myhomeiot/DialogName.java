@@ -34,6 +34,7 @@ public class DialogName extends DialogFragment {
         this.context = context;
         alertDialog = new AlertDialog.Builder(context);
         setShowEditText(true);
+        setCancelable(false);
 
     }
 
@@ -60,6 +61,7 @@ public class DialogName extends DialogFragment {
 
 
 
+
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
@@ -67,7 +69,6 @@ public class DialogName extends DialogFragment {
         MyHomeIotTools tools;
         AlertDialog dialog;
         tools = new MyHomeIotTools(context);
-        setCancelable(false);
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         mbinding = DialogNameBinding.inflate(inflater);
         alertDialog.setView(mbinding.getRoot());

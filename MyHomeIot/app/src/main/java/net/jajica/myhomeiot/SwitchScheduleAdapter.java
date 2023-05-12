@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import net.jajica.libiot.IOT_STATE_SCHEDULE;
 import net.jajica.libiot.IotScheduleDeviceSwitch;
 import net.jajica.myhomeiot.databinding.ListSwitchScheduleBinding;
 import net.jajica.myhomeiot.databinding.ListScheduleEmptyBinding;
@@ -191,7 +192,7 @@ public class SwitchScheduleAdapter extends RecyclerView.Adapter<SwitchScheduleAd
         holder.mbinding.textToHour.setText(data);
         paintStatusSchedule(holder, position);
         paintWeekSchedule(holder, position);
-        paintActiveSchedule(holder, position);
+
         //paintWeekSchedule(holder, position);
         holder.mbinding.progressComandSchedule.setVisibility(View.INVISIBLE);
 
@@ -201,8 +202,12 @@ public class SwitchScheduleAdapter extends RecyclerView.Adapter<SwitchScheduleAd
 
     private void paintActiveSchedule(SwitchScheduleAdapterViewHolder holder, int position) {
 
-        if (listSchedule.get(position).getActiveSchedule()) {
-            holder.mbinding.imageCurrentSchedule.setVisibility(View.VISIBLE);
+        if (listSchedule.get(position).getScheduleState() == IOT_STATE_SCHEDULE.ACTIVE_SCHEDULE) {
+            if (listSchedule.get(position).getActiveSchedule()) {
+                holder.mbinding.imageCurrentSchedule.setVisibility(View.VISIBLE);
+            } else {
+                holder.mbinding.imageCurrentSchedule.setVisibility(View.INVISIBLE);
+            }
         } else {
             holder.mbinding.imageCurrentSchedule.setVisibility(View.INVISIBLE);
         }
@@ -252,6 +257,7 @@ public class SwitchScheduleAdapter extends RecyclerView.Adapter<SwitchScheduleAd
                 holder.mbinding.imageScheduleStatus.setImageResource(R.drawable.ic_action_unlock);
                 break;
         }
+        paintActiveSchedule(holder, position);
 
     }
 

@@ -2,7 +2,6 @@ package net.jajica.myhomeiot;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -19,6 +18,7 @@ import android.widget.PopupMenu;
 
 import com.google.android.material.navigation.NavigationBarView;
 
+import net.jajica.libiot.IOT_ALARM_VALUE;
 import net.jajica.libiot.IOT_CODE_RESULT;
 import net.jajica.libiot.IOT_COMMANDS;
 import net.jajica.libiot.IOT_DEVICE_STATUS;
@@ -98,6 +98,7 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
 
     }
 
+
     /**
      * Este metodo configura los listener para la recepcion de comandos y espontaneos
      * En base a la informacion recibida se pintan los diferentes elementos del interfaz
@@ -107,14 +108,23 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
 
         //Configuramos los listeners de comandos.
 
+        device.setOnReceivedTimeoutCommand(new IotDevice.OnReceivedTimeoutCommand() {
+            @Override
+            public void onReceivedTimeoutCommand(String token) {
+                Log.e(TAG, "timeout: El dispositivo se encuentra offline");
+                //updateDevice();
+                //sendError();
+            }
+        });
+
+
+
         device.setOnReceivedStatus(new IotDevice.OnReceivedStatus() {
             @Override
             public void onReceivedStatus(IOT_CODE_RESULT resultCode) {
                 Log.i(TAG, "ff");
                 updateDevice();
                 device.commandGetScheduleDevice();
-                sendError();
-
 
             }
         });
@@ -233,13 +243,7 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
             }
         });
 
-        device.setOnReceivedTimeoutCommand(new IotDevice.OnReceivedTimeoutCommand() {
-            @Override
-            public void onReceivedTimeoutCommand(String token) {
 
-                sendError();
-             }
-        });
 
 
     }
@@ -331,7 +335,7 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
             mBinding.imageBrokerConnected.setImageResource(R.drawable.ic_wifi_on);
         } else {
             mBinding.imageBrokerConnected.setImageResource(R.drawable.ic_wifi_off);
-            device.setConnectionState(IOT_DEVICE_STATUS_CONNECTION.DEVICE_DISCONNECTED);
+            device.setConnectionState(IOT_DEVICE_STATUS_CONNECTION.UNKNOWN);
         }
 
 
@@ -450,7 +454,7 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
      */
     private void paintStatusCommunication() {
 
-        paintBrokerStatus();
+
 
     switch (device.getStatusConnection()) {
 
@@ -458,10 +462,14 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
             mBinding.progressOperationSwitch.setVisibility(View.INVISIBLE);
             break;
         case DEVICE_CONNECTED:
-            mBinding.imageConnectedDeviceSwitch.setImageResource(R.drawable.ic_action_connect_ok);
+            mBinding.imageConnectedDeviceSwitch.setImageResource(R.drawable.ic_action_online);
+            device.getAlarms().setWifiAlarm(IOT_ALARM_VALUE.ALARM_OFF);
+            paintBrokerStatus();
             break;
         case DEVICE_DISCONNECTED:
-            mBinding.imageConnectedDeviceSwitch.setImageResource(R.drawable.ic_action_connect_nok);
+            mBinding.imageConnectedDeviceSwitch.setImageResource(R.drawable.ic_action_offline);
+            device.getAlarms().setWifiAlarm(IOT_ALARM_VALUE.ALARM_ON);
+            paintBrokerStatus();
             break;
         case DEVICE_WAITING_RESPONSE:
             mBinding.imageConnectedDeviceSwitch.setImageResource(R.drawable.ic_action_waiting_response);
@@ -470,7 +478,9 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
         case DEVICE_NO_SUBSCRIPT:
         case DEVICE_ERROR_NO_SUBSCRIPT:
         case DEVICE_ERROR_SUBSCRIPTION:
+            paintBrokerStatus();
             mBinding.imageConnectedDeviceSwitch.setImageResource(R.drawable.ic_action_error);
+            device.getAlarms().setWifiAlarm(IOT_ALARM_VALUE.ALARM_ON);
             break;
 
     }
@@ -534,6 +544,11 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
                     case REFRESH_SCHEDULE:
                         device.commandGetStatusDevice();
                         updateDevice();
+                        break;
+                    case TIMEOUT:
+                        notifyTimeoutCommand();
+                        sendError();
+                        break;
 
                 }
             }
@@ -712,43 +727,34 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
 
         MyHomeIotTools tools;
         AlertDialog.Builder dialog;
-        tools = new MyHomeIotTools(getApplicationContext());
-        dialog = tools.notifyError(R.drawable.ic_action_error,
-                R.string.error, R.string.error_message_uniq_room, fragmentManager, this);
 
-        dialog.setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-        });
-
-/*
-        DialogName window;
-        window = new DialogName(this);
-        window.setParameterDialog(R.drawable.ic_action_error,
-                R.string.error, R.string.error_message_uniq_room);
-        window.setShowEditText(false);
-        window.show(fragmentManager, "ii");
-        window.alertDialog.setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-        });
+        if (device.getAlarms().getWifiAlarm() == IOT_ALARM_VALUE.ALARM_OFF) {
+            tools = new MyHomeIotTools(getApplicationContext());
+            dialog = tools.notifyError(R.drawable.ic_action_error,
+                    R.string.error, R.string.error_connection_device, fragmentManager, this);
+            dialog.setCancelable(true);
+        }
 
 
 
- */
+    }
+
+    private void notifyTimeoutCommand() {
 
 
 
+        try {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
 
-
-
-
-
-
+                    updateDevice();
+                    Log.d(TAG,"send update to disconnect");
+                }
+            });
+        } catch (NullPointerException exception) {
+            Log.e(TAG, "La tarea para cancelar es erronea");
+        }
 
 
     }

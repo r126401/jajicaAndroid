@@ -29,6 +29,7 @@ public class IotDeviceSwitch extends IotDevice implements Serializable {
         setPublishOtaTopic("OtaIotOnOff");
         setSubscribeOtaTopic("newVersionOtaIotOnOff");
         setDeviceType(IOT_DEVICE_TYPE.INTERRUPTOR);
+        setConnectionState(IOT_DEVICE_STATUS_CONNECTION.UNKNOWN);
 
     }
 
@@ -37,6 +38,7 @@ public class IotDeviceSwitch extends IotDevice implements Serializable {
         setPublishOtaTopic("OtaIotOnOff");
         setSubscribeOtaTopic("newVersionOtaIotOnOff");
         setDeviceType(IOT_DEVICE_TYPE.INTERRUPTOR);
+        setConnectionState(IOT_DEVICE_STATUS_CONNECTION.UNKNOWN);
     }
 
     private ArrayList<IotScheduleDeviceSwitch> schedules;
@@ -107,6 +109,8 @@ public class IotDeviceSwitch extends IotDevice implements Serializable {
                 programa = new IotScheduleDeviceSwitch(objeto);
                 if (programa.getScheduleId().equals(getActiveSchedule())) {
                     programa.setActiveSchedule(true);
+                } else {
+                    programa.setActiveSchedule(false);
                 }
                 addSchedule(programa);
             }
@@ -186,6 +190,11 @@ public class IotDeviceSwitch extends IotDevice implements Serializable {
         schedule.setDurationFromReport(message);
         schedule.setScheduleStateFromReport(message);
         setCurrentScheduleFromReport(message);
+        if (activeSchedule.equals(schedule.scheduleId)) {
+            schedule.setActiveSchedule(true);
+        } else {
+            schedule.setActiveSchedule(false);
+        }
         return IOT_CODE_RESULT.RESUT_CODE_OK;
 
     }

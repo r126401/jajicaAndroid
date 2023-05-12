@@ -129,6 +129,7 @@
     <string name="modify_name_room">Modify name room</string>
     <string name="modify_name_room_text">Write the new name of room</string>
     <string name="error_message_uniq_room">Error, You can not delete the last one room</string>
+    <string name="error_connection_device">The device is offline temporaly</string>
 
 
 </resources>
