@@ -1616,7 +1616,7 @@ public abstract class IotDevice implements Serializable {
         setDeviceStateFromReport(message);
         setProgrammerStateFromReport(message);
         setCurrentScheduleFromReport(message);
-        loadSchedulesFromReport(message);
+        //loadSchedulesFromReport(message);
 
 
         return IOT_CODE_RESULT.RESUT_CODE_OK;
@@ -1992,7 +1992,6 @@ public abstract class IotDevice implements Serializable {
 
     protected IOT_CODE_RESULT processCommonParameters(String message) {
 
-        int index;
 
         setCurrentOtaVersionFromReport(message);
         setConnectionState(IOT_DEVICE_STATUS_CONNECTION.DEVICE_CONNECTED);
@@ -2001,17 +2000,13 @@ public abstract class IotDevice implements Serializable {
         setDeviceTypeFromReport(message);
         setCurrentScheduleFromReport(message);
         setEndUpgradeFlagFromReport(message);
-        index = searchSchedule(getActiveSchedule());
-        if (index >=0) {
-            IotScheduleDevice schedule;
-            schedule = getSchedules().get(index);
-            schedule.setActiveSchedule(true);
-        }
         object2Json();
 
         return IOT_CODE_RESULT.RESUT_CODE_OK;
 
     }
+
+
 
     protected IOT_TYPE_ALARM_DEVICE identifyTypeAlarm(String message) {
 

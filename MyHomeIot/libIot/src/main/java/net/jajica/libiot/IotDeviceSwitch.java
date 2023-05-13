@@ -304,13 +304,17 @@ public class IotDeviceSwitch extends IotDevice implements Serializable {
     @Override
     protected IOT_CODE_RESULT processStartSchedule(String message) {
         setStateRelayFromReport(message);
+        processCommonParameters(message);
+        setActiveScheduleFromReport(message);
         return super.processStartSchedule(message);
     }
 
     @Override
     protected IOT_CODE_RESULT processEndSchedule(String message) {
         setStateRelayFromReport(message);
-        return super.processStartSchedule(message);
+        processCommonParameters(message);
+        setActiveScheduleFromReport(message);
+        return super.processEndSchedule(message);
     }
 
     @Override
@@ -410,4 +414,26 @@ public class IotDeviceSwitch extends IotDevice implements Serializable {
         }
         super.setConnectionState(connectionState);
     }
+
+    protected void setActiveScheduleFromReport(String message) {
+
+        int nSchedules;
+        int i;
+        IotScheduleDevice schedule;
+
+        if (getSchedulesSwitch() != null) {
+            nSchedules = getSchedulesSwitch().size();
+            for (i=0;i<nSchedules;i++) {
+                schedule = getSchedulesSwitch().get(i);
+                if (schedule.getScheduleId().equals(getActiveSchedule())) {
+                    schedule.setActiveSchedule(true);
+                } else {
+                    schedule.setActiveSchedule(false);
+                }
+            }
+        }
+
+
+    }
+
 }
