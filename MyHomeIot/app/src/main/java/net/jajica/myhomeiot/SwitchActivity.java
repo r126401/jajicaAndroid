@@ -549,6 +549,9 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
                         notifyTimeoutCommand();
                         sendError();
                         break;
+                    case UPDATE_SCHEDULE:
+                        updateDevice();
+                        break;
 
                 }
             }

@@ -148,6 +148,10 @@ public class SwitchScheduleFragment extends Fragment implements SwipeRefreshLayo
             @Override
             public void onReceivesSpontaneousStartSchedule(IOT_CODE_RESULT resultCode) {
                 adapter.notifyDataSetChanged();
+                if (onSendEventSchedule != null) {
+                    onSendEventSchedule.onSendEventSchedule(ActionSwitchScheduleFragment.OPERATION_SCHEDULE.UPDATE_SCHEDULE);
+                }
+
             }
         });
 
@@ -155,6 +159,9 @@ public class SwitchScheduleFragment extends Fragment implements SwipeRefreshLayo
             @Override
             public void onReceivesSpontaneousEndSchedule(IOT_CODE_RESULT resultCode) {
                 adapter.notifyDataSetChanged();
+                if (onSendEventSchedule != null) {
+                    onSendEventSchedule.onSendEventSchedule(ActionSwitchScheduleFragment.OPERATION_SCHEDULE.UPDATE_SCHEDULE);
+                }
             }
         });
 
