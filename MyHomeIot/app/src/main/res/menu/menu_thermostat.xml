@@ -16,7 +16,7 @@
     </item>
 
     <item
-        android:id="@+id/item_new_schedule_thermostat"
+        android:id="@+id/item_new_schedule_switch"
         android:icon="@drawable/ic_action_new_schedule"
         android:title="new">
 

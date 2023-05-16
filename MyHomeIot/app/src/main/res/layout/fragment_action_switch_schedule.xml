@@ -15,10 +15,12 @@
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/textScheduleType"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="30dp"
             android:gravity="center"
             android:text="NUEVO PROGRAMA"
-            app:layout_constraintTop_toTopOf="parent">
+            android:textColor="?attr/colorOnPrimary"
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="?attr/colorPrimary">
 
         </androidx.appcompat.widget.AppCompatTextView>
 
@@ -30,33 +32,38 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:text="Dias de la semana"
+            android:textSize="20dp"
+            android:background="?attr/colorSurfaceVariant"
             app:layout_constraintTop_toBottomOf="@+id/textScheduleType" />
 
 
         <LinearLayout
             android:id="@+id/layoutWeekPanel"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/titlePanelWeek">
+            app:layout_constraintTop_toBottomOf="@+id/titlePanelWeek"
+            android:background="?attr/colorSurfaceVariant">
 
             <include
                 android:id="@+id/layoutWeekSchedule"
-                layout="@layout/schedule_week_list"></include>
+                layout="@layout/schedule_week_list">
+
+            </include>
         </LinearLayout>
 
         <LinearLayout
-            android:layout_marginTop="50dp"
             android:id="@+id/layouttitleTimePicker"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:weightSum="100"
-            tools:layout_editor_absoluteY="59dp"
-            app:layout_constraintTop_toBottomOf="@id/layoutWeekPanel">
+            android:layout_marginTop="20dp"
+            app:layout_constraintTop_toBottomOf="@+id/layoutWeekPanel"
+            android:background="?attr/colorSurfaceVariant">
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/titleFrom"
@@ -90,7 +97,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="50"
                 android:timePickerMode="spinner"
-                android:numbersSelectorColor="?attr/colorPrimarySurface">
+                android:background="?attr/colorSurfaceVariant">
 
             </TimePicker>
 
@@ -99,7 +106,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="50"
-                android:timePickerMode="spinner">
+                android:timePickerMode="spinner"
+                android:background="?attr/colorSurfaceVariant">
 
             </TimePicker>
 

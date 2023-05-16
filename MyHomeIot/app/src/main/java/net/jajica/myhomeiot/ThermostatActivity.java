@@ -669,7 +669,7 @@ public class ThermostatActivity extends AppCompatActivity implements View.OnClic
             case (R.id.item_settings_thermostat):
                 launchSettingsThermostat();
                 break;
-            case (R.id.item_new_schedule_thermostat):
+            case (R.id.item_new_schedule_switch):
                 launchNewScheduleThermostat();
 
                 break;

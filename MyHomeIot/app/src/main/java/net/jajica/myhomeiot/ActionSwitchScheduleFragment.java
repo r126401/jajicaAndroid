@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -224,6 +225,7 @@ public class ActionSwitchScheduleFragment extends Fragment implements View.OnCli
                     if (onActionSchedule != null) {
                         onActionSchedule.onActionSchedule(schedule, operationSchedule, oldSchedule);
                         getParentFragmentManager().popBackStack();
+                        //getParentFragmentManager().popBackStack("ScheduleSwitch", FragmentManager.POP_BACK_STACK_INCLUSIVE);
                     }
                 }
 
@@ -244,6 +246,7 @@ public class ActionSwitchScheduleFragment extends Fragment implements View.OnCli
     private void processCancelSchedule() {
 
         getParentFragmentManager().popBackStack();
+        //getParentFragmentManager().popBackStack("ScheduleSwitch", FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
     }
 

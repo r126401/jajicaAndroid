@@ -2,6 +2,7 @@ package net.jajica.myhomeiot;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -48,6 +49,8 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
 
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
+
+    private SwitchScheduleFragment switchScheduleFragment;
 
 
     /**
@@ -256,7 +259,8 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.containerSwitch, infoDeviceFragment, "infoDeviceFragment");
         fragmentTransaction.setReorderingAllowed(true);
-        fragmentTransaction.addToBackStack("scheduleSwitch");
+        fragmentTransaction.addToBackStack("infoDeviceFragment");
+        //fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
 
     }
@@ -521,42 +525,48 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
      */
     private void paintScheduleFragment() {
         Log.i(TAG, "device es : switch" + device.hashCode());
-        SwitchScheduleFragment switchScheduleFragment = new SwitchScheduleFragment(device);
+        if (switchScheduleFragment == null) {
+            switchScheduleFragment = new SwitchScheduleFragment(device);
+            switchScheduleFragment.setOnSendEventSchedule(new SwitchScheduleFragment.OnSendEventSchedule() {
+                @Override
+                public void onSendEventSchedule(ActionSwitchScheduleFragment.OPERATION_SCHEDULE operation) {
+                    switch (operation) {
+
+                        case NEW_SCHEDULE:
+                            break;
+                        case DELETE_SCHEDULE:
+                            break;
+                        case MODIFY_SCHEDULE:
+                            break;
+                        case DISPLAY_SCHEDULE:
+                            paintPanelProgressSchedule();
+                            break;
+                        case REFRESH_SCHEDULE:
+                            device.commandGetStatusDevice();
+                            updateDevice();
+                            break;
+                        case TIMEOUT:
+                            notifyTimeoutCommand();
+                            sendError();
+                            break;
+                        case UPDATE_SCHEDULE:
+                            updateDevice();
+                            break;
+
+                    }
+                }
+            });
+
+        }
+
         fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.containerSwitch, switchScheduleFragment, "ScheduleSwitch");
+        fragmentTransaction.replace(R.id.containerSwitch, switchScheduleFragment, "ScheduleSwitch");
+        fragmentTransaction.addToBackStack("ScheduleSwitch");
         fragmentTransaction.setReorderingAllowed(true);
         fragmentTransaction.commit();
 
-        switchScheduleFragment.setOnSendEventSchedule(new SwitchScheduleFragment.OnSendEventSchedule() {
-            @Override
-            public void onSendEventSchedule(ActionSwitchScheduleFragment.OPERATION_SCHEDULE operation) {
-                switch (operation) {
-
-                    case NEW_SCHEDULE:
-                        break;
-                    case DELETE_SCHEDULE:
-                        break;
-                    case MODIFY_SCHEDULE:
-                        break;
-                    case DISPLAY_SCHEDULE:
-                        paintPanelProgressSchedule();
-                        break;
-                    case REFRESH_SCHEDULE:
-                        device.commandGetStatusDevice();
-                        updateDevice();
-                        break;
-                    case TIMEOUT:
-                        notifyTimeoutCommand();
-                        sendError();
-                        break;
-                    case UPDATE_SCHEDULE:
-                        updateDevice();
-                        break;
-
-                }
-            }
-        });
 }
+
 
 
     /**
@@ -570,13 +580,13 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
 
         switch (item.getItemId()) {
 
-            case (R.id.item_new_schedule_thermostat):
+            case (R.id.item_new_schedule_switch):
                 fragmentTransaction = fragmentManager.beginTransaction();
                 ActionSwitchScheduleFragment actionSwitchScheduleFragment = new ActionSwitchScheduleFragment(null);
                 actionSwitchScheduleFragment.setOnActionSchedule(this);
                 fragmentTransaction.replace(R.id.containerSwitch, actionSwitchScheduleFragment, "NewScheduleSwitch");
                 fragmentTransaction.setReorderingAllowed(true);
-                fragmentTransaction.addToBackStack("scheduleSwitch");
+                fragmentTransaction.addToBackStack("NewScheduleSwitch");
                 fragmentTransaction.commit();
                 break;
 
@@ -762,5 +772,22 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
 
     }
 
+    @Override
+    public void onBackPressed() {
 
+
+        //fragmentManager.popBackStack("scheduleSwitch", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+        //Fragment fragment = fragmentManager.findFragmentByTag("ScheduleSwitch");
+
+        String tag = fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 1).getName();
+        Fragment fragment = fragmentManager.findFragmentByTag(tag);
+        if (tag.equals("ScheduleSwitch")) {
+            finish();
+        } else {
+            paintScheduleFragment();
+            //fragmentManager.popBackStack("ScheduleSwitch", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        }
+
+    }
 }
