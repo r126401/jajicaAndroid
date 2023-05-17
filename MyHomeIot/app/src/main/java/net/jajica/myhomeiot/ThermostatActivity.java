@@ -273,6 +273,7 @@ public class ThermostatActivity extends AppCompatActivity implements View.OnClic
         device.setOnReceivedSetThresholdTemperature(new IotDeviceThermostat.OnReceivedSetThresholdTemperature() {
             @Override
             public void onReceivedSetThresholdTemperature(IOT_CODE_RESULT resultCode) {
+                //device.commandGetStatusDevice();
                 updateDevice();
             }
         });
