@@ -23,6 +23,7 @@ import android.widget.TextView;
 
 import com.google.android.material.navigation.NavigationBarView;
 
+import net.jajica.libiot.IOT_ALARM_VALUE;
 import net.jajica.libiot.IOT_CODE_RESULT;
 import net.jajica.libiot.IOT_COMMANDS;
 import net.jajica.libiot.IOT_DEVICE_STATUS;
@@ -102,16 +103,12 @@ public class ThermostatActivity extends AppCompatActivity implements View.OnClic
         if (device.json2Object(jsonObject) != IOT_JSON_RESULT.JSON_OK) {
             return false;
         }
-        if (createConnectionMqtt() != IOT_MQTT_STATUS_CONNECTION.CONEXION_MQTT_CON_EXITO) {
-            return false;
+        if (createConnectionMqtt() == IOT_MQTT_STATUS_CONNECTION.CONEXION_MQTT_CON_EXITO) {
+            device.setCnx(cnx);
+            configureListenerDeviceThermostat();
+            updateDevice();
+            return true;
         }
-
-        device.setCnx(cnx);
-        configureListenerDeviceThermostat();
-        updateDevice();
-
-
-
 
         return true;
 
@@ -302,6 +299,8 @@ public class ThermostatActivity extends AppCompatActivity implements View.OnClic
             @Override
             public void connectionEstablished(boolean reconnect, String serverURI) {
                 Log.i(TAG, "Conexion establecida");
+                device.setConnectionState(IOT_DEVICE_STATUS_CONNECTION.DEVICE_CONNECTED);
+                device.unSubscribeDevice();
                 device.subscribeDevice();
                 device.subscribeOtaServer();
                 device.commandGetStatusDevice();
@@ -407,18 +406,8 @@ public class ThermostatActivity extends AppCompatActivity implements View.OnClic
 
             case AUTO:
             case AUTOMAN:
-                if (device.getSchedulesThermostat()!= null) {
-                    if (device.getSchedulesThermostat().size() > 0) {
-                        mBinding.textStatusThermostat.setVisibility(View.VISIBLE);
-                        mBinding.textStatusThermostat.setText(getResources().getString(R.string.auto));
-                    } else {
-                        mBinding.textStatusThermostat.setVisibility(View.INVISIBLE);
-                    }
-
-                } else {
-                    mBinding.textStatusThermostat.setVisibility(View.INVISIBLE);
-                }
-
+                mBinding.textStatusThermostat.setVisibility(View.VISIBLE);
+                mBinding.textStatusThermostat.setText(status.toString());
                 break;
             case MANUAL:
                 mBinding.textStatusThermostat.setText(getResources().getString(R.string.manual));
@@ -471,21 +460,34 @@ public class ThermostatActivity extends AppCompatActivity implements View.OnClic
 
             case UNKNOWN:
                 mBinding.progressOperationThermostat.setVisibility(View.INVISIBLE);
+                mBinding.imageUpTemperature.setEnabled(false);
+                mBinding.imageDownTemperature.setEnabled(false);
                 break;
             case DEVICE_CONNECTED:
                 mBinding.imageConnectedDeviceThermostat.setImageResource(R.drawable.ic_action_online);
+                device.getAlarms().setWifiAlarm(IOT_ALARM_VALUE.ALARM_OFF);
+                mBinding.imageUpTemperature.setEnabled(true);
+                mBinding.imageDownTemperature.setEnabled(true);
+                paintBrokerStatus();
                 break;
             case DEVICE_DISCONNECTED:
                 mBinding.imageConnectedDeviceThermostat.setImageResource(R.drawable.ic_action_offline);
+                mBinding.imageUpTemperature.setEnabled(false);
+                mBinding.imageDownTemperature.setEnabled(false);
                 break;
             case DEVICE_WAITING_RESPONSE:
                 mBinding.imageConnectedDeviceThermostat.setImageResource(R.drawable.ic_action_waiting_response);
+                mBinding.imageUpTemperature.setEnabled(false);
+                mBinding.imageDownTemperature.setEnabled(false);
                 break;
             case DEVICE_ERROR_COMMUNICATION:
             case DEVICE_NO_SUBSCRIPT:
             case DEVICE_ERROR_NO_SUBSCRIPT:
             case DEVICE_ERROR_SUBSCRIPTION:
                 mBinding.imageConnectedDeviceThermostat.setImageResource(R.drawable.ic_action_error);
+                device.getAlarms().setWifiAlarm(IOT_ALARM_VALUE.ALARM_ON);
+                mBinding.imageUpTemperature.setEnabled(false);
+                mBinding.imageDownTemperature.setEnabled(false);
                 break;
 
         }

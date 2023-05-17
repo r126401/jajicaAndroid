@@ -9,7 +9,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ActionSwitchScheduleFragment">
+        tools:context=".ActionSwitchScheduleFragment"
+        android:background="?attr/colorSurfaceVariant">
 
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -17,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:gravity="center"
-            android:text="NUEVO PROGRAMA"
+            android:text="@string/new_schedule"
             android:textColor="?attr/colorOnPrimary"
             app:layout_constraintTop_toTopOf="parent"
             android:background="?attr/colorPrimary">
@@ -31,8 +32,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:text="Dias de la semana"
-            android:textSize="20dp"
+            android:text="@string/week_days"
+            android:textSize="20sp"
             android:background="?attr/colorSurfaceVariant"
             app:layout_constraintTop_toBottomOf="@+id/textScheduleType" />
 
@@ -96,8 +97,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="50"
-                android:timePickerMode="spinner"
-                android:background="?attr/colorSurfaceVariant">
+
+                style="@style/MyTimePicker">
 
             </TimePicker>
 
@@ -111,7 +112,10 @@
 
             </TimePicker>
 
+
         </LinearLayout>
+
+
 
         <LinearLayout
             android:id="@+id/layoutButtonsTimePicker"
@@ -125,7 +129,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="50"
-                android:text="@string/cancel">
+                android:text="@string/cancel"
+                android:background="@drawable/round_corners_buttons">
 
             </androidx.appcompat.widget.AppCompatButton>
 
@@ -134,7 +139,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="50"
-                android:text="@string/button_ok">
+                android:text="@string/button_ok"
+                android:background="@drawable/round_corners_buttons">
 
             </androidx.appcompat.widget.AppCompatButton>
 

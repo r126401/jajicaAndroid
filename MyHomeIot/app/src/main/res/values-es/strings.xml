@@ -128,5 +128,6 @@
     <string name="modify_name_room_text">Introduce el nuevo nombre de la habitación</string>
     <string name="error_message_uniq_room">Error!, no se puede borrar la última habitación</string>
     <string name="error_connection_device">El dispositivo se encuentra offline temporalmente</string>
+    <string name="week_days">Dias de la semana</string>
 
 </resources>

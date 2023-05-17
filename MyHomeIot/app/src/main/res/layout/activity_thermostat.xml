@@ -23,7 +23,8 @@
             android:columnCount="5"
             android:layoutDirection="rtl"
             android:padding="10dp"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="?attr/colorSurfaceVariant">
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/imageBrokerConnected"
@@ -58,9 +59,11 @@
                 android:id="@+id/textDeviceInfoThermostat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="left"
+                android:layout_gravity="start"
                 android:layout_marginEnd="10dp"
-                android:drawableLeft="@drawable/ic_action_thermostat"
+                android:minWidth="180dp"
+                android:drawablePadding="50dp"
+                android:drawableEnd="@drawable/ic_action_thermostat"
                 android:text="@string/move_device" />
 
         </GridLayout>
@@ -80,10 +83,11 @@
             android:layout_height="wrap_content"
             android:drawableStart="@drawable/themometer"
             android:text="25.5"
-            android:textSize="40dp"
+            android:textSize="40sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textStatusThermostat" />
+            app:layout_constraintTop_toBottomOf="@+id/textStatusThermostat"
+            android:layout_marginEnd="48dp"/>
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/appCompatTextView7"
@@ -101,13 +105,14 @@
             android:id="@+id/textThresholdTemperature"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+
             android:drawableStart="@drawable/ic_action_heating"
+            android:drawablePadding="10dp"
             android:text="21.5"
             android:textSize="30dp"
             app:layout_constraintBottom_toTopOf="@+id/gridLayoutSchedule"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/textTemperature"
+            app:layout_constraintStart_toStartOf="@+id/textTemperature"
             app:layout_constraintTop_toBottomOf="@+id/textTemperature" />
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -117,30 +122,31 @@
             android:text="ºC"
             android:textSize="30dp"
             app:layout_constraintBottom_toBottomOf="@+id/textThresholdTemperature"
-            app:layout_constraintStart_toEndOf="@+id/textThresholdTemperature">
+            app:layout_constraintStart_toEndOf="@+id/textThresholdTemperature"
+            app:layout_constraintTop_toTopOf="@+id/textThresholdTemperature">
 
         </androidx.appcompat.widget.AppCompatTextView>
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/imageDownTemperature"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:src="@drawable/ic_action_left"
             app:layout_constraintBottom_toBottomOf="@+id/textThresholdTemperature"
             app:layout_constraintEnd_toStartOf="@+id/textThresholdTemperature"
-            app:layout_constraintTop_toTopOf="@+id/textThresholdTemperature"
-            android:layout_marginRight="10dp"/>
+            app:layout_constraintStart_toStartOf="@+id/gridLayoutSchedule"
+            app:layout_constraintTop_toTopOf="@+id/textThresholdTemperature" />
 
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/imageUpTemperature"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:src="@drawable/ic_action_right"
             app:layout_constraintBottom_toBottomOf="@+id/textThresholdTemperature"
+            app:layout_constraintEnd_toEndOf="@+id/gridLayoutSchedule"
             app:layout_constraintStart_toEndOf="@+id/appCompatTextView6"
-            app:layout_constraintTop_toTopOf="@+id/textThresholdTemperature"
-            android:layout_marginStart="10dp"/>
+            app:layout_constraintTop_toTopOf="@+id/textThresholdTemperature" />
 
 
         <GridLayout
@@ -148,10 +154,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:columnCount="3"
-
             app:layout_constraintBottom_toTopOf="@+id/bottomActionThermostat"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintStart_toStartOf="parent"
+            android:visibility="invisible"
+            android:layout_marginBottom="10dp">
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/textStartSchedule"
@@ -197,7 +204,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/heating"
-            app:layout_constraintBottom_toBottomOf="@+id/textThresholdTemperature"
+            app:layout_constraintBottom_toBottomOf="@+id/textTemperature"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/appCompatTextView7"
             app:layout_constraintTop_toTopOf="@+id/textTemperature" />
@@ -207,7 +214,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/textTemperature">
+            app:layout_constraintTop_toTopOf="@+id/textTemperature"
+            android:indeterminateDrawable="@drawable/style_progress_bar">
 
         </ProgressBar>
 

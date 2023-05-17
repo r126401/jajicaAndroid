@@ -8,12 +8,7 @@
 
     </item>
 
-    <item
-        android:id="@+id/item_settings_switch"
-        android:icon="@drawable/ic_settings"
-        android:title="@string/settings">
 
-    </item>
 
     <item
         android:id="@+id/item_new_schedule_switch"

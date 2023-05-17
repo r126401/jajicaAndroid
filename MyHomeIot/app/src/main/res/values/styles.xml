@@ -96,5 +96,9 @@
     </style>
 
 
+    <style name="MyTimePicker" parent="Widget.MaterialComponents.TimePicker">
+        <item name="android:timePickerMode">spinner</item>
+        <item name="android:background">?attr/colorSurfaceVariant</item>
+    </style>
     
 </resources>
