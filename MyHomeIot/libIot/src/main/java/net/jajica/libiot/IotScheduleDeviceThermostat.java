@@ -1,11 +1,13 @@
 package net.jajica.libiot;
 
+import androidx.annotation.NonNull;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
 
-public class IotScheduleDeviceThermostat extends IotScheduleDeviceSwitch implements Serializable {
+public class IotScheduleDeviceThermostat extends IotScheduleDeviceSwitch implements Serializable, Cloneable {
 
     protected double thresholdTemperature;
 
@@ -64,4 +66,8 @@ public class IotScheduleDeviceThermostat extends IotScheduleDeviceSwitch impleme
 
         return objectSchedule;
     }
+
+
+
+
 }

@@ -320,6 +320,7 @@ public class IotDeviceThermostat extends IotDeviceThermometer implements Seriali
         }
         setThresholdTemperature(i);
 
+
         return IOT_CODE_RESULT.RESUT_CODE_OK;
 
     }
@@ -511,6 +512,7 @@ public class IotDeviceThermostat extends IotDeviceThermometer implements Seriali
             return result;
         }
         setThresholdTemperatureFromReport(message);
+        setStateRelayFromReport(message);
         return IOT_CODE_RESULT.RESUT_CODE_OK;
 
     }
@@ -559,5 +561,39 @@ public class IotDeviceThermostat extends IotDeviceThermometer implements Seriali
         }
         super.setConnectionState(connectionState);
     }
+
+    public Boolean checkValidScheduleThermostatDevice(IotScheduleDeviceThermostat schedule, String oldScheduleId) {
+
+
+        int i;
+
+        if (getSchedulesThermostat() != null) {
+            for(i=0;i<getSchedulesThermostat().size();i++) {
+                if (getSchedulesThermostat().get(i).getScheduleId().equals(oldScheduleId)) {
+                    continue;
+                }
+
+                if (!checkValidProg(
+                        getSchedulesThermostat().get(i).getHour(),
+                        getSchedulesThermostat().get(i).getMinute(),
+                        getSchedulesThermostat().get(i).getSecond(),
+                        getSchedulesThermostat().get(i).getDuration(),
+                        schedule.getHour(),
+                        schedule.getMinute(),
+                        schedule.getSecond(),
+                        schedule.getDuration()
+                )) {
+                    Log.w(TAG, "El intervalo no es valido");
+                    return false;
+                }
+
+            }
+        }
+
+
+        Log.i(TAG, "El schedule es valido y se puede lanzar");
+        return true;
+    }
+
 
 }

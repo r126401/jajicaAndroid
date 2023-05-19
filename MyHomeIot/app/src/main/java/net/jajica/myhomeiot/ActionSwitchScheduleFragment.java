@@ -16,6 +16,8 @@ import android.view.ViewGroup;
 import net.jajica.libiot.IOT_CLASS_SCHEDULE;
 import net.jajica.libiot.IOT_STATE_SCHEDULE;
 import net.jajica.libiot.IOT_SWITCH_RELAY;
+import net.jajica.libiot.IotDeviceSwitch;
+import net.jajica.libiot.IotScheduleDevice;
 import net.jajica.libiot.IotScheduleDeviceSwitch;
 import net.jajica.myhomeiot.databinding.FragmentActionSwitchScheduleBinding;
 import java.util.ArrayList;
@@ -26,6 +28,7 @@ public class ActionSwitchScheduleFragment extends Fragment implements View.OnCli
     private final String TAG = "ActionSwitchScheduleFragment";
     private FragmentActionSwitchScheduleBinding binding;
     private IotScheduleDeviceSwitch schedule;
+    private IotScheduleDeviceSwitch originalSchedule;
 
     private OPERATION_SCHEDULE operationSchedule;
 
@@ -35,13 +38,15 @@ public class ActionSwitchScheduleFragment extends Fragment implements View.OnCli
 
     private String oldSchedule;
 
+    private IotDeviceSwitch device;
+
     /**
      * Este interface implementa las notificaciones de las operaciones que se realizan desde este
      * fragment con el objetivo de acutalizar las vistas del adapter y principal de la activity
      */
     public interface OnActionSchedule {
 
-        void onActionSchedule(IotScheduleDeviceSwitch schedule, OPERATION_SCHEDULE operationSchedule, String adittionalInfo);
+        Boolean onActionSchedule(IotScheduleDeviceSwitch schedule, OPERATION_SCHEDULE operationSchedule, String adittionalInfo);
     }
 
     public void setOnActionSchedule(OnActionSchedule onActionSchedule) {
@@ -61,15 +66,13 @@ public class ActionSwitchScheduleFragment extends Fragment implements View.OnCli
         TIMEOUT,
     }
 
-    public ActionSwitchScheduleFragment() {
-        // Required empty public constructor
-    }
+
 
     /**
      *
      * @param schedule es el programa en curso sobre el que se puede actuar
      */
-    public ActionSwitchScheduleFragment(IotScheduleDeviceSwitch schedule) {
+    public ActionSwitchScheduleFragment(IotScheduleDeviceSwitch schedule, IotDeviceSwitch device) {
 
         if (schedule == null) {
             operationSchedule = OPERATION_SCHEDULE.NEW_SCHEDULE;
@@ -77,12 +80,17 @@ public class ActionSwitchScheduleFragment extends Fragment implements View.OnCli
             operationSchedule = OPERATION_SCHEDULE.MODIFY_SCHEDULE;
         }
 
-        this.schedule = schedule;
+        this.originalSchedule = schedule;
+        this.schedule = (IotScheduleDeviceSwitch) originalSchedule.clone();
+
+
         if (schedule != null) {
             oldSchedule = schedule.getScheduleId();
         } else {
             oldSchedule = null;
         }
+
+        this.device = device;
 
 
     }
@@ -223,8 +231,12 @@ public class ActionSwitchScheduleFragment extends Fragment implements View.OnCli
             case (R.id.buttonAcceptSchedule):
                 if (processActionSchedule()) {
                     if (onActionSchedule != null) {
-                        onActionSchedule.onActionSchedule(schedule, operationSchedule, oldSchedule);
-                        getParentFragmentManager().popBackStack();
+                        if (!onActionSchedule.onActionSchedule(schedule, operationSchedule, oldSchedule)) {
+                            errorMessage();
+                        } else {
+                            getParentFragmentManager().popBackStack();
+                        }
+
                         //getParentFragmentManager().popBackStack("ScheduleSwitch", FragmentManager.POP_BACK_STACK_INCLUSIVE);
                     }
                 }
@@ -262,10 +274,7 @@ public class ActionSwitchScheduleFragment extends Fragment implements View.OnCli
         int duration;
         tool = new MyHomeIotTools();
 
-        if (!checkRulesControls()) {
-            errorMessage();
-            return false;
-        }
+
 
         duration = tool.diffDate(
                 binding.timePickerFrom.getHour(),
@@ -278,6 +287,10 @@ public class ActionSwitchScheduleFragment extends Fragment implements View.OnCli
         schedule.setDuration(duration);
         schedule.setMask(tool.readMask(listWeek));
         schedule.setRelay(IOT_SWITCH_RELAY.ON);
+        if (!checkRulesControls(schedule)) {
+            errorMessage();
+            return false;
+        }
         if (schedule.getScheduleState() == IOT_STATE_SCHEDULE.UNKNOWN_SCHEDULE) {
             schedule.setScheduleState(IOT_STATE_SCHEDULE.ACTIVE_SCHEDULE);
         }
@@ -286,19 +299,33 @@ public class ActionSwitchScheduleFragment extends Fragment implements View.OnCli
     }
 
 
-    private Boolean checkRulesControls() {
+    private Boolean checkRulesControls(IotScheduleDeviceSwitch schedule) {
 
-        int time1;
-        int time2;
+        int duration;
+        MyHomeIotTools tool;
+        tool = new MyHomeIotTools();
 
-        time1 = (binding.timePickerFrom.getHour() * 3600) + (binding.timePickerFrom.getMinute() * 60);
-        time2 = (binding.timePickerTo.getHour() * 3600) + (binding.timePickerTo.getMinute() * 60);
+        if ((duration = tool.diffDate(
+                binding.timePickerFrom.getHour(),
+                binding.timePickerFrom.getMinute(),
+                binding.timePickerTo.getHour(),
+                binding.timePickerTo.getMinute())) <= 0) {
 
-        if (time1 >= time2) {
+            Log.e(TAG, "intervalos nok");
             return false;
-        } else {
-            return true;
         }
+
+        /*
+        if (!device.checkValidScheduleSwitchDevice(schedule)) {
+            Log.e(TAG, "el intevalo no es valido");
+            return false;
+        }
+
+
+         */
+
+        return true;
+
     }
 
     private void errorMessage() {

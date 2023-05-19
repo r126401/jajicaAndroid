@@ -2131,6 +2131,37 @@ public abstract class IotDevice implements Serializable {
      */
     public Boolean checkValidSchedule(IotScheduleDevice schedule, String oldScheduleId) {
 
+        int i;
+
+        if (getSchedules() != null) {
+            for(i=0;i<getSchedules().size();i++) {
+                if (getSchedules().get(i).getScheduleId().equals(oldScheduleId)) {
+                    continue;
+                }
+
+                if (!checkValidProg(
+                        getSchedules().get(i).getHour(),
+                        getSchedules().get(i).getMinute(),
+                        getSchedules().get(i).getSecond(),
+                        getSchedules().get(i).getDuration(),
+                        schedule.getHour(),
+                        schedule.getMinute(),
+                        schedule.getSecond(),
+                        schedule.getDuration()
+                )) {
+                    Log.w(TAG, "El intervalo no es valido");
+                    return false;
+                }
+
+            }
+        }
+
+
+        Log.i(TAG, "El schedule es valido y se puede lanzar");
+        return true;
+
+
+        /*
         int beginInterval;
         int endInterval;
         int seconds;
@@ -2160,6 +2191,8 @@ public abstract class IotDevice implements Serializable {
             }
         }
         return true;
+
+         */
     }
 
     private Boolean checkInterval(int seconds, int beginInterval, int endInterval) {
@@ -2239,6 +2272,41 @@ public abstract class IotDevice implements Serializable {
         }
 
         return IOT_DEVICE_STATUS_CONNECTION.DEVICE_WAITING_RESPONSE;
+    }
+
+
+    protected Boolean checkValidProg(int hour1, int minute1, int second1,int duration1, int hour2, int minute2, int second2, int duration2) {
+
+
+        double interval1;
+        double interval2;
+        double intervalSchedule1;
+        double intervalSchedule2;
+        IotTools tool;
+        tool = new IotTools();
+
+        interval1 = tool.secondOfDay(hour1, minute1, second1);
+        interval2 = interval1 + duration1;
+        intervalSchedule1 = tool.secondOfDay(hour2, minute2, second2);
+        intervalSchedule2 = intervalSchedule1 + duration2;
+
+        if ((intervalSchedule1 >= interval1) && (intervalSchedule1 <= interval2)) {
+            Log.w(TAG, "La hora inicial del schedule esta dentro del intervalo del programa ");
+            return false;
+        }
+
+        if ((intervalSchedule2 >= interval1) && (intervalSchedule2 <= interval2)) {
+            Log.w(TAG, "La hora final del schedule esta dentro del intervalo del programa ");
+            return false;
+        }
+
+        if ((interval1 >= intervalSchedule1) && (interval2 <= intervalSchedule2)) {
+            Log.w(TAG, "El intervalo elegido solapa el existente");
+            return false;
+        }
+
+        return true;
+
     }
 
 

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="200dp"
+    android:layout_height="wrap_content"
     tools:context=".SettingsDialogFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -16,7 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/hello_blank_fragment"
-            android:textSize="30sp"
+            android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -27,55 +27,66 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="25.5"
-            android:textSize="30sp"
+            android:textSize="20sp"
+            android:minWidth="48dp"
             app:layout_constraintEnd_toEndOf="@+id/textNameParameter"
             app:layout_constraintStart_toStartOf="@+id/textNameParameter"
             app:layout_constraintTop_toBottomOf="@+id/textNameParameter">
 
         </com.google.android.material.textfield.TextInputEditText>
 
-        <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/switchSensor"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layoutSensor"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:showText="true"
-            android:text="local"
-            android:thumb="@drawable/thumbswitch"
-            app:track="@drawable/trackswitch"
-            android:background="?attr/colorSecondaryContainer"
-            android:backgroundTint="?attr/colorSecondaryContainer"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textValueParameter"
-            android:visibility="invisible"/>
+            app:layout_constraintTop_toBottomOf="@+id/textValueParameter">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/textSensor"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="sensor id"
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/switchSensor"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="?attr/colorSecondaryContainer"
+                android:backgroundTint="?attr/colorSecondaryContainer"
+                android:showText="true"
+                android:text="local"
+                android:thumb="@drawable/thumbswitch"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:track="@drawable/trackswitch" />
 
-            app:layout_constraintBottom_toBottomOf="@+id/switchSensor"
-            app:layout_constraintEnd_toStartOf="@+id/buttonQrSensor"
-            app:layout_constraintStart_toEndOf="@+id/switchSensor"
-            app:layout_constraintTop_toTopOf="@+id/switchSensor"
-            android:visibility="invisible">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/textSensor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="sensor id"
+                android:minHeight="50dp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/switchSensor"
+                app:layout_constraintEnd_toStartOf="@+id/buttonQrSensor"
+                app:layout_constraintStart_toEndOf="@+id/switchSensor"
+                app:layout_constraintTop_toTopOf="@+id/switchSensor">
 
-        </com.google.android.material.textfield.TextInputEditText>
+            </com.google.android.material.textfield.TextInputEditText>
 
-        <androidx.appcompat.widget.AppCompatImageButton
-            android:id="@+id/buttonQrSensor"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@color/zxing_transparent"
-            android:src="@drawable/ic_action_qr"
-            app:layout_constraintBottom_toBottomOf="@+id/textSensor"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/textValueParameter"
-            app:layout_constraintTop_toTopOf="@+id/textSensor"
-            android:visibility="invisible">
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/buttonQrSensor"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@color/zxing_transparent"
+                android:src="@drawable/ic_action_qr"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/textSensor"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/textSensor"
+                android:contentDescription="@string/action_scan">
 
-        </androidx.appcompat.widget.AppCompatImageButton>
+            </androidx.appcompat.widget.AppCompatImageButton>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

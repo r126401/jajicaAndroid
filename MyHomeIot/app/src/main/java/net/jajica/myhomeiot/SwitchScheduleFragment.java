@@ -18,6 +18,7 @@ import net.jajica.libiot.IOT_CODE_RESULT;
 import net.jajica.libiot.IOT_STATE_SCHEDULE;
 import net.jajica.libiot.IotDevice;
 import net.jajica.libiot.IotDeviceSwitch;
+import net.jajica.libiot.IotScheduleDevice;
 import net.jajica.libiot.IotScheduleDeviceSwitch;
 import net.jajica.myhomeiot.databinding.FragmentSwitchScheduleBinding;
 
@@ -254,11 +255,17 @@ public class SwitchScheduleFragment extends Fragment implements SwipeRefreshLayo
                         schedule = device.getSchedulesSwitch().get(position);
                         Log.i(TAG, "device: Fragment" + device.hashCode());
                         ActionSwitchScheduleFragment actionSwitchScheduleFragment;
-                        actionSwitchScheduleFragment = new ActionSwitchScheduleFragment(schedule);
+                        actionSwitchScheduleFragment = new ActionSwitchScheduleFragment(schedule, device);
                         actionSwitchScheduleFragment.setOnActionSchedule(new ActionSwitchScheduleFragment.OnActionSchedule() {
                             @Override
-                            public void onActionSchedule(IotScheduleDeviceSwitch schedule, ActionSwitchScheduleFragment.OPERATION_SCHEDULE operationSchedule, String adittionalInfo) {
-                                device.commandModifyScheduleDevice(schedule);
+                            public Boolean onActionSchedule(IotScheduleDeviceSwitch schedule, ActionSwitchScheduleFragment.OPERATION_SCHEDULE operationSchedule, String aditionalInfo) {
+                                if (device.checkValidScheduleSwitchDevice(schedule, aditionalInfo)) {
+                                    device.commandModifyScheduleDevice(schedule);
+                                    return true;
+                                } else {
+                                    return false;
+                                }
+
                             }
                         });
                         FragmentManager fragmentManager = getParentFragmentManager();

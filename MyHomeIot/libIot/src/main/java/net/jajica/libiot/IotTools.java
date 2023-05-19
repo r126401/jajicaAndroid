@@ -334,6 +334,14 @@ public class IotTools implements Serializable {
     }
 
 
+    public double secondOfDay(int hour, int minute, int second) {
+
+        return (hour*3600) + (minute * 60) + second;
+
+
+    }
+
+
 
 
 }

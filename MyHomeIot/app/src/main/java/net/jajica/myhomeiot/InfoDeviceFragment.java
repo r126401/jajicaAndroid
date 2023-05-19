@@ -95,6 +95,8 @@ public class InfoDeviceFragment extends Fragment {
                 FragmentTransaction fragmentTransaction;
                 fragmentTransaction = fragmentManager.beginTransaction();
                 settingsDialogFragment = new SettingsDialogFragment(parameter, value, getContext());
+                settingsDialogFragment.setParameterDialog(R.drawable.ic_settings, R.string.settings, R.string.modify_parameter_message);
+
                 settingsDialogFragment.show(fragmentTransaction, "infoDevice");
 
                 settingsDialogFragment.setOnScanDeviceListener(new SettingsDialogFragment.OnScanDeviceListener() {

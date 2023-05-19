@@ -3,13 +3,15 @@ package net.jajica.libiot;
 import android.annotation.SuppressLint;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
 import java.util.Formatter;
 
-public class IotScheduleDevice implements Serializable {
+public class IotScheduleDevice implements Serializable, Cloneable {
 
     private final String TAG = "IotScheduleDevice";
     protected String rawSchedule;
@@ -422,5 +424,13 @@ public class IotScheduleDevice implements Serializable {
 
     }
 
-
+    @NonNull
+    @Override
+    public Object clone()  {
+        try {
+            return super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

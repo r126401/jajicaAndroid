@@ -132,6 +132,8 @@
     <string name="error_message_uniq_room">Error!, no se puede borrar la última habitación</string>
     <string name="error_connection_device">El dispositivo se encuentra offline temporalmente</string>
     <string name="week_days">Dias de la semana</string>
+    <string name="centigrates">ºC</string>
+    <string name="modify_parameter_message">Modificación del parametro del dispositivo</string>
 
 
 </resources>

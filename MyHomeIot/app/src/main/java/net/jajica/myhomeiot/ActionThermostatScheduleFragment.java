@@ -1,26 +1,33 @@
 package net.jajica.myhomeiot;
 
 import android.app.AlertDialog;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.fragment.app.Fragment;
 
+import android.os.CountDownTimer;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import net.jajica.libiot.IOT_CLASS_SCHEDULE;
 import net.jajica.libiot.IOT_STATE_SCHEDULE;
 import net.jajica.libiot.IOT_SWITCH_RELAY;
 import net.jajica.libiot.IotScheduleDeviceThermostat;
+
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import net.jajica.myhomeiot.databinding.FragmentActionThermostatScheduleBinding;
 
 
-public class ActionThermostatScheduleFragment extends Fragment implements View.OnClickListener{
+public class ActionThermostatScheduleFragment extends Fragment implements View.OnClickListener {
 
 
 
@@ -32,13 +39,16 @@ public class ActionThermostatScheduleFragment extends Fragment implements View.O
         DELETE_SCHEDULE,
         MODIFY_SCHEDULE,
         DISPLAY_SCHEDULE,
-        REFRESH_SCHEDULE
+        REFRESH_SCHEDULE,
+        UPDATE_SCHEDULE,
+        TIMEOUT,
     }
 
     private final String TAG = "ActionThermostatScheduleFragment";
 
     private FragmentActionThermostatScheduleBinding binding;
     private IotScheduleDeviceThermostat schedule;
+    private IotScheduleDeviceThermostat originalSchedule;
 
     private OPERATION_SCHEDULE operationSchedule;
 
@@ -47,6 +57,11 @@ public class ActionThermostatScheduleFragment extends Fragment implements View.O
     private ArrayList<AppCompatTextView> listWeek;
 
     private String oldSchedule;
+    private CountDownTimer counter;
+    private Handler handler;
+    private Boolean autoincremento;
+    private Boolean autodecremento;
+
 
 
 
@@ -56,7 +71,7 @@ public class ActionThermostatScheduleFragment extends Fragment implements View.O
      */
     public interface OnActionSchedule {
 
-        void onActionSchedule(IotScheduleDeviceThermostat schedule, ActionThermostatScheduleFragment.OPERATION_SCHEDULE operationSchedule, String aditionalInfo);
+        Boolean onActionSchedule(IotScheduleDeviceThermostat schedule, ActionThermostatScheduleFragment.OPERATION_SCHEDULE operationSchedule, String aditionalInfo);
     }
 
     public void setOnActionSchedule(ActionThermostatScheduleFragment.OnActionSchedule onActionSchedule) {
@@ -79,7 +94,9 @@ public class ActionThermostatScheduleFragment extends Fragment implements View.O
             operationSchedule = OPERATION_SCHEDULE.MODIFY_SCHEDULE;
         }
 
-        this.schedule = schedule;
+        this.originalSchedule = schedule;
+        this.schedule = (IotScheduleDeviceThermostat) originalSchedule.clone();
+        //originalSchedule = (IotScheduleDeviceThermostat) schedule.clone();
         if (schedule != null) {
             oldSchedule = schedule.getScheduleId();
         } else {
@@ -183,6 +200,8 @@ public class ActionThermostatScheduleFragment extends Fragment implements View.O
         rootView = binding.getRoot();
         binding.timePickerFrom.setIs24HourView(true);
         binding.timePickerTo.setIs24HourView(true);
+        binding.imageDownThreshold.setOnClickListener(this);
+        binding.imageUpThreshold.setOnClickListener(this);
         if (schedule == null) {
             binding.textScheduleType.setText(getResources().getString(R.string.new_schedule));
         } else {
@@ -200,8 +219,13 @@ public class ActionThermostatScheduleFragment extends Fragment implements View.O
             case (R.id.buttonAcceptSchedule):
                 if (processActionSchedule()) {
                     if (onActionSchedule != null) {
-                        onActionSchedule.onActionSchedule(schedule, operationSchedule, oldSchedule);
-                        getParentFragmentManager().popBackStack();
+                        if (onActionSchedule.onActionSchedule(schedule, operationSchedule, oldSchedule)) {
+                            getParentFragmentManager().popBackStack();
+                        } else {
+                            errorMessage();
+
+                        }
+
                     }
                 }
 
@@ -210,17 +234,63 @@ public class ActionThermostatScheduleFragment extends Fragment implements View.O
                 processCancelSchedule();
 
                 break;
+
+            case (R.id.imageUpThreshold):
+                modifyDoubleValue(binding.textThreshold, true, 0.5, 0, 30);
+                break;
+            case (R.id.imageDownThreshold):
+                modifyDoubleValue(binding.textThreshold, false, 0.5, 0, 30);
+                break;
+
         }
 
 
+
+
     }
+
+
+    private void modifyDoubleValue(TextView controlTexto, Boolean incremento, double valor, double minVal, double maxVal) {
+
+        double cantidad;
+
+        cantidad = Double.parseDouble(controlTexto.getText().toString());
+        if (incremento == true) {
+            cantidad += valor;
+            if (cantidad >= maxVal) cantidad = maxVal;
+        } else {
+            cantidad -= valor;
+            if (cantidad <= minVal) cantidad = minVal;
+        }
+
+        DecimalFormat formater = new DecimalFormat("##.#");
+        String dato;
+        dato = formater.format(cantidad);
+        String dat;
+        dat = dato.substring(0,2);
+        if (dato.length() > 2) {
+            dat += ".";
+            dat += dato.substring(3);
+        } else {
+            dat += ".0";
+        }
+
+        controlTexto.setText(dat);
+
+
+    }
+
+
+
 
     /**
      * Este metodo devuelve el control al fragment anterior.
      */
     private void processCancelSchedule() {
 
+        //schedule = originalSchedule;
         getParentFragmentManager().popBackStack();
+
 
     }
 
@@ -236,10 +306,7 @@ public class ActionThermostatScheduleFragment extends Fragment implements View.O
         int duration;
         tool = new MyHomeIotTools();
 
-        if (!checkRulesControls()) {
-            errorMessage();
-            return false;
-        }
+
 
         duration = tool.diffDate(
                 binding.timePickerFrom.getHour(),
@@ -252,6 +319,11 @@ public class ActionThermostatScheduleFragment extends Fragment implements View.O
         schedule.setDuration(duration);
         schedule.setMask(tool.readMask(listWeek));
         schedule.setRelay(IOT_SWITCH_RELAY.ON);
+        schedule.setThresholdTemperature(Double.parseDouble(binding.textThreshold.getText().toString()));
+        if (!checkRulesControls()) {
+            errorMessage();
+            return false;
+        }
         if (schedule.getScheduleState() == IOT_STATE_SCHEDULE.UNKNOWN_SCHEDULE) {
             schedule.setScheduleState(IOT_STATE_SCHEDULE.ACTIVE_SCHEDULE);
         }
@@ -262,17 +334,22 @@ public class ActionThermostatScheduleFragment extends Fragment implements View.O
 
     private Boolean checkRulesControls() {
 
-        int time1;
-        int time2;
+        int duration;
+        MyHomeIotTools tool;
+        tool = new MyHomeIotTools();
 
-        time1 = (binding.timePickerFrom.getHour() * 3600) + (binding.timePickerFrom.getMinute() * 60);
-        time2 = (binding.timePickerTo.getHour() * 3600) + (binding.timePickerTo.getMinute() * 60);
+        if ((duration = tool.diffDate(
+                binding.timePickerFrom.getHour(),
+                binding.timePickerFrom.getMinute(),
+                binding.timePickerTo.getHour(),
+                binding.timePickerTo.getMinute())) <= 0) {
 
-        if (time1 >= time2) {
+            Log.e(TAG, "intervalos nok");
             return false;
-        } else {
-            return true;
         }
+
+        return true;
+
     }
 
     private void errorMessage() {
@@ -288,7 +365,6 @@ public class ActionThermostatScheduleFragment extends Fragment implements View.O
 
 
     }
-
 
 
 }

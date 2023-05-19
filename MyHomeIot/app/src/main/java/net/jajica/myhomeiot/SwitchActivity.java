@@ -582,7 +582,7 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
 
             case (R.id.item_new_schedule_switch):
                 fragmentTransaction = fragmentManager.beginTransaction();
-                ActionSwitchScheduleFragment actionSwitchScheduleFragment = new ActionSwitchScheduleFragment(null);
+                ActionSwitchScheduleFragment actionSwitchScheduleFragment = new ActionSwitchScheduleFragment(null, device);
                 actionSwitchScheduleFragment.setOnActionSchedule(this);
                 fragmentTransaction.replace(R.id.containerSwitch, actionSwitchScheduleFragment, "NewScheduleSwitch");
                 fragmentTransaction.setReorderingAllowed(true);
@@ -637,25 +637,30 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
      * @param operationSchedule
      */
     @Override
-    public void onActionSchedule(IotScheduleDeviceSwitch schedule, ActionSwitchScheduleFragment.OPERATION_SCHEDULE operationSchedule, String additionalInfo) {
+    public Boolean onActionSchedule(IotScheduleDeviceSwitch schedule, ActionSwitchScheduleFragment.OPERATION_SCHEDULE operationSchedule, String additionalInfo) {
 
         if (operationSchedule == ActionSwitchScheduleFragment.OPERATION_SCHEDULE.NEW_SCHEDULE) {
-            if (device.checkValidSchedule(schedule, null)) {
+            if (device.checkValidScheduleSwitchDevice(schedule, null)) {
                 device.commandNewScheduleDevice(schedule);
+                return true;
+            } else {
+                return false;
             }
 
         }
 
         if (operationSchedule == ActionSwitchScheduleFragment.OPERATION_SCHEDULE.MODIFY_SCHEDULE) {
 
-            if (device.checkValidSchedule(schedule, additionalInfo)) {
+            if (device.checkValidScheduleSwitchDevice(schedule, additionalInfo)) {
                 device.commandModifyScheduleDevice(schedule);
+                return true;
+            } else {
+                return false;
             }
 
         }
 
-
-
+        return true;
     }
 
 
@@ -775,18 +780,12 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
     @Override
     public void onBackPressed() {
 
-
-        //fragmentManager.popBackStack("scheduleSwitch", FragmentManager.POP_BACK_STACK_INCLUSIVE);
-
-        //Fragment fragment = fragmentManager.findFragmentByTag("ScheduleSwitch");
-
         String tag = fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 1).getName();
         Fragment fragment = fragmentManager.findFragmentByTag(tag);
         if (tag.equals("ScheduleSwitch")) {
             finish();
         } else {
             paintScheduleFragment();
-            //fragmentManager.popBackStack("ScheduleSwitch", FragmentManager.POP_BACK_STACK_INCLUSIVE);
         }
 
     }

@@ -25,7 +25,7 @@ public class ThermostatScheduleFragment extends Fragment implements SwipeRefresh
 
     private final String TAG = "ThermostatScheduleFragment";
     private FragmentThermostatScheduleBinding mBinding;
-    private IotDeviceThermostat device;
+    static IotDeviceThermostat device;
 
     private ThermostatScheduleAdapter adapter;
 
@@ -99,6 +99,7 @@ public class ThermostatScheduleFragment extends Fragment implements SwipeRefresh
         device.setOnReceivedScheduleDevice(new IotDevice.OnReceivedScheduleDevice() {
             @Override
             public void onReceivedScheduleDevice(IOT_CODE_RESULT resultCode) {
+                fillAdapter();
 
             }
         });
@@ -107,6 +108,11 @@ public class ThermostatScheduleFragment extends Fragment implements SwipeRefresh
         device.setOnReceivedModifySchedule(new IotDevice.OnReceivedModifySchedule() {
             @Override
             public void onReceivedModifySchedule(IOT_CODE_RESULT resultCode) {
+                Log.i(TAG, "hola");
+                adapter.notifyDataSetChanged();
+                if (onSendEventSchedule != null) {
+                    onSendEventSchedule.onSendEventSchedule(ActionThermostatScheduleFragment.OPERATION_SCHEDULE.MODIFY_SCHEDULE);
+                }
 
             }
         });
@@ -115,7 +121,13 @@ public class ThermostatScheduleFragment extends Fragment implements SwipeRefresh
         device.setOnReceivedDeleteScheduleDevice(new IotDevice.OnReceivedDeleteScheduleDevice() {
             @Override
             public void onReceivedDeleteScheduleDevice(IOT_CODE_RESULT resultCode, String scheduleId) {
-
+                if (resultCode == IOT_CODE_RESULT.RESUT_CODE_OK) {
+                    device.commandGetScheduleDevice();
+                    Log.i(TAG, "device es : onReceivedDeleteScheduleDevice " + device.hashCode());
+                    if (onSendEventSchedule != null) {
+                        onSendEventSchedule.onSendEventSchedule(ActionThermostatScheduleFragment.OPERATION_SCHEDULE.DELETE_SCHEDULE);
+                    }
+                }
             }
         });
 
@@ -124,6 +136,14 @@ public class ThermostatScheduleFragment extends Fragment implements SwipeRefresh
             @Override
             public void onReceivedNewSchedule(IOT_CODE_RESULT resultCode) {
 
+                if (resultCode == IOT_CODE_RESULT.RESUT_CODE_OK) {
+                    Log.i(TAG, "Se recibe la respuesta del nuevo programa y estamos listos para insertarlo");
+                    device.commandGetScheduleDevice();
+                    if (onSendEventSchedule != null) {
+                        onSendEventSchedule.onSendEventSchedule(ActionThermostatScheduleFragment.OPERATION_SCHEDULE.NEW_SCHEDULE);
+                    }
+                }
+
             }
         });
 
@@ -131,6 +151,8 @@ public class ThermostatScheduleFragment extends Fragment implements SwipeRefresh
         device.setOnReceivedTimeoutCommand(new IotDevice.OnReceivedTimeoutCommand() {
             @Override
             public void onReceivedTimeoutCommand(String token) {
+                Log.e(TAG, "Recibido timeout");
+                onSendEventSchedule.onSendEventSchedule(ActionThermostatScheduleFragment.OPERATION_SCHEDULE.TIMEOUT);
 
             }
         });
@@ -172,8 +194,14 @@ public class ThermostatScheduleFragment extends Fragment implements SwipeRefresh
                         actionThermostatScheduleFragment = new ActionThermostatScheduleFragment(schedule);
                         actionThermostatScheduleFragment.setOnActionSchedule(new ActionThermostatScheduleFragment.OnActionSchedule() {
                             @Override
-                            public void onActionSchedule(IotScheduleDeviceThermostat schedule, ActionThermostatScheduleFragment.OPERATION_SCHEDULE operationSchedule, String adittionalInfo) {
-                                device.commandModifyScheduleDevice(schedule);
+                            public Boolean onActionSchedule(IotScheduleDeviceThermostat schedule, ActionThermostatScheduleFragment.OPERATION_SCHEDULE operationSchedule, String aditionalInfo) {
+                                if (device.checkValidScheduleThermostatDevice(schedule, aditionalInfo)) {
+                                    device.commandModifyScheduleDevice(schedule);
+                                    return true;
+                                } else {
+                                    return false;
+                                }
+
                             }
                         });
                         FragmentManager fragmentManager = getParentFragmentManager();

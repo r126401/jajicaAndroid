@@ -2,6 +2,7 @@ package net.jajica.myhomeiot;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -173,6 +174,14 @@ public class ThermostatActivity extends AppCompatActivity implements View.OnClic
             }
         });
 
+        device.setOnReceivedNewSchedule(new IotDevice.OnReceivedNewSchedule() {
+            @Override
+            public void onReceivedNewSchedule(IOT_CODE_RESULT resultCode) {
+                Log.i(TAG, "Recibida nueva programacion");
+                device.commandGetScheduleDevice();
+            }
+        });
+
 
 
         /**
@@ -285,7 +294,7 @@ public class ThermostatActivity extends AppCompatActivity implements View.OnClic
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.containerThermostat, infoDeviceFragment, "infoDeviceFragment");
         fragmentTransaction.setReorderingAllowed(true);
-        fragmentTransaction.addToBackStack("scheduleThermostat");
+        fragmentTransaction.addToBackStack("infoDeviceFragment");
         fragmentTransaction.commit();
 
     }
@@ -722,7 +731,7 @@ public class ThermostatActivity extends AppCompatActivity implements View.OnClic
         actionThermostatScheduleFragment.setOnActionSchedule(this);
         fragmentTransaction.replace(R.id.containerThermostat, actionThermostatScheduleFragment, "NewScheduleThermostat");
         fragmentTransaction.setReorderingAllowed(true);
-        fragmentTransaction.addToBackStack("ScheduleThermostat");
+        fragmentTransaction.addToBackStack("NewScheduleThermostat");
         fragmentTransaction.commit();
     }
 
@@ -777,11 +786,44 @@ public class ThermostatActivity extends AppCompatActivity implements View.OnClic
 
     private void paintScheduleFragment() {
         Log.i(TAG, "device es : Thermostat" + device.hashCode());
-        thermostatScheduleFragment = new ThermostatScheduleFragment(device);
+        if (thermostatScheduleFragment == null) {
+            thermostatScheduleFragment = new ThermostatScheduleFragment(device);
+            thermostatScheduleFragment.setOnSendEventSchedule(new ThermostatScheduleFragment.OnSendEventSchedule() {
+                @Override
+                public void onSendEventSchedule(ActionThermostatScheduleFragment.OPERATION_SCHEDULE operation) {
+                    switch (operation) {
+
+                        case NEW_SCHEDULE:
+                            break;
+                        case DELETE_SCHEDULE:
+                            break;
+                        case MODIFY_SCHEDULE:
+                            break;
+                        case DISPLAY_SCHEDULE:
+                            paintPanelProgressSchedule();
+                            break;
+                        case REFRESH_SCHEDULE:
+                            device.commandGetStatusDevice();
+                            updateDevice();
+                        case TIMEOUT:
+                            notifyTimeoutCommand();
+                            sendError();
+                            break;
+                        case UPDATE_SCHEDULE:
+                            updateDevice();
+                            break;
+
+                    }
+                }
+            });
+
+        }
+
         fragmentManager = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.containerThermostat, thermostatScheduleFragment, "ScheduleThermostat");
+        fragmentTransaction.replace(R.id.containerThermostat, thermostatScheduleFragment, "ScheduleThermostat");
         fragmentTransaction.setReorderingAllowed(true);
+        fragmentTransaction.addToBackStack("ScheduleThermostat");
         fragmentTransaction.commit();
 
         thermostatScheduleFragment.setOnSendEventSchedule(new ThermostatScheduleFragment.OnSendEventSchedule() {
@@ -809,22 +851,30 @@ public class ThermostatActivity extends AppCompatActivity implements View.OnClic
     }
 
     @Override
-    public void onActionSchedule(IotScheduleDeviceThermostat schedule, ActionThermostatScheduleFragment.OPERATION_SCHEDULE operationSchedule, String aditionalInfo) {
+    public Boolean onActionSchedule(IotScheduleDeviceThermostat schedule, ActionThermostatScheduleFragment.OPERATION_SCHEDULE operationSchedule, String aditionalInfo) {
 
         if (operationSchedule == ActionThermostatScheduleFragment.OPERATION_SCHEDULE.NEW_SCHEDULE) {
-            if (device.checkValidSchedule(schedule, null)) {
+            if (device.checkValidScheduleThermostatDevice(schedule, null)) {
                 device.commandNewScheduleDevice(schedule);
+                return true;
+            } else {
+                return false;
             }
 
         }
 
         if (operationSchedule == ActionThermostatScheduleFragment.OPERATION_SCHEDULE.MODIFY_SCHEDULE) {
 
-            if (device.checkValidSchedule(schedule, aditionalInfo)) {
+            if (device.checkValidScheduleThermostatDevice(schedule, aditionalInfo)) {
                 device.commandModifyScheduleDevice(schedule);
+                return true;
+            } else {
+                return false;
             }
 
         }
+
+        return true;
 
 
     }
@@ -871,6 +921,52 @@ public class ThermostatActivity extends AppCompatActivity implements View.OnClic
 
     }
 
+    @Override
+    public void onBackPressed() {
 
+        String tag = fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 1).getName();
+        if (tag.equals("ScheduleThermostat")) {
+            finish();
+        } else {
+            paintScheduleFragment();
+        }
+    }
+
+    private void notifyTimeoutCommand() {
+
+
+
+        try {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+
+                    updateDevice();
+                    Log.d(TAG,"send update to disconnect");
+                }
+            });
+        } catch (NullPointerException exception) {
+            Log.e(TAG, "La tarea para cancelar es erronea");
+        }
+
+
+    }
+
+    private void sendError() {
+
+
+        MyHomeIotTools tools;
+        AlertDialog.Builder dialog;
+
+        if (device.getAlarms().getWifiAlarm() == IOT_ALARM_VALUE.ALARM_OFF) {
+            tools = new MyHomeIotTools(getApplicationContext());
+            dialog = tools.notifyError(R.drawable.ic_action_error,
+                    R.string.error, R.string.error_connection_device, fragmentManager, this);
+            dialog.setCancelable(true);
+        }
+
+
+
+    }
 
 }

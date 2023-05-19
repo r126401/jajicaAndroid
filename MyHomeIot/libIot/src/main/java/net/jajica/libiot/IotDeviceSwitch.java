@@ -436,4 +436,39 @@ public class IotDeviceSwitch extends IotDevice implements Serializable {
 
     }
 
+    public Boolean checkValidScheduleSwitchDevice(IotScheduleDeviceSwitch schedule, String oldScheduleId) {
+
+
+        int i;
+
+        if (getSchedulesSwitch() != null) {
+            for(i=0;i<getSchedulesSwitch().size();i++) {
+                if (getSchedulesSwitch().get(i).getScheduleId().equals(oldScheduleId)) {
+                    continue;
+                }
+
+                if (!checkValidProg(
+                        getSchedulesSwitch().get(i).getHour(),
+                        getSchedulesSwitch().get(i).getMinute(),
+                        getSchedulesSwitch().get(i).getSecond(),
+                        getSchedulesSwitch().get(i).getDuration(),
+                        schedule.getHour(),
+                        schedule.getMinute(),
+                        schedule.getSecond(),
+                        schedule.getDuration()
+                )) {
+                    Log.w(TAG, "El intervalo no es valido");
+                    return false;
+                }
+
+            }
+        }
+
+
+        Log.i(TAG, "El schedule es valido y se puede lanzar");
+        return true;
+    }
+
+
+
 }

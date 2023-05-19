@@ -2,12 +2,14 @@ package net.jajica.libiot;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
 
-public class IotScheduleDeviceSwitch extends IotScheduleDevice implements Serializable {
+public class IotScheduleDeviceSwitch extends IotScheduleDevice implements Serializable, Cloneable {
 
     private final String TAG = "IotScheduleDeviceSwitch";
     private IOT_SWITCH_RELAY relay;
@@ -92,4 +94,5 @@ public class IotScheduleDeviceSwitch extends IotScheduleDevice implements Serial
 
         return objectSchedule;
     }
+
 }

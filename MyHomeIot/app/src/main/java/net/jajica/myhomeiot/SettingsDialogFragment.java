@@ -44,6 +44,34 @@ public class SettingsDialogFragment extends DialogFragment implements View.OnCli
 
     AlertDialog.Builder alertDialog;
 
+    private int icon;
+    private int title;
+    private int message;
+
+    public void setIcon(int icon) {
+        this.icon = icon;
+    }
+
+    public void setTitle(int title) {
+        this.title = title;
+    }
+
+    public void setMessage(int message) {
+        this.message = message;
+    }
+
+    public int getIcon() {
+        return icon;
+    }
+
+    public int getTitle() {
+        return title;
+    }
+
+    public int getMessage() {
+        return message;
+    }
+
     private OnScanDeviceListener onScanDeviceListener;
 
     public interface OnScanDeviceListener {
@@ -114,7 +142,8 @@ public class SettingsDialogFragment extends DialogFragment implements View.OnCli
     }
 
 
-    public SettingsDialogFragment() {
+    public SettingsDialogFragment(Context context) {
+
 
     }
 
@@ -168,19 +197,28 @@ public class SettingsDialogFragment extends DialogFragment implements View.OnCli
                 break;
         }
 
+
         alertDialog.setCancelable(false);
         setCancelable(false);
+
+        alertDialog.setIcon(getIcon());
+        alertDialog.setTitle(getTitle());
+        alertDialog.setMessage(getMessage());
 
         return alertDialog.create();
 
     }
 
     private void sensorLocal() {
+
+
         mBinding.switchSensor.setVisibility(View.VISIBLE);
         mBinding.switchSensor.setText(getResources().getString(R.string.local));
-        mBinding.textValueParameter.setVisibility(View.INVISIBLE);
-        mBinding.textSensor.setVisibility(View.INVISIBLE);
-        mBinding.buttonQrSensor.setVisibility(View.INVISIBLE);
+        mBinding.layoutSensor.setVisibility(View.GONE);
+        mBinding.textValueParameter.setVisibility(View.GONE);
+        mBinding.textSensor.setVisibility(View.GONE);
+        mBinding.buttonQrSensor.setVisibility(View.GONE);
+
 
 
     }
@@ -190,6 +228,7 @@ public class SettingsDialogFragment extends DialogFragment implements View.OnCli
         mBinding.switchSensor.setVisibility(View.VISIBLE);
         mBinding.switchSensor.setText(getResources().getString(R.string.remote));
         mBinding.textValueParameter.setVisibility(View.INVISIBLE);
+        mBinding.layoutSensor.setVisibility(View.VISIBLE);
         mBinding.textSensor.setVisibility(View.VISIBLE);
         mBinding.buttonQrSensor.setVisibility(View.VISIBLE);
         mBinding.textValueParameter.setHint(R.string.settings);
@@ -238,4 +277,13 @@ public class SettingsDialogFragment extends DialogFragment implements View.OnCli
         }
 
     }
+
+    public void setParameterDialog(int icon, int title, int message) {
+
+        setIcon(icon);
+        setTitle(title);
+        setMessage(message);
+
+    }
+
 }

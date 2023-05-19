@@ -133,6 +133,7 @@ public class ThermostatScheduleAdapter extends RecyclerView.Adapter<ThermostatSc
                 holder.mbinding.getRoot().setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+
                         onItemClickSelected.onItemClickSelected(ThermostatScheduleAdapter.ITEM_TYPE.MODIFY_SCHEDULE, position);
 
                     }

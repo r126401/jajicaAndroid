@@ -12,6 +12,7 @@ import androidx.fragment.app.FragmentManager;
 
 import net.jajica.libiot.IOT_COMMANDS;
 import net.jajica.libiot.IotDevice;
+import net.jajica.libiot.IotScheduleDevice;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -69,18 +70,25 @@ public class MyHomeIotTools {
 
     }
 
+    /**
+     * This method calculated the final date from inicial date and duration
+     * @param hour
+     * @param minute
+     * @param duration
+     * @return
+     */
 
-    public String convertDuration(int hora, int minuto, int duracion) {
+    public String convertDuration(int hour, int minute, int duration) {
 
         Calendar fecha;
         String horafinal;
-        if (duracion == 0) {
+        if (duration == 0) {
             horafinal = "siempre";
         } else {
             fecha = Calendar.getInstance();
-            fecha.set(Calendar.HOUR_OF_DAY, hora);
-            fecha.set(Calendar.MINUTE, minuto);
-            fecha.set(Calendar.SECOND, duracion);
+            fecha.set(Calendar.HOUR_OF_DAY, hour);
+            fecha.set(Calendar.MINUTE, minute);
+            fecha.set(Calendar.SECOND, duration);
 
 
             horafinal = formatHour(fecha.get(Calendar.HOUR_OF_DAY), fecha.get(Calendar.MINUTE));
@@ -351,8 +359,15 @@ public class MyHomeIotTools {
         return window.alertDialog;
 
 
-
     }
+
+
+
+
+
+
+
+
 
 
 
