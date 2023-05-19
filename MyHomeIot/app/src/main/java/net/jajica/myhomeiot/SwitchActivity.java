@@ -789,4 +789,11 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
         }
 
     }
+
+    @Override
+    protected void onDestroy() {
+        //cnx.closeConnection();
+        super.onDestroy();
+
+    }
 }

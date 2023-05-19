@@ -385,8 +385,9 @@ public class IotMqttConnection implements Serializable {
      *
      */
     public void closeConnection() {
+        client.unregisterResources();
         client.disconnect();
-        client.close();
+        //client.close();
 
         setStateConnection(IOT_MQTT_STATUS_CONNECTION.CONEXION_MQTT_DESCONECTADA);
     }

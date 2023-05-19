@@ -264,7 +264,6 @@ public class ThermostatActivity extends AppCompatActivity implements View.OnClic
 
                 if (resultCode == IOT_CODE_RESULT.RESUT_CODE_OK) {
                     Log.i(TAG, "Recibido modificacion");
-                    device.commandGetStatusDevice();
                     device.commandGetInfoDevice();
                 }
 
@@ -282,7 +281,6 @@ public class ThermostatActivity extends AppCompatActivity implements View.OnClic
         device.setOnReceivedSetThresholdTemperature(new IotDeviceThermostat.OnReceivedSetThresholdTemperature() {
             @Override
             public void onReceivedSetThresholdTemperature(IOT_CODE_RESULT resultCode) {
-                //device.commandGetStatusDevice();
                 updateDevice();
             }
         });
@@ -826,27 +824,6 @@ public class ThermostatActivity extends AppCompatActivity implements View.OnClic
         fragmentTransaction.addToBackStack("ScheduleThermostat");
         fragmentTransaction.commit();
 
-        thermostatScheduleFragment.setOnSendEventSchedule(new ThermostatScheduleFragment.OnSendEventSchedule() {
-            @Override
-            public void onSendEventSchedule(ActionThermostatScheduleFragment.OPERATION_SCHEDULE operation) {
-                switch (operation) {
-
-                    case NEW_SCHEDULE:
-                        break;
-                    case DELETE_SCHEDULE:
-                        break;
-                    case MODIFY_SCHEDULE:
-                        break;
-                    case DISPLAY_SCHEDULE:
-                        paintPanelProgressSchedule();
-                        break;
-                    case REFRESH_SCHEDULE:
-                        device.commandGetStatusDevice();
-                        updateDevice();
-
-                }
-            }
-        });
 
     }
 
