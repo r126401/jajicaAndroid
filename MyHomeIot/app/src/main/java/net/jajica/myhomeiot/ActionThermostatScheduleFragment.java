@@ -94,14 +94,14 @@ public class ActionThermostatScheduleFragment extends Fragment implements View.O
             operationSchedule = OPERATION_SCHEDULE.MODIFY_SCHEDULE;
         }
 
-        this.originalSchedule = schedule;
-        this.schedule = (IotScheduleDeviceThermostat) originalSchedule.clone();
-        //originalSchedule = (IotScheduleDeviceThermostat) schedule.clone();
         if (schedule != null) {
+            this.originalSchedule = schedule;
+            this.schedule = (IotScheduleDeviceThermostat) originalSchedule.clone();
             oldSchedule = schedule.getScheduleId();
         } else {
             oldSchedule = null;
         }
+
     }
 
     private void initListWeek() {

@@ -169,7 +169,7 @@ public class IotMqttConnection implements Serializable {
         this.context = context;
         token = null;
         iotMqttConfiguration = null;
-        stateConnection = IOT_MQTT_STATUS_CONNECTION.CONEXION_MQTT_DESCONECTADA;
+        stateConnection = IOT_MQTT_STATUS_CONNECTION.CONEXION_MQTT_DISCONNECT;
         iotMqttConfiguration = new IotMqttConfiguration(this.context);
         options = new MqttConnectOptions();
         options.setAutomaticReconnect(iotMqttConfiguration.getAutoConnect());
@@ -209,8 +209,17 @@ public class IotMqttConnection implements Serializable {
             @Override
             public void connectionLost(Throwable cause) {
                 //Informamos cuando se pierde la conexion
-                setStateConnection(IOT_MQTT_STATUS_CONNECTION.CONEXION_MQTT_LOST);
-                listenerConexionMqtt.connectionLost(cause);
+
+                if (cause == null) {
+                    setStateConnection(IOT_MQTT_STATUS_CONNECTION.CONEXION_MQTT_DISCONNECT);
+                } else {
+                    Log.e(TAG, cause.getCause().toString());
+                    setStateConnection(IOT_MQTT_STATUS_CONNECTION.CONEXION_MQTT_LOST);
+                    listenerConexionMqtt.connectionLost(cause);
+
+                }
+
+
 
             }
 
@@ -367,8 +376,19 @@ public class IotMqttConnection implements Serializable {
                    timerConnection.purge();
                    Log.i(TAG, "SE CANCELA EL TEMPORIZADOR...");
                 } else {
-                    Log.e(TAG, "Se reintenta conexion");
-                    connect();
+
+                    if ((getStateConnection() == IOT_MQTT_STATUS_CONNECTION.CONEXION_MQTT_LOST) ||
+                    (getStateConnection() == IOT_MQTT_STATUS_CONNECTION.CONEXION_MQTT_FAIL)){
+                        Log.e(TAG, "Conexion perdidaSe reintenta conexion otra vez");
+                        connect();
+                    } else {
+                        Log.e(TAG, "Nos desconectamos definitivamente por que es nuestra");
+                        this.cancel();
+                        timerConnection.purge();
+
+
+                    }
+
                 }
 
             }
@@ -385,11 +405,8 @@ public class IotMqttConnection implements Serializable {
      *
      */
     public void closeConnection() {
-        client.unregisterResources();
         client.disconnect();
-        //client.close();
-
-        setStateConnection(IOT_MQTT_STATUS_CONNECTION.CONEXION_MQTT_DESCONECTADA);
+        setStateConnection(IOT_MQTT_STATUS_CONNECTION.CONEXION_MQTT_DISCONNECT);
     }
 
     public Boolean isConnected() {

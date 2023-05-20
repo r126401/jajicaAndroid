@@ -105,7 +105,7 @@ public class ThermostatActivity extends AppCompatActivity implements View.OnClic
             return false;
         }
         if (createConnectionMqtt() == IOT_MQTT_STATUS_CONNECTION.CONEXION_MQTT_CON_EXITO) {
-            device.setCnx(cnx);
+
             configureListenerDeviceThermostat();
             updateDevice();
             return true;
@@ -129,7 +129,7 @@ public class ThermostatActivity extends AppCompatActivity implements View.OnClic
             public void onReceivedStatus(IOT_CODE_RESULT resultCode) {
                 Log.i(TAG, "ff");
                 updateDevice();
-                device.commandGetScheduleDevice();
+                //device.commandGetScheduleDevice();
 
 
             }
@@ -308,12 +308,14 @@ public class ThermostatActivity extends AppCompatActivity implements View.OnClic
             public void connectionEstablished(boolean reconnect, String serverURI) {
                 Log.i(TAG, "Conexion establecida");
                 device.setConnectionState(IOT_DEVICE_STATUS_CONNECTION.DEVICE_CONNECTED);
+                device.setCnx(cnx);
                 device.unSubscribeDevice();
                 device.subscribeDevice();
                 device.subscribeOtaServer();
-                device.commandGetStatusDevice();
                 updateDevice();
                 device.getOtaVersionAvailableCommand();
+                device.commandGetStatusDevice();
+                device.commandGetScheduleDevice();
             }
 
             @Override
@@ -802,7 +804,9 @@ public class ThermostatActivity extends AppCompatActivity implements View.OnClic
                             break;
                         case REFRESH_SCHEDULE:
                             device.commandGetStatusDevice();
+                            device.commandGetScheduleDevice();
                             updateDevice();
+                            break;
                         case TIMEOUT:
                             notifyTimeoutCommand();
                             sendError();
@@ -946,4 +950,11 @@ public class ThermostatActivity extends AppCompatActivity implements View.OnClic
 
     }
 
+    @Override
+    protected void onDestroy() {
+        cnx.closeConnection();
+        device.unSubscribeDevice();
+        device.unsubscribeOtaServer();
+        super.onDestroy();
+    }
 }

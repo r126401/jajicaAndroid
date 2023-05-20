@@ -79,8 +79,9 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
             Log.e(TAG, "Error al recibir el json desde MainActivity");
         }
 
+
         if (createConnectionMqtt() == IOT_MQTT_STATUS_CONNECTION.CONEXION_MQTT_CON_EXITO) {
-            device.setCnx(cnx);
+            //device.setCnx(cnx);
             configureListenersDeviceSwitch();
             updateDevice();
         }
@@ -283,6 +284,7 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
             @Override
             public void connectionEstablished(boolean reconnect, String serverURI) {
                 Log.i(TAG, "Conexion establecida");
+                device.setCnx(cnx);
                 device.subscribeDevice();
                 device.subscribeOtaServer();
                 device.commandGetStatusDevice();
@@ -783,6 +785,7 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
         String tag = fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 1).getName();
         Fragment fragment = fragmentManager.findFragmentByTag(tag);
         if (tag.equals("ScheduleSwitch")) {
+
             finish();
         } else {
             paintScheduleFragment();
@@ -792,7 +795,10 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
 
     @Override
     protected void onDestroy() {
-        //cnx.closeConnection();
+
+        cnx.closeConnection();
+        device.unSubscribeDevice();
+        device.unsubscribeOtaServer();
         super.onDestroy();
 
     }

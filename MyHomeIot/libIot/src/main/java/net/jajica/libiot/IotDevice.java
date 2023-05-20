@@ -986,6 +986,14 @@ public abstract class IotDevice implements Serializable {
         return subscribeDevice(getSubscribeOtaTopic());
     }
 
+    public IOT_DEVICE_STATUS_CONNECTION unsubscribeOtaServer() {
+
+        return unSubscribeDevice(getSubscribeOtaTopic());
+    }
+
+
+
+
     /**
      * Subscribe a la aplicacion a un topic diferente del propia para el dispositivo
      * @param topicDevice Es el topic

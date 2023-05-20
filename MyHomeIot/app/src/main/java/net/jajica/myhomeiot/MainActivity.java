@@ -196,24 +196,32 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     private IOT_MQTT_STATUS_CONNECTION createEnvironment(int position) {
 
         IOT_MQTT_STATUS_CONNECTION state;
-        cnx = new IotMqttConnection(getApplicationContext());
-        state = cnx.createConnection(new IotMqttConnection.OnMqttConnection() {
-            @Override
-            public void connectionEstablished(boolean reconnect, String serverURI) {
-                Log.i(TAG, "Conexion estabilizada");
-                if (createStructure(position) != APPLICATION_STATUS.APPLICATION_NOK) {
-                    notifyConnectOk();
+
+
+        if ((cnx == null) || (!cnx.isConnected())) {
+            cnx = new IotMqttConnection(getApplicationContext());
+            state = cnx.createConnection(new IotMqttConnection.OnMqttConnection() {
+                @Override
+                public void connectionEstablished(boolean reconnect, String serverURI) {
+                    Log.i(TAG, "Conexion estabilizada");
+                    if (createStructure(position) != APPLICATION_STATUS.APPLICATION_NOK) {
+                        notifyConnectOk();
+                    }
+
+
                 }
 
+                @Override
+                public void connectionLost(Throwable cause) {
+                    notifyConnectNok();
 
-            }
+                }
+            });
+        } else {
+            createStructure(position);
+            return IOT_MQTT_STATUS_CONNECTION.CONEXION_MQTT_ACTIVE;
+        }
 
-            @Override
-            public void connectionLost(Throwable cause) {
-                notifyConnectNok();
-
-            }
-        });
 
         return state;
 
@@ -704,11 +712,6 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
             Objects.requireNonNull(binding.tabs.getTabAt(i)).setText(text);
 
         }
-
-    }
-
-    private void errorApplication() {
-
 
     }
 

@@ -224,9 +224,14 @@ public class ThermostatScheduleFragment extends Fragment implements SwipeRefresh
     @Override
     public void onRefresh() {
 
+        
         if (onSendEventSchedule != null) {
             onSendEventSchedule.onSendEventSchedule(ActionThermostatScheduleFragment.OPERATION_SCHEDULE.REFRESH_SCHEDULE);
         }
+
+
+
+
         mBinding.swipeThermostatScheduleList.setRefreshing(false);
 
     }

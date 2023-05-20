@@ -476,6 +476,12 @@ public class ThermometerActivity extends AppCompatActivity implements Navigation
 
     }
 
+    @Override
+    protected void onDestroy() {
 
-
+        cnx.closeConnection();
+        device.unSubscribeDevice();
+        device.unsubscribeOtaServer();
+        super.onDestroy();
+    }
 }
