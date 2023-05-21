@@ -12,6 +12,7 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import net.jajica.libiot.IOT_STATE_SCHEDULE;
 import net.jajica.libiot.IotScheduleDeviceThermostat;
 
 import java.util.ArrayList;
@@ -219,8 +220,12 @@ public class ThermostatScheduleAdapter extends RecyclerView.Adapter<ThermostatSc
 
     private void paintActiveSchedule(ThermostatScheduleAdapter.ThermostatScheduleAdapterViewHolder holder, int position) {
 
-        if (listSchedule.get(position).getActiveSchedule()) {
-            holder.mbinding.imageCurrentSchedule.setVisibility(View.VISIBLE);
+        if (listSchedule.get(position).getScheduleState() == IOT_STATE_SCHEDULE.ACTIVE_SCHEDULE) {
+            if (listSchedule.get(position).getActiveSchedule()) {
+                holder.mbinding.imageCurrentSchedule.setVisibility(View.VISIBLE);
+            } else {
+                holder.mbinding.imageCurrentSchedule.setVisibility(View.INVISIBLE);
+            }
         } else {
             holder.mbinding.imageCurrentSchedule.setVisibility(View.INVISIBLE);
         }

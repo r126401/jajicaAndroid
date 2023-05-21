@@ -157,6 +157,34 @@ public class ThermostatScheduleFragment extends Fragment implements SwipeRefresh
             }
         });
 
+        device.setOnReceivedSpontaneousStartSchedule(new IotDevice.OnReceivedSpontaneousStartSchedule() {
+            @Override
+            public void onReceivesSpontaneousStartSchedule(IOT_CODE_RESULT resultCode) {
+
+                adapter.notifyDataSetChanged();
+                if (onSendEventSchedule != null) {
+                    onSendEventSchedule.onSendEventSchedule(ActionThermostatScheduleFragment.OPERATION_SCHEDULE.UPDATE_SCHEDULE);
+                }
+
+            }
+        });
+
+
+
+
+        device.setOnReceivedSpontaneousEndSchedule(new IotDevice.OnReceivedSpontaneousEndSchedule() {
+            @Override
+            public void onReceivesSpontaneousEndSchedule(IOT_CODE_RESULT resultCode) {
+
+                adapter.notifyDataSetChanged();
+                if (onSendEventSchedule != null) {
+                    onSendEventSchedule.onSendEventSchedule(ActionThermostatScheduleFragment.OPERATION_SCHEDULE.UPDATE_SCHEDULE);
+                }
+
+            }
+        });
+
+
     }
 
     private void configureListenerAdapter() {
