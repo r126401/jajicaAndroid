@@ -126,13 +126,17 @@ public class IotDeviceThermostat extends IotDeviceThermometer implements Seriali
 
     @Override
     protected IOT_CODE_RESULT processStartSchedule(String message) {
+        setStateRelayFromReport(message);
         processCommonParameters(message);
+        setActiveScheduleFromReport(message);
         return super.processStartSchedule(message);
     }
 
     @Override
     protected IOT_CODE_RESULT processEndSchedule(String message) {
         processCommonParameters(message);
+        setStateRelayFromReport(message);
+        setActiveSchedule(message);
         return super.processEndSchedule(message);
     }
 
@@ -593,6 +597,27 @@ public class IotDeviceThermostat extends IotDeviceThermometer implements Seriali
 
         Log.i(TAG, "El schedule es valido y se puede lanzar");
         return true;
+    }
+
+    protected void setActiveScheduleFromReport(String message) {
+
+        int nSchedules;
+        int i;
+        IotScheduleDevice schedule;
+
+        if (getSchedulesThermostat() != null) {
+            nSchedules = getSchedulesThermostat().size();
+            for (i=0;i<nSchedules;i++) {
+                schedule = getSchedulesThermostat().get(i);
+                if (schedule.getScheduleId().equals(getActiveSchedule())) {
+                    schedule.setActiveSchedule(true);
+                } else {
+                    schedule.setActiveSchedule(false);
+                }
+            }
+        }
+
+
     }
 
 
