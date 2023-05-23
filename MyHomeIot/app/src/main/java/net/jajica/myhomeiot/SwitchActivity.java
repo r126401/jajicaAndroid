@@ -290,7 +290,6 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
                 device.commandGetStatusDevice();
                 updateDevice();
                 device.getOtaVersionAvailableCommand();
-                //paintScheduleFragment();
             }
 
             @Override

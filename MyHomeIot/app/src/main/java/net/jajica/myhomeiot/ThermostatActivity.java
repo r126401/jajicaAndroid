@@ -179,6 +179,7 @@ public class ThermostatActivity extends AppCompatActivity implements View.OnClic
             public void onReceivedNewSchedule(IOT_CODE_RESULT resultCode) {
                 Log.i(TAG, "Recibida nueva programacion");
                 device.commandGetScheduleDevice();
+                updateDevice();
             }
         });
 
@@ -265,6 +266,7 @@ public class ThermostatActivity extends AppCompatActivity implements View.OnClic
                 if (resultCode == IOT_CODE_RESULT.RESUT_CODE_OK) {
                     Log.i(TAG, "Recibido modificacion");
                     device.commandGetInfoDevice();
+                    updateDevice();
                 }
 
             }
@@ -307,15 +309,15 @@ public class ThermostatActivity extends AppCompatActivity implements View.OnClic
             @Override
             public void connectionEstablished(boolean reconnect, String serverURI) {
                 Log.i(TAG, "Conexion establecida");
-                device.setConnectionState(IOT_DEVICE_STATUS_CONNECTION.DEVICE_CONNECTED);
                 device.setCnx(cnx);
                 device.unSubscribeDevice();
+                device.unsubscribeOtaServer();
                 device.subscribeDevice();
                 device.subscribeOtaServer();
-                updateDevice();
                 device.getOtaVersionAvailableCommand();
                 device.commandGetStatusDevice();
                 device.commandGetScheduleDevice();
+                updateDevice();
             }
 
             @Override
@@ -416,12 +418,11 @@ public class ThermostatActivity extends AppCompatActivity implements View.OnClic
 
             case AUTO:
             case AUTOMAN:
+            case MANUAL:
                 mBinding.textStatusThermostat.setVisibility(View.VISIBLE);
                 mBinding.textStatusThermostat.setText(status.toString());
                 break;
-            case MANUAL:
-                mBinding.textStatusThermostat.setText(getResources().getString(R.string.manual));
-                break;
+
             case STARTING:
                 mBinding.textStatusThermostat.setText(getResources().getString(R.string.arrancando));
                 break;
@@ -464,7 +465,7 @@ public class ThermostatActivity extends AppCompatActivity implements View.OnClic
 
     private void paintStatusCommunication() {
 
-        paintBrokerStatus();
+
 
         switch (device.getStatusConnection()) {
 
@@ -484,6 +485,7 @@ public class ThermostatActivity extends AppCompatActivity implements View.OnClic
                 mBinding.imageConnectedDeviceThermostat.setImageResource(R.drawable.ic_action_offline);
                 mBinding.imageUpTemperature.setEnabled(false);
                 mBinding.imageDownTemperature.setEnabled(false);
+                paintBrokerStatus();
                 break;
             case DEVICE_WAITING_RESPONSE:
                 mBinding.imageConnectedDeviceThermostat.setImageResource(R.drawable.ic_action_waiting_response);
@@ -494,6 +496,7 @@ public class ThermostatActivity extends AppCompatActivity implements View.OnClic
             case DEVICE_NO_SUBSCRIPT:
             case DEVICE_ERROR_NO_SUBSCRIPT:
             case DEVICE_ERROR_SUBSCRIPTION:
+                paintBrokerStatus();
                 mBinding.imageConnectedDeviceThermostat.setImageResource(R.drawable.ic_action_error);
                 device.getAlarms().setWifiAlarm(IOT_ALARM_VALUE.ALARM_ON);
                 mBinding.imageUpTemperature.setEnabled(false);
@@ -629,6 +632,7 @@ public class ThermostatActivity extends AppCompatActivity implements View.OnClic
                 public void onFinish() {
                     device.setThresholdTemperature(Double.valueOf(mBinding.textThresholdTemperature.getText().toString()));
                     device.commandSetThresholdTemperarture(device.getThresholdTemperature());
+                    updateDevice();
                     //dialogo.enviarComando(dispositivoCronotermostato, dialogo.comandoModificarUmbralTemperatura(dispositivoCronotermostato.getUmbralTemperatura()));
                     Log.i(TAG, "Modificado umbral de temperatura");
                     mBinding.textThresholdTemperature.setTextColor(Color.BLACK);
@@ -771,6 +775,7 @@ public class ThermostatActivity extends AppCompatActivity implements View.OnClic
     private void launchInfoThermostat() {
 
         device.commandGetInfoDevice();
+        updateDevice();
     }
 
 
@@ -867,6 +872,7 @@ public class ThermostatActivity extends AppCompatActivity implements View.OnClic
         if (operationSchedule == ActionThermostatScheduleFragment.OPERATION_SCHEDULE.NEW_SCHEDULE) {
             if (device.checkValidScheduleThermostatDevice(schedule, null)) {
                 device.commandNewScheduleDevice(schedule);
+                updateDevice();
                 return true;
             } else {
                 return false;
@@ -878,6 +884,7 @@ public class ThermostatActivity extends AppCompatActivity implements View.OnClic
 
             if (device.checkValidScheduleThermostatDevice(schedule, aditionalInfo)) {
                 device.commandModifyScheduleDevice(schedule);
+                updateDevice();
                 return true;
             } else {
                 return false;
@@ -917,6 +924,7 @@ public class ThermostatActivity extends AppCompatActivity implements View.OnClic
 
 
                 }
+                updateDevice();
 
             }
         });

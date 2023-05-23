@@ -13,7 +13,7 @@
         android:id="@+id/layoutThermostat"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="40">
+        android:layout_weight="45">
 
         <GridLayout
             android:id="@+id/gridLayoutStatusDevice"
@@ -71,6 +71,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/textStatusThermostat"
+            android:layout_marginTop="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/auto"
@@ -85,10 +86,9 @@
             android:drawableStart="@drawable/themometer"
             android:text="25.5"
             android:textSize="40sp"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/imageHeatingThermostat"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textStatusThermostat"
-            android:layout_marginEnd="48dp"/>
+            app:layout_constraintTop_toBottomOf="@+id/textStatusThermostat" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/appCompatTextView7"
@@ -206,8 +206,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/heating"
             app:layout_constraintBottom_toBottomOf="@+id/textTemperature"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/appCompatTextView7"
+            app:layout_constraintEnd_toEndOf="@+id/gridLayoutSchedule"
             app:layout_constraintTop_toTopOf="@+id/textTemperature" />
 
         <ProgressBar
@@ -238,7 +237,7 @@
         android:id="@+id/containerThermostat"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="60">
+        android:layout_weight="55">
 
     </FrameLayout>
 
