@@ -99,6 +99,11 @@ public class ThermostatScheduleFragment extends Fragment implements SwipeRefresh
         device.setOnReceivedScheduleDevice(new IotDevice.OnReceivedScheduleDevice() {
             @Override
             public void onReceivedScheduleDevice(IOT_CODE_RESULT resultCode) {
+                if (resultCode == IOT_CODE_RESULT.RESUT_CODE_OK) {
+                    if (onSendEventSchedule != null) {
+                        onSendEventSchedule.onSendEventSchedule(ActionThermostatScheduleFragment.OPERATION_SCHEDULE.DISPLAY_SCHEDULE);
+                    }
+                }
                 fillAdapter();
 
             }

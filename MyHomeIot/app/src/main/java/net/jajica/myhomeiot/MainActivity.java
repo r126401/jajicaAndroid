@@ -666,6 +666,15 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                 fragmentDevices.adapter.notifyItemChanged(position);
                 break;
 
+            case RENAME_DEVICE:
+                SettingsDialogFragment window;
+                window = new SettingsDialogFragment(IOT_LABELS_JSON.DEVICE_NAME, device.getDeviceName(), getApplicationContext());
+                window.show(this.getSupportFragmentManager(), "rename_device");
+                window.setParameterDialog(R.drawable.ic_action_name, R.string.nameDevice, R.string.rename_device);
+                Log.i(TAG, "hjola");
+                break;
+
+
 
         }
 

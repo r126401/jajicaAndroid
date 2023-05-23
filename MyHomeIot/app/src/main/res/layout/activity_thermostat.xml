@@ -64,7 +64,8 @@
                 android:minWidth="180dp"
                 android:drawablePadding="50dp"
                 android:drawableEnd="@drawable/ic_action_thermostat"
-                android:text="@string/move_device" />
+                android:text="@string/move_device"
+                style="@style/textItem"/>
 
         </GridLayout>
 

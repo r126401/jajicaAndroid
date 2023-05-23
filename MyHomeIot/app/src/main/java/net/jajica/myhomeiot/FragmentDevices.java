@@ -62,7 +62,8 @@ public class FragmentDevices extends Fragment implements SwipeRefreshLayout.OnRe
         DELETE_DEVICE,
         MODIFY_DEVICE,
         SELECTED_DEVICE,
-        CUT_DEVICE
+        CUT_DEVICE,
+        RENAME_DEVICE,
     }
 
     public interface OnOperationDeviceListener {
@@ -693,6 +694,11 @@ public class FragmentDevices extends Fragment implements SwipeRefreshLayout.OnRe
                             deviceType,
                             position);
                     break;
+
+                case RENAME_DEVICE:
+                    onOperationDeviceListener.onOperationDeviceListener(
+                            OPERATION_DEVICE.RENAME_DEVICE, device, deviceType, position);
+
             }
 
         }

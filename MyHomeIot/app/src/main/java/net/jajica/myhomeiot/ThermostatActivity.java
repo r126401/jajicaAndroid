@@ -510,6 +510,36 @@ public class ThermostatActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void paintPanelProgressSchedule() {
+
+        String from;
+        String to;
+        MyHomeIotTools tool;
+        int currentTimeSchedule;
+        int progress;
+        int index;
+
+        IotScheduleDeviceThermostat schedule;
+        if (device.getActiveSchedule() == null) {
+            mBinding.gridLayoutSchedule.setVisibility(View.INVISIBLE);
+            return;
+        }
+        mBinding.gridLayoutSchedule.setVisibility(View.VISIBLE);
+        tool = new MyHomeIotTools();
+        index = device.searchSchedule(device.getActiveSchedule());
+        if (index >= 0) {
+            schedule = device.getSchedulesThermostat().get(index);
+            from = tool.formatHour(schedule.getHour(), schedule.getMinute());
+            to = tool.convertDuration(schedule.getHour(), schedule.getMinute(), schedule.getDuration());
+            currentTimeSchedule = tool.currentDate2DurationSchedule(from);
+            progress = (currentTimeSchedule * 100) / schedule.getDuration();
+            mBinding.progressSchedule.setProgress(progress);
+            mBinding.textStartSchedule.setText(from);
+            mBinding.textEndSchedule.setText(to);
+        } else {
+            mBinding.gridLayoutSchedule.setVisibility(View.INVISIBLE);
+        }
+
+
     }
 
     private void paintBrokerStatus() {
@@ -797,11 +827,10 @@ public class ThermostatActivity extends AppCompatActivity implements View.OnClic
                             break;
                         case DELETE_SCHEDULE:
                             break;
-                        case MODIFY_SCHEDULE:
-                            break;
                         case DISPLAY_SCHEDULE:
                             paintPanelProgressSchedule();
                             break;
+                        case MODIFY_SCHEDULE:
                         case REFRESH_SCHEDULE:
                             device.commandGetStatusDevice();
                             device.commandGetScheduleDevice();
@@ -812,6 +841,7 @@ public class ThermostatActivity extends AppCompatActivity implements View.OnClic
                             sendError();
                             break;
                         case UPDATE_SCHEDULE:
+                            paintPanelProgressSchedule();
                             updateDevice();
                             break;
 

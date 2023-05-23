@@ -539,19 +539,20 @@ public class SwitchActivity extends AppCompatActivity implements  NavigationBarV
                         case DELETE_SCHEDULE:
                             break;
                         case MODIFY_SCHEDULE:
+                            device.commandGetStatusDevice();
                             break;
                         case DISPLAY_SCHEDULE:
                             paintPanelProgressSchedule();
                             break;
                         case REFRESH_SCHEDULE:
                             device.commandGetStatusDevice();
-                            updateDevice();
                             break;
                         case TIMEOUT:
                             notifyTimeoutCommand();
                             sendError();
                             break;
                         case UPDATE_SCHEDULE:
+                            paintPanelProgressSchedule();
                             updateDevice();
                             break;
 

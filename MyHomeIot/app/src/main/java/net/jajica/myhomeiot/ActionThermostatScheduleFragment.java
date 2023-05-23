@@ -100,6 +100,8 @@ public class ActionThermostatScheduleFragment extends Fragment implements View.O
             oldSchedule = schedule.getScheduleId();
         } else {
             oldSchedule = null;
+            this.schedule = null;
+            this.originalSchedule = null;
         }
 
     }
@@ -147,6 +149,7 @@ public class ActionThermostatScheduleFragment extends Fragment implements View.O
             minute = tool.extractMinuteForConvertDuration(data);
             binding.timePickerTo.setHour(Integer.parseInt(hour));
             binding.timePickerTo.setMinute(Integer.parseInt(minute));
+            binding.textThreshold.setText(String.valueOf(schedule.getThresholdTemperature()));
         } else {
 
             schedule = new IotScheduleDeviceThermostat();

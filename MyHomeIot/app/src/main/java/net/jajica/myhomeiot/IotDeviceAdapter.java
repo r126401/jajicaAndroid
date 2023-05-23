@@ -529,52 +529,15 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
 
 
-    private void modifyNameDevice(TextInputEditText editText, int position) {
+    private void modifyNameDevice() {
 
-        editText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String data = s.toString();
-                int index;
-                if ((index = data.indexOf("\n")) > 0) {
-                    data = data.replace("\n","");
-                    editText.setText(data);
-                    editText.setEnabled(false);
-                    deviceList.get(position).setDeviceName(data);
-                    notifyItemChanged(position);
-                    IotUsersDevices configuration;
-                    configuration = new IotUsersDevices(context);
-                    configuration.loadConfiguration();
-                    IotDevice device;
-
-                    device = configuration.getIotDeviceObject(siteName, roomName, deviceList.get(position).getDeviceId());
-                    if (device != null) {
-                        device.setDeviceName(data);
-                        configuration.saveConfiguration(context);
-                    }
+     SettingsDialogFragment window;
+     window = new SettingsDialogFragment(context);
+     window.setParameterDialog(R.drawable.ic_action_name, R.string.rename_device, R.string.rename_device);
+     window.show(window.getParentFragmentManager(), "hola");
 
 
-                }
 
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-        editText.setEnabled(true);
-        editText.requestFocus();
-        MyHomeIotTools tools;
-        tools = new MyHomeIotTools(context);
-        editText.setSelection(editText.getText().length());
-        tools.showKeyboard(InputMethodManager.SHOW_FORCED);
     }
 
     private void deleteDevice(int position) {
@@ -613,10 +576,17 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case (R.id.item_rename_device):
-                        //modifyNameDevice(editText, position);
+                        if (onAdapterOperationDeviceListener != null) {
+                            onAdapterOperationDeviceListener.onAdapterOperationDeviceListener(
+                                    FragmentDevices.OPERATION_DEVICE.RENAME_DEVICE,
+                                    deviceList.get(position),
+                                    deviceList.get(position).getDeviceType(),
+                                    position );
+                        }
                         break;
                     case (R.id.item_delete_device):
                         deleteDevice(position);
+
                         Log.i(TAG, "delete");
                         break;
 
