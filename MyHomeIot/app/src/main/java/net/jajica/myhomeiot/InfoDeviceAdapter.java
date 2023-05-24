@@ -45,7 +45,7 @@ public class InfoDeviceAdapter extends RecyclerView.Adapter<InfoDeviceAdapter.In
     public interface OnSelectedParameterListener {
 
 
-        void onSelectedParameter(IOT_LABELS_JSON parameter, String value);
+        void onSelectedParameter(IOT_LABELS_JSON parameter, String value, String value2);
 
 
     }
@@ -92,6 +92,8 @@ public class InfoDeviceAdapter extends RecyclerView.Adapter<InfoDeviceAdapter.In
 
         IOT_LABELS_JSON label = IOT_LABELS_JSON.COMMAND;
         String value;
+        int i;
+        String value2 = null;
 
 
 
@@ -109,7 +111,21 @@ public class InfoDeviceAdapter extends RecyclerView.Adapter<InfoDeviceAdapter.In
                     case MARGIN_TEMPERATURE:
                     case CALIBRATE_VALUE:
                     case TYPE_SENSOR:
-                        onSelectedParameterListener.onSelectedParameter(label, value);
+                        if (value.equals("true")) {
+                            onSelectedParameterListener.onSelectedParameter(label, value, null);
+                        } else {
+
+                            for (i=0;i<infoDevice.size();i++) {
+                                if (infoDevice.get(i).getItemLabelInfoDevice().equals(IOT_LABELS_JSON.SENSOR_ID.getValorTextoJson())) {
+                                    value2 = infoDevice.get(i).getItemValueInfoDevice();
+                                    break;
+                                }
+
+                            }
+                            onSelectedParameterListener.onSelectedParameter(label, value, value2);
+                        }
+
+
                         break;
                     case SENSOR_ID:
                         break;

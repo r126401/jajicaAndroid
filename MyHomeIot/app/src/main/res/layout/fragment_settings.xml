@@ -31,7 +31,8 @@
             android:minWidth="48dp"
             app:layout_constraintEnd_toEndOf="@+id/textNameParameter"
             app:layout_constraintStart_toStartOf="@+id/textNameParameter"
-            app:layout_constraintTop_toBottomOf="@+id/textNameParameter">
+            app:layout_constraintTop_toBottomOf="@+id/textNameParameter"
+            android:maxLength="20">
 
         </com.google.android.material.textfield.TextInputEditText>
 
@@ -45,15 +46,12 @@
                 android:id="@+id/switchSensor"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:background="?attr/colorSecondaryContainer"
-                android:backgroundTint="?attr/colorSecondaryContainer"
                 android:showText="true"
                 android:text="local"
-                android:thumb="@drawable/thumbswitch"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:track="@drawable/trackswitch" />
+/>
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/textSensor"

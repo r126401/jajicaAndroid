@@ -529,16 +529,7 @@ public class IotDeviceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
 
 
-    private void modifyNameDevice() {
 
-     SettingsDialogFragment window;
-     window = new SettingsDialogFragment(context);
-     window.setParameterDialog(R.drawable.ic_action_name, R.string.rename_device, R.string.rename_device);
-     window.show(window.getParentFragmentManager(), "hola");
-
-
-
-    }
 
     private void deleteDevice(int position) {
 

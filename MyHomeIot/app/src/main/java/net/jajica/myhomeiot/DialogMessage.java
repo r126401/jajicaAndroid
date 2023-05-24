@@ -2,6 +2,7 @@ package net.jajica.myhomeiot;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.LayoutInflater;
@@ -22,6 +23,10 @@ public class DialogMessage extends DialogFragment {
     private int icon;
     private int title;
     private int message;
+
+    private Boolean buttons;
+
+    OnAnswerMessage onAnswerMessage;
 
     public void setIcon(int icon) {
         this.icon = icon;
@@ -51,10 +56,30 @@ public class DialogMessage extends DialogFragment {
         return message;
     }
 
+    public void setOnAnswerMessage(OnAnswerMessage onAnswerMessage) {
+        this.onAnswerMessage = onAnswerMessage;
+    }
+
     DialogMessage() {
         setShowEditText(true);
         setCancelable(false);
+        buttons = false;
     }
+
+    DialogMessage(Boolean buttons) {
+
+        setShowEditText(true);
+        setCancelable(false);
+        this.buttons = buttons;
+    }
+
+    public interface OnAnswerMessage {
+
+        void onAnswerMessage(String message);
+    }
+
+
+
 
     @NonNull
     @Override
@@ -80,9 +105,30 @@ public class DialogMessage extends DialogFragment {
         builder.setIcon(getIcon());
         builder.setTitle(getTitle());
         builder.setMessage(getMessage());
+
+
+        if (buttons) {
+
+            builder.setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    if (onAnswerMessage != null) {
+                        onAnswerMessage.onAnswerMessage(mbinding.textIn.toString());
+                    }
+
+                }
+            });
+
+            builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });
+        }
+
         dialog = builder.create();
-
-
         return dialog;
 
     }

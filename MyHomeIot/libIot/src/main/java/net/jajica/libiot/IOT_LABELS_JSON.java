@@ -13,7 +13,7 @@ public enum IOT_LABELS_JSON {
     COMMAND("dlgComando", false),
     COMMAND_NAME("nombreComando", false),
     DEVICE_ID("idDevice", false),
-    DEVICE_NAME("nombreDispositivo", true),
+    DEVICE_NAME("nombreDispositivo", false),
     DEVICE_TYPE("device", false),
     TOPIC_SUBSCRIPTION("topicSubscripcion", false),
     TOPIC_PUBLISH("topicPublicacion", false),

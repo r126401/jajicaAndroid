@@ -131,5 +131,6 @@
     <string name="week_days">Dias de la semana</string>
     <string name="centigrates">ºC</string>
     <string name="modify_parameter_message">Modificación del parametro del dispositivo</string>
+    <string name="delete_device_message">Si aceptas el dispositivo se borrará de la aplicacion pero seguira funcionando</string>
 
 </resources>

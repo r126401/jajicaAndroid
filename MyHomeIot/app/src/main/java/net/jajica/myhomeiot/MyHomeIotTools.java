@@ -363,6 +363,28 @@ public class MyHomeIotTools {
 
 
 
+    public Boolean checkValidMac(String mac) {
+
+        int i;
+        if (mac == null) return false;
+        if (mac.length() != 12) return false;
+        mac = mac.toUpperCase();
+
+        for (i=0; i<mac.length();i++) {
+
+            if (((mac.charAt(i) > '9') || (mac.charAt(i) < '0')) && ((mac.charAt(i) > 'F') || (mac.charAt(i) < 'A'))) {
+                return false;
+            }
+
+
+        }
+
+        return true;
+
+
+
+    }
+
 
 
 

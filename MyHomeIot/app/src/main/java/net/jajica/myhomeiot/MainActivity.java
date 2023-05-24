@@ -11,6 +11,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -28,6 +31,7 @@ import net.jajica.libiot.IOT_DEVICE_TYPE;
 import net.jajica.libiot.IOT_LABELS_JSON;
 import net.jajica.libiot.IOT_MQTT_STATUS_CONNECTION;
 import net.jajica.libiot.IOT_OPERATION_CONFIGURATION_DEVICES;
+import net.jajica.libiot.IotDeviceUnknown;
 import net.jajica.libiot.IotMqttConnection;
 import net.jajica.libiot.IotRoomsDevices;
 import net.jajica.libiot.IotDevice;
@@ -621,6 +625,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         ArrayList<IotDevice> deviceList;
         IOT_OPERATION_CONFIGURATION_DEVICES result = IOT_OPERATION_CONFIGURATION_DEVICES.DEVICE_ERROR;
 
+
         if ((fragmentDevices = identifyActiveFragment()) == null) {
             return IOT_OPERATION_CONFIGURATION_DEVICES.DEVICE_ERROR;
         }
@@ -637,11 +642,30 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                 }
                 break;
             case DELETE_DEVICE:
-                if ((result = configuration.deleteIotDevice(device.getDeviceId(), currentSite, currentRoom)) == IOT_OPERATION_CONFIGURATION_DEVICES.DEVICE_REMOVED) {
-                    deviceList = getCurrentDeviceList();
-                    fragmentDevices.setDeviceList(deviceList, operationDevice, position);
-                    return result;
-                }
+
+                int i;
+                DialogMessage window;
+                window = new DialogMessage(true);
+                window.setParameterDialog(R.drawable.ic_action_delete, R.string.delete_device, R.string.delete_device_message);
+                window.setShowEditText(false);
+                window.show(getSupportFragmentManager().beginTransaction(), "delete_device");
+
+                int finalPosition = position;
+                window.setOnAnswerMessage(new DialogMessage.OnAnswerMessage() {
+                    @Override
+                    public void onAnswerMessage(String message) {
+                        ArrayList<IotDevice> deviceList;
+                        if ((configuration.deleteIotDevice(device.getDeviceId(), currentSite, currentRoom)) == IOT_OPERATION_CONFIGURATION_DEVICES.DEVICE_REMOVED) {
+                            deviceList = getCurrentDeviceList();
+                            fragmentDevices.setDeviceList(deviceList, operationDevice, finalPosition);
+
+                        }
+                    }
+                });
+
+
+
+
                 break;
             case MODIFY_DEVICE:
                 if ((result = configuration.modifyIotDevice(device, currentSite, currentRoom)) == IOT_OPERATION_CONFIGURATION_DEVICES.DEVICE_MODIFIED) {
@@ -667,12 +691,9 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                 break;
 
             case RENAME_DEVICE:
-                SettingsDialogFragment window;
-                window = new SettingsDialogFragment(IOT_LABELS_JSON.DEVICE_NAME, device.getDeviceName(), getApplicationContext());
-                window.show(this.getSupportFragmentManager(), "rename_device");
-                window.setParameterDialog(R.drawable.ic_action_name, R.string.nameDevice, R.string.rename_device);
-                Log.i(TAG, "hjola");
+                modifyNameDevice(device);
                 break;
+
 
 
 
@@ -724,6 +745,51 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 
     }
 
+
+    private void modifyNameDevice(IotDevice device) {
+
+        SettingsDialogFragment window;
+        window = new SettingsDialogFragment(IOT_LABELS_JSON.DEVICE_NAME, device.getDeviceName(), this);
+        window.setParameterDialog(R.drawable.ic_action_name, R.string.nameDevice, R.string.rename_device);
+        window.show(this.getSupportFragmentManager().beginTransaction(), "rename_device");
+        window.alertDialog.setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                String name = device.getDeviceName();
+                if (checkName(device.getDeviceName())) {
+                    IotDevice dev = configuration.getIotDeviceObject(currentSite, currentRoom, device.getDeviceId());
+                    if (dev != null) {
+                        if (!name.equals(window.getValue())) {
+                            dev.setDeviceName(window.getValue());
+                            configuration.saveConfiguration(getApplicationContext());
+                            createEnvironment(-1);
+                        }
+
+                    }
+                }
+
+
+            }
+        });
+        window.alertDialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+    }
+
+
+    private Boolean checkName(String name) {
+
+        if (name == null) return false;
+        if ((name.length() == 0) || (name.length() > 20)) return false;
+        return true;
+
+
+
+    }
 
 
 }

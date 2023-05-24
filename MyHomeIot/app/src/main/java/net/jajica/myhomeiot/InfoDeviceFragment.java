@@ -22,6 +22,7 @@ import com.journeyapps.barcodescanner.ScanOptions;
 
 import net.jajica.libiot.IOT_LABELS_JSON;
 import net.jajica.libiot.IotDevice;
+import net.jajica.libiot.IotDeviceThermostat;
 import net.jajica.libiot.IotInfoDevice;
 import net.jajica.myhomeiot.databinding.FragmentInfoDeviceBinding;
 
@@ -88,13 +89,18 @@ public class InfoDeviceFragment extends Fragment {
 
         adapter.setOnSelectedParameterListener(new InfoDeviceAdapter.OnSelectedParameterListener() {
             @Override
-            public void onSelectedParameter(IOT_LABELS_JSON parameter, String value) {
+            public void onSelectedParameter(IOT_LABELS_JSON parameter, String value, String value2) {
 
                 SettingsDialogFragment settingsDialogFragment;
                 FragmentManager fragmentManager = getChildFragmentManager();
                 FragmentTransaction fragmentTransaction;
                 fragmentTransaction = fragmentManager.beginTransaction();
-                settingsDialogFragment = new SettingsDialogFragment(parameter, value, getContext());
+                if (value2 == null) {
+                    settingsDialogFragment = new SettingsDialogFragment(parameter, value, getContext());
+                } else {
+                    settingsDialogFragment = new SettingsDialogFragment(parameter, value, getContext(), value2);
+                }
+
                 settingsDialogFragment.setParameterDialog(R.drawable.ic_settings, R.string.settings, R.string.modify_parameter_message);
 
                 settingsDialogFragment.show(fragmentTransaction, "infoDevice");
@@ -158,20 +164,42 @@ public class InfoDeviceFragment extends Fragment {
     private void modifySensorValue(IOT_LABELS_JSON parameter, String sensorId, Boolean isChecked) {
 
         JSONObject object = null;
+        IotDeviceThermostat dev = (IotDeviceThermostat) device;
+        MyHomeIotTools tool;
+        tool = new MyHomeIotTools();
 
-        try {
-            object = new JSONObject();
-            object.put(IOT_LABELS_JSON.TYPE_SENSOR.getValorTextoJson(), !isChecked);
-            if (isChecked) {
-                object.put(IOT_LABELS_JSON.SENSOR_ID.getValorTextoJson(), sensorId);
+        if (isChecked) {
+            if (dev.getMasterSensor()) {
+                // el sensor era master y lo sigue siendo
+                return;
+            } else {
+                object = new JSONObject();
+                try {
+                    object.put(IOT_LABELS_JSON.TYPE_SENSOR.getValorTextoJson(), true);
+                    device.commandModifyAppParameter(object);
+                    return;
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    return;
+                }
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return;
+        } else {
+            if (tool.checkValidMac(sensorId)) {
+                if (!device.getDeviceName().equals(sensorId)) {
+                    try {
+
+                        object = new JSONObject();
+                        object.put(IOT_LABELS_JSON.TYPE_SENSOR.getValorTextoJson(), false);
+                        object.put(IOT_LABELS_JSON.SENSOR_ID.getValorTextoJson(), sensorId);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        return;
+                    }
+                    device.commandModifyAppParameter(object);
+                }
+            }
         }
-
-        device.commandModifyAppParameter(object);
-
 
     }
 
@@ -251,6 +279,7 @@ public class InfoDeviceFragment extends Fragment {
         // barcodeLauncher.launch(scanOptions);
         barcodeLauncher.launch(scanOptions);
     }
+
 
 
 

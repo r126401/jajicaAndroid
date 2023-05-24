@@ -133,6 +133,7 @@
     <string name="week_days">Week days</string>
     <string name="centigrates">ºC</string>
     <string name="modify_parameter_message">Modify parameter in configuration</string>
+    <string name="delete_device_message">if accept, the device will be deleted but work fine!</string>
 
 
 </resources>

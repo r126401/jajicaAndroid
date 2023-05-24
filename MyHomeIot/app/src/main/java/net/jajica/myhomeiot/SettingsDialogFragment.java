@@ -15,6 +15,7 @@ import androidx.fragment.app.DialogFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.Toast;
 
@@ -48,6 +49,8 @@ public class SettingsDialogFragment extends DialogFragment implements View.OnCli
     private int title;
     private int message;
 
+    private String value;
+
     public void setIcon(int icon) {
         this.icon = icon;
     }
@@ -72,6 +75,11 @@ public class SettingsDialogFragment extends DialogFragment implements View.OnCli
         return message;
     }
 
+    public String getValue() {
+
+        return mBinding.textValueParameter.getText().toString();
+    }
+
     private OnScanDeviceListener onScanDeviceListener;
 
     public interface OnScanDeviceListener {
@@ -89,6 +97,19 @@ public class SettingsDialogFragment extends DialogFragment implements View.OnCli
         label = parameter;
         alertDialog = new AlertDialog.Builder(context);
     }
+
+
+    public SettingsDialogFragment(IOT_LABELS_JSON parameter, String stringParameter, Context context, String value) {
+
+        this.stringParameter = stringParameter;
+        this.context = context;
+        label = parameter;
+        alertDialog = new AlertDialog.Builder(context);
+        this.value = value;
+    }
+
+
+
 
     private final ActivityResultLauncher<ScanOptions> barcodeLauncher = registerForActivityResult(new ScanContract(),
             result -> {
@@ -142,7 +163,11 @@ public class SettingsDialogFragment extends DialogFragment implements View.OnCli
     }
 
 
-    public SettingsDialogFragment(Context context) {
+    public SettingsDialogFragment(IOT_LABELS_JSON parameter, String stringParameter) {
+
+        this.stringParameter = stringParameter;
+        this.context = null;
+        label = parameter;
 
 
     }
@@ -154,6 +179,8 @@ public class SettingsDialogFragment extends DialogFragment implements View.OnCli
         super.onCreate(savedInstanceState);
 
     }
+
+
 
 
     @NonNull
@@ -184,11 +211,14 @@ public class SettingsDialogFragment extends DialogFragment implements View.OnCli
                 break;
             case TYPE_SENSOR:
                 if (stringParameter.equals("false")) {
-                    sensorLocal();
+                    mBinding.switchSensor.setChecked(false);
+                    sensorRemote();
                     Log.i(TAG, "kk");
                 } else {
-                    sensorRemote();
+                    mBinding.switchSensor.setChecked(true);
+                    sensorLocal();
                 }
+                mBinding.textSensor.setText(value);
                 break;
             case SENSOR_ID:
 
@@ -214,10 +244,11 @@ public class SettingsDialogFragment extends DialogFragment implements View.OnCli
 
         mBinding.switchSensor.setVisibility(View.VISIBLE);
         mBinding.switchSensor.setText(getResources().getString(R.string.local));
-        mBinding.layoutSensor.setVisibility(View.GONE);
-        mBinding.textValueParameter.setVisibility(View.GONE);
+        mBinding.layoutSensor.setVisibility(View.VISIBLE);
+        mBinding.textValueParameter.setVisibility(View.INVISIBLE);
         mBinding.textSensor.setVisibility(View.GONE);
         mBinding.buttonQrSensor.setVisibility(View.GONE);
+
 
 
 
@@ -243,11 +274,9 @@ public class SettingsDialogFragment extends DialogFragment implements View.OnCli
         switch (v.getId()) {
             case (R.id.switchSensor):
                 if (mBinding.switchSensor.isChecked()) {
-                    mBinding.switchSensor.setChecked(true);
-                    sensorRemote();
-                } else {
-                    mBinding.switchSensor.setChecked(false);
                     sensorLocal();
+                } else {
+                    sensorRemote();
                 }
                 break;
             case (R.id.buttonQrSensor):
